@@ -1,0 +1,22 @@
+{
+  "FARHOME.AbilityStr": "Strength",
+  "FARHOME.AbilityCon": "Constitution",
+  "FARHOME.AbilityDex": "Dexterity",
+  "FARHOME.AbilityInt": "Intelligence",
+  "FARHOME.AbilityWis": "Wisdom",
+  "FARHOME.AbilityCha": "Charisma",
+
+  "FARHOME.AbilityStrAbbr": "str",
+  "FARHOME.AbilityConAbbr": "con",
+  "FARHOME.AbilityDexAbbr": "dex",
+  "FARHOME.AbilityIntAbbr": "int",
+  "FARHOME.AbilityWisAbbr": "wis",
+  "FARHOME.AbilityChaAbbr": "cha",
+
+  "FARHOME.EffectCreate": "Create Effect",
+  "FARHOME.EffectToggle": "Toggle Effect",
+  "FARHOME.EffectEdit": "Edit Effect",
+  "FARHOME.EffectDelete": "Delete Effect",
+
+  "FARHOME.Add": "Add"
+}
