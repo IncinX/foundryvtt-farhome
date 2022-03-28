@@ -1,3 +1,3 @@
-export const registerSettings = function() {
-	// Register any custom system settings here
+export function registerSettings(): void {
+  // Register any custom system settings here
 }
