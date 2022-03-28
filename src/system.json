@@ -1,0 +1,23 @@
+{
+  "name": "farhome",
+  "title": "Farhome",
+  "description": "The Farhome system for FoundryVTT!",
+  "version": "0.1.0",
+  "author": "Thomas Perry",
+  "scripts": [],
+  "esmodules": ["farhome.js"],
+  "styles": ["farhome.css"],
+  "packs": [],
+  "languages": [],
+  "gridDistance": 5,
+  "gridUnits": "ft",
+  "minimumCoreVersion": "0.5.0",
+  "compatibleCoreVersion": "0.5.0",
+  "url": "https://github.com/IncinX/foundryvtt-farhome",
+  "manifest": "https://github.com/IncinX/foundryvtt-farhome/raw/1.0/system.json",
+  "download": "https://github.com/IncinX/foundryvtt-farhome/archive/refs/tags/1.0.zip",
+  "license": "LICENSE.txt",
+  "readme": "README.md",
+  "bugs": "",
+  "changelog": ""
+}
