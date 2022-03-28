@@ -5,7 +5,7 @@
             <input name="name" type="text" value="{{item.name}}" placeholder="Name" />
         </h1>
     </header>
-    <div>
+    <div class="sheet-content">
         <table>
             <tr>
                 <th>{{localize "farhome.item.features.quantity"}}</th>
@@ -20,6 +20,6 @@
                 </td>
             </tr>
         </table>
-        {{editor content=data.description target="data.description" button=true owner=owner editable=edit}}
+        {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
     </div>
 </form>
