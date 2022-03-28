@@ -1,8 +1,8 @@
 export default class FarhomeItemSheet extends ItemSheet {
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
-      width: 600,
-      height: 600,
+    return foundry.utils.mergeObject(super.defaultOptions, {
+      width: 560,
+      height: 400,
       classes: ['farhome', 'sheet', 'item'],
     });
   }
