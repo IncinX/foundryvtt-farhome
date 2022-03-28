@@ -20,6 +20,6 @@
                 </td>
             </tr>
         </table>
-        <textarea name="data.description" placeholder="Description">{{data.description}}</textarea>
+        {{editor content=data.description target="data.description" button=true owner=owner editable=edit}}
     </div>
 </form>

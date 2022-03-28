@@ -1,16 +1,16 @@
 export default class FarhomeItemSheet extends ItemSheet {
-    get template() {
-        return `systems/farhome/templates/sheets/${this.item.data.type}-sheet.html`;
-    }
+  get template() {
+    return `systems/farhome/templates/sheets/${this.item.data.type}-sheet.html`;
+  }
 
-    getData() {
-        const data = super.getData();
-        const itemData = data.data;
+  getData() {
+    const data = super.getData();
+    const itemData = data.data;
 
-        data.config = CONFIG.farhome;
+    data.config = CONFIG.farhome;
 
-        data.item = itemData;
-        data.data = itemData.data;
-        return data;
-    }
+    data.item = itemData;
+    data.data = itemData.data;
+    return data;
+  }
 }
