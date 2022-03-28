@@ -17,7 +17,12 @@
   "esmodules": ["module/farhome.js"],
   "styles": ["styles/farhome.css"],
   "packs": [],
-  "dependencies": [],
+  "dependencies": [
+    {
+      "name": "special-dice-roller",
+      "manifest": "https://raw.githubusercontent.com/IncinX/foundryvtt-special-dice-roller/0.16.2/module.json"
+    }
+  ],
   "languages": [
     {
       "lang": "en",
@@ -36,6 +41,6 @@
   "initiative": "",
   "gridDistance": 5,
   "gridUnits": "ft",
-  "primaryTokenAttribute": "",
-  "secondaryTokenAttribute": ""
+  "primaryTokenAttribute": "wounds",
+  "secondaryTokenAttribute": "ap"
 }

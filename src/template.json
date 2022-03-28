@@ -1,10 +1,78 @@
 {
   "Actor": {
-    "types": [],
-    "templates": {}
+    "types": ["character", "npc"],
+    "templates": {
+      "base": {
+        "wounds": {
+          "value": 10,
+          "min": 0
+        },
+        "ap": {
+          "value": 11,
+          "min": 0
+        },
+        "mana" : {
+          "value": 0
+        },
+        "spellPower" : {
+          "value": 0
+        },
+        "biography": ""
+      }
+    },
+    "character": {
+      "templates": ["base"],
+      "background": "",
+      "level": {
+        "value": 1,
+        "min": 1,
+        "max": 30
+      },
+      "attributes": {
+        "str": {
+          "value": 1
+        },
+        "dex": {
+          "value": 1
+        },
+        "con": {
+          "value": 1
+        },
+        "int": {
+          "value": 1
+        },
+        "will": {
+          "value": 1
+        },
+        "cha": {
+          "value": 1
+        }
+      }
+    },
+    "npc": {
+      "templates": ["base"],
+      "cr": 0
+    }
   },
   "Item": {
-    "types": [],
-    "templates": {}
+    "types": ["item", "feat", "spell"],
+    "templates": {
+      "base": {
+        "description": ""
+      }
+    },
+    "item": {
+      "templates": ["base"],
+      "quantity": 1,
+      "weight": 0,
+      "formula": "d20 + @str.mod + ceil(@lvl / 2)"
+    },
+    "feat": {
+      "templates": ["base"]
+    },
+    "spell": {
+      "templates": ["base"],
+      "spellLevel": 1
+    }
   }
 }

@@ -11,14 +11,18 @@
  */
 
 // Import TypeScript modules
+import { farhome } from "./config";
 import { registerSettings } from './settings';
 import { preloadTemplates } from './preloadTemplates';
+import FarhomeItemSheet from './sheets/item-sheet';
 
 // Initialize system
 Hooks.once('init', async () => {
   console.log('farhome | Initializing farhome');
 
   // Assign custom classes and constants here
+  // @ts-ignore TS2339: Not sure how to extend this using Typescript.
+  CONFIG.farhome = farhome;
 
   // Register custom system settings
   registerSettings();
@@ -27,6 +31,8 @@ Hooks.once('init', async () => {
   await preloadTemplates();
 
   // Register custom sheets (if any)
+  Items.unregisterSheet("core", ItemSheet);
+  Items.registerSheet("farhome", FarhomeItemSheet, { makeDefault: true });
 });
 
 // Setup system

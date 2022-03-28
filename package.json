@@ -1,5 +1,5 @@
 {
-  "private": true,
+  "private": false,
   "name": "farhome",
   "description": "The Farhome game system implemented for FoundryVTT.",
   "license": "MIT",
