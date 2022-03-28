@@ -1,30 +1,21 @@
 module.exports = {
-  parser: '@typescript-eslint/parser',
+  parser: '@babel/eslint-parser',
 
   parserOptions: {
     ecmaVersion: 2020,
     sourceType: 'module',
-    project: './tsconfig.eslint.json',
+    requireConfigFile: false,
   },
 
   env: {
     browser: true,
   },
 
-  extends: ['plugin:@typescript-eslint/recommended', 'plugin:jest/recommended', 'plugin:prettier/recommended'],
+  extends: ['plugin:jest/recommended', 'plugin:prettier/recommended'],
 
-  plugins: ['@typescript-eslint', 'jest'],
+  plugins: ['jest'],
 
   rules: {
     // Specify any specific ESLint rules.
   },
-
-  overrides: [
-    {
-      files: ['./*.cjs'],
-      rules: {
-        '@typescript-eslint/no-var-requires': 'off',
-      },
-    },
-  ],
 };

@@ -11,7 +11,7 @@
  */
 
 // Import TypeScript modules
-import { farhome } from "./config";
+import { farhome } from './config';
 import { registerSettings } from './settings';
 import { preloadTemplates } from './preloadTemplates';
 import FarhomeItemSheet from './sheets/item-sheet';
@@ -32,8 +32,8 @@ Hooks.once('init', async () => {
   await preloadTemplates();
 
   // Register custom sheets (if any)
-  Items.unregisterSheet("core", ItemSheet);
-  Items.registerSheet("farhome", FarhomeItemSheet, { makeDefault: true });
+  Items.unregisterSheet('core', ItemSheet);
+  Items.registerSheet('farhome', FarhomeItemSheet, { makeDefault: true });
 });
 
 // Setup system
