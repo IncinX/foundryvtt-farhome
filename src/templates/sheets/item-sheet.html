@@ -8,17 +8,18 @@
     <div>
         <table>
             <tr>
-                <th>{{localize "farhome.features.wounds"}}</th>
-                <th>{{localize "farhome.features.level"}}</th>
+                <th>{{localize "farhome.item.features.quantity"}}</th>
+                <th>{{localize "farhome.item.features.weight"}}</th>
             </tr>
             <tr>
                 <td>
-                    <input name="wounds" type="text" value="{{item.wounds}}" placeholder="Wounds" data-dtype="Number" />
+                    <input name="data.quantity" type="text" value="{{data.quantity}}" placeholder="Quantity" data-dtype="Number" />
                 </td>
                 <td>
-                    <input name="level" type="text" value="{{item.level}}" placeholder="Level" data-dtype="Number" />
+                    <input name="data.weight" type="text" value="{{data.weight}}" placeholder="Weight" data-dtype="Number" />
                 </td>
             </tr>
         </table>
+        <textarea name="data.description" placeholder="Description">{{data.description}}</textarea>
     </div>
 </form>

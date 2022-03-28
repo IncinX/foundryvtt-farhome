@@ -1,15 +1,16 @@
 export default class FarhomeItemSheet extends ItemSheet {
-    get template(): string {
+    get template() {
         return `systems/farhome/templates/sheets/${this.item.data.type}-sheet.html`;
     }
 
-    // @ts-ignore Not sure how to do this properly in Typescript yet
     getData() {
-        let data = super.getData();
+        const data = super.getData();
+        const itemData = data.data;
 
-        // @ts-ignore Not sure how to do this properly in Typescript yet
         data.config = CONFIG.farhome;
 
+        data.item = itemData;
+        data.data = itemData.data;
         return data;
     }
 }

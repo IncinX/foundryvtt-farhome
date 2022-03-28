@@ -1,28 +1,36 @@
 {
     "farhome": {
-        "features": {
-            "wounds": "Wounds",
-            "ap": "AP",
-            "healingSurges": "Healing Surges",
-            "level": "Level",
-            "spellPower": "Spell Power",
-            "mana": "Mana",
-            "background": "Background",
-            "biography": "Biography"
+        "character": {
+            "features": {
+                "wounds": "Wounds",
+                "ap": "AP",
+                "healingSurges": "Healing Surges",
+                "level": "Level",
+                "spellPower": "Spell Power",
+                "mana": "Mana",
+                "background": "Background",
+                "biography": "Biography"
+            },
+            "attribute" : {
+                "str": "Strength",
+                "dex": "Dexterity",
+                "con": "Constitution",
+                "int": "Intelligence",
+                "will": "Willpower",
+                "cha": "Charisma",
+                "strAbbr": "Str",
+                "dexAbbr": "Dex",
+                "conAbbr": "Con",
+                "intAbbr": "Int",
+                "willAbbr": "Will",
+                "chaAbbr": "Cha"
+            }
         },
-        "attribute" : {
-            "str": "Strength",
-            "dex": "Dexterity",
-            "con": "Constitution",
-            "int": "Intelligence",
-            "will": "Willpower",
-            "cha": "Charisma",
-            "strAbbr": "Str",
-            "dexAbbr": "Dex",
-            "conAbbr": "Con",
-            "intAbbr": "Int",
-            "willAbbr": "Will",
-            "chaAbbr": "Cha"
+        "item": {
+            "features": {
+                "quantity": "Quantity",
+                "weight": "Weight"
+            }
         }
     }
 }

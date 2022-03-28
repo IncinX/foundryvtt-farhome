@@ -21,6 +21,7 @@ Hooks.once('init', async () => {
   console.log('farhome | Initializing farhome');
 
   // Assign custom classes and constants here
+  // #todo Find out if this is how other modules do it and update if necessary.  (Ideally find a good Typescript based project to base it off of)
   // @ts-ignore TS2339: Not sure how to extend this using Typescript.
   CONFIG.farhome = farhome;
 
