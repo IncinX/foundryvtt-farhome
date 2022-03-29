@@ -63,7 +63,7 @@
               "medicine": 0
             },
             "will": {
-              "animalHandling": 0,
+              "handling": 0,
               "insight": 0,
               "nature": 0,
               "perception": 0
