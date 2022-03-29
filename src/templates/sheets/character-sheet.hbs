@@ -4,15 +4,20 @@
     <img class="profile" src="{{actor.img}}" title="{{actor.name}}" data-edit="img"/>
 
     <section class="header-details flexrow">
-      <h1 class="charname">
-        <input name="name" type="text" value="{{actor.name}}" placeholder="{{localize 'farhome.character.name'}}" />
-        <input name="data.background" type="text" value="{{data.background}}" placeholder="{{localize 'farhome.character.background'}}" />
-      </h1>
+      <input name="name" type="text" value="{{actor.name}}" placeholder="{{localize 'farhome.characterName'}}" />
+      <input name="data.background" type="text" value="{{data.background}}" placeholder="{{localize 'farhome.background'}}" />
     </section>
   </header>
   
-  {{!-- Character Stats and Saving Throw Proficiencies --}}
-  <div class="sidebar">
-    {{> "systems/farhome/templates/partials/character-stat-block.hbs" }}
+  <div class="flexrow">
+    {{!-- Character Stats and Saving Throw Proficiencies --}}
+    <div class="stat">
+      {{> "systems/farhome/templates/partials/character-stat-block.hbs" }}
+    </div>
+    <div class="flexcol">
+      <div class="skill">
+        {{> "systems/farhome/templates/partials/character-skills.hbs" }}
+      </div>"
+    </div>
   </div>
 </form>

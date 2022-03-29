@@ -9,7 +9,7 @@
         "attribute": {
           "str": -1,
           "dex": -1,
-          "con": -1,
+          "sta": -1,
           "int": -1,
           "will": -1,
           "cha": -1,
@@ -32,11 +32,11 @@
           },
           "exhaustion": 0
         },
-        "proficiencies": {
+        "proficiency": {
           "saves": {
             "str": 0,
             "dex": 0,
-            "con": 0,
+            "sta": 0,
             "int": 0,
             "will": 0,
             "cha": 0

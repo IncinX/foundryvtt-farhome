@@ -1,41 +1,31 @@
 {
   "farhome": {
-    "character": {
-      "name": "Character Name",
-      "race": "Race",
-      "background": "Background",
-      "biography": "Biography",
-      "attribute": {
-        "str": "Strength",
-        "dex": "Dexterity",
-        "con": "Constitution",
-        "int": "Intelligence",
-        "will": "Willpower",
-        "cha": "Charisma",
-        "strAbbr": "Str",
-        "dexAbbr": "Dex",
-        "conAbbr": "Con",
-        "intAbbr": "Int",
-        "willAbbr": "Will",
-        "chaAbbr": "Cha",
-        "wounds": "Wounds",
-        "tempWounds": "Temporary Wounds",
-        "ap": "AP",
-        "movement": "Movement",
-        "sprint": "Sprint",
-        "mana": "Mana",
-        "spellPower": "Spell Power",
-        "healingSurges": "Healing Surges",
-        "exhausion": "Exhaustion",
-        "background": "Background",
-        "biography": "Biography"
-      }
-    },
-    "item": {
-      "features": {
-        "quantity": "Quantity",
-        "weight": "Weight"
-      }
-    }
+    "characterName": "Character Name",
+    "race": "Race",
+    "background": "Background",
+    "biography": "Biography",
+    "str": "Strength",
+    "dex": "Dexterity",
+    "sta": "Stamina",
+    "int": "Intelligence",
+    "will": "Willpower",
+    "cha": "Charisma",
+    "strAbbr": "Str",
+    "dexAbbr": "Dex",
+    "staAbbr": "Sta",
+    "intAbbr": "Int",
+    "willAbbr": "Will",
+    "chaAbbr": "Cha",
+    "wounds": "Wounds",
+    "tempWounds": "Temporary Wounds",
+    "ap": "AP",
+    "movement": "Movement",
+    "sprint": "Sprint",
+    "mana": "Mana",
+    "spellPower": "Spell Power",
+    "healingSurges": "Healing Surges",
+    "exhausion": "Exhaustion",
+    "quantity": "Quantity",
+    "weight": "Weight"
   }
 }
