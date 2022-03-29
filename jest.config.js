@@ -1,9 +1,4 @@
 export default {
-  preset: 'ts-jest',
+  preset: 'jest',
   testEnvironment: 'node',
-  globals: {
-    'ts-jest': {
-      tsconfig: '<rootDir>/test/tsconfig.json',
-    },
-  },
 };
