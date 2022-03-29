@@ -1,14 +1,18 @@
 <section>
-  <!--#todo Find out how to get handlebars to work with data.ability.str.athletics and farhome.athletics for parameters-->
-  <div class="ability-group flexcol">
-    <h2>Strength</h2>
-    <div class="ability flexrow">
-      <label for="data.ability.str.athletics">{{localize 'farhome.athletics'}}</label>
-      <input name="data.ability.str.athletics" type="text" value="{{data.ability.str.athletics}}" />
-    </div>
-    <div class="ability flexrow">
-      <label for="data.ability.str.intimidation">{{localize 'farhome.intimidation'}}</label>
-      <input name="data.ability.str.intimidation" type="text" value="{{data.ability.str.intimidation}}" />
-    </div>
+  <!--#todo Find out how to localize these and iterate on sub-elements-->
+  <div class="ability-box flexcol">
+    {{#each data.proficiency.ability as |ability abilityName|}}
+      <div class="ability-group flexcol"></div>
+        <h2>{{abilityName}}</h2>
+        {{#each ability as |proficiency proficiencyName|}}
+          <div class="ability">
+            <!-- #todo Add localization here -->
+            <!-- #todo This isn't quite working yet -->
+            <label for="farhome.ability.{{abilityName}}.{{proficiencyName}}">{{proficiencyName}}</label>
+            <input name="farhome.ability.{{abilityName}}.{{proficiencyName}}" type="text" value="{{proficiency}}" />
+          </div>
+        {{/each}}
+      </div>
+    {{/each}}
   </div>
 </section>
