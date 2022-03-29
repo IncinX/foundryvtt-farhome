@@ -3,24 +3,34 @@
     "types": ["character", "npc"],
     "templates": {
       "base": {
-        "features": {
-          "wounds": 1,
-          "tempWounds": 0,
-          "ap": 9,
-          "move": 1,
-          "sprint": 1,
-          "mana": 0,
-          "spellPower": 0,
-          "exhaustion": 0,
-          "biography": ""
-        },
-        "attributes": {
+        "race": "",
+        "background": "",
+        "biography": "",
+        "attribute": {
           "str": -1,
           "dex": -1,
           "con": -1,
           "int": -1,
           "will": -1,
-          "cha": -1
+          "cha": -1,
+          "wounds": {
+            "value": 1,
+            "max": 1
+          },
+          "tempWounds": 0,
+          "ap": {
+            "value": 9,
+            "max": 9
+          },
+          "move": 1,
+          "sprint": 1,
+          "mana": 0,
+          "spellPower": 0,
+          "healingSurges": {
+            "value": 1,
+            "max": 1
+          },
+          "exhaustion": 0
         },
         "proficiencies": {
           "saves": {
@@ -95,7 +105,8 @@
     "character": {
       "templates": ["base"],
       "background": "",
-      "level": 1
+      "level": 1,
+      "experience": 0
     },
     "npc": {
       "templates": ["base"],
@@ -110,16 +121,19 @@
       },
       "formula": {
         "formula": ""
+      },
+      "rarity": {
+        "rarity": ""
       }
     },
     "item": {
-      "templates": ["base"],
+      "templates": ["base", "rarity"],
       "quantity": 1,
       "weight": 0,
       "formula": "d20 + @str.mod + ceil(@lvl / 2)"
     },
     "weapon": {
-      "templates": ["base", "formula"],
+      "templates": ["base", "rarity", "formula"],
       "damage": {
         "value": 1,
         "type": "bludgeoning"
@@ -138,7 +152,7 @@
       }
     },
     "armor": {
-      "templates": ["base", "formula"],
+      "templates": ["base", "rarity", "formula"],
       "armorBonus": 0,
       "maxDex": 0,
       "stealth": false,

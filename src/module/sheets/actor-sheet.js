@@ -1,6 +1,6 @@
-export default class FarhomeItemSheet extends ItemSheet {
+export default class FarhomeActorSheet extends ActorSheet {
   get template() {
-    return `systems/farhome/templates/sheets/${this.actor.data.type}-sheet.html`;
+    return `systems/farhome/templates/sheets/${this.actor.data.type}-sheet.hbs`;
   }
 
   getData() {

@@ -1,6 +1,7 @@
 export async function preloadTemplates() {
   const templatePaths = [
-    // Add paths to "systems/farhome/templates"
+    "systems/farhome/templates/partials/character-stat.hbs",
+    "systems/farhome/templates/partials/character-stat-block.hbs",
   ];
 
   return loadTemplates(templatePaths);

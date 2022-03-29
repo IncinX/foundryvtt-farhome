@@ -2,6 +2,7 @@ import { farhome } from './config';
 import { registerSettings } from './settings';
 import { preloadTemplates } from './preloadTemplates';
 import FarhomeItemSheet from './sheets/item-sheet';
+import FarhomeCharacterSheet from './sheets/character-sheet';
 
 // Initialize system
 Hooks.once('init', async () => {
@@ -19,6 +20,9 @@ Hooks.once('init', async () => {
   // Register custom sheets (if any)
   Items.unregisterSheet('core', ItemSheet);
   Items.registerSheet('farhome', FarhomeItemSheet, { makeDefault: true });
+
+  Actors.unregisterSheet('core', ActorSheet);
+  Actors.registerSheet('farhome', FarhomeCharacterSheet, { makeDefault: true });
 });
 
 // Setup system
