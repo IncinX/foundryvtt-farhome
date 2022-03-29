@@ -8,7 +8,7 @@ export default class FarhomeItemSheet extends ItemSheet {
   }
 
   get template() {
-    return `systems/farhome/templates/sheets/${this.item.data.type}-sheet.html`;
+    return `systems/farhome/templates/sheets/${this.item.data.type}-sheet.hbs`;
   }
 
   getData() {

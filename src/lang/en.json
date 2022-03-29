@@ -1,36 +1,45 @@
 {
-    "farhome": {
-        "character": {
-            "features": {
-                "wounds": "Wounds",
-                "ap": "AP",
-                "healingSurges": "Healing Surges",
-                "level": "Level",
-                "spellPower": "Spell Power",
-                "mana": "Mana",
-                "background": "Background",
-                "biography": "Biography"
-            },
-            "attribute" : {
-                "str": "Strength",
-                "dex": "Dexterity",
-                "con": "Constitution",
-                "int": "Intelligence",
-                "will": "Willpower",
-                "cha": "Charisma",
-                "strAbbr": "Str",
-                "dexAbbr": "Dex",
-                "conAbbr": "Con",
-                "intAbbr": "Int",
-                "willAbbr": "Will",
-                "chaAbbr": "Cha"
-            }
-        },
-        "item": {
-            "features": {
-                "quantity": "Quantity",
-                "weight": "Weight"
-            }
-        }
-    }
+  "farhome": {
+    "characterName": "Character Name",
+    "race": "Race",
+    "background": "Background",
+    "biography": "Biography",
+    "str": "Strength",
+    "dex": "Dexterity",
+    "sta": "Stamina",
+    "int": "Intelligence",
+    "will": "Willpower",
+    "cha": "Charisma",
+    "athletics": "Athletics",
+    "intimidation": "Intimidation",
+    "acrobatics": "Acrobatics",
+    "lockpicking": "Lockpicking",
+    "stealth": "Stealth",
+    "sleightOfHand": "Sleight of Hand",
+    "exhaustion": "Exhaustion",
+    "survival": "Survival",
+    "arcana": "Arcana",
+    "investigation": "Investigation",
+    "lore": "Lore",
+    "medicine": "Medicine",
+    "handling": "Handling",
+    "insight": "Insight",
+    "nature": "Nature",
+    "perception": "Perception",
+    "conversation": "Conversation",
+    "diplomacy": "Diplomacy",
+    "performance": "Performance",
+    "religion": "Religion",
+    "wounds": "Wounds",
+    "tempWounds": "Temporary Wounds",
+    "ap": "AP",
+    "movement": "Movement",
+    "sprint": "Sprint",
+    "mana": "Mana",
+    "spellPower": "Spell Power",
+    "healingSurges": "Healing Surges",
+    "exhausion": "Exhaustion",
+    "quantity": "Quantity",
+    "weight": "Weight"
+  }
 }
