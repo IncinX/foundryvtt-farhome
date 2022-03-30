@@ -5,11 +5,13 @@
       <div class="ability-group flexcol"></div>
         <h2>{{abilityName}}</h2>
         {{#each ability as |proficiency proficiencyName|}}
-          <div class="ability">
+          <div class="ability flexrow">
             <!-- #todo Add localization here -->
-            <!-- #todo This isn't quite working yet -->
-            <label for="farhome.ability.{{abilityName}}.{{proficiencyName}}">{{proficiencyName}}</label>
-            <input name="farhome.ability.{{abilityName}}.{{proficiencyName}}" type="text" value="{{proficiency}}" />
+            <!-- #todo Value changes aren't working yet -->
+            <label for="farhome.proficiency.ability.{{abilityName}}.{{proficiencyName}}">{{proficiencyName}}</label>
+            <input name="farhome.proficiency.ability.{{abilityName}}.{{proficiencyName}}" type="text" value="{{proficiency}}" data-dtype="Number" placeholder="{{proficiencyName}}"/>
+            <p>{{localize 'farhome.{proficiencyName}' proficiencyName=proficiencyName}}</p>
+            <p>{{localize 'farhome.athletics'}}</p>
           </div>
         {{/each}}
       </div>
