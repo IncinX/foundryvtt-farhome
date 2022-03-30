@@ -1,13 +1,13 @@
 <section>
-  <!--#todo Find out how to localize these and iterate on sub-elements-->
+  <!--TODO Find out how to localize these and iterate on sub-elements-->
   <div class="ability-box flexcol">
     {{#each data.proficiency.ability as |ability abilityName|}}
       <div class="ability-group flexcol"></div>
         <h2>{{abilityName}}</h2>
         {{#each ability as |proficiency proficiencyName|}}
           <div class="ability flexrow">
-            <!-- #todo Add localization here -->
-            <!-- #todo Value changes aren't working yet -->
+            <!-- TODO Add localization here -->
+            <!-- TODO Value changes aren't working yet -->
             <label for="farhome.proficiency.ability.{{abilityName}}.{{proficiencyName}}">{{proficiencyName}}</label>
             <input name="farhome.proficiency.ability.{{abilityName}}.{{proficiencyName}}" type="text" value="{{proficiency}}" data-dtype="Number" placeholder="{{proficiencyName}}"/>
             <p>{{localize 'farhome.{proficiencyName}' proficiencyName=proficiencyName}}</p>

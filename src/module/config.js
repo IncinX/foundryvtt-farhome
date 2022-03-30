@@ -1,1 +1,1 @@
-export const farhome = {};
+export const FARHOME = {};

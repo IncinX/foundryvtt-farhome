@@ -12,7 +12,7 @@ export default class FarhomeItemSheet extends ItemSheet {
   }
 
   getData() {
-    // #todo This is jank, does it need to be like this?
+    // TODO This is jank, does it need to be like this?
     const data = super.getData();
     const itemData = data.data;
 

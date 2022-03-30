@@ -1,6 +1,8 @@
-import { farhome } from './config';
+import { FARHOME } from './config';
 import { registerSettings } from './settings';
 import { preloadTemplates } from './preloadTemplates';
+import { FarhomeActor } from "./documents/actor";
+import { FarhomeItem } from "./documents/item";
 import FarhomeItemSheet from './sheets/item-sheet';
 import FarhomeCharacterSheet from './sheets/character-sheet';
 
@@ -9,13 +11,16 @@ Hooks.once('init', async () => {
   console.log('farhome | Initializing farhome');
 
   // Assign custom classes and constants here
-  CONFIG.farhome = farhome;
+  CONFIG.FARHOME = FARHOME;
+
+  // TODO Need to create an initiative formula for the system
 
   // Register custom system settings
   registerSettings();
 
-  // Preload Handlebars templates
-  await preloadTemplates();
+  // Register custom Document classes
+  CONFIG.Actor.documentClass = FarhomeCharacterSheet;
+  CONFIG.Item.documentClass = FarhomeItemSheet;
 
   // Register custom sheets (if any)
   Items.unregisterSheet('core', ItemSheet);
@@ -23,6 +28,9 @@ Hooks.once('init', async () => {
 
   Actors.unregisterSheet('core', ActorSheet);
   Actors.registerSheet('farhome', FarhomeCharacterSheet, { makeDefault: true });
+
+  // Preload Handlebars templates
+  await preloadTemplates();
 });
 
 // Setup system

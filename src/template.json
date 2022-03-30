@@ -266,7 +266,9 @@
         "value": 0,
         "min": 0
       },
-      "formula": "d20 + @str.mod + ceil(@lvl / 2)"
+      "formula": {
+        "value": "TBD"
+      }
     },
     "weapon": {
       "templates": ["base", "rarity", "formula"],
@@ -313,20 +315,41 @@
         "value": false
       },
       "properties": {
-        "light": false,
-        "medium": false,
-        "heavy": false,
-        "shield": false,
-        "masterwork": false
+        "light": {
+          "value": false
+        },
+        "medium": {
+          "value": false
+        },
+        "heavy": {
+          "value": false
+        },
+        "shield": {
+          "value": false
+        },
+        "masterwork": {
+          "value": false
+        }
       }
     },
     "feat": {
-      "templates": ["base"]
+      "templates": ["base"],
+      "description": {
+        "value": ""
+      }
+    },
+    "maneuver": {
+      "templates": ["base"],
+      "description": {
+        "value": ""
+      }
     },
     "spell": {
       "templates": ["base"],
       "spellLevel": {
-        "value": 0
+        "value": {
+          "value": 0
+        }
       }
     }
   }
