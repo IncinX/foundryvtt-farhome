@@ -9,12 +9,9 @@ export default class FarhomeActorSheet extends ActorSheet {
   getData() {
     // TODO This is jank, does it need to be like this?
     const data = super.getData();
-    const itemData = data.data;
 
     data.config = CONFIG.farhome;
 
-    data.item = itemData;
-    data.data = itemData.data;
     return data;
   }
 }

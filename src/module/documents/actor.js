@@ -1,3 +1,5 @@
+// TODO Add facilities to potentially calculate spell power
+
 /**
  * Extend the base Actor document by defining a custom roll data structure which is ideal for the Simple system.
  * @extends {Actor}
@@ -31,7 +33,7 @@
   prepareDerivedData() {
     const actorData = this.data;
     const data = actorData.data;
-    const flags = actorData.flags.boilerplate || {};
+    const flags = actorData.flags.farhome || {};
 
     // Make separate methods for each Actor type (character, npc, etc.) to keep
     // things organized.
@@ -49,10 +51,12 @@
     const data = actorData.data;
 
     // Loop through ability scores, and add their modifiers to our sheet output.
+    /* TODO This doesn't apply to farhome but I can extend it to something similar later.
     for (let [key, ability] of Object.entries(data.abilities)) {
       // Calculate the modifier using d20 rules.
       ability.mod = Math.floor((ability.value - 10) / 2);
     }
+    */
   }
 
   /**
@@ -63,7 +67,9 @@
 
     // Make modifications to data here. For example:
     const data = actorData.data;
+    /** TODO Not useful right now but it could be useful later./
     data.xp = (data.cr * data.cr) * 100;
+    */
   }
 
   /**
@@ -87,6 +93,8 @@
 
     // Copy the ability scores to the top level, so that rolls can use
     // formulas like `@str.mod + 4`.
+    // TODO This doesn't apply to farhome but I can extend it to something similar later.
+    /*
     if (data.abilities) {
       for (let [k, v] of Object.entries(data.abilities)) {
         data[k] = foundry.utils.deepClone(v);
@@ -97,6 +105,7 @@
     if (data.attributes.level) {
       data.lvl = data.attributes.level.value ?? 0;
     }
+    */
   }
 
   /**
