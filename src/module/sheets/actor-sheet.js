@@ -16,7 +16,8 @@ export default class FarhomeActorSheet extends ActorSheet {
       template: 'systems/farhome/templates/sheets/actor-sheet.hbs',
       width: 800,
       height: 800,
-      tabs: [{ navSelector: '.sheet-tabs', contentSelector: '.sheet-body', initial: 'attributes' }],
+      // TODO Enable this a bit at a time when it is ready.
+      //tabs: [{ navSelector: '.sheet-tabs', contentSelector: '.sheet-body', initial: 'attributes' }],
     });
   }
 
@@ -53,7 +54,8 @@ export default class FarhomeActorSheet extends ActorSheet {
     context.rollData = context.actor.getRollData();
 
     // Prepare active effects
-    context.effects = prepareActiveEffectCategories(this.actor.effects);
+    // TODO Enable this a bit at a time when it is ready.
+    //context.effects = prepareActiveEffectCategories(this.actor.effects);
 
     return context;
   }
@@ -162,6 +164,8 @@ export default class FarhomeActorSheet extends ActorSheet {
   activateListeners(html) {
     super.activateListeners(html);
 
+    /* TODO Not tested or activated yet
+
     // Render the item sheet for viewing/editing prior to the editable check.
     html.find('.item-edit').click((ev) => {
       const li = $(ev.currentTarget).parents('.item');
@@ -199,6 +203,7 @@ export default class FarhomeActorSheet extends ActorSheet {
         li.addEventListener('dragstart', handler, false);
       });
     }
+    */
   }
 
   /**
