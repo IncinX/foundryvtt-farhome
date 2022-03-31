@@ -12,6 +12,9 @@
         "biography": {
           "value": ""
         },
+        "notes": {
+          "value": ""
+        },
         "features": {
           "wounds": {
             "value": 1,

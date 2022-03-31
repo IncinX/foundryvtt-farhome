@@ -34,6 +34,7 @@ export default class FarhomeActorSheet extends ActorSheet {
     context.flags = actorData.flags;
 
     // Prepare the items
+    this._parepActorData(context);
     this._prepareItems(context);
   
     // Prepare character data and items.
@@ -56,7 +57,7 @@ export default class FarhomeActorSheet extends ActorSheet {
   }
 
   /**
-   * Prepare the character derived sheet-specific data.
+   * Prepare the actor derived sheet-specific data (common to character and npc)
    *
    * @param {Object} actorData The actor to prepare.
    *
@@ -64,9 +65,27 @@ export default class FarhomeActorSheet extends ActorSheet {
    */
    _prepareCharacterData(context) {
     // Handle ability scores.
-    for (let [k, v] of Object.entries(context.data.abilities)) {
-      v.label = game.i18n.localize(CONFIG.BOILERPLATE.abilities[k]) ?? k;
+    for (let [k, v] of Object.entries(context.data.attributes)) {
+      labelText = game.i18n.localize(`farhome.${k}`);
+      
+      if (labelText === null) {
+        labelText = k;
+        console.warn(`Localization not found: farhome.${k}`);
+      }
+
+      v.label = game.i18n.localize(`farhome.${k}`) ?? k;
     }
+  }
+
+  /**
+   * Prepare the character derived sheet-specific data.
+   *
+   * @param {Object} actorData The actor to prepare.
+   *
+   * @return {undefined}
+   */
+  _prepareCharacterData(context) {
+    // Nothing to do right now.
   }
   
   /**
@@ -76,13 +95,8 @@ export default class FarhomeActorSheet extends ActorSheet {
    *
    * @return {undefined}
    */
-   _prepareNpcData(context) {
-    // Handle ability scores.
-    // TODO This is duplicated with character data, create a common function to prepare for both.
-    // TODO Tweak this localization function to localize based on name farhome.<field_name>
-    for (let [k, v] of Object.entries(context.data.abilities)) {
-      v.label = game.i18n.localize(CONFIG.FARHOME.abilities[k]) ?? k;
-    }
+  _prepareNpcData(context) {
+     // Nothing to do right now.
   }
 
   /**
