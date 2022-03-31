@@ -1,5 +1,5 @@
 // TODO Create auto helper methods to go into template and add a derived label field that auto-resolves localization to farhome.<field_name>
-//       Basically if something is of type "object" then it will add a label field and attempt to localize it with defaulting to the original name on fallback and logging a warning to console.
+//       Basically if something is of type 'object' then it will add a label field and attempt to localize it with defaulting to the original name on fallback and logging a warning to console.
 // TODO Use Handlebars If logic to customize the actor sheet based on the actor type.  Only create a seperate sheet if it's absolutely necessary.
 // TODO A lot of the functionality on this sheet was built from the BOILERPLATE from the https://gitlab.com/asacolips-projects/foundry-mods/boilerplate/-/blob/master/module/sheets/actor-sheet.mjs project and likely needs to be modified for FARHOME.
 
@@ -25,10 +25,10 @@ export default class FarhomeActorSheet extends ActorSheet {
     // sheets are the actor object, the data object, whether or not it's
     // editable, the items array, and the effects array.
     const context = super.getData();
-  
+
     // Use a safe clone of the actor data for further operations.
     const actorData = this.actor.data.toObject(false);
-  
+
     // Add the actor's data to context.data for easier access, as well as flags.
     context.data = actorData.data;
     context.flags = actorData.flags;
@@ -36,23 +36,23 @@ export default class FarhomeActorSheet extends ActorSheet {
     // Prepare the items
     this._parepActorData(context);
     this._prepareItems(context);
-  
+
     // Prepare character data and items.
     if (actorData.type == 'character') {
       this._prepareCharacterData(context);
     }
-  
+
     // Prepare NPC data and items.
     if (actorData.type == 'npc') {
       this._prepareNpcData(context);
     }
-  
+
     // Add roll data for TinyMCE editors.
     context.rollData = context.actor.getRollData();
-  
+
     // Prepare active effects
     context.effects = prepareActiveEffectCategories(this.actor.effects);
-  
+
     return context;
   }
 
@@ -63,11 +63,11 @@ export default class FarhomeActorSheet extends ActorSheet {
    *
    * @return {undefined}
    */
-   _prepareCharacterData(context) {
+  _prepareCharacterData(context) {
     // Handle ability scores.
     for (let [k, v] of Object.entries(context.data.attributes)) {
       labelText = game.i18n.localize(`farhome.${k}`);
-      
+
       if (labelText === null) {
         labelText = k;
         console.warn(`Localization not found: farhome.${k}`);
@@ -87,7 +87,7 @@ export default class FarhomeActorSheet extends ActorSheet {
   _prepareCharacterData(context) {
     // Nothing to do right now.
   }
-  
+
   /**
    * Prepare the npc derived sheet-specific data.
    *
@@ -96,7 +96,7 @@ export default class FarhomeActorSheet extends ActorSheet {
    * @return {undefined}
    */
   _prepareNpcData(context) {
-     // Nothing to do right now.
+    // Nothing to do right now.
   }
 
   /**
@@ -121,7 +121,7 @@ export default class FarhomeActorSheet extends ActorSheet {
       6: [],
       7: [],
       8: [],
-      9: []
+      9: [],
     };
 
     // Iterate through items, allocating to containers
@@ -161,9 +161,9 @@ export default class FarhomeActorSheet extends ActorSheet {
     super.activateListeners(html);
 
     // Render the item sheet for viewing/editing prior to the editable check.
-    html.find('.item-edit').click(ev => {
-      const li = $(ev.currentTarget).parents(".item");
-      const item = this.actor.items.get(li.data("itemId"));
+    html.find('.item-edit').click((ev) => {
+      const li = $(ev.currentTarget).parents('.item');
+      const item = this.actor.items.get(li.data('itemId'));
       item.sheet.render(true);
     });
 
@@ -175,26 +175,26 @@ export default class FarhomeActorSheet extends ActorSheet {
     html.find('.item-create').click(this._onItemCreate.bind(this));
 
     // Delete Inventory Item
-    html.find('.item-delete').click(ev => {
-      const li = $(ev.currentTarget).parents(".item");
-      const item = this.actor.items.get(li.data("itemId"));
+    html.find('.item-delete').click((ev) => {
+      const li = $(ev.currentTarget).parents('.item');
+      const item = this.actor.items.get(li.data('itemId'));
       item.delete();
       li.slideUp(200, () => this.render(false));
     });
 
     // Active Effect management
-    html.find(".effect-control").click(ev => onManageActiveEffect(ev, this.actor));
+    html.find('.effect-control').click((ev) => onManageActiveEffect(ev, this.actor));
 
     // Rollable abilities.
     html.find('.rollable').click(this._onRoll.bind(this));
 
     // Drag events for macros.
     if (this.actor.isOwner) {
-      let handler = ev => this._onDragStart(ev);
+      let handler = (ev) => this._onDragStart(ev);
       html.find('li.item').each((i, li) => {
-        if (li.classList.contains("inventory-header")) return;
-        li.setAttribute("draggable", true);
-        li.addEventListener("dragstart", handler, false);
+        if (li.classList.contains('inventory-header')) return;
+        li.setAttribute('draggable', true);
+        li.addEventListener('dragstart', handler, false);
       });
     }
   }
@@ -217,13 +217,13 @@ export default class FarhomeActorSheet extends ActorSheet {
     const itemData = {
       name: name,
       type: type,
-      data: data
+      data: data,
     };
     // Remove the type from the dataset since it's in the itemData.type prop.
-    delete itemData.data["type"];
+    delete itemData.data['type'];
 
     // Finally, create the item!
-    return await Item.create(itemData, {parent: this.actor});
+    return await Item.create(itemData, { parent: this.actor });
   }
 
   /**

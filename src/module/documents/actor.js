@@ -4,8 +4,7 @@
  * Extend the base Actor document by defining a custom roll data structure which is ideal for the Simple system.
  * @extends {Actor}
  */
- export class FarhomeActor extends Actor {
-
+export class FarhomeActor extends Actor {
   /** @override */
   prepareData() {
     // Prepare data for the actor. Calling the super version of this executes
@@ -116,5 +115,4 @@
 
     // Process additional NPC data here.
   }
-
 }

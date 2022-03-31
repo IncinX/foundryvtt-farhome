@@ -2,7 +2,7 @@
  * Extend the basic Item with some very simple modifications.
  * @extends {Item}
  */
- export class FarhomeItem extends Item {
+export class FarhomeItem extends Item {
   /**
    * Augment the basic Item data model with additional dynamic data.
    */
@@ -16,9 +16,9 @@
    * Prepare a data object which is passed to any Roll formulas which are created related to this Item
    * @private
    */
-   getRollData() {
+  getRollData() {
     // If present, return the actor's roll data.
-    if ( !this.actor ) return null;
+    if (!this.actor) return null;
     const rollData = this.actor.getRollData();
     rollData.item = foundry.utils.deepClone(this.data.data);
 
@@ -44,7 +44,7 @@
         speaker: speaker,
         rollMode: rollMode,
         flavor: label,
-        content: item.data.description ?? ''
+        content: item.data.description ?? '',
       });
     }
     // Otherwise, create a roll and send a chat message from it.

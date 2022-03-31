@@ -1,8 +1,8 @@
 import { FARHOME } from './config';
 import { registerSettings } from './settings';
 import { preloadTemplates } from './preloadTemplates';
-import { FarhomeActor } from "./documents/actor";
-import { FarhomeItem } from "./documents/item";
+import { FarhomeActor } from './documents/actor';
+import { FarhomeItem } from './documents/item';
 import FarhomeItemSheet from './sheets/item-sheet';
 import FarhomeCharacterSheet from './sheets/character-sheet';
 
