@@ -1,6 +1,5 @@
 export async function preloadTemplates() {
-  const templatePaths = [
-  ];
+  const templatePaths = [];
 
   return loadTemplates(templatePaths);
 }

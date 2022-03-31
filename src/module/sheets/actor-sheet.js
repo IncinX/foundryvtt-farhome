@@ -1,9 +1,9 @@
 // TODO Create auto helper methods to go into template and add a derived label field that auto-resolves localization to farhome.<field_name>
-//       Basically if something is of type 'object' then it will add a label field and attempt to localize it with defaulting to the original name on fallback and logging a warning to console.
+//      Basically if something is of type 'object' then it will add a label field and attempt to localize it with defaulting to the original name on fallback and logging a warning to console.
 // TODO Use Handlebars If logic to customize the actor sheet based on the actor type.  Only create a seperate sheet if it's absolutely necessary.
 // TODO A lot of the functionality on this sheet was built from the BOILERPLATE from the https://gitlab.com/asacolips-projects/foundry-mods/boilerplate/-/blob/master/module/sheets/actor-sheet.mjs project and likely needs to be modified for FARHOME.
 
-import {onManageActiveEffect, prepareActiveEffectCategories} from "../helpers/effects.js";
+import { onManageActiveEffect, prepareActiveEffectCategories } from '../helpers/effects.js';
 
 /**
  * Extend the basic ActorSheet to implement Farhome specifics.
