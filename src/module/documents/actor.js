@@ -50,11 +50,11 @@
     // Make modifications to data here. For example:
     const data = actorData.data;
 
-    // Loop through ability scores, and add their modifiers to our sheet output.
+    // Loop through attribute scores, and add their modifiers to our sheet output.
     /* TODO This doesn't apply to farhome but I can extend it to something similar later.
-    for (let [key, ability] of Object.entries(data.abilities)) {
+    for (let [key, attribute] of Object.entries(data.attributes)) {
       // Calculate the modifier using d20 rules.
-      ability.mod = Math.floor((ability.value - 10) / 2);
+      attribute.mod = Math.floor((attribute.value - 10) / 2);
     }
     */
   }
@@ -96,14 +96,14 @@
     // TODO This doesn't apply to farhome but I can extend it to something similar later.
     /*
     if (data.abilities) {
-      for (let [k, v] of Object.entries(data.abilities)) {
+      for (let [k, v] of Object.entries(data.attributes)) {
         data[k] = foundry.utils.deepClone(v);
       }
     }
 
     // Add level for easier access, or fall back to 0.
-    if (data.attributes.level) {
-      data.lvl = data.attributes.level.value ?? 0;
+    if (data.essence.level) {
+      data.lvl = data.essence.level.value ?? 0;
     }
     */
   }

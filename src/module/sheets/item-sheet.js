@@ -1,3 +1,5 @@
+// TODO The item sheet can definitely come later.  The character sheet is what's most important for session 0.
+
 export default class FarhomeItemSheet extends ItemSheet {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
