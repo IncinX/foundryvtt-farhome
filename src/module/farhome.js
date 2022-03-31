@@ -1,10 +1,10 @@
-import { FARHOME } from './config';
+import { FARHOME } from './helpers/config';
 import { registerSettings } from './settings';
 import { preloadTemplates } from './preloadTemplates';
 import { FarhomeActor } from './documents/actor';
 import { FarhomeItem } from './documents/item';
 import FarhomeItemSheet from './sheets/item-sheet';
-import FarhomeCharacterSheet from './sheets/character-sheet';
+import FarhomeActorSheet from './sheets/actor-sheet';
 
 // Initialize system
 Hooks.once('init', async () => {
@@ -27,7 +27,7 @@ Hooks.once('init', async () => {
   Items.registerSheet('farhome', FarhomeItemSheet, { makeDefault: true });
 
   Actors.unregisterSheet('core', ActorSheet);
-  Actors.registerSheet('farhome', FarhomeCharacterSheet, { makeDefault: true });
+  Actors.registerSheet('farhome', FarhomeActorSheet, { makeDefault: true });
 
   // Preload Handlebars templates
   await preloadTemplates();
