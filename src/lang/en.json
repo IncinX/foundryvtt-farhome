@@ -41,6 +41,7 @@
     "exhausion": "Exhaustion",
     "quantity": "Quantity",
     "weight": "Weight",
-    "level": "Level"
+    "level": "Level",
+    "inventory": "Inventory"
   }
 }
