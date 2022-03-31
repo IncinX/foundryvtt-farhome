@@ -3,6 +3,8 @@
 // TODO Use Handlebars If logic to customize the actor sheet based on the actor type.  Only create a seperate sheet if it's absolutely necessary.
 // TODO A lot of the functionality on this sheet was built from the BOILERPLATE from the https://gitlab.com/asacolips-projects/foundry-mods/boilerplate/-/blob/master/module/sheets/actor-sheet.mjs project and likely needs to be modified for FARHOME.
 
+import {onManageActiveEffect, prepareActiveEffectCategories} from "../helpers/effects.js";
+
 /**
  * Extend the basic ActorSheet to implement Farhome specifics.
  * @extends {ActorSheet}
@@ -11,7 +13,7 @@ export default class FarhomeActorSheet extends ActorSheet {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ['farhome', 'sheet', 'actor'],
-      template: 'systems/farhome/templates/actor-sheet.hbs',
+      template: 'systems/farhome/templates/sheets/actor-sheet.hbs',
       width: 800,
       height: 800,
       tabs: [{ navSelector: '.sheet-tabs', contentSelector: '.sheet-body', initial: 'attributes' }],
@@ -34,7 +36,7 @@ export default class FarhomeActorSheet extends ActorSheet {
     context.flags = actorData.flags;
 
     // Prepare the items
-    this._parepActorData(context);
+    this._prepareActorData(context);
     this._prepareItems(context);
 
     // Prepare character data and items.
@@ -63,10 +65,10 @@ export default class FarhomeActorSheet extends ActorSheet {
    *
    * @return {undefined}
    */
-  _prepareCharacterData(context) {
+  _prepareActorData(context) {
     // Handle ability scores.
     for (let [k, v] of Object.entries(context.data.attributes)) {
-      labelText = game.i18n.localize(`farhome.${k}`);
+      let labelText = game.i18n.localize(`farhome.${k}`);
 
       if (labelText === null) {
         labelText = k;
