@@ -19,8 +19,8 @@ Hooks.once('init', async () => {
   registerSettings();
 
   // Register custom Document classes
-  CONFIG.Actor.documentClass = FarhomeCharacterSheet;
-  CONFIG.Item.documentClass = FarhomeItemSheet;
+  CONFIG.Actor.documentClass = FarhomeActor;
+  CONFIG.Item.documentClass = FarhomeItem;
 
   // Register custom sheets (if any)
   Items.unregisterSheet('core', ItemSheet);
