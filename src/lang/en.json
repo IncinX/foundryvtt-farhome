@@ -42,6 +42,7 @@
     "quantity": "Quantity",
     "weight": "Weight",
     "level": "Level",
+    "xp": "Experience",
     "inventory": "Inventory"
   }
 }
