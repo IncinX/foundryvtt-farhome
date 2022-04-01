@@ -256,6 +256,9 @@
         }
       },
       "formula": {
+        "usesFormula": {
+          "value": false
+        },
         "formula": {
           "value": ""
         }
@@ -264,10 +267,15 @@
         "rarity": {
           "value": ""
         }
+      },
+      "equippable": {
+        "equipped": {
+          "value": false
+        }
       }
     },
     "item": {
-      "templates": ["base", "rarity"],
+      "templates": ["base", "rarity", "equippable", "formula"],
       "quantity": {
         "value": 1,
         "min": 0
@@ -281,7 +289,7 @@
       }
     },
     "weapon": {
-      "templates": ["base", "rarity", "formula"],
+      "templates": ["base", "rarity", "equippable", "formula"],
       "damage": {
         "value": 1,
         "type": "bludgeoning"
@@ -314,7 +322,7 @@
       }
     },
     "armor": {
-      "templates": ["base", "rarity", "formula"],
+      "templates": ["base", "rarity", "equippable", "formula"],
       "armorBonus": {
         "value": 0
       },

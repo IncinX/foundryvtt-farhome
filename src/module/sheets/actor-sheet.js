@@ -110,7 +110,9 @@ export default class FarhomeActorSheet extends ActorSheet {
    */
   _prepareItems(context) {
     // Initialize containers.
-    const gear = [];
+    const inventory = [];
+    const weapons = [];
+    const armor = [];
     const feats = [];
     const maneuvers = [];
     const spells = {
@@ -148,6 +150,9 @@ export default class FarhomeActorSheet extends ActorSheet {
         }
       }
     }
+
+    // TODO Create roll formula's for items
+    // TODO Adjust existing roll formula's based on feats and such
 
     // Assign and return
     context.gear = gear;

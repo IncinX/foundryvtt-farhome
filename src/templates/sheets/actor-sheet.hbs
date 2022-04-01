@@ -26,7 +26,7 @@
     </header>
     
     {{!-- Resource Bar --}}
-    <div class="resource-fields grid grid-4col">
+    <div class="resource-fields grid grid-6col">
       {{!-- TODO Try to change these into partials with context and variables... Localize the string here and pass the string in. --}}
       <div class="resource flex-group-center">
           <div class="resource-content flexrow flex-center flex-between">
@@ -38,14 +38,6 @@
       </div>
       <div class="resource flex-group-center">
           <div class="resource-content flexrow flex-center flex-between">
-            <input type="text" name="data.features.ap.value" value="{{data.features.ap.value}}" data-dtype="Number"/>
-            <span> / </span>
-            <input type="text" name="data.features.ap.max" value="{{data.features.ap.max}}" data-dtype="Number"/>
-          </div>
-          <label for="data.features.ap.value" class="resource-label">{{localize 'farhome.ap'}}</label>
-      </div>
-      <div class="resource flex-group-center">
-          <div class="resource-content flexrow flex-center flex-between">
             <input type="text" name="data.features.healingSurges.value" value="{{data.features.healingSurges.value}}" data-dtype="Number"/>
             <span> / </span>
             <input type="text" name="data.features.healingSurges.max" value="{{data.features.healingSurges.max}}" data-dtype="Number"/>
@@ -54,9 +46,30 @@
       </div>
       <div class="resource flex-group-center">
           <div class="resource-content flexrow flex-center flex-between">
-            <input type="text" name="data.features.move.value" value="{{data.features.move.value}}" data-dtype="Number"/>
+            <input type="text" name="data.features.ap.value" value="{{data.features.ap.value}}" data-dtype="Number"/>
             <span> / </span>
-            <input type="text" name="data.features.sprint.value" value="{{data.features.sprint.value}}" data-dtype="Number"/>
+            <input type="text" name="data.features.ap.max" value="{{data.features.ap.max}}" data-dtype="Number"/>
+          </div>
+          <label for="data.features.ap.value" class="resource-label">{{localize 'farhome.ap'}}</label>
+      </div>
+      <div class="resource flex-group-center">
+          <div class="resource-content flexrow flex-center flex-between">
+            <input type="text" name="data.features.mana.value" value="{{data.features.mana.value}}" data-dtype="Number"/>
+            <span> / </span>
+            <input type="text" name="data.features.mana.max" value="{{data.features.mana.max}}" data-dtype="Number"/>
+          </div>
+          <label for="data.features.mana.value" class="resource-label">{{localize 'farhome.mana'}}</label>
+      </div>
+      <div class="resource flex-group-center">
+          <div class="resource-content flexrow flex-center flex-between">
+            <input type="text" name="data.features.spellPower.value" value="{{data.features.spellPower.value}}" data-dtype="Number"/>
+          </div>
+          <label for="data.features.spellPower.value" class="resource-label">{{localize 'farhome.spellPower'}}</label>
+      </div>
+      <div class="resource flex-group-center">
+          <div class="resource-content flexrow flex-center flex-between">
+            <input type="text" name="data.features.move.value" value="{{data.features.move.value}}" data-dtype="Number" placeholder="{{localize 'farhome.move'}}"/>
+            <input type="text" name="data.features.sprint.value" value="{{data.features.sprint.value}}" data-dtype="Number" placeholder="{{localize 'farhome.sprint'}}"/>
           </div>
           <label for="data.features.move.value" class="resource-label">{{localize 'farhome.movement'}}</label>
       </div>
@@ -77,7 +90,7 @@
   {{!-- Sheet Body --}}
   <section class="sheet-body">
 
-    {{!-- Attributes, Biography and Notes are the most important things to setup right now for initial character creation. Everything else they can jam under notes for now. --}}
+    {{!-- TODO Attributes, Biography and Notes are the most important things to setup right now for initial character creation. Everything else they can jam under notes for now. --}}
 
     {{!-- Biography Tab --}}
     <div class="tab biography" data-group="primary" data-tab="biography">
@@ -85,6 +98,7 @@
     </div>
     
     {{!-- Notes Tab --}}
+    {{!-- TODO Figure out how to fix the initial text section. --}}
     <div class="tab notes" data-group="primary" data-tab="notes">
         {{editor content=data.notes.value target="data.notes.value" button=true owner=owner editable=editable}}
     </div>

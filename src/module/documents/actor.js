@@ -56,6 +56,8 @@ export class FarhomeActor extends Actor {
       attribute.mod = Math.floor((attribute.value - 10) / 2);
     }
     */
+   
+    // TODO Create roll formula's for @str.roll as an example to be "ssspn"
   }
 
   /**
