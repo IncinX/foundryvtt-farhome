@@ -364,6 +364,9 @@
     },
     "spell": {
       "templates": ["base"],
+      "prepared": {
+        "value": false
+      },
       "spellLevel": {
         "value": 0
       }
