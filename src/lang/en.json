@@ -1,9 +1,15 @@
 {
   "farhome": {
+    "attributes": "Attributes",
+    "feats": "Feats",
+    "maneuvers": "Maneuvers",
+    "spells": "Spells",
+    "inventory": "Inventory",
+    "biography": "Biography",
+    "notes": "Notes",
     "characterName": "Character Name",
     "race": "Race",
     "background": "Background",
-    "biography": "Biography",
     "str": "Strength",
     "dex": "Dexterity",
     "sta": "Stamina",
@@ -39,10 +45,9 @@
     "spellPower": "Spell Power",
     "healingSurges": "Healing Surges",
     "exhausion": "Exhaustion",
-    "quantity": "Quantity",
-    "weight": "Weight",
     "level": "Level",
     "xp": "Experience",
-    "inventory": "Inventory"
+    "quantity": "Quantity",
+    "weight": "Weight"
   }
 }
