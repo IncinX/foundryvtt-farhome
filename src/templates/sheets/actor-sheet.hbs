@@ -3,31 +3,31 @@
   {{log data}}
 
   {{!-- Character Sheet Header --}}
-  {{!-- TODO Squeeze the top-bar to the top, not half the page. --}}
+  {{!-- TODO Align the top-bar to the top without stretching, currently it takes half the page. --}}
   <div class "top-bar flexcol">
     <header class="sheet-header flexrow">
-        <img class="profile-img" src="{{actor.img}}" title="{{actor.name}}" data-edit="img"/>
-        <div class="header-fields flexrow">
-          <div class="name-info flexcol flex-between">
-            <input class="name-input header-input align-stretch" name="name" type="text" value="{{actor.name}}" placeholder="{{localize 'farhome.characterName'}}" />
-            <label class="under-label" for="name">{{localize 'farhome.characterName'}}</label>
-          </div>
-          <div class="xp-info flexcol">
-            <input class="header-input" name="data.level.value" type="text" value="{{data.level.value}}" data-dtype="Number" placeholder="{{localize 'farhome.level'}}" />
-            <label class="under-label" for="data.level.value">{{localize 'farhome.level'}}</label>
-            <input class="header-input" name="data.xp.value" type="text" value="{{data.xp.value}}" data-dtype="Number" placeholder="{{localize 'farhome.xp'}}" />
-            <label class="under-label" for="data.xp.value">{{localize 'farhome.xp'}}</label>
-            <input class="header-input" name="data.race.value" type="text" value="{{data.race.value}}" placeholder="{{localize 'farhome.race'}}" />
-            <label class="under-label" for="data.race.value">{{localize 'farhome.race'}}</label>
-            <input class="header-input" name="data.background.value" type="text" value="{{data.background.value}}" placeholder="{{localize 'farhome.background'}}" />
-            <label class="under-label" for="data.background.value">{{localize 'farhome.background'}}</label>
-          </div>
+      <img class="profile-img" src="{{actor.img}}" title="{{actor.name}}" data-edit="img"/>
+      <div class="header-fields flexrow">
+        <div class="name-info flexcol flex-between">
+          <input class="name-input header-input align-stretch" name="name" type="text" value="{{actor.name}}" placeholder="{{localize 'farhome.characterName'}}" />
+          <label class="under-label" for="name">{{localize 'farhome.characterName'}}</label>
+        </div>
+        <div class="character-info flexcol">
+          <input class="header-input" name="data.level.value" type="text" value="{{data.level.value}}" data-dtype="Number" placeholder="{{localize 'farhome.level'}}" />
+          <label class="under-label" for="data.level.value">{{localize 'farhome.level'}}</label>
+          <input class="header-input" name="data.xp.value" type="text" value="{{data.xp.value}}" data-dtype="Number" placeholder="{{localize 'farhome.xp'}}" />
+          <label class="under-label" for="data.xp.value">{{localize 'farhome.xp'}}</label>
+          <input class="header-input" name="data.race.value" type="text" value="{{data.race.value}}" placeholder="{{localize 'farhome.race'}}" />
+          <label class="under-label" for="data.race.value">{{localize 'farhome.race'}}</label>
+          <input class="header-input" name="data.background.value" type="text" value="{{data.background.value}}" placeholder="{{localize 'farhome.background'}}" />
+          <label class="under-label" for="data.background.value">{{localize 'farhome.background'}}</label>
         </div>
       </div>
     </header>
-    <div class="information-fields flexrow">
-    </div>
+    
+    {{!-- Resource Bar --}}
     <div class="resource-fields grid grid-4col">
+      {{!-- TODO Try to change these into partials with context and variables... Localize the string here and pass the string in. --}}
       <div class="resource flex-group-center">
           <div class="resource-content flexrow flex-center flex-between">
             <input type="text" name="data.features.wounds.value" value="{{data.features.wounds.value}}" data-dtype="Number"/>
