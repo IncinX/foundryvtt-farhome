@@ -27,7 +27,7 @@
     
     {{!-- Resource Bar --}}
     <div class="resource-fields grid grid-6col">
-      {{!-- TODO Try to change these into partials with context and variables... Localize the string here and pass the string in. --}}
+      {{!-- TODO Try to change these into partials with context and variables... Localize the string here and pass the string in or just add a label field. --}}
       <div class="resource flex-group-center">
           <div class="resource-content flexrow flex-center flex-between">
             <input type="text" name="data.features.wounds.value" value="{{data.features.wounds.value}}" data-dtype="Number"/>
@@ -89,7 +89,17 @@
 
   {{!-- Sheet Body --}}
   <section class="sheet-body">
-
+    {{!-- Attributes Tab --}}
+    {{!-- TODO Switch this out with a handlebars loop and use the data.attributes.str.label --}}
+    <div class="tab attributes" data-group="primary" data-tab="attributes">
+      <div class="attribute-group flex-group-center">
+        <div class="attribute-content flex-center flex-between">
+          <input type="text" name="data.attributes.str.value" value="{{data.attributes.str.value}}" data-dtype="Number"/>
+        </div>
+        <label for="data.attributes.str.value" class="attribute-label">{{data.attributes.str.label}}</label>
+      </div>
+    </div>
+    
     {{!-- TODO Attributes, Biography and Notes are the most important things to setup right now for initial character creation. Everything else they can jam under notes for now. --}}
 
     {{!-- Biography Tab --}}
