@@ -10,10 +10,10 @@
           "value": ""
         },
         "biography": {
-          "value": ""
+          "value": "<h1>Biography</h1>"
         },
         "notes": {
-          "value": ""
+          "value": "<h1>Notes</h1>"
         },
         "features": {
           "wounds": {
@@ -29,7 +29,8 @@
             "max": 9
           },
           "hero": {
-            "value": 0
+            "value": 0,
+            "max": 0
           },
           "move": {
             "value": 1
@@ -38,7 +39,8 @@
             "value": 1
           },
           "mana": {
-            "value": 0
+            "value": 0,
+            "max": 0
           },
           "spellPower": {
             "value": 0
