@@ -10,6 +10,13 @@ export class FarhomeItem extends Item {
     // As with the actor class, items are documents that can have their data
     // preparation methods overridden (such as prepareBaseData()).
     super.prepareData();
+
+    // Get the Item's data
+    const itemData = this.data;
+    const actorData = this.actor ? this.actor.data : {};
+    const data = itemData.data;
+
+    // TODO Add custom rollable stuff here and prepare functions to set up the rollables.
   }
 
   /**

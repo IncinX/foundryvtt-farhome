@@ -5,6 +5,8 @@
 
 import { onManageActiveEffect, prepareActiveEffectCategories } from '../helpers/effects.js';
 
+// TODO Add Poison/Hex icons later
+
 /**
  * Extend the basic ActorSheet to implement Farhome specifics.
  * @extends {ActorSheet}
@@ -203,6 +205,15 @@ export default class FarhomeActorSheet extends ActorSheet {
   activateListeners(html) {
     super.activateListeners(html);
 
+    // -------------------------------------------------------------
+    // Everything below here is only needed if the sheet is editable
+    if (!this.isEditable) return;
+
+    // TODO Move a lot of this to separate methods.
+
+    // Add Inventory Item
+    html.find('.item-create').click(this._onItemCreate.bind(this));
+
     // Render the item sheet for viewing/editing prior to the editable check.
     html.find('.item-edit').click((ev) => {
       const li = $(ev.currentTarget).parents('.item');
@@ -210,22 +221,17 @@ export default class FarhomeActorSheet extends ActorSheet {
       item.sheet.render(true);
     });
 
-    // -------------------------------------------------------------
-    // Everything below here is only needed if the sheet is editable
-    if (!this.isEditable) return;
-
-    // Add Inventory Item
-    html.find('.item-create').click(this._onItemCreate.bind(this));
-
     // Delete Inventory Item
     html.find('.item-delete').click((ev) => {
       const li = $(ev.currentTarget).parents('.item');
       const item = this.actor.items.get(li.data('itemId'));
       item.delete();
+      // TODO I don't think this sliding motion actually works, add it later.
       li.slideUp(200, () => this.render(false));
     });
 
     // Active Effect management
+    // TODO Add support for effects
     html.find('.effect-control').click((ev) => onManageActiveEffect(ev, this.actor));
 
     // Rollable abilities.

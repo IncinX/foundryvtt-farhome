@@ -252,7 +252,7 @@
     "templates": {
       "base": {
         "description": {
-          "value": ""
+          "value": "Insert item description here.  Click the edit button in the upper right."
         }
       },
       "formula": {
@@ -260,7 +260,7 @@
           "value": false
         },
         "formula": {
-          "value": ""
+          "value": "/fh n"
         }
       },
       "rarity": {
