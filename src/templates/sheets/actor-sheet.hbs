@@ -1,6 +1,6 @@
 <form class="{{cssClass}}" autocomplete="off">
   {{!-- Uncomment to debug data context --}}
-  {{!--{{log data}}--}}
+  {{log data}}
 
   {{!-- Character Sheet Header --}}
   <div class "top-bar flexcol">
@@ -29,32 +29,32 @@
       {{>
         "systems/farhome/templates/partials/max-resource-partial.hbs"
         data.features.hero
-        objectString="data.features.hero"
+        valueString="data.features.hero"
         separatorString=" / "}}
       {{>
         "systems/farhome/templates/partials/max-resource-partial.hbs"
         data.features.wounds
-        objectString="data.features.wounds"
+        valueString="data.features.wounds"
         separatorString=" / "}}
       {{>
         "systems/farhome/templates/partials/max-resource-partial.hbs"
         data.features.healingSurges
-        objectString="data.features.healingSurges"
+        valueString="data.features.healingSurges"
         separatorString=" / "}}
       {{>
         "systems/farhome/templates/partials/max-resource-partial.hbs"
         data.features.ap
-        objectString="data.features.ap"
+        valueString="data.features.ap"
         separatorString=" / "}}
       {{>
         "systems/farhome/templates/partials/max-resource-partial.hbs"
         data.features.mana
-        objectString="data.features.mana"
+        valueString="data.features.mana"
         separatorString=" / "}}
       {{>
         "systems/farhome/templates/partials/resource-partial.hbs"
         data.features.spellPower
-        objectString="data.features.spellPower"}}
+        valueString="data.features.spellPower"}}
       <div class="resource-box flex-group-center">
           <div class="resource-content flexrow flex-center flex-between">
             <input type="text" name="data.features.move.value" value="{{data.features.move.value}}" data-dtype="Number" placeholder="{{localize 'farhome.move'}}"/>
@@ -79,32 +79,73 @@
   {{!-- Sheet Body --}}
   <section class="sheet-body">
     {{!-- Attributes Tab --}}
-    <div class="tab attributes" data-group="primary" data-tab="attributes">
-      <div class="attribute-list flexcol">
+    <div class="tab attributes flexrow" data-group="primary" data-tab="attributes">
+      <div class="attribute-list flex-group-center">
         {{>
           "systems/farhome/templates/partials/attribute-partial.hbs"
           data.attributes.str
-          objectString="data.attributes.str"}}
+          valueString="data.attributes.str"}}
         {{>
           "systems/farhome/templates/partials/attribute-partial.hbs"
           data.attributes.dex
-          objectString="data.attributes.dex"}}
+          valueString="data.attributes.dex"}}
         {{>
           "systems/farhome/templates/partials/attribute-partial.hbs"
           data.attributes.sta
-          objectString="data.attributes.sta"}}
+          valueString="data.attributes.sta"}}
         {{>
           "systems/farhome/templates/partials/attribute-partial.hbs"
           data.attributes.int
-          objectString="data.attributes.int"}}
+          valueString="data.attributes.int"}}
         {{>
           "systems/farhome/templates/partials/attribute-partial.hbs"
           data.attributes.will
-          objectString="data.attributes.will"}}
+          valueString="data.attributes.will"}}
         {{>
           "systems/farhome/templates/partials/attribute-partial.hbs"
           data.attributes.cha
-          objectString="data.attributes.cha"}}
+          valueString="data.attributes.cha"}}
+      </div>
+      <div class="saves-proficiency-group flex-group-center box">
+        <div class="saves-list flexcol">
+          <h3>Saves</h3>
+          <table class="proficiency-table">
+            <colgroup>
+              <col class="proficiency-label" />
+              <col class="proficiency-data" />
+            </colgroup>
+            {{>
+              "systems/farhome/templates/partials/proficiency-partial.hbs"
+                data.proficiencies.saves.str
+                valueString="data.proficiencies.saves.str"}}
+            {{>
+              "systems/farhome/templates/partials/proficiency-partial.hbs"
+                data.proficiencies.saves.dex
+                valueString="data.proficiencies.saves.dex"}}
+            {{>
+              "systems/farhome/templates/partials/proficiency-partial.hbs"
+                data.proficiencies.saves.sta
+                valueString="data.proficiencies.saves.sta"}}
+            {{>
+              "systems/farhome/templates/partials/proficiency-partial.hbs"
+                data.proficiencies.saves.int
+                valueString="data.proficiencies.saves.int"}}
+            {{>
+              "systems/farhome/templates/partials/proficiency-partial.hbs"
+                data.proficiencies.saves.will
+                valueString="data.proficiencies.saves.will"}}
+            {{>
+              "systems/farhome/templates/partials/proficiency-partial.hbs"
+                data.proficiencies.saves.cha
+                valueString="data.proficiencies.saves.cha"}}
+          </table>
+        </div>
+      </div>
+      <div class="attribute-proficiency-group flex-group-center box">
+        <h3>Proficiencies</h3>
+        <div class="proficiency-group">
+          <h4>Strength</h4>
+        </div>
       </div>
     </div>
 
