@@ -65,12 +65,21 @@
   {{!-- Sheet Body --}}
   <section class="sheet-body">
     {{!-- Attributes Tab --}}
+    {{!-- TODO Switch this out with a handlebars loop and use the data.attributes.str.label --}}
     <div class="tab attributes" data-group="primary" data-tab="attributes">
-      {{!-- TODO Add proficiency stuff next --}}
-      {{#each data.attributes as |attributeObject key|}}
-        {{> "systems/farhome/templates/partials/attribute-partial.hbs" attributeObject
-                                                                       objectString="data.attributes.{{key}}"}}
-      {{/each}}
+      {{!-- TODO A loop can't be used here because there is a label in the object.  Perhaps the label method isn't he best way and a resolved 'localize' parameter is best. --}}
+      {{> "systems/farhome/templates/partials/attribute-partial.hbs" data.attributes.str
+                                                                     objectString="data.attributes.str"}}
+      {{> "systems/farhome/templates/partials/attribute-partial.hbs" data.attributes.dex
+                                                                     objectString="data.attributes.dex"}}
+      {{> "systems/farhome/templates/partials/attribute-partial.hbs" data.attributes.sta
+                                                                     objectString="data.attributes.sta"}}
+      {{> "systems/farhome/templates/partials/attribute-partial.hbs" data.attributes.int
+                                                                     objectString="data.attributes.int"}}
+      {{> "systems/farhome/templates/partials/attribute-partial.hbs" data.attributes.will
+                                                                     objectString="data.attributes.will"}}
+      {{> "systems/farhome/templates/partials/attribute-partial.hbs" data.attributes.cha
+                                                                     objectString="data.attributes.cha"}}
     </div>
     
     {{!-- TODO Attributes, Biography and Notes are the most important things to setup right now for initial character creation. Everything else they can jam under notes for now. --}}
