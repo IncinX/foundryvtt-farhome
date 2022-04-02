@@ -5,62 +5,69 @@
   {{!-- Character Sheet Header --}}
   <div class "top-bar flexcol">
     <header class="sheet-header flexrow">
-      <img class="profile-img" src="{{actor.img}}" title="{{actor.name}}" data-edit="img"/>
+      <img class="profile-img" src="{{actor.img}}" title="{{actor.name}}" data-edit="img" />
       <div class="header-fields flexrow">
         <div class="name-info flexcol flex-between flex3">
-          <input class="name-input header-input align-stretch" name="name" type="text" value="{{actor.name}}" placeholder="{{localize 'farhome.characterName'}}" />
+          <input class="name-input header-input align-stretch" name="name" type="text" value="{{actor.name}}"
+            placeholder="{{localize 'farhome.characterName'}}" />
           <label class="under-label" for="name">{{localize 'farhome.characterName'}}</label>
         </div>
         <div class="character-info flexcol flex1">
-          <input class="header-input" name="data.level.value" type="text" value="{{data.level.value}}" data-dtype="Number" placeholder="{{data.level.label}}" />
+          <input class="header-input" name="data.level.value" type="text" value="{{data.level.value}}"
+            data-dtype="Number" placeholder="{{data.level.label}}" />
           <label class="under-label" for="data.level.value">{{localize 'farhome.level'}}</label>
-          <input class="header-input" name="data.xp.value" type="text" value="{{data.xp.value}}" data-dtype="Number" placeholder="{{data.xp.label}}" />
+          <input class="header-input" name="data.xp.value" type="text" value="{{data.xp.value}}" data-dtype="Number"
+            placeholder="{{data.xp.label}}" />
           <label class="under-label" for="data.xp.value">{{localize 'farhome.xp'}}</label>
-          <input class="header-input" name="data.race.value" type="text" value="{{data.race.value}}" placeholder="{{data.race.label}}" />
+          <input class="header-input" name="data.race.value" type="text" value="{{data.race.value}}"
+            placeholder="{{data.race.label}}" />
           <label class="under-label" for="data.race.value">{{localize 'farhome.race'}}</label>
-          <input class="header-input" name="data.background.value" type="text" value="{{data.background.value}}" placeholder="{{data.background.label}}" />
+          <input class="header-input" name="data.background.value" type="text" value="{{data.background.value}}"
+            placeholder="{{data.background.label}}" />
           <label class="under-label" for="data.background.value">{{localize 'farhome.background'}}</label>
         </div>
       </div>
     </header>
-    
+
     {{!-- Resource Bar --}}
     <div class="resource-fields grid grid-7col">
       {{>
-        "systems/farhome/templates/partials/max-resource-partial.hbs"
-        data.features.hero
-        objectString="data.features.hero"
-        separatorString=" / "}}
+      "systems/farhome/templates/partials/max-resource-partial.hbs"
+      data.features.hero
+      objectString="data.features.hero"
+      separatorString=" / "}}
       {{>
-        "systems/farhome/templates/partials/max-resource-partial.hbs"
-        data.features.wounds
-        objectString="data.features.wounds"
-        separatorString=" / "}}
+      "systems/farhome/templates/partials/max-resource-partial.hbs"
+      data.features.wounds
+      objectString="data.features.wounds"
+      separatorString=" / "}}
       {{>
-        "systems/farhome/templates/partials/max-resource-partial.hbs"
-        data.features.healingSurges
-        objectString="data.features.healingSurges"
-        separatorString=" / "}}
+      "systems/farhome/templates/partials/max-resource-partial.hbs"
+      data.features.healingSurges
+      objectString="data.features.healingSurges"
+      separatorString=" / "}}
       {{>
-        "systems/farhome/templates/partials/max-resource-partial.hbs"
-        data.features.ap
-        objectString="data.features.ap"
-        separatorString=" / "}}
+      "systems/farhome/templates/partials/max-resource-partial.hbs"
+      data.features.ap
+      objectString="data.features.ap"
+      separatorString=" / "}}
       {{>
-        "systems/farhome/templates/partials/max-resource-partial.hbs"
-        data.features.mana
-        objectString="data.features.mana"
-        separatorString=" / "}}
+      "systems/farhome/templates/partials/max-resource-partial.hbs"
+      data.features.mana
+      objectString="data.features.mana"
+      separatorString=" / "}}
       {{>
-        "systems/farhome/templates/partials/resource-partial.hbs"
-        data.features.spellPower
-        objectString="data.features.spellPower"}}
+      "systems/farhome/templates/partials/resource-partial.hbs"
+      data.features.spellPower
+      objectString="data.features.spellPower"}}
       <div class="resource-box flex-group-center">
-          <div class="resource-content flexrow flex-center flex-between">
-            <input type="text" name="data.features.move.value" value="{{data.features.move.value}}" data-dtype="Number" placeholder="{{localize 'farhome.move'}}"/>
-            <input type="text" name="data.features.sprint.value" value="{{data.features.sprint.value}}" data-dtype="Number" placeholder="{{localize 'farhome.sprint'}}"/>
-          </div>
-          <label for="data.features.move.value" class="resource-label">{{data.features.move.label}}</label>
+        <div class="resource-content flexrow flex-center flex-between">
+          <input type="text" name="data.features.move.value" value="{{data.features.move.value}}" data-dtype="Number"
+            placeholder="{{localize 'farhome.move'}}" />
+          <input type="text" name="data.features.sprint.value" value="{{data.features.sprint.value}}"
+            data-dtype="Number" placeholder="{{localize 'farhome.sprint'}}" />
+        </div>
+        <label for="data.features.move.value" class="resource-label">{{data.features.move.label}}</label>
       </div>
     </div>
   </div>
@@ -82,81 +89,203 @@
     <div class="tab attributes flexrow" data-group="primary" data-tab="attributes">
       <div class="attribute-list flex-group-center">
         {{>
-          "systems/farhome/templates/partials/attribute-partial.hbs"
-          data.attributes.str
-          objectString="data.attributes.str"}}
+        "systems/farhome/templates/partials/attribute-partial.hbs"
+        data.attributes.str
+        objectString="data.attributes.str"}}
         {{>
-          "systems/farhome/templates/partials/attribute-partial.hbs"
-          data.attributes.dex
-          objectString="data.attributes.dex"}}
+        "systems/farhome/templates/partials/attribute-partial.hbs"
+        data.attributes.dex
+        objectString="data.attributes.dex"}}
         {{>
-          "systems/farhome/templates/partials/attribute-partial.hbs"
-          data.attributes.sta
-          objectString="data.attributes.sta"}}
+        "systems/farhome/templates/partials/attribute-partial.hbs"
+        data.attributes.sta
+        objectString="data.attributes.sta"}}
         {{>
-          "systems/farhome/templates/partials/attribute-partial.hbs"
-          data.attributes.int
-          objectString="data.attributes.int"}}
+        "systems/farhome/templates/partials/attribute-partial.hbs"
+        data.attributes.int
+        objectString="data.attributes.int"}}
         {{>
-          "systems/farhome/templates/partials/attribute-partial.hbs"
-          data.attributes.will
-          objectString="data.attributes.will"}}
+        "systems/farhome/templates/partials/attribute-partial.hbs"
+        data.attributes.will
+        objectString="data.attributes.will"}}
         {{>
-          "systems/farhome/templates/partials/attribute-partial.hbs"
-          data.attributes.cha
-          objectString="data.attributes.cha"}}
+        "systems/farhome/templates/partials/attribute-partial.hbs"
+        data.attributes.cha
+        objectString="data.attributes.cha"}}
       </div>
       <div class="saves-proficiency-group flexcol">
         <div class="saves-list flex-group-center proficiency-group-box">
-          <h2>Saves</h2>
+          <h2>{{localize 'farhome.saves'}}</h2>
           <table class="proficiency-table">
             <colgroup>
               <col class="proficiency-label" />
               <col class="proficiency-data" />
             </colgroup>
             {{>
-              "systems/farhome/templates/partials/proficiency-partial.hbs"
-                data.proficiencies.saves.str
-                objectString="data.proficiencies.saves.str"}}
+            "systems/farhome/templates/partials/proficiency-partial.hbs"
+            data.proficiencies.saves.str
+            objectString="data.proficiencies.saves.str"}}
             {{>
-              "systems/farhome/templates/partials/proficiency-partial.hbs"
-                data.proficiencies.saves.dex
-                objectString="data.proficiencies.saves.dex"}}
+            "systems/farhome/templates/partials/proficiency-partial.hbs"
+            data.proficiencies.saves.dex
+            objectString="data.proficiencies.saves.dex"}}
             {{>
-              "systems/farhome/templates/partials/proficiency-partial.hbs"
-                data.proficiencies.saves.sta
-                objectString="data.proficiencies.saves.sta"}}
+            "systems/farhome/templates/partials/proficiency-partial.hbs"
+            data.proficiencies.saves.sta
+            objectString="data.proficiencies.saves.sta"}}
             {{>
-              "systems/farhome/templates/partials/proficiency-partial.hbs"
-                data.proficiencies.saves.int
-                objectString="data.proficiencies.saves.int"}}
+            "systems/farhome/templates/partials/proficiency-partial.hbs"
+            data.proficiencies.saves.int
+            objectString="data.proficiencies.saves.int"}}
             {{>
-              "systems/farhome/templates/partials/proficiency-partial.hbs"
-                data.proficiencies.saves.will
-                objectString="data.proficiencies.saves.will"}}
+            "systems/farhome/templates/partials/proficiency-partial.hbs"
+            data.proficiencies.saves.will
+            objectString="data.proficiencies.saves.will"}}
             {{>
-              "systems/farhome/templates/partials/proficiency-partial.hbs"
-                data.proficiencies.saves.cha
-                objectString="data.proficiencies.saves.cha"}}
+            "systems/farhome/templates/partials/proficiency-partial.hbs"
+            data.proficiencies.saves.cha
+            objectString="data.proficiencies.saves.cha"}}
           </table>
         </div>
         <div class="attribute-proficiency-group flex-group-center proficiency-group-box">
-          <h2>Proficiencies</h2>
+          <h2>{{localize 'farhome.proficiencies'}}</h2>
           <div class="proficiency-group">
-            <h4>Strength</h4>
+            <h4>{{localize 'farhome.str'}}</h4>
             <table class="proficiency-table">
               <colgroup>
                 <col class="proficiency-label" />
                 <col class="proficiency-data" />
               </colgroup>
               {{>
-                "systems/farhome/templates/partials/proficiency-partial.hbs"
-                  data.proficiencies.attributes.str.athletics
-                  objectString="data.proficiencies.attributes.str.athletics"}}
+              "systems/farhome/templates/partials/proficiency-partial.hbs"
+              data.proficiencies.attributes.str.athletics
+              objectString="data.proficiencies.attributes.str.athletics"}}
+              {{>
+              "systems/farhome/templates/partials/proficiency-partial.hbs"
+              data.proficiencies.attributes.str.intimidation
+              objectString="data.proficiencies.attributes.str.intimidation"}}
             </table>
           </div>
+          <div class="proficiency-group">
+            <h4>{{localize 'farhome.dex'}}</h4>
+            <table class="proficiency-table">
+              <colgroup>
+                <col class="proficiency-label" />
+                <col class="proficiency-data" />
+              </colgroup>
+              {{>
+              "systems/farhome/templates/partials/proficiency-partial.hbs"
+              data.proficiencies.attributes.dex.acrobatics
+              objectString="data.proficiencies.attributes.dex.acrobatics"}}
+              {{>
+              "systems/farhome/templates/partials/proficiency-partial.hbs"
+              data.proficiencies.attributes.dex.lockpicking
+              objectString="data.proficiencies.attributes.dex.lockpicking"}}
+              {{>
+              "systems/farhome/templates/partials/proficiency-partial.hbs"
+              data.proficiencies.attributes.dex.stealth
+              objectString="data.proficiencies.attributes.dex.stealth"}}
+              {{>
+              "systems/farhome/templates/partials/proficiency-partial.hbs"
+              data.proficiencies.attributes.dex.sleightOfHand
+              objectString="data.proficiencies.attributes.dex.sleightOfHand"}}
+            </table>
+          </div>
+          <div class="proficiency-group">
+            <h4>{{localize 'farhome.sta'}}</h4>
+            <table class="proficiency-table">
+              <colgroup>
+                <col class="proficiency-label" />
+                <col class="proficiency-data" />
+              </colgroup>
+              {{>
+              "systems/farhome/templates/partials/proficiency-partial.hbs"
+              data.proficiencies.attributes.sta.exhaustion
+              objectString="data.proficiencies.attributes.sta.exhaustion"}}
+              {{>
+              "systems/farhome/templates/partials/proficiency-partial.hbs"
+              data.proficiencies.attributes.sta.survival
+              objectString="data.proficiencies.attributes.sta.survival"}}
+            </table>
+          </div>
+          <div class="proficiency-group">
+            <h4>{{localize 'farhome.int'}}</h4>
+            <table class="proficiency-table">
+              <colgroup>
+                <col class="proficiency-label" />
+                <col class="proficiency-data" />
+              </colgroup>
+              {{>
+              "systems/farhome/templates/partials/proficiency-partial.hbs"
+              data.proficiencies.attributes.int.arcana
+              objectString="data.proficiencies.attributes.int.arcana"}}
+              {{>
+              "systems/farhome/templates/partials/proficiency-partial.hbs"
+              data.proficiencies.attributes.int.investigation
+              objectString="data.proficiencies.attributes.int.investigation"}}
+              {{>
+              "systems/farhome/templates/partials/proficiency-partial.hbs"
+              data.proficiencies.attributes.int.lore
+              objectString="data.proficiencies.attributes.int.lore"}}
+              {{>
+              "systems/farhome/templates/partials/proficiency-partial.hbs"
+              data.proficiencies.attributes.int.medicine
+              objectString="data.proficiencies.attributes.int.medicine"}}
+            </table>
+          </div>
+          <div class="proficiency-group">
+            <h4>{{localize 'farhome.will'}}</h4>
+            <table class="proficiency-table">
+              <colgroup>
+                <col class="proficiency-label" />
+                <col class="proficiency-data" />
+              </colgroup>
+              {{>
+              "systems/farhome/templates/partials/proficiency-partial.hbs"
+              data.proficiencies.attributes.will.animalHandling
+              objectString="data.proficiencies.attributes.will.animalHandling"}}
+              {{>
+              "systems/farhome/templates/partials/proficiency-partial.hbs"
+              data.proficiencies.attributes.will.insight
+              objectString="data.proficiencies.attributes.will.insight"}}
+              {{>
+              "systems/farhome/templates/partials/proficiency-partial.hbs"
+              data.proficiencies.attributes.will.nature
+              objectString="data.proficiencies.attributes.will.nature"}}
+              {{>
+              "systems/farhome/templates/partials/proficiency-partial.hbs"
+              data.proficiencies.attributes.will.perception
+              objectString="data.proficiencies.attributes.will.perception"}}
+            </table>
+          </div>
+          <div class="proficiency-group">
+            <h4>{{localize 'farhome.cha'}}</h4>
+            <table class="proficiency-table">
+              <colgroup>
+                <col class="proficiency-label" />
+                <col class="proficiency-data" />
+              </colgroup>
+              {{>
+              "systems/farhome/templates/partials/proficiency-partial.hbs"
+              data.proficiencies.attributes.cha.conversation
+              objectString="data.proficiencies.attributes.cha.conversation"}}
+              {{>
+              "systems/farhome/templates/partials/proficiency-partial.hbs"
+              data.proficiencies.attributes.cha.diplomacy
+              objectString="data.proficiencies.attributes.cha.diplomacy"}}
+              {{>
+              "systems/farhome/templates/partials/proficiency-partial.hbs"
+              data.proficiencies.attributes.cha.performance
+              objectString="data.proficiencies.attributes.cha.performance"}}
+              {{>
+              "systems/farhome/templates/partials/proficiency-partial.hbs"
+              data.proficiencies.attributes.cha.religion
+              objectString="data.proficiencies.attributes.cha.religion"}}
+            </table>
+          </div>
+        </div>
       </div>
-      </div>
+    </div>
     </div>
 
     {{!-- Feats Tab --}}
@@ -178,31 +307,32 @@
           <div class="item-image"></div>
           <div class="item-name">Name</div>
           <div class="item-controls">
-            <a class="item-control item-create" title="Create Item" data-type="item"><i class="fas fa-plus"></i> Add Item</a>
+            <a class="item-control item-create" title="Create Item" data-type="item"><i class="fas fa-plus"></i> Add
+              Item</a>
           </div>
         </li>
         {{#each items as |item id|}}
-          <li class="item flexrow" data-item-id="{{item._id}}">
-            <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24"/></div>
-            <h4 class="item-name">{{item.name}}</h4>
-            <div class="item-controls">
-              <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
-              <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
-            </div>
-          </li>
+        <li class="item flexrow" data-item-id="{{item._id}}">
+          <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24" /></div>
+          <h4 class="item-name">{{item.name}}</h4>
+          <div class="item-controls">
+            <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+            <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+          </div>
+        </li>
         {{/each}}
       </ol>
     </div>
 
     {{!-- Biography Tab --}}
     <div class="tab biography" data-group="primary" data-tab="biography">
-        {{editor content=data.biography.value target="data.biography.value" button=true owner=owner editable=editable}}
+      {{editor content=data.biography.value target="data.biography.value" button=true owner=owner editable=editable}}
     </div>
-    
+
     {{!-- Notes Tab --}}
     {{!-- TODO Figure out how to fix the initial text section. --}}
     <div class="tab notes" data-group="primary" data-tab="notes">
-        {{editor content=data.notes.value target="data.notes.value" button=true owner=owner editable=editable}}
+      {{editor content=data.notes.value target="data.notes.value" button=true owner=owner editable=editable}}
     </div>
   </section>
 
