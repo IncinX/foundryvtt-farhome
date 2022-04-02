@@ -80,19 +80,20 @@ export default class FarhomeActorSheet extends ActorSheet {
   _localizeObject(objectKeyName, objectValue) {
     let hasLabel = false;
 
-    if (objectValue === null) { return; }
+    if (objectValue === null) {
+      return;
+    }
 
     for (let [k, v] of Object.entries(objectValue)) {
       if (k === 'label') {
-        console.warn(`Label field already found for key: ${objectKeyName}`)
+        console.warn(`Label field already found for key: ${objectKeyName}`);
         hasLabel = true;
-      }
-      else if ((k !== 'value') && (typeof v === 'object')) {
+      } else if (k !== 'value' && typeof v === 'object') {
         this._localizeObject(k, v);
       }
     }
-    
-    if ((objectKeyName !== null) && !hasLabel) {
+
+    if (objectKeyName !== null && !hasLabel) {
       let localizationKey = `farhome.${objectKeyName}`;
       let labelText = game.i18n.localize(localizationKey);
 

@@ -1,5 +1,8 @@
 export async function preloadTemplates() {
-  const templatePaths = [];
+  const templatePaths = [
+    'systems/farhome/templates/partials/max-resource-partial.hbs',
+    'systems/farhome/templates/partials/resource-partial.hbs',
+  ];
 
   return loadTemplates(templatePaths);
 }

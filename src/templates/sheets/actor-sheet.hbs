@@ -1,9 +1,8 @@
 <form class="{{cssClass}}" autocomplete="off">
-  {{!-- Debugging --}}
-  {{log data}}
+  {{!-- Uncomment to debug data context --}}
+  {{!--{{log data}}--}}
 
   {{!-- Character Sheet Header --}}
-  {{!-- TODO Align the top-bar to the top without stretching, currently it takes half the page. --}}
   <div class "top-bar flexcol">
     <header class="sheet-header flexrow">
       <img class="profile-img" src="{{actor.img}}" title="{{actor.name}}" data-edit="img"/>
@@ -28,44 +27,20 @@
     {{!-- Resource Bar --}}
     <div class="resource-fields grid grid-6col">
       {{!-- TODO Try to change these into partials with context and variables... Localize the string here and pass the string in or just add a label field. --}}
-      <div class="resource flex-group-center">
-          <div class="resource-content flexrow flex-center flex-between">
-            <input type="text" name="data.features.wounds.value" value="{{data.features.wounds.value}}" data-dtype="Number"/>
-            <span> / </span>
-            <input type="text" name="data.features.wounds.max" value="{{data.features.wounds.max}}" data-dtype="Number"/>
-          </div>
-          <label for="data.features.wounds.value" class="resource-label">{{data.features.wounds.label}}</label>
-      </div>
-      <div class="resource flex-group-center">
-          <div class="resource-content flexrow flex-center flex-between">
-            <input type="text" name="data.features.healingSurges.value" value="{{data.features.healingSurges.value}}" data-dtype="Number"/>
-            <span> / </span>
-            <input type="text" name="data.features.healingSurges.max" value="{{data.features.healingSurges.max}}" data-dtype="Number"/>
-          </div>
-          <label for="data.features.healingSurges.value" class="resource-label">{{data.features.healingSurges.label}}</label>
-      </div>
-      <div class="resource flex-group-center">
-          <div class="resource-content flexrow flex-center flex-between">
-            <input type="text" name="data.features.ap.value" value="{{data.features.ap.value}}" data-dtype="Number"/>
-            <span> / </span>
-            <input type="text" name="data.features.ap.max" value="{{data.features.ap.max}}" data-dtype="Number"/>
-          </div>
-          <label for="data.features.ap.value" class="resource-label">{{data.features.ap.label}}</label>
-      </div>
-      <div class="resource flex-group-center">
-          <div class="resource-content flexrow flex-center flex-between">
-            <input type="text" name="data.features.mana.value" value="{{data.features.mana.value}}" data-dtype="Number"/>
-            <span> / </span>
-            <input type="text" name="data.features.mana.max" value="{{data.features.mana.max}}" data-dtype="Number"/>
-          </div>
-          <label for="data.features.mana.value" class="resource-label">{{data.features.mana.label}}</label>
-      </div>
-      <div class="resource flex-group-center">
-          <div class="resource-content flexrow flex-center flex-between">
-            <input type="text" name="data.features.spellPower.value" value="{{data.features.spellPower.value}}" data-dtype="Number"/>
-          </div>
-          <label for="data.features.spellPower.value" class="resource-label">{{data.features.spellPower.label}}</label>
-      </div>
+      {{> "systems/farhome/templates/partials/max-resource-partial.hbs" data.features.wounds
+                                                                        objectString="data.features.wounds"
+                                                                        separatorString=" / "}}
+      {{> "systems/farhome/templates/partials/max-resource-partial.hbs" data.features.healingSurges
+                                                                        objectString="data.features.healingSurges"
+                                                                        separatorString=" / "}}
+      {{> "systems/farhome/templates/partials/max-resource-partial.hbs" data.features.ap
+                                                                        objectString="data.features.ap"
+                                                                        separatorString=" / "}}
+      {{> "systems/farhome/templates/partials/max-resource-partial.hbs" data.features.mana
+                                                                        objectString="data.features.mana"
+                                                                        separatorString=" / "}}
+      {{> "systems/farhome/templates/partials/resource-partial.hbs" data.features.spellPower
+                                                                    objectString="data.features.spellPower"}}
       <div class="resource flex-group-center">
           <div class="resource-content flexrow flex-center flex-between">
             <input type="text" name="data.features.move.value" value="{{data.features.move.value}}" data-dtype="Number" placeholder="{{localize 'farhome.move'}}"/>
