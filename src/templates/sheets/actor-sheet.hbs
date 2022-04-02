@@ -106,8 +106,8 @@
           data.attributes.cha
           objectString="data.attributes.cha"}}
       </div>
-      <div class="saves-proficiency-group flex-group-center box">
-        <div class="saves-list flexcol">
+      <div class="saves-proficiency-group flexcol">
+        <div class="saves-list flex-group-center box">
           <h2>Saves</h2>
           <table class="proficiency-table">
             <colgroup>
@@ -140,12 +140,22 @@
                 objectString="data.proficiencies.saves.cha"}}
           </table>
         </div>
+        <div class="attribute-proficiency-group flex-group-center box">
+          <h2>Proficiencies</h2>
+          <div class="proficiency-group">
+            <h4>Strength</h4>
+            <table class="proficiency-table">
+              <colgroup>
+                <col class="proficiency-label" />
+                <col class="proficiency-data" />
+              </colgroup>
+              {{>
+                "systems/farhome/templates/partials/proficiency-partial.hbs"
+                  data.proficiencies.attributes.str.athletics
+                  objectString="data.proficiencies.attributes.str.athletics"}}
+            </table>
+          </div>
       </div>
-      <div class="attribute-proficiency-group flex-group-center box">
-        <h2>Proficiencies</h2>
-        <div class="proficiency-group">
-          <h4>Strength</h4>
-        </div>
       </div>
     </div>
 
