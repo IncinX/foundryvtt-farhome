@@ -351,16 +351,10 @@
       }
     },
     "feat": {
-      "templates": ["base"],
-      "description": {
-        "value": ""
-      }
+      "templates": ["base"]
     },
     "maneuver": {
-      "templates": ["base"],
-      "description": {
-        "value": ""
-      }
+      "templates": ["base"]
     },
     "spell": {
       "templates": ["base"],

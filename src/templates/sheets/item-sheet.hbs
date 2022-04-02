@@ -13,13 +13,13 @@
             </tr>
             <tr>
                 <td>
-                    <input name="data.quantity" type="text" value="{{data.quantity}}" placeholder="Quantity" data-dtype="Number" />
+                    <input name="data.quantity.value" type="text" value="{{data.quantity.value}}" placeholder="Quantity" data-dtype="Number" />
                 </td>
                 <td>
-                    <input name="data.weight" type="text" value="{{data.weight}}" placeholder="Weight" data-dtype="Number" />
+                    <input name="data.weight.value" type="text" value="{{data.weight.value}}" placeholder="Weight" data-dtype="Number" />
                 </td>
             </tr>
         </table>
-        {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+        {{editor content=data.description.value target="data.description.value" button=true owner=owner editable=editable}}
     </div>
 </form>
