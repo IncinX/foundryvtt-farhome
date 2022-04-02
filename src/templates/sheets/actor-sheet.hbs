@@ -65,14 +65,12 @@
   {{!-- Sheet Body --}}
   <section class="sheet-body">
     {{!-- Attributes Tab --}}
-    {{!-- TODO Switch this out with a handlebars loop and use the data.attributes.str.label --}}
     <div class="tab attributes" data-group="primary" data-tab="attributes">
-      <div class="attribute-group flex-group-center">
-        <div class="attribute-content flex-center flex-between">
-          <input type="text" name="data.attributes.str.value" value="{{data.attributes.str.value}}" data-dtype="Number"/>
-        </div>
-        <label for="data.attributes.str.value" class="attribute-label">{{data.attributes.str.label}}</label>
-      </div>
+      {{!-- TODO Add proficiency stuff next --}}
+      {{#each data.attributes as |attributeObject key|}}
+        {{> "systems/farhome/templates/partials/attribute-partial.hbs" attributeObject
+                                                                       objectString="data.attributes.{{key}}"}}
+      {{/each}}
     </div>
     
     {{!-- TODO Attributes, Biography and Notes are the most important things to setup right now for initial character creation. Everything else they can jam under notes for now. --}}
