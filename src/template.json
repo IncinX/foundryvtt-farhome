@@ -141,7 +141,7 @@
               }
             },
             "will": {
-              "handling": {
+              "animalHandling": {
                 "value": 0
               },
               "insight": {
