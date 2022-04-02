@@ -7,11 +7,11 @@
     <header class="sheet-header flexrow">
       <img class="profile-img" src="{{actor.img}}" title="{{actor.name}}" data-edit="img"/>
       <div class="header-fields flexrow">
-        <div class="name-info flexcol flex-between">
+        <div class="name-info flexcol flex-between flex3">
           <input class="name-input header-input align-stretch" name="name" type="text" value="{{actor.name}}" placeholder="{{localize 'farhome.characterName'}}" />
           <label class="under-label" for="name">{{localize 'farhome.characterName'}}</label>
         </div>
-        <div class="character-info flexcol">
+        <div class="character-info flexcol flex1">
           <input class="header-input" name="data.level.value" type="text" value="{{data.level.value}}" data-dtype="Number" placeholder="{{data.level.label}}" />
           <label class="under-label" for="data.level.value">{{localize 'farhome.level'}}</label>
           <input class="header-input" name="data.xp.value" type="text" value="{{data.xp.value}}" data-dtype="Number" placeholder="{{data.xp.label}}" />
@@ -25,22 +25,36 @@
     </header>
     
     {{!-- Resource Bar --}}
-    <div class="resource-fields grid grid-6col">
-      {{!-- TODO Try to change these into partials with context and variables... Localize the string here and pass the string in or just add a label field. --}}
-      {{> "systems/farhome/templates/partials/max-resource-partial.hbs" data.features.wounds
-                                                                        objectString="data.features.wounds"
-                                                                        separatorString=" / "}}
-      {{> "systems/farhome/templates/partials/max-resource-partial.hbs" data.features.healingSurges
-                                                                        objectString="data.features.healingSurges"
-                                                                        separatorString=" / "}}
-      {{> "systems/farhome/templates/partials/max-resource-partial.hbs" data.features.ap
-                                                                        objectString="data.features.ap"
-                                                                        separatorString=" / "}}
-      {{> "systems/farhome/templates/partials/max-resource-partial.hbs" data.features.mana
-                                                                        objectString="data.features.mana"
-                                                                        separatorString=" / "}}
-      {{> "systems/farhome/templates/partials/resource-partial.hbs" data.features.spellPower
-                                                                    objectString="data.features.spellPower"}}
+    <div class="resource-fields grid grid-7col">
+      {{>
+        "systems/farhome/templates/partials/max-resource-partial.hbs"
+        data.features.hero
+        objectString="data.features.hero"
+        separatorString=" / "}}
+      {{>
+        "systems/farhome/templates/partials/max-resource-partial.hbs"
+        data.features.wounds
+        objectString="data.features.wounds"
+        separatorString=" / "}}
+      {{>
+        "systems/farhome/templates/partials/max-resource-partial.hbs"
+        data.features.healingSurges
+        objectString="data.features.healingSurges"
+        separatorString=" / "}}
+      {{>
+        "systems/farhome/templates/partials/max-resource-partial.hbs"
+        data.features.ap
+        objectString="data.features.ap"
+        separatorString=" / "}}
+      {{>
+        "systems/farhome/templates/partials/max-resource-partial.hbs"
+        data.features.mana
+        objectString="data.features.mana"
+        separatorString=" / "}}
+      {{>
+        "systems/farhome/templates/partials/resource-partial.hbs"
+        data.features.spellPower
+        objectString="data.features.spellPower"}}
       <div class="resource flex-group-center">
           <div class="resource-content flexrow flex-center flex-between">
             <input type="text" name="data.features.move.value" value="{{data.features.move.value}}" data-dtype="Number" placeholder="{{localize 'farhome.move'}}"/>
@@ -65,21 +79,33 @@
   {{!-- Sheet Body --}}
   <section class="sheet-body">
     {{!-- Attributes Tab --}}
-    {{!-- TODO Switch this out with a handlebars loop and use the data.attributes.str.label --}}
     <div class="tab attributes" data-group="primary" data-tab="attributes">
-      {{!-- TODO A loop can't be used here because there is a label in the object.  Perhaps the label method isn't he best way and a resolved 'localize' parameter is best. --}}
-      {{> "systems/farhome/templates/partials/attribute-partial.hbs" data.attributes.str
-                                                                     objectString="data.attributes.str"}}
-      {{> "systems/farhome/templates/partials/attribute-partial.hbs" data.attributes.dex
-                                                                     objectString="data.attributes.dex"}}
-      {{> "systems/farhome/templates/partials/attribute-partial.hbs" data.attributes.sta
-                                                                     objectString="data.attributes.sta"}}
-      {{> "systems/farhome/templates/partials/attribute-partial.hbs" data.attributes.int
-                                                                     objectString="data.attributes.int"}}
-      {{> "systems/farhome/templates/partials/attribute-partial.hbs" data.attributes.will
-                                                                     objectString="data.attributes.will"}}
-      {{> "systems/farhome/templates/partials/attribute-partial.hbs" data.attributes.cha
-                                                                     objectString="data.attributes.cha"}}
+      <div class="attribute-list flexcol">
+        {{>
+          "systems/farhome/templates/partials/attribute-partial.hbs"
+          data.attributes.str
+          objectString="data.attributes.str"}}
+        {{>
+          "systems/farhome/templates/partials/attribute-partial.hbs"
+          data.attributes.dex
+          objectString="data.attributes.dex"}}
+        {{>
+          "systems/farhome/templates/partials/attribute-partial.hbs"
+          data.attributes.sta
+          objectString="data.attributes.sta"}}
+        {{>
+          "systems/farhome/templates/partials/attribute-partial.hbs"
+          data.attributes.int
+          objectString="data.attributes.int"}}
+        {{>
+          "systems/farhome/templates/partials/attribute-partial.hbs"
+          data.attributes.will
+          objectString="data.attributes.will"}}
+        {{>
+          "systems/farhome/templates/partials/attribute-partial.hbs"
+          data.attributes.cha
+          objectString="data.attributes.cha"}}
+      </div>
     </div>
     
     {{!-- TODO Attributes, Biography and Notes are the most important things to setup right now for initial character creation. Everything else they can jam under notes for now. --}}
