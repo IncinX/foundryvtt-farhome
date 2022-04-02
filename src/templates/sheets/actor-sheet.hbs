@@ -29,32 +29,32 @@
       {{>
         "systems/farhome/templates/partials/max-resource-partial.hbs"
         data.features.hero
-        valueString="data.features.hero"
+        objectString="data.features.hero"
         separatorString=" / "}}
       {{>
         "systems/farhome/templates/partials/max-resource-partial.hbs"
         data.features.wounds
-        valueString="data.features.wounds"
+        objectString="data.features.wounds"
         separatorString=" / "}}
       {{>
         "systems/farhome/templates/partials/max-resource-partial.hbs"
         data.features.healingSurges
-        valueString="data.features.healingSurges"
+        objectString="data.features.healingSurges"
         separatorString=" / "}}
       {{>
         "systems/farhome/templates/partials/max-resource-partial.hbs"
         data.features.ap
-        valueString="data.features.ap"
+        objectString="data.features.ap"
         separatorString=" / "}}
       {{>
         "systems/farhome/templates/partials/max-resource-partial.hbs"
         data.features.mana
-        valueString="data.features.mana"
+        objectString="data.features.mana"
         separatorString=" / "}}
       {{>
         "systems/farhome/templates/partials/resource-partial.hbs"
         data.features.spellPower
-        valueString="data.features.spellPower"}}
+        objectString="data.features.spellPower"}}
       <div class="resource-box flex-group-center">
           <div class="resource-content flexrow flex-center flex-between">
             <input type="text" name="data.features.move.value" value="{{data.features.move.value}}" data-dtype="Number" placeholder="{{localize 'farhome.move'}}"/>
@@ -84,31 +84,31 @@
         {{>
           "systems/farhome/templates/partials/attribute-partial.hbs"
           data.attributes.str
-          valueString="data.attributes.str"}}
+          objectString="data.attributes.str"}}
         {{>
           "systems/farhome/templates/partials/attribute-partial.hbs"
           data.attributes.dex
-          valueString="data.attributes.dex"}}
+          objectString="data.attributes.dex"}}
         {{>
           "systems/farhome/templates/partials/attribute-partial.hbs"
           data.attributes.sta
-          valueString="data.attributes.sta"}}
+          objectString="data.attributes.sta"}}
         {{>
           "systems/farhome/templates/partials/attribute-partial.hbs"
           data.attributes.int
-          valueString="data.attributes.int"}}
+          objectString="data.attributes.int"}}
         {{>
           "systems/farhome/templates/partials/attribute-partial.hbs"
           data.attributes.will
-          valueString="data.attributes.will"}}
+          objectString="data.attributes.will"}}
         {{>
           "systems/farhome/templates/partials/attribute-partial.hbs"
           data.attributes.cha
-          valueString="data.attributes.cha"}}
+          objectString="data.attributes.cha"}}
       </div>
       <div class="saves-proficiency-group flex-group-center box">
         <div class="saves-list flexcol">
-          <h3>Saves</h3>
+          <h2>Saves</h2>
           <table class="proficiency-table">
             <colgroup>
               <col class="proficiency-label" />
@@ -117,32 +117,32 @@
             {{>
               "systems/farhome/templates/partials/proficiency-partial.hbs"
                 data.proficiencies.saves.str
-                valueString="data.proficiencies.saves.str"}}
+                objectString="data.proficiencies.saves.str"}}
             {{>
               "systems/farhome/templates/partials/proficiency-partial.hbs"
                 data.proficiencies.saves.dex
-                valueString="data.proficiencies.saves.dex"}}
+                objectString="data.proficiencies.saves.dex"}}
             {{>
               "systems/farhome/templates/partials/proficiency-partial.hbs"
                 data.proficiencies.saves.sta
-                valueString="data.proficiencies.saves.sta"}}
+                objectString="data.proficiencies.saves.sta"}}
             {{>
               "systems/farhome/templates/partials/proficiency-partial.hbs"
                 data.proficiencies.saves.int
-                valueString="data.proficiencies.saves.int"}}
+                objectString="data.proficiencies.saves.int"}}
             {{>
               "systems/farhome/templates/partials/proficiency-partial.hbs"
                 data.proficiencies.saves.will
-                valueString="data.proficiencies.saves.will"}}
+                objectString="data.proficiencies.saves.will"}}
             {{>
               "systems/farhome/templates/partials/proficiency-partial.hbs"
                 data.proficiencies.saves.cha
-                valueString="data.proficiencies.saves.cha"}}
+                objectString="data.proficiencies.saves.cha"}}
           </table>
         </div>
       </div>
       <div class="attribute-proficiency-group flex-group-center box">
-        <h3>Proficiencies</h3>
+        <h2>Proficiencies</h2>
         <div class="proficiency-group">
           <h4>Strength</h4>
         </div>
