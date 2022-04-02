@@ -66,16 +66,41 @@ export default class FarhomeActorSheet extends ActorSheet {
    * @return {undefined}
    */
   _prepareActorData(context) {
-    // Handle ability scores.
-    for (let [k, v] of Object.entries(context.data.attributes)) {
-      let labelText = game.i18n.localize(`farhome.${k}`);
+    // Do derived localization of the entire context data.
+    this._localizeObject(null, context.data);
+  }
 
-      if (labelText === null) {
-        labelText = k;
-        console.warn(`Localization not found: farhome.${k}`);
+  /**
+   * Recursively localizes an object by adding a label sub-key with the localization of it's key name.
+   *
+   * @param {Object} object Any javascript object
+   *
+   * @return {undefined}
+   */
+  _localizeObject(objectKeyName, objectValue) {
+    let hasLabel = false;
+
+    if (objectValue === null) { return; }
+
+    for (let [k, v] of Object.entries(objectValue)) {
+      if (k === 'label') {
+        console.warn(`Label field already found for key: ${objectKeyName}`)
+        hasLabel = true;
+      }
+      else if ((k !== 'value') && (typeof v === 'object')) {
+        this._localizeObject(k, v);
+      }
+    }
+    
+    if ((objectKeyName !== null) && !hasLabel) {
+      let localizationKey = `farhome.${objectKeyName}`;
+      let labelText = game.i18n.localize(localizationKey);
+
+      if (labelText === localizationKey) {
+        console.warn(`Localization not found: farhome.${objectKeyName}`);
       }
 
-      v.label = game.i18n.localize(`farhome.${k}`) ?? k;
+      objectValue.label = labelText;
     }
   }
 
@@ -112,7 +137,7 @@ export default class FarhomeActorSheet extends ActorSheet {
     // Initialize containers.
     const inventory = [];
     const weapons = [];
-    const armor = [];
+    const armors = [];
     const feats = [];
     const maneuvers = [];
     const spells = {
@@ -131,9 +156,17 @@ export default class FarhomeActorSheet extends ActorSheet {
     // Iterate through items, allocating to containers
     for (let i of context.items) {
       i.img = i.img || DEFAULT_TOKEN;
-      // Append to gear.
+      // Append to inventory.
       if (i.type === 'item') {
-        gear.push(i);
+        inventory.push(i);
+      }
+      // Append to weapons.
+      else if (i.type === 'weapon') {
+        weapons.push(i);
+      }
+      // Append to armor.
+      else if (i.type === 'armor') {
+        armors.push(i);
       }
       // Append to feats.
       else if (i.type === 'feat') {
@@ -155,7 +188,9 @@ export default class FarhomeActorSheet extends ActorSheet {
     // TODO Adjust existing roll formula's based on feats and such
 
     // Assign and return
-    context.gear = gear;
+    context.inventory = inventory;
+    context.weapons = weapons;
+    context.armors = armors;
     context.feats = feats;
     context.maneuvers = maneuvers;
     context.spells = spells;
