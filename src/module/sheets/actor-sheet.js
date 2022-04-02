@@ -296,13 +296,20 @@ export default class FarhomeActorSheet extends ActorSheet {
 
     // Handle rolls that supply the formula directly.
     if (dataset.roll) {
-      let label = dataset.label ? `[attribute] ${dataset.label}` : '';
-      let roll = new Roll(dataset.roll, this.actor.getRollData());
-      roll.toMessage({
+      let label = dataset.label ?? '';
+      console.log(game.specialDiceRoller);
+      let roll = game.specialDiceRoller.fh.rollFormula(dataset.roll);
+      // TODO Add support for doing appends and resolving more advanced roll formula's
+      //let roll = new Roll(dataset.roll, this.actor.getRollData());
+
+      let results_html = `<h1>${label}</h1>${roll}`
+      
+      ChatMessage.create({
+        user: game.user._id,
         speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-        flavor: label,
-        rollMode: game.settings.get('core', 'rollMode'),
-      });
+        //speaker: ChatMessage.getSpeaker({token: actor}),
+        content: results_html
+    });
       return roll;
     }
   }
