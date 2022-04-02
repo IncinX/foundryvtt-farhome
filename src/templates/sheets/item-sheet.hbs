@@ -1,25 +1,50 @@
 <form class="{{cssClass}}" autocomplete="off">
-    <header class="sheet-header">
-        <img src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64" />
-        <h1>
-            <input name="name" type="text" value="{{item.name}}" placeholder="Name" />
-        </h1>
-    </header>
-    <div class="sheet-content">
-        <table>
-            <tr>
-                <th>{{localize "farhome.quantity"}}</th>
-                <th>{{localize "farhome.weight"}}</th>
-            </tr>
-            <tr>
-                <td>
-                    <input name="data.quantity.value" type="text" value="{{data.quantity.value}}" placeholder="Quantity" data-dtype="Number" />
-                </td>
-                <td>
-                    <input name="data.weight.value" type="text" value="{{data.weight.value}}" placeholder="Weight" data-dtype="Number" />
-                </td>
-            </tr>
-        </table>
-        {{editor content=data.description.value target="data.description.value" button=true owner=owner editable=editable}}
+  {{!-- Uncomment to debug data context --}}
+  {{log .}}
+
+  {{!-- TODO Need to add under-labels for some things similar to Actor sheet. --}}
+  
+  {{!-- Item Sheet Header --}}
+  <header class="sheet-header">
+    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}"/>
+    <div class="header-fields">
+      <h1>
+        <input name="item.name" type="text" value="{{item.name}}" placeholder="{{localize 'farhome.itemName'}}" />
+      </h1>
     </div>
+  </header>
+
+  {{!-- Sheet Tab Navigation --}}
+  <nav class="sheet-tabs tabs" data-group="primary">
+    <a class="item" data-tab="description">Description</a>
+    <a class="item" data-tab="attributes">Attributes</a>
+  </nav>
+
+  {{!-- Item Sheet Content --}}
+  {{!-- TODO Try to remove sheet-content css later since I'm not using it anymore. --}}
+  <section class="sheet-body">
+
+    {{!-- Description Tab --}}
+    <div class="tab" data-group="primary" data-tab="description">
+      {{editor content=data.description.value target="data.description.value" rollData=rollData button=true owner=owner editable=editable}}
+    </div>
+
+    {{!-- Attributes Tab --}}
+    <div class="tab attributes" data-group="primary" data-tab="attributes">
+    <table>
+      <tr>
+        <th>{{localize "farhome.quantity"}}</th>
+        <th>{{localize "farhome.weight"}}</th>
+      </tr>
+      <tr>
+        <td>
+          <input name="data.quantity.value" type="text" value="{{data.quantity.value}}" placeholder="Quantity" data-dtype="Number" />
+        </td>
+        <td>
+          <input name="data.weight.value" type="text" value="{{data.weight.value}}" placeholder="Weight" data-dtype="Number" />
+        </td>
+      </tr>
+    </table>
+    </div>
+  </div>
 </form>
