@@ -3,137 +3,293 @@
     "types": ["character", "npc"],
     "templates": {
       "base": {
-        "race": "",
-        "background": "",
-        "biography": "",
-        "attribute": {
-          "str": -1,
-          "dex": -1,
-          "sta": -1,
-          "int": -1,
-          "will": -1,
-          "cha": -1,
+        "race": {
+          "value": ""
+        },
+        "background": {
+          "value": ""
+        },
+        "biography": {
+          "value": "<h1>Biography</h1>"
+        },
+        "notes": {
+          "value": "<h1>Notes</h1>"
+        },
+        "features": {
           "wounds": {
             "value": 1,
             "max": 1
           },
-          "tempWounds": 0,
+          "tempWounds": {
+            "value": 0
+          },
           "ap": {
             "value": 9,
+            "min": 0,
             "max": 9
           },
-          "move": 1,
-          "sprint": 1,
-          "mana": 0,
-          "spellPower": 0,
+          "hero": {
+            "value": 0,
+            "max": 0
+          },
+          "move": {
+            "value": 1
+          },
+          "sprint": {
+            "value": 1
+          },
+          "mana": {
+            "value": 0,
+            "max": 0
+          },
+          "spellPower": {
+            "value": 0
+          },
           "healingSurges": {
             "value": 1,
+            "min": 0,
             "max": 1
           },
-          "exhaustion": 0
+          "exhaustion": {
+            "value": 0
+          }
         },
-        "proficiency": {
-          "saves": {
-            "str": 0,
-            "dex": 0,
-            "sta": 0,
-            "int": 0,
-            "will": 0,
-            "cha": 0
+        "attributes": {
+          "str": {
+            "value": -1
           },
-          "ability": {
+          "dex": {
+            "value": -1
+          },
+          "sta": {
+            "value": -1
+          },
+          "int": {
+            "value": -1
+          },
+          "will": {
+            "value": -1
+          },
+          "cha": {
+            "value": -1
+          }
+        },
+        "proficiencies": {
+          "saves": {
             "str": {
-              "athletics": 0,
-              "intimidation": 0
+              "value": 0
             },
             "dex": {
-              "acrobatics": 0,
-              "lockpicking": 0,
-              "stealth": 0,
-              "sleightOfHand": 0
+              "value": 0
             },
             "sta": {
-              "exhaustion": 0,
-              "survival": 0
+              "value": 0
             },
             "int": {
-              "arcana": 0,
-              "investigation": 0,
-              "lore": 0,
-              "medicine": 0
+              "value": 0
             },
             "will": {
-              "handling": 0,
-              "insight": 0,
-              "nature": 0,
-              "perception": 0
+              "value": 0
             },
             "cha": {
-              "conversation": 0,
-              "diplomacy": 0,
-              "performance": 0,
-              "religion": 0
+              "value": 0
+            }
+          },
+          "attributes": {
+            "str": {
+              "athletics": {
+                "value": 0
+              },
+              "intimidation": {
+                "value": 0
+              }
+            },
+            "dex": {
+              "acrobatics": {
+                "value": 0
+              },
+              "lockpicking": {
+                "value": 0
+              },
+              "stealth": {
+                "value": 0
+              },
+              "sleightOfHand": {
+                "value": 0
+              }
+            },
+            "sta": {
+              "exhaustion": {
+                "value": 0
+              },
+              "survival": {
+                "value": 0
+              }
+            },
+            "int": {
+              "arcana": {
+                "value": 0
+              },
+              "investigation": {
+                "value": 0
+              },
+              "lore": {
+                "value": 0
+              },
+              "medicine": {
+                "value": 0
+              }
+            },
+            "will": {
+              "handling": {
+                "value": 0
+              },
+              "insight": {
+                "value": 0
+              },
+              "nature": {
+                "value": 0
+              },
+              "perception": {
+                "value": 0
+              }
+            },
+            "cha": {
+              "conversation": {
+                "value": 0
+              },
+              "diplomacy": {
+                "value": 0
+              },
+              "performance": {
+                "value": 0
+              },
+              "religion": {
+                "value": 0
+              }
             }
           },
           "equipment": {
-            "lightArmor": false,
-            "mediumArmor": false,
-            "heavyArmor": false,
-            "buckler": false,
-            "shield": false
+            "lightArmor": {
+              "value": false
+            },
+            "mediumArmor": {
+              "value": false
+            },
+            "heavyArmor": {
+              "value": false
+            },
+            "buckler": {
+              "value": false
+            },
+            "shield": {
+              "value": false
+            }
           },
           "weapons": {
-            "oneHand": 0,
-            "twoHand": 0,
-            "ranged": 0,
-            "unarmed": 0
+            "oneHand": {
+              "value": 0
+            },
+            "twoHand": {
+              "value": 0
+            },
+            "ranged": {
+              "value": 0
+            },
+            "unarmed": {
+              "value": 0
+            }
           },
           "spell": {
-            "arcane": 0,
-            "curse": 0,
-            "divine": 0
+            "arcane": {
+              "value": 0
+            },
+            "curse": {
+              "value": 0
+            },
+            "divine": {
+              "value": 0
+            },
+            "druidic": {
+              "value": 0
+            }
           },
           "tools": {
-            "repairKit": 0,
-            "enchantersTools": 0,
-            "apothecarySet": 0,
-            "scribingTools": 0
+            "repairKit": {
+              "value": 0
+            },
+            "enchantersTools": {
+              "value": 0
+            },
+            "apothecarySet": {
+              "value": 0
+            },
+            "scribingTools": {
+              "value": 0
+            }
           }
         }
       }
     },
     "character": {
       "templates": ["base"],
-      "background": "",
-      "level": 1,
-      "experience": 0
+      "level": {
+        "value": 0
+      },
+      "xp": {
+        "value": 0
+      }
     },
     "npc": {
       "templates": ["base"],
-      "cr": 0
+      "cr": {
+        "value": 0
+      }
     }
   },
   "Item": {
     "types": ["item", "weapon", "armor", "feat", "spell"],
     "templates": {
       "base": {
-        "description": ""
+        "description": {
+          "value": "Insert item description here.  Click the edit button in the upper right."
+        }
       },
       "formula": {
-        "formula": ""
+        "usesFormula": {
+          "value": false
+        },
+        "formula": {
+          "value": "/fh n"
+        }
       },
       "rarity": {
-        "rarity": ""
+        "rarity": {
+          "value": ""
+        }
+      },
+      "equippable": {
+        "equipped": {
+          "value": false
+        }
       }
     },
     "item": {
-      "templates": ["base", "rarity"],
-      "quantity": 1,
-      "weight": 0,
-      "formula": "d20 + @str.mod + ceil(@lvl / 2)"
+      "templates": ["base", "rarity", "equippable", "formula"],
+      "quantity": {
+        "value": 1,
+        "min": 0
+      },
+      "weight": {
+        "value": 0,
+        "min": 0
+      },
+      "formula": {
+        "value": "TBD"
+      }
     },
     "weapon": {
-      "templates": ["base", "rarity", "formula"],
+      "templates": ["base", "rarity", "equippable", "formula"],
       "damage": {
         "value": 1,
         "type": "bludgeoning"
@@ -142,34 +298,72 @@
         "value": 0
       },
       "properties": {
-        "finesse": false,
-        "heavy": false,
-        "light": false,
-        "loading": false,
-        "reach": false,
-        "twoHanded": false,
-        "versatile": false
+        "finesse": {
+          "value": false
+        },
+        "heavy": {
+          "value": false
+        },
+        "light": {
+          "value": false
+        },
+        "loading": {
+          "value": false
+        },
+        "reach": {
+          "value": false
+        },
+        "twoHanded": {
+          "value": false
+        },
+        "versatile": {
+          "value": false
+        }
       }
     },
     "armor": {
-      "templates": ["base", "rarity", "formula"],
-      "armorBonus": 0,
-      "maxDex": 0,
-      "stealth": false,
+      "templates": ["base", "rarity", "equippable", "formula"],
+      "armorBonus": {
+        "value": 0
+      },
+      "maxDex": {
+        "value": 0
+      },
+      "stealth": {
+        "value": false
+      },
       "properties": {
-        "light": false,
-        "medium": false,
-        "heavy": false,
-        "shield": false,
-        "masterwork": false
+        "light": {
+          "value": false
+        },
+        "medium": {
+          "value": false
+        },
+        "heavy": {
+          "value": false
+        },
+        "shield": {
+          "value": false
+        },
+        "masterwork": {
+          "value": false
+        }
       }
     },
     "feat": {
       "templates": ["base"]
     },
+    "maneuver": {
+      "templates": ["base"]
+    },
     "spell": {
       "templates": ["base"],
-      "spellLevel": 1
+      "prepared": {
+        "value": false
+      },
+      "spellLevel": {
+        "value": 0
+      }
     }
   }
 }
