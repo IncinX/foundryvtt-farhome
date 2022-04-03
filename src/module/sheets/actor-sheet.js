@@ -303,14 +303,14 @@ export default class FarhomeActorSheet extends ActorSheet {
       // TODO Add support for doing appends and resolving more advanced roll formula's
       //let roll = new Roll(dataset.roll, this.actor.getRollData());
 
-      let results_html = `<h1>${label}</h1>${roll}`
-      
+      let results_html = `<h1>${label}</h1>${roll}`;
+
       ChatMessage.create({
         user: game.user._id,
         speaker: ChatMessage.getSpeaker({ actor: this.actor }),
         //speaker: ChatMessage.getSpeaker({token: actor}),
-        content: results_html
-    });
+        content: results_html,
+      });
       return roll;
     }
   }

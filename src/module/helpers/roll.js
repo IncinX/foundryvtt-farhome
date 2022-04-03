@@ -12,7 +12,7 @@ export function proficiencyRollFormula(proficiency, attribute) {
   let enhancedDice = clamp(attribute, 0, maxDice) - superiorDice;
   let normalDice = maxDice - (enhancedDice + superiorDice);
 
-  let rollFormula = "";
+  let rollFormula = '';
 
   if (superiorDice > 0) {
     rollFormula += `${superiorDice}s`;

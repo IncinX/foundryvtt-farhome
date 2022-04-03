@@ -48,7 +48,6 @@ export class FarhomeActor extends Actor {
    * Prepare Actor general derived data data
    */
   _prepareActorData(actorData) {
-
     const data = actorData.data;
 
     // Loop through attribute scores, and add their roll string as derived data.
@@ -74,11 +73,11 @@ export class FarhomeActor extends Actor {
   /**
    * Prepare Character type specific data
    */
-   _prepareCharacterData(actorData) {
+  _prepareCharacterData(actorData) {
     if (actorData.type !== 'character') return;
 
     const data = actorData.data;
-    
+
     // Character specific derived data should be calculated here
   }
 
