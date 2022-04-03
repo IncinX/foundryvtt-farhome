@@ -1,6 +1,7 @@
 // TODO Add facilities to potentially calculate spell power
 
 import { clamp } from '../helpers/math';
+import { proficiencyRollFormula } from '../helpers/roll';
 
 /**
  * Extend the base Actor document by defining a custom roll data structure which is ideal for the Simple system.
@@ -38,71 +39,47 @@ export class FarhomeActor extends Actor {
 
     // Make separate methods for each Actor type (character, npc, etc.) to keep
     // things organized.
+    this._prepareActorData(actorData);
     this._prepareCharacterData(actorData);
     this._prepareNpcData(actorData);
   }
 
   /**
-   * Prepare Character type specific data
+   * Prepare Actor general derived data data
    */
-  _prepareCharacterData(actorData) {
-    if (actorData.type !== 'character') return;
+  _prepareActorData(actorData) {
 
-    // TODO Move all this to somethign like _prepareActorData that is common to all actors (the roll stuff definitely should be)
-
-    // Make modifications to data here. For example:
     const data = actorData.data;
 
     // Loop through attribute scores, and add their roll string as derived data.
-    for (let [key, attribute] of Object.entries(data.attributes)) {
-      attribute.roll = "";
-
-      // TODO Can I somehow make this into a helper method that accepts superior, proficient and normal dice?
-      let enhancedDice = clamp(attribute.value, 0, 5);
-      let normalDice = 5 - enhancedDice;
-
-      if (enhancedDice > 0) {
-        attribute.roll += `${enhancedDice}e`;
-      }
-      if (normalDice > 0) {
-        attribute.roll += `${normalDice}n`;
-      }
+    for (let [_, attributeObject] of Object.entries(data.attributes)) {
+      attributeObject.roll = proficiencyRollFormula(0, attributeObject.value);
     }
 
     // Loop through the saves, and add their roll string as derived data.
-    for (let [key, proficiency] of Object.entries(data.proficiencies.saves)) {
-      proficiency.roll = "";
+    for (let [attributeKey, proficiencyObject] of Object.entries(data.proficiencies.saves)) {
+      proficiencyObject.roll = proficiencyRollFormula(proficiencyObject.value, data.attributes[attributeKey].value);
+    }
 
-      // TODO Can I somehow make this into a helper method that accepts superior, proficient and normal dice?
-      //      This should cleanup this code and the code below.  Put it in math.js
-      
-      // TODO Can we shorten this?
-      let attribute = data.attributes[key];
-      let enhancedDice = clamp(attribute.value, 0, 5);
-      let superiorDice = clamp(proficiency.value, 0, enhancedDice);
-      enhancedDice -= superiorDice;
-      let normalDice = 5 - (enhancedDice + superiorDice);
-
-      if (superiorDice > 0) {
-        proficiency.roll += `${superiorDice}s`;
-      }
-      if (enhancedDice > 0) {
-        proficiency.roll += `${enhancedDice}e`;
-      }
-      if (normalDice > 0) {
-        proficiency.roll += `${normalDice}n`;
+    // Loop through the attribute proficiencies, and add their roll string as derived data.
+    for (let [attributeKey, attributeObject] of Object.entries(data.proficiencies.attributes)) {
+      for (let [_, proficiencyObject] of Object.entries(attributeObject)) {
+        proficiencyObject.roll = proficiencyRollFormula(proficiencyObject.value, data.attributes[attributeKey].value);
       }
     }
+
+    // TODO Add the roll strings for spells and weapons too
+  }
+
+  /**
+   * Prepare Character type specific data
+   */
+   _prepareCharacterData(actorData) {
+    if (actorData.type !== 'character') return;
+
+    const data = actorData.data;
     
-    // TODO Add roll strings for all proficiencies.
-
-    /* TODO This doesn't apply to farhome but I can extend it to something similar later.
-    for (let [key, attribute] of Object.entries(data.attributes)) {
-      // Calculate the modifier using d20 rules.
-      attribute.mod = Math.floor((attribute.value - 10) / 2);
-    }
-    */
-    // TODO Create roll formula's for @str.roll as an example to be "ssspn"
+    // Character specific derived data should be calculated here
   }
 
   /**
@@ -111,11 +88,9 @@ export class FarhomeActor extends Actor {
   _prepareNpcData(actorData) {
     if (actorData.type !== 'npc') return;
 
-    // Make modifications to data here. For example:
     const data = actorData.data;
-    /** TODO Not useful right now but it could be useful later./
-    data.xp = (data.cr * data.cr) * 100;
-    */
+
+    // NPC specific derived data should be calculated here
   }
 
   /**
