@@ -9,7 +9,8 @@ export function proficiencyRollFormula(proficiency, attribute) {
   let maxDice = Math.max(standardMaxDice, attribute);
   let maxSuperior = clamp(attribute, 0, standardMaxDice);
   let superiorDice = Math.min(proficiency, maxSuperior);
-  let enhancedDice = clamp(attribute, 0, maxDice) - superiorDice;
+  let extraEnhanced = (maxDice > standardMaxDice) ? Math.max(proficiency - standardMaxDice, 0) : 0;
+  let enhancedDice = clamp(attribute, 0, standardMaxDice) - superiorDice + extraEnhanced;
   let normalDice = maxDice - (enhancedDice + superiorDice);
 
   let rollFormula = '';
