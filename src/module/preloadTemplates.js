@@ -5,6 +5,7 @@ export async function preloadTemplates() {
     'systems/farhome/templates/partials/resource-partial.hbs',
     'systems/farhome/templates/partials/number-proficiency-partial.hbs',
     'systems/farhome/templates/partials/bool-proficiency-partial.hbs',
+    'systems/farhome/templates/partials/item-header-partial.hbs',
   ];
 
   return loadTemplates(templatePaths);

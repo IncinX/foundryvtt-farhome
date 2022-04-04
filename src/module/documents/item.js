@@ -39,6 +39,11 @@ export class FarhomeItem extends Item {
    */
   async roll() {
     const item = this.data;
+    
+    // TODO Look into Roll.replaceFormulaData() and foundry.utils.getProperty as a way to replace context data from the actor and items.
+    //      Use this as a means to build embedded descriptions for auto-rolling.
+
+    // TODO The available data for embedded descriptions should be the actor data as well as the item data. (probably referenced like actor.dex.roll and item.bonus.roll)
 
     // Initialize chat data.
     const speaker = ChatMessage.getSpeaker({ actor: this.actor });

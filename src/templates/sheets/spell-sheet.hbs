@@ -6,14 +6,7 @@
   {{!-- TODO Create common parts to allow for common elements between the different item sheet types. --}}
 
   {{!-- Item Sheet Header --}}
-  <header class="sheet-header">
-    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}"/>
-    <div class="header-fields">
-      <h1>
-        <input name="name" type="text" value="{{item.name}}" placeholder="{{localize 'farhome.itemName'}}" />
-      </h1>
-    </div>
-  </header>
+  {{> "systems/farhome/templates/partials/item-header-partial.hbs"}}
 
   {{!-- Sheet Tab Navigation --}}
   <nav class="sheet-tabs tabs" data-group="primary">
