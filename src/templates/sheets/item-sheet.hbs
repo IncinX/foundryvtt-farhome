@@ -1,6 +1,6 @@
 <form class="{{cssClass}}" autocomplete="off">
   {{!-- Uncomment to debug data context --}}
-  {{!--{{log .}}--}}
+  {{log .}}
 
   {{!-- TODO Need to add under-labels for some things similar to Actor sheet. --}}
   {{!-- TODO Create common parts to allow for common elements between the different item sheet types. --}}
@@ -10,7 +10,7 @@
     <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}"/>
     <div class="header-fields">
       <h1>
-        <input name="item.name" type="text" value="{{item.name}}" placeholder="{{localize 'farhome.itemName'}}" />
+        <input name="name" type="text" value="{{item.name}}" placeholder="{{localize 'farhome.itemName'}}" />
       </h1>
     </div>
   </header>
