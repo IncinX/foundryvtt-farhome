@@ -293,6 +293,9 @@
       "weaponType": {
         "value": "One Handed Melee"
       },
+      "weaponBonus": {
+        "value": 0
+      },
       "properties": {
         "finesse": {
           "value": false

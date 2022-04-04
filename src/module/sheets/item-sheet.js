@@ -1,4 +1,4 @@
-// TODO The item sheet can definitely come later.  The character sheet is what's most important for session 0.
+import { localizeObject } from '../helpers/localization';
 
 export default class FarhomeItemSheet extends ItemSheet {
   /** @override */
@@ -31,7 +31,7 @@ export default class FarhomeItemSheet extends ItemSheet {
     context.data = itemData.data;
     context.flags = itemData.flags;
 
-    // TODO Move this stuff into functions like actor-sheet.js does.
+    this._prepareAllItemData(context);
 
     // Retrieve the roll data for TinyMCE editors.
     context.rollData = {};
@@ -41,6 +41,18 @@ export default class FarhomeItemSheet extends ItemSheet {
     }
 
     return context;
+  }
+
+  /**
+   * Prepare the item derived sheet-specific data (common to all items
+   *
+   * @param {Object} itemData The actor to prepare.
+   *
+   * @return {undefined}
+   */
+  _prepareAllItemData(itemData) {
+    // Do derived localization of the entire context data.
+    localizeObject(null, itemData.data);
   }
 
   /** @override */
