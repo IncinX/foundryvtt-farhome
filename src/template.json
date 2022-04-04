@@ -255,14 +255,6 @@
           "value": "Insert item description here.  Click the edit button that shows up when you hover this text."
         }
       },
-      "formula": {
-        "usesFormula": {
-          "value": false
-        },
-        "formula": {
-          "value": "/fh n"
-        }
-      },
       "rarity": {
         "rarity": {
           "value": ""
@@ -275,7 +267,7 @@
       }
     },
     "item": {
-      "templates": ["base", "rarity", "equippable", "formula"],
+      "templates": ["base", "rarity", "equippable"],
       "quantity": {
         "value": 1,
         "min": 0
@@ -283,13 +275,10 @@
       "weight": {
         "value": 0,
         "min": 0
-      },
-      "formula": {
-        "value": "TBD"
       }
     },
     "weapon": {
-      "templates": ["base", "rarity", "equippable", "formula"],
+      "templates": ["base", "rarity", "equippable"],
       "damage": {
         "value": 1,
         "type": "bludgeoning"
@@ -322,7 +311,7 @@
       }
     },
     "armor": {
-      "templates": ["base", "rarity", "equippable", "formula"],
+      "templates": ["base", "rarity", "equippable"],
       "armorBonus": {
         "value": 0
       },
