@@ -2,6 +2,7 @@
 //      Basically if something is of type 'object' then it will add a label field and attempt to localize it with defaulting to the original name on fallback and logging a warning to console.
 // TODO Use Handlebars If logic to customize the actor sheet based on the actor type.  Only create a seperate sheet if it's absolutely necessary.
 // TODO A lot of the functionality on this sheet was built from the BOILERPLATE from the https://gitlab.com/asacolips-projects/foundry-mods/boilerplate/-/blob/master/module/sheets/actor-sheet.mjs project and likely needs to be modified for FARHOME.
+// TODO Add mana deduction
 
 import { onManageActiveEffect, prepareActiveEffectCategories } from '../helpers/effects.js';
 
@@ -156,6 +157,10 @@ export default class FarhomeActorSheet extends ActorSheet {
       9: [],
     };
 
+    // TODO Consider removing weapon and armor as separate types and just embed the fields as part of the item.
+    // TODO The user can then customize the ability.  I could add an isWeapon or isArmor field later if necessary.
+    // TODO Add the ability to do inline rolls.
+
     // Iterate through items, allocating to containers
     for (let i of context.items) {
       i.img = i.img || DEFAULT_TOKEN;
@@ -296,12 +301,28 @@ export default class FarhomeActorSheet extends ActorSheet {
 
     // Handle rolls that supply the formula directly.
     if (dataset.roll) {
-      let label = dataset.label ? `[attribute] ${dataset.label}` : '';
-      let roll = new Roll(dataset.roll, this.actor.getRollData());
-      roll.toMessage({
+      let label = dataset.label ?? '';
+      console.log(game.specialDiceRoller);
+      let roll = game.specialDiceRoller.fh.rollFormula(dataset.roll);
+      // TODO Add support for doing appends and resolving more advanced roll formula's
+      //let roll = new Roll(dataset.roll, this.actor.getRollData());
+
+      // TODO Add support for embedding formula's like [[@dex.roll]]ss to append two superior dice to the rolls. NO clue how to do this yet.
+      // TODO Add ability to incorporate poison and hex into the calculations.
+      //      Experiment with some systems that have custom dice.
+      //      Another approach is to use something like this: https://foundryvtt.com/packages/itemacro
+      //      Also see dnd5e create5eMacro
+      //      I could also have a really robust attribute system and roll function that uses the attributes properly to form a roll chat message.
+      // TODO Can I add custom buttons to chat messages?  That would be cool to build more sophisticated macros.
+      // TODO Also see this: https://gitlab.com/asacolips-projects/foundry-mods/boilerplate/-/blob/master/module/documents/item.mjs (See how they do item rolls!!)
+
+      let results_html = `<h1>${label}</h1>${roll}`;
+
+      ChatMessage.create({
+        user: game.user._id,
         speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-        flavor: label,
-        rollMode: game.settings.get('core', 'rollMode'),
+        //speaker: ChatMessage.getSpeaker({token: actor}),
+        content: results_html,
       });
       return roll;
     }

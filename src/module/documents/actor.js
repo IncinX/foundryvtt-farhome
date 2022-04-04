@@ -1,5 +1,8 @@
 // TODO Add facilities to potentially calculate spell power
 
+import { clamp } from '../helpers/math';
+import { proficiencyRollFormula } from '../helpers/roll';
+
 /**
  * Extend the base Actor document by defining a custom roll data structure which is ideal for the Simple system.
  * @extends {Actor}
@@ -36,8 +39,35 @@ export class FarhomeActor extends Actor {
 
     // Make separate methods for each Actor type (character, npc, etc.) to keep
     // things organized.
+    this._prepareActorData(actorData);
     this._prepareCharacterData(actorData);
     this._prepareNpcData(actorData);
+  }
+
+  /**
+   * Prepare Actor general derived data data
+   */
+  _prepareActorData(actorData) {
+    const data = actorData.data;
+
+    // Loop through attribute scores, and add their roll string as derived data.
+    for (let [_, attributeObject] of Object.entries(data.attributes)) {
+      attributeObject.roll = proficiencyRollFormula(0, attributeObject.value);
+    }
+
+    // Loop through the saves, and add their roll string as derived data.
+    for (let [attributeKey, proficiencyObject] of Object.entries(data.proficiencies.saves)) {
+      proficiencyObject.roll = proficiencyRollFormula(proficiencyObject.value, data.attributes[attributeKey].value);
+    }
+
+    // Loop through the attribute proficiencies, and add their roll string as derived data.
+    for (let [attributeKey, attributeObject] of Object.entries(data.proficiencies.attributes)) {
+      for (let [_, proficiencyObject] of Object.entries(attributeObject)) {
+        proficiencyObject.roll = proficiencyRollFormula(proficiencyObject.value, data.attributes[attributeKey].value);
+      }
+    }
+
+    // TODO Add the roll strings for spells and weapons too
   }
 
   /**
@@ -46,17 +76,9 @@ export class FarhomeActor extends Actor {
   _prepareCharacterData(actorData) {
     if (actorData.type !== 'character') return;
 
-    // Make modifications to data here. For example:
     const data = actorData.data;
 
-    // Loop through attribute scores, and add their modifiers to our sheet output.
-    /* TODO This doesn't apply to farhome but I can extend it to something similar later.
-    for (let [key, attribute] of Object.entries(data.attributes)) {
-      // Calculate the modifier using d20 rules.
-      attribute.mod = Math.floor((attribute.value - 10) / 2);
-    }
-    */
-    // TODO Create roll formula's for @str.roll as an example to be "ssspn"
+    // Character specific derived data should be calculated here
   }
 
   /**
@@ -65,11 +87,9 @@ export class FarhomeActor extends Actor {
   _prepareNpcData(actorData) {
     if (actorData.type !== 'npc') return;
 
-    // Make modifications to data here. For example:
     const data = actorData.data;
-    /** TODO Not useful right now but it could be useful later./
-    data.xp = (data.cr * data.cr) * 100;
-    */
+
+    // NPC specific derived data should be calculated here
   }
 
   /**

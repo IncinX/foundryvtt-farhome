@@ -1,6 +1,6 @@
 <form class="{{cssClass}}" autocomplete="off">
   {{!-- Uncomment to debug data context --}}
-  {{log .}}
+  {{!--{{log .}}--}}
 
   {{!-- TODO Need to add under-labels for some things similar to Actor sheet. --}}
   {{!-- TODO Create common parts to allow for common elements between the different item sheet types. --}}
@@ -30,20 +30,6 @@
 
     {{!-- Attributes Tab --}}
     <div class="tab attributes" data-group="primary" data-tab="attributes">
-      <table>
-        <tr>
-          <th>{{localize "farhome.quantity"}}</th>
-          <th>{{localize "farhome.weight"}}</th>
-        </tr>
-        <tr>
-          <td>
-            <input name="data.quantity.value" type="text" value="{{data.quantity.value}}" placeholder="Quantity" data-dtype="Number" />
-          </td>
-          <td>
-            <input name="data.weight.value" type="text" value="{{data.weight.value}}" placeholder="Weight" data-dtype="Number" />
-          </td>
-        </tr>
-      </table>
     </div>
   </div>
 </form>

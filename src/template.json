@@ -141,7 +141,7 @@
               }
             },
             "will": {
-              "handling": {
+              "animalHandling": {
                 "value": 0
               },
               "insight": {
@@ -200,7 +200,7 @@
               "value": 0
             }
           },
-          "spell": {
+          "spells": {
             "arcane": {
               "value": 0
             },
@@ -248,19 +248,11 @@
     }
   },
   "Item": {
-    "types": ["item", "weapon", "armor", "feat", "spell"],
+    "types": ["item", "weapon", "armor", "feat", "maneuver", "spell"],
     "templates": {
       "base": {
         "description": {
-          "value": "Insert item description here.  Click the edit button in the upper right."
-        }
-      },
-      "formula": {
-        "usesFormula": {
-          "value": false
-        },
-        "formula": {
-          "value": "/fh n"
+          "value": "Insert item description here.  Click the edit button that shows up when you hover this text."
         }
       },
       "rarity": {
@@ -275,7 +267,7 @@
       }
     },
     "item": {
-      "templates": ["base", "rarity", "equippable", "formula"],
+      "templates": ["base", "rarity", "equippable"],
       "quantity": {
         "value": 1,
         "min": 0
@@ -283,13 +275,10 @@
       "weight": {
         "value": 0,
         "min": 0
-      },
-      "formula": {
-        "value": "TBD"
       }
     },
     "weapon": {
-      "templates": ["base", "rarity", "equippable", "formula"],
+      "templates": ["base", "rarity", "equippable"],
       "damage": {
         "value": 1,
         "type": "bludgeoning"
@@ -322,7 +311,7 @@
       }
     },
     "armor": {
-      "templates": ["base", "rarity", "equippable", "formula"],
+      "templates": ["base", "rarity", "equippable"],
       "armorBonus": {
         "value": 0
       },
