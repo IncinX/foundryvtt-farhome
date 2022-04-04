@@ -248,7 +248,7 @@
     }
   },
   "Item": {
-    "types": ["item", "weapon", "armor", "feat", "spell"],
+    "types": ["item", "weapon", "armor", "feat", "maneuver", "spell"],
     "templates": {
       "base": {
         "description": {

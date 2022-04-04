@@ -157,6 +157,10 @@ export default class FarhomeActorSheet extends ActorSheet {
       9: [],
     };
 
+    // TODO Consider removing weapon and armor as separate types and just embed the fields as part of the item.
+    // TODO The user can then customize the ability.  I could add an isWeapon or isArmor field later if necessary.
+    // TODO Add the ability to do inline rolls.
+
     // Iterate through items, allocating to containers
     for (let i of context.items) {
       i.img = i.img || DEFAULT_TOKEN;
@@ -302,6 +306,9 @@ export default class FarhomeActorSheet extends ActorSheet {
       let roll = game.specialDiceRoller.fh.rollFormula(dataset.roll);
       // TODO Add support for doing appends and resolving more advanced roll formula's
       //let roll = new Roll(dataset.roll, this.actor.getRollData());
+
+      // TODO Add support for embedding formula's like [[@dex.roll]]ss to append two superior dice to the rolls.
+      // TODO Add ability to incorporate poison and hex into the calculations.
 
       let results_html = `<h1>${label}</h1>${roll}`;
 
