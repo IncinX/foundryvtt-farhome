@@ -257,13 +257,24 @@
       },
       "rarity": {
         "rarity": {
-          "value": ""
+          "value": "Common"
         }
       },
       "equippable": {
         "equipped": {
           "value": false
         }
+      },
+      "apCost": {
+        "ap": {
+          "value": 1
+        }
+      },
+      "range": {
+        "value": "Melee"
+      },
+      "damageType": {
+        "value": "Bludgeoning"
       }
     },
     "item": {
@@ -278,13 +289,9 @@
       }
     },
     "weapon": {
-      "templates": ["base", "rarity", "equippable"],
-      "damage": {
-        "value": 1,
-        "type": "bludgeoning"
-      },
-      "range": {
-        "value": 0
+      "templates": ["base", "rarity", "equippable", "range", "damageType"],
+      "weaponType": {
+        "value": "One Handed Melee"
       },
       "properties": {
         "finesse": {
@@ -343,15 +350,30 @@
       "templates": ["base"]
     },
     "maneuver": {
-      "templates": ["base"]
+      "templates": ["base", "range"],
+      "levelRequired": {
+        "value": ""
+      },
+      "apCost": {
+        "value": ""
+      }
     },
     "spell": {
-      "templates": ["base"],
+      "templates": ["base", "range", "damageType"],
       "prepared": {
         "value": false
       },
       "spellLevel": {
         "value": 0
+      },
+      "spellSchool": {
+        "value": "Arcane"
+      },
+      "duration": {
+        "value": "Instant"
+      },
+      "castingTime": {
+        "castingTime": "1 AP"
       }
     }
   }
