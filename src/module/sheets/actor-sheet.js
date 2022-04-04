@@ -314,6 +314,7 @@ export default class FarhomeActorSheet extends ActorSheet {
       //      Also see dnd5e create5eMacro
       //      I could also have a really robust attribute system and roll function that uses the attributes properly to form a roll chat message.
       // TODO Can I add custom buttons to chat messages?  That would be cool to build more sophisticated macros.
+      // TODO Also see this: https://gitlab.com/asacolips-projects/foundry-mods/boilerplate/-/blob/master/module/documents/item.mjs (See how they do item rolls!!)
 
       let results_html = `<h1>${label}</h1>${roll}`;
 
