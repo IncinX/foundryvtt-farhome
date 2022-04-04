@@ -5,6 +5,7 @@
 // TODO Add mana deduction
 
 import { onManageActiveEffect, prepareActiveEffectCategories } from '../helpers/effects.js';
+import { localizeObject } from '../helpers/localization.js';
 
 // TODO Add Poison/Hex icons later
 
@@ -70,42 +71,7 @@ export default class FarhomeActorSheet extends ActorSheet {
    */
   _prepareActorData(context) {
     // Do derived localization of the entire context data.
-    this._localizeObject(null, context.data);
-  }
-
-  /**
-   * Recursively localizes an object by adding a label sub-key with the localization of it's key name.
-   *
-   * @param {Object} object Any javascript object
-   *
-   * @return {undefined}
-   */
-  _localizeObject(objectKeyName, objectValue) {
-    let hasLabel = false;
-
-    if (objectValue === null) {
-      return;
-    }
-
-    for (let [k, v] of Object.entries(objectValue)) {
-      if (k === 'label') {
-        console.warn(`Label field already found for key: ${objectKeyName}`);
-        hasLabel = true;
-      } else if (k !== 'value' && typeof v === 'object') {
-        this._localizeObject(k, v);
-      }
-    }
-
-    if (objectKeyName !== null && !hasLabel) {
-      let localizationKey = `farhome.${objectKeyName}`;
-      let labelText = game.i18n.localize(localizationKey);
-
-      if (labelText === localizationKey) {
-        console.warn(`Localization not found: farhome.${objectKeyName}`);
-      }
-
-      objectValue.label = labelText;
-    }
+    localizeObject(null, context.data);
   }
 
   /**
@@ -279,18 +245,18 @@ export default class FarhomeActorSheet extends ActorSheet {
    * @param {Event} event   The originating click event
    * @private
    */
-   async _onItemEdit(event) {
+  async _onItemEdit(event) {
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
     item.sheet.render(true);
   }
-  
+
   /**
    * Handle deleting an Owned Item
    * @param {Event} event   The originating click event
    * @private
    */
-   async _onItemDelete(event) {
+  async _onItemDelete(event) {
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
     item.delete();

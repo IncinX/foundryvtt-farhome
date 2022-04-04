@@ -62,6 +62,8 @@ export default class FarhomeItemSheet extends ItemSheet {
     // Roll handlers, click handlers, etc. would go here.
 
     // TODO This should call the roll handler on the item itself.
-    html.find('.item-roll').click((ev) => {console.log("Clicked Item Roll!")});
+    html.find('.item-roll').click((ev) => {
+      console.log('Clicked Item Roll!');
+    });
   }
 }

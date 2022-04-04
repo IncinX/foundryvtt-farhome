@@ -39,7 +39,7 @@ export class FarhomeItem extends Item {
    */
   async roll() {
     const item = this.data;
-    
+
     // TODO Look into Roll.replaceFormulaData() and foundry.utils.getProperty as a way to replace context data from the actor and items.
     //      Use this as a means to build embedded descriptions for auto-rolling.
 

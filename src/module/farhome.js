@@ -1,10 +1,15 @@
 import { FARHOME } from './helpers/config';
+import { createItemMacro, rollItemMacro } from './helpers/macros';
 import { registerSettings } from './settings';
 import { preloadTemplates } from './preloadTemplates';
 import { FarhomeActor } from './documents/actor';
 import { FarhomeItem } from './documents/item';
 import FarhomeItemSheet from './sheets/item-sheet';
 import FarhomeActorSheet from './sheets/actor-sheet';
+
+/* -------------------------------------------- */
+/*  Init Hook                                   */
+/* -------------------------------------------- */
 
 // Initialize system
 Hooks.once('init', async () => {
@@ -33,15 +38,36 @@ Hooks.once('init', async () => {
   await preloadTemplates();
 });
 
+/* -------------------------------------------- */
+/*  Handlebars Helpers                          */
+/* -------------------------------------------- */
+
+// If you need to add Handlebars helpers, here are a few useful examples:
+Handlebars.registerHelper('concat', function () {
+  var outStr = '';
+  for (var arg in arguments) {
+    if (typeof arguments[arg] != 'object') {
+      outStr += arguments[arg];
+    }
+  }
+  return outStr;
+});
+
+Handlebars.registerHelper('toLowerCase', function (str) {
+  return str.toLowerCase();
+});
+
+/* -------------------------------------------- */
+/*  Ready/System Hooks                          */
+/* -------------------------------------------- */
+
 // Setup system
 Hooks.once('setup', async () => {
   // Do anything after initialization but before
   // ready
 });
 
-// When ready
 Hooks.once('ready', async () => {
-  // Do anything once the system is ready
+  // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
+  Hooks.on('hotbarDrop', (bar, data, slot) => createItemMacro(data, slot));
 });
-
-// Add any additional hooks if necessary
