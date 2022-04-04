@@ -307,8 +307,11 @@ export default class FarhomeActorSheet extends ActorSheet {
       // TODO Add support for doing appends and resolving more advanced roll formula's
       //let roll = new Roll(dataset.roll, this.actor.getRollData());
 
-      // TODO Add support for embedding formula's like [[@dex.roll]]ss to append two superior dice to the rolls.
+      // TODO Add support for embedding formula's like [[@dex.roll]]ss to append two superior dice to the rolls. NO clue how to do this yet.
       // TODO Add ability to incorporate poison and hex into the calculations.
+      //      Experiment with some systems that have custom dice.
+      //      Another approach is to use something like this: https://foundryvtt.com/packages/itemacro
+      //      Also see dnd5e create5eMacro
 
       let results_html = `<h1>${label}</h1>${roll}`;
 
