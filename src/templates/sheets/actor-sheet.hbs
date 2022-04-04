@@ -11,6 +11,18 @@
           <input class="name-input header-input align-stretch" name="name" type="text" value="{{actor.name}}"
             placeholder="{{localize 'farhome.characterName'}}" />
           <label class="under-label" for="name">{{localize 'farhome.characterName'}}</label>
+          <div class="race-background-info flexrow flex-between flex2">
+            <div class="race-info flexcol">
+              <input class="header-input" name="data.race.value" type="text" value="{{data.race.value}}"
+                placeholder="{{data.race.label}}" />
+              <label class="under-label" for="data.race.value">{{localize 'farhome.race'}}</label>
+            </div>
+            <div class="background-info flexcol">
+              <input class="header-input" name="data.background.value" type="text" value="{{data.background.value}}"
+                placeholder="{{data.background.label}}" />
+              <label class="under-label" for="data.background.value">{{localize 'farhome.background'}}</label>
+            </div>
+          </div>
         </div>
         <div class="character-info flexcol flex1">
           <input class="header-input" name="data.level.value" type="text" value="{{data.level.value}}"
@@ -19,12 +31,6 @@
           <input class="header-input" name="data.xp.value" type="text" value="{{data.xp.value}}" data-dtype="Number"
             placeholder="{{data.xp.label}}" />
           <label class="under-label" for="data.xp.value">{{localize 'farhome.xp'}}</label>
-          <input class="header-input" name="data.race.value" type="text" value="{{data.race.value}}"
-            placeholder="{{data.race.label}}" />
-          <label class="under-label" for="data.race.value">{{localize 'farhome.race'}}</label>
-          <input class="header-input" name="data.background.value" type="text" value="{{data.background.value}}"
-            placeholder="{{data.background.label}}" />
-          <label class="under-label" for="data.background.value">{{localize 'farhome.background'}}</label>
         </div>
       </div>
     </header>

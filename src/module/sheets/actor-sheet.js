@@ -312,6 +312,8 @@ export default class FarhomeActorSheet extends ActorSheet {
       //      Experiment with some systems that have custom dice.
       //      Another approach is to use something like this: https://foundryvtt.com/packages/itemacro
       //      Also see dnd5e create5eMacro
+      //      I could also have a really robust attribute system and roll function that uses the attributes properly to form a roll chat message.
+      // TODO Can I add custom buttons to chat messages?  That would be cool to build more sophisticated macros.
 
       let results_html = `<h1>${label}</h1>${roll}`;
 
