@@ -86,7 +86,7 @@
   {{!-- Sheet Body --}}
   <section class="sheet-body">
     {{!-- Attributes Tab --}}
-    <div class="tab attributes flexrow" data-group="primary" data-tab="attributes">
+    <div class="tab attributes-tab flexrow" data-group="primary" data-tab="attributes">
       <div class="attribute-list flex-group-center">
         {{>
         "systems/farhome/templates/partials/attribute-partial.hbs"
@@ -288,7 +288,7 @@
     </div>
 
     {{!-- Feats Tab --}}
-    <div class="tab feats" data-group="primary" data-tab="feats">
+    <div class="tab feats-tab" data-group="primary" data-tab="feats">
       <ol class="items-list">
         <li class="item flexrow item-header">
           <div class="item-image"></div>
@@ -311,7 +311,7 @@
     </div>
 
     {{!-- Maneuvers Tab --}}
-    <div class="tab maneuvers" data-group="primary" data-tab="maneuvers">
+    <div class="tab maneuvers-tab" data-group="primary" data-tab="maneuvers">
       <ol class="items-list">
         <li class="item flexrow item-header">
           <div class="item-image"></div>
@@ -335,7 +335,7 @@
 
     {{!-- Spells Tab --}}
     {{!-- TODO This needs to add the ability for different levels of spells. --}}
-    <div class="tab spells" data-group="primary" data-tab="spells">
+    <div class="tab spells-tab" data-group="primary" data-tab="spells">
       <ol class="items-list">
         <li class="item flexrow item-header">
           <div class="item-image"></div>
@@ -365,7 +365,7 @@
     </div>
 
     {{!-- Inventory Tab --}}
-    <div class="tab inventory" data-group="primary" data-tab="inventory">
+    <div class="tab inventory-tab" data-group="primary" data-tab="inventory">
       <ol class="items-list">
         <li class="item flexrow item-header">
           <div class="item-image"></div>
@@ -388,13 +388,13 @@
     </div>
 
     {{!-- Biography Tab --}}
-    <div class="tab biography" data-group="primary" data-tab="biography">
+    <div class="tab biography-tab" data-group="primary" data-tab="biography">
       {{editor content=data.biography.value target="data.biography.value" button=true owner=owner editable=editable}}
     </div>
 
     {{!-- Notes Tab --}}
     {{!-- TODO Figure out how to fix the initial text section. --}}
-    <div class="tab notes" data-group="primary" data-tab="notes">
+    <div class="tab notes-tab" data-group="primary" data-tab="notes">
       {{editor content=data.notes.value target="data.notes.value" button=true owner=owner editable=editable}}
     </div>
   </section>
