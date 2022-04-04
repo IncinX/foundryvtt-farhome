@@ -220,20 +220,10 @@ export default class FarhomeActorSheet extends ActorSheet {
     html.find('.item-create').click(this._onItemCreate.bind(this));
 
     // Render the item sheet for viewing/editing prior to the editable check.
-    html.find('.item-edit').click((ev) => {
-      const li = $(ev.currentTarget).parents('.item');
-      const item = this.actor.items.get(li.data('itemId'));
-      item.sheet.render(true);
-    });
+    html.find('.item-edit').click(this._onItemEdit.bind(this));
 
     // Delete Inventory Item
-    html.find('.item-delete').click((ev) => {
-      const li = $(ev.currentTarget).parents('.item');
-      const item = this.actor.items.get(li.data('itemId'));
-      item.delete();
-      // TODO I don't think this sliding motion actually works, add it later.
-      li.slideUp(200, () => this.render(false));
-    });
+    html.find('.item-delete').click(this._onItemDelete.bind(this));
 
     // Active Effect management
     // TODO Add support for effects
@@ -261,12 +251,16 @@ export default class FarhomeActorSheet extends ActorSheet {
   async _onItemCreate(event) {
     event.preventDefault();
     const header = event.currentTarget;
+
     // Get the type of item to create.
     const type = header.dataset.type;
+
     // Grab any data associated with this control.
     const data = duplicate(header.dataset);
+
     // Initialize a default name.
     const name = `New ${type.capitalize()}`;
+
     // Prepare the item object.
     const itemData = {
       name: name,
@@ -278,6 +272,31 @@ export default class FarhomeActorSheet extends ActorSheet {
 
     // Finally, create the item!
     return await Item.create(itemData, { parent: this.actor });
+  }
+
+  /**
+   * Handle editing an Owned Item
+   * @param {Event} event   The originating click event
+   * @private
+   */
+   async _onItemEdit(event) {
+    const li = $(event.currentTarget).parents('.item');
+    const item = this.actor.items.get(li.data('itemId'));
+    item.sheet.render(true);
+  }
+  
+  /**
+   * Handle deleting an Owned Item
+   * @param {Event} event   The originating click event
+   * @private
+   */
+   async _onItemDelete(event) {
+    const li = $(event.currentTarget).parents('.item');
+    const item = this.actor.items.get(li.data('itemId'));
+    item.delete();
+
+    // TODO I don't think this sliding motion actually works, add it later.
+    li.slideUp(200, () => this.render(false));
   }
 
   /**
