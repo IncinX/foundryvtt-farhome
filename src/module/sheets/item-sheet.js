@@ -1,4 +1,5 @@
 import { localizeObject } from '../helpers/localization';
+import { evaluateTemplate } from '../helpers/template-evaluator';
 
 export default class FarhomeItemSheet extends ItemSheet {
   /** @override */
@@ -76,6 +77,23 @@ export default class FarhomeItemSheet extends ItemSheet {
     // TODO This should call the roll handler on the item itself.
     html.find('.item-roll').click((ev) => {
       console.log('Clicked Item Roll!');
+      // TODO Remove this debug code later.  It should go in the item roll function.
+      let sampleData = {
+        attributes: {
+          dex: {
+            value: 3
+          }
+        },
+        proficiencies: {
+          dex: {
+            acrobatics: {
+              value: 2
+            }
+          }
+        }
+      };
+
+      console.log(evaluateTemplate('[${dex}]', sampleData));
     });
   }
 }
