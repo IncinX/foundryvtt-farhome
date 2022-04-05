@@ -67,7 +67,41 @@ export class FarhomeActor extends Actor {
       }
     }
 
-    // TODO Add the roll strings for spells and tools too.  (The weapon roll depends on the attribute which is unknown at this point.)
+    // Setup rolls for spells
+    data.proficiencies.spells.arcane.roll = proficiencyRollFormula(
+      data.proficiencies.spells.arcane.value,
+      data.attributes.int.value,
+    );
+    data.proficiencies.spells.curse.roll = proficiencyRollFormula(
+      data.proficiencies.spells.curse.value,
+      data.attributes.will.value,
+    );
+    data.proficiencies.spells.divine.roll = proficiencyRollFormula(
+      data.proficiencies.spells.divine.value,
+      data.attributes.cha.value,
+    );
+    data.proficiencies.spells.druidic.roll = proficiencyRollFormula(
+      data.proficiencies.spells.druidic.value,
+      data.attributes.will.value,
+    );
+
+    // Setup rolls for tools
+    data.proficiencies.tools.repairKit.roll = proficiencyRollFormula(
+      data.proficiencies.tools.repairKit.value,
+      data.attributes.str.value,
+    );
+    data.proficiencies.tools.enchantersTools.roll = proficiencyRollFormula(
+      data.proficiencies.tools.enchantersTools.value,
+      data.attributes.int.value,
+    );
+    data.proficiencies.tools.apothecarySet.roll = proficiencyRollFormula(
+      data.proficiencies.tools.apothecarySet.value,
+      data.attributes.will.value,
+    );
+    data.proficiencies.tools.scribingTools.roll = proficiencyRollFormula(
+      data.proficiencies.tools.scribingTools.value,
+      data.attributes.int.value,
+    );
   }
 
   /**

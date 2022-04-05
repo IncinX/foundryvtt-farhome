@@ -317,31 +317,6 @@
             objectString="data.proficiencies.weapons.unarmed"}}
           </table>
         </div>
-        <div class="spells-proficiency-group flex-group-center proficiency-group-box">
-          <h2>{{localize 'farhome.spells'}}</h2>
-          <table class="proficiency-table">
-            <colgroup>
-              <col class="proficiency-label" />
-              <col class="proficiency-data" />
-            </colgroup>
-            {{>
-            "systems/farhome/templates/partials/number-proficiency-partial.hbs"
-            data.proficiencies.spells.arcane
-            objectString="data.proficiencies.spells.arcane"}}
-            {{>
-            "systems/farhome/templates/partials/number-proficiency-partial.hbs"
-            data.proficiencies.spells.curse
-            objectString="data.proficiencies.spells.curse"}}
-            {{>
-            "systems/farhome/templates/partials/number-proficiency-partial.hbs"
-            data.proficiencies.spells.divine
-            objectString="data.proficiencies.spells.divine"}}
-            {{>
-            "systems/farhome/templates/partials/number-proficiency-partial.hbs"
-            data.proficiencies.spells.druidic
-            objectString="data.proficiencies.spells.druidic"}}
-          </table>
-        </div>
         <div class="equipment-proficiency-group flex-group-center proficiency-group-box">
           <h2>{{localize 'farhome.equipment'}}</h2>
           <table class="proficiency-table">
@@ -371,6 +346,31 @@
             objectString="data.proficiencies.equipment.shield"}}
           </table>
         </div>
+        <div class="spells-proficiency-group flex-group-center proficiency-group-box">
+          <h2>{{localize 'farhome.spells'}}</h2>
+          <table class="proficiency-table">
+            <colgroup>
+              <col class="proficiency-label" />
+              <col class="proficiency-data" />
+            </colgroup>
+            {{>
+            "systems/farhome/templates/partials/rollable-number-proficiency-partial.hbs"
+            data.proficiencies.spells.arcane
+            objectString="data.proficiencies.spells.arcane"}}
+            {{>
+            "systems/farhome/templates/partials/rollable-number-proficiency-partial.hbs"
+            data.proficiencies.spells.curse
+            objectString="data.proficiencies.spells.curse"}}
+            {{>
+            "systems/farhome/templates/partials/rollable-number-proficiency-partial.hbs"
+            data.proficiencies.spells.divine
+            objectString="data.proficiencies.spells.divine"}}
+            {{>
+            "systems/farhome/templates/partials/rollable-number-proficiency-partial.hbs"
+            data.proficiencies.spells.druidic
+            objectString="data.proficiencies.spells.druidic"}}
+          </table>
+        </div>
         <div class="tools-proficiency-group flex-group-center proficiency-group-box">
           <h2>{{localize 'farhome.tools'}}</h2>
           <table class="proficiency-table">
@@ -379,19 +379,19 @@
               <col class="proficiency-data" />
             </colgroup>
             {{>
-            "systems/farhome/templates/partials/number-proficiency-partial.hbs"
+            "systems/farhome/templates/partials/rollable-number-proficiency-partial.hbs"
             data.proficiencies.tools.repairKit
             objectString="data.proficiencies.tools.repairKit"}}
             {{>
-            "systems/farhome/templates/partials/number-proficiency-partial.hbs"
+            "systems/farhome/templates/partials/rollable-number-proficiency-partial.hbs"
             data.proficiencies.tools.enchantersTools
             objectString="data.proficiencies.tools.enchantersTools"}}
             {{>
-            "systems/farhome/templates/partials/number-proficiency-partial.hbs"
+            "systems/farhome/templates/partials/rollable-number-proficiency-partial.hbs"
             data.proficiencies.tools.apothecarySet
             objectString="data.proficiencies.tools.apothecarySet"}}
             {{>
-            "systems/farhome/templates/partials/number-proficiency-partial.hbs"
+            "systems/farhome/templates/partials/rollable-number-proficiency-partial.hbs"
             data.proficiencies.tools.scribingTools
             objectString="data.proficiencies.tools.scribingTools"}}
           </table>
