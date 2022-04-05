@@ -21,7 +21,7 @@ const sourceDirectory = './src';
 const distDirectory = './dist';
 const stylesDirectory = `${sourceDirectory}/styles`;
 const stylesExtension = 'less';
-const sourceFileExtension = 'ts';
+const sourceFileExtension = 'js';
 const staticFiles = ['assets', 'fonts', 'lang', 'packs', 'templates', 'system.json', 'template.json'];
 
 /********************/
