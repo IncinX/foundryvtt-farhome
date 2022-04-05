@@ -1,6 +1,7 @@
 export default {
+  preset: "rollup-jest",
   testEnvironment: 'node',
   roots: [
-    'test',
+    'src',
   ],
 };
