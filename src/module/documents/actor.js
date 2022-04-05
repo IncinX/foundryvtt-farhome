@@ -67,7 +67,7 @@ export class FarhomeActor extends Actor {
       }
     }
 
-    // TODO Add the roll strings for spells and weapons too
+    // TODO Add the roll strings for spells and tools too.  (The weapon roll depends on the attribute which is unknown at this point.)
   }
 
   /**
