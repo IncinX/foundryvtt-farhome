@@ -242,7 +242,7 @@ export default class FarhomeActorSheet extends ActorSheet {
       itemData.data.spellLevel = {
         value: parseInt(data.spellLevel),
       };
-    };
+    }
 
     // TODO When a new item of a type is created, it should fill the rollTemplate field with an appropriate template for it's type.
 

@@ -23,7 +23,7 @@ export default class FarhomeItemSheet extends ItemSheet {
     // sheets are the actor object, the data object, whether or not it's
     // editable, the items array, and the effects array.
     const context = super.getData();
-    
+
     // Add the farhome configuration so it is available in handlebars.
     context.config = CONFIG.FARHOME;
 
