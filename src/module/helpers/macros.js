@@ -42,6 +42,8 @@ export function rollItemMacro(itemName) {
   const item = actor ? actor.items.find((i) => i.name === itemName) : null;
   if (!item) return ui.notifications.warn(`Your controlled Actor does not have an item named ${itemName}`);
 
+  // TODO Possibly pass in actor here as a parameter or modify the roll function to also query the owning actor (ideally based on _id)
+
   // Trigger the item roll
   return item.roll();
 }

@@ -1,6 +1,8 @@
 {
   "farhome": {
     "description": "Description",
+    "rollTemplate": "Roll Template",
+    "extraDice": "Extra Dice",
     "attributes": "Attributes",
     "proficiencies": "Proficiencies",
     "tools": "Tools",

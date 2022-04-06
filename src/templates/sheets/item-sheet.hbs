@@ -12,31 +12,37 @@
   <nav class="sheet-tabs tabs" data-group="primary">
     <a class="item" data-tab="description">{{localize "farhome.description"}}</a>
     <a class="item" data-tab="attributes">{{localize "farhome.attributes"}}</a>
+    <a class="item" data-tab="rollTemplate">{{localize "farhome.rollTemplate"}}</a>
   </nav>
 
   {{!-- Item Sheet Content --}}
   <section class="sheet-body">
     {{!-- Description Tab --}}
     <div class="tab" data-group="primary" data-tab="description">
-      {{editor content=data.description.value target="data.description.value" rollData=rollData button=true owner=owner editable=editable}}
+      {{editor content=data.description.value target="data.description.value" button=true owner=owner editable=editable}}
     </div>
 
     {{!-- Attributes Tab --}}
     <div class="tab attributes" data-group="primary" data-tab="attributes">
       <table>
-        <tr>
-          <th>{{localize "farhome.quantity"}}</th>
-          <th>{{localize "farhome.weight"}}</th>
-        </tr>
-        <tr>
-          <td>
-            <input name="data.quantity.value" type="text" value="{{data.quantity.value}}" placeholder="Quantity" data-dtype="Number" />
-          </td>
-          <td>
-            <input name="data.weight.value" type="text" value="{{data.weight.value}}" placeholder="Weight" data-dtype="Number" />
-          </td>
-        </tr>
+        <colgroup>
+          <col class="attribute-label" />
+          <col class="attribute-data" />
+        </colgroup>
+        {{>
+        "systems/farhome/templates/partials/number-proficiency-partial.hbs"
+        data.quantity
+        objectString="data.quantity"}}
+        {{>
+        "systems/farhome/templates/partials/number-proficiency-partial.hbs"
+        data.weight
+        objectString="data.weight"}}
       </table>
+    </div>
+
+    {{!-- Roll Template Tab --}}
+    <div class="tab" data-group="primary" data-tab="rollTemplate">
+      {{editor content=data.rollTemplate.value target="data.rollTemplate.value" button=true owner=owner editable=editable}}
     </div>
   </div>
 </form>

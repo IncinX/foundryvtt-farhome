@@ -274,10 +274,14 @@
         }
       },
       "range": {
-        "value": "Melee"
+        "range": {
+          "value": "Melee"
+        }
       },
       "damageType": {
-        "value": "Bludgeoning"
+        "damageType": {
+          "value": "Bludgeoning"
+        }
       }
     },
     "item": {

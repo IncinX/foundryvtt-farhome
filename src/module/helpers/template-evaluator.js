@@ -38,8 +38,8 @@ export function evaluateRoll(rollFormula, actorData, itemData) {
   };
 
   let itemContext = {
-    extraDice: 's',
-    description: '', // TODO Fill this with the item description
+    name: 'Test Item Name',
+    description: 'Test Item Description', // TODO Fill this with the item description
   };
 
   // TODO Need to get the text between the [[]], evaluate it and replace the whole [[]] expression.
@@ -50,7 +50,7 @@ export function evaluateRoll(rollFormula, actorData, itemData) {
     'fh',
     'a',
     'i',
-    'return ' + 'fh.roll(fh.getRollString(a.acrobatics, a.dex) + i.extraDice);',
+    'return ' + 'fh.roll(fh.getRollString(a.acrobatics, a.dex) + "s");',
   );
   let evaluatedOutput = evaluationFunction(farhomeContext, actorContext, itemContext);
   console.log(evaluatedOutput);
