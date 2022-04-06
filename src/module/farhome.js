@@ -19,7 +19,7 @@ Hooks.once('init', async () => {
     FarhomeActor,
     FarhomeItem,
     rollItemMacro,
-  }
+  };
 
   // Assign custom classes and constants here
   CONFIG.FARHOME = FARHOME;
