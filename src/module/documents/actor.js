@@ -44,6 +44,17 @@ export class FarhomeActor extends Actor {
     this._prepareNpcData(actorData);
   }
 
+  /** @inheritdoc */
+  _preCreate(data, options, user) {
+    if (this.type === 'character') {
+      this.data.token.update({
+        vision: true,
+        actorLink: true,
+        disposition: 1,
+      });
+    }
+  }
+
   /**
    * Prepare Actor general derived data data
    */

@@ -4,9 +4,9 @@ describe('Evaluate template', () => {
   let sampleData = {
     attributes: {
       dex: {
-        value: 3
-      }
-    }
+        value: 3,
+      },
+    },
   };
 
   // TODO Currently skipped because the functionality is WIP, update the test and remove the skip later.
