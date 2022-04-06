@@ -15,6 +15,12 @@ import FarhomeActorSheet from './sheets/actor-sheet';
 Hooks.once('init', async () => {
   console.log('farhome | Initializing farhome');
 
+  game.farhome = {
+    FarhomeActor,
+    FarhomeItem,
+    rollItemMacro,
+  }
+
   // Assign custom classes and constants here
   CONFIG.FARHOME = FARHOME;
 

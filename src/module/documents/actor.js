@@ -133,41 +133,42 @@ export class FarhomeActor extends Actor {
     const data = super.getRollData();
 
     // Prepare character roll data.
-    this._getCharacterRollData(data);
-    this._getNpcRollData(data);
+    let actorRollData = this._getCharacterRollData(data);
+    let characterRollData = this._getCharacterRollData(data);
+    let npcRollData = this._getNpcRollData(data);
 
-    return data;
+    return {
+      ...actorRollData,
+      ...characterRollData,
+      ...npcRollData,
+    };
+  }
+
+  /**
+   * Prepare generic actor roll data.
+   */
+  _getCharacterRollData(data) {
+    // Generate a generic actor roll context and return it
+    return {};
   }
 
   /**
    * Prepare character roll data.
    */
   _getCharacterRollData(data) {
-    if (this.data.type !== 'character') return;
+    if (this.data.type !== 'character') return {};
 
-    // Copy the ability scores to the top level, so that rolls can use
-    // formulas like `@str.mod + 4`.
-    // TODO This doesn't apply to farhome but I can extend it to something similar later.
-    /*
-    if (data.abilities) {
-      for (let [k, v] of Object.entries(data.attributes)) {
-        data[k] = foundry.utils.deepClone(v);
-      }
-    }
-
-    // Add level for easier access, or fall back to 0.
-    if (data.essence.level) {
-      data.lvl = data.essence.level.value ?? 0;
-    }
-    */
+    // Generate a character roll context and return it
+    return {};
   }
 
   /**
    * Prepare NPC roll data.
    */
   _getNpcRollData(data) {
-    if (this.data.type !== 'npc') return;
+    if (this.data.type !== 'npc') return {};
 
-    // Process additional NPC data here.
+    // Generate an NPC roll context and return it
+    return {};
   }
 }

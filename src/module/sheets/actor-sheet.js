@@ -233,6 +233,9 @@ export default class FarhomeActorSheet extends ActorSheet {
       type: type,
       data: data,
     };
+
+    // TODO When a new item of a type is created, it should fill the rollTemplate field with an appropriate template for it's type.
+
     // Remove the type from the dataset since it's in the itemData.type prop.
     delete itemData.data['type'];
 

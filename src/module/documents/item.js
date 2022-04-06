@@ -1,3 +1,5 @@
+import { evaluateTemplate } from '../helpers/template-evaluator';
+
 /**
  * Extend the basic Item with some very simple modifications.
  * @extends {Item}
@@ -39,6 +41,26 @@ export class FarhomeItem extends Item {
    */
   async roll() {
     const item = this.data;
+
+    console.log('The item.roll() function was called!');
+
+    // TODO Remove this debug code later.  It should go in the item roll function.
+    let sampleData = {
+      attributes: {
+        dex: {
+          value: 3,
+        },
+      },
+      proficiencies: {
+        dex: {
+          acrobatics: {
+            value: 2,
+          },
+        },
+      },
+    };
+
+    console.log(evaluateTemplate('[${dex}]', sampleData));
 
     // TODO Look into Roll.replaceFormulaData() and foundry.utils.getProperty as a way to replace context data from the actor and items.
     //      Use this as a means to build embedded descriptions for auto-rolling.

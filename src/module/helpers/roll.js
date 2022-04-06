@@ -1,4 +1,3 @@
-// TODO Add some unit tests for all of this.  Handle a lot of the different cases.
 import { clamp } from './math';
 
 export function proficiencyRollFormula(proficiency, attribute) {
