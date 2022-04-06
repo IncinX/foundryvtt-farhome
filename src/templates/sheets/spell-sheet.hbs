@@ -39,20 +39,11 @@
         data.spellLevel
         objectString="data.spellLevel"}}
         {{!-- TODO Move this into row-select-partial if possible --}}
-        <tr>
-          <td>
-            <label class="resource-label" for="data.spellSchool.value" data-label="data.spellSchool.label">{{data.spellSchool.label}}</label>
-          </td>
-          <td>
-            <select name="data.spellSchool.value">
-              {{#select data.spellSchool.value}}
-                {{#each config.spellSchools as |name type|}}
-                  <option value="{{type}}">{{localize name}}</option>
-                {{/each}}
-              {{/select}}
-            </select>
-          </td>
-        </tr>
+        {{>
+        "systems/farhome/templates/partials/row-select-partial.hbs"
+        data.spellSchool
+        objectString="data.spellSchool"
+        mapping=config.spellSchools}}
       </table>
     </div>
 
