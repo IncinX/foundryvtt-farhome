@@ -1,5 +1,47 @@
 export const FARHOME = {};
 
-// TODO Add stuff here for spell school drop down box (from training video)
-// TODO Add stuff here from range selectors for spells
-// TODO Add stuff here for range selectors for weapons
+FARHOME.spellSchools = {
+  arcane: 'farhome.arcane',
+  curse: 'farhome.curse',
+  divine: 'farhome.divine',
+  druidic: 'farhome.druidic',
+};
+
+FARHOME.weaponTypes = {
+  oneHand: 'farhome.oneHand',
+  twoHand: 'farhome.twoHand',
+  ranged: 'farhome.ranged',
+  unarmed: 'farhome.unarmed',
+};
+
+FARHOME.rarities = {
+  common: 'farhome.common',
+  uncommon: 'farhome.uncommon',
+  rare: 'farhome.rare',
+  veryRare: 'farhome.veryRare',
+  legendary: 'farhome.legendary',
+  artifact: 'farhome.artifact',
+};
+
+FARHOME.damageTypes = {
+  slashing: 'farhome.slashing',
+  bludgeoning: 'farhome.bludgeoning',
+  piercing: 'farhome.piercing',
+  fire: 'farhome.fire',
+  cold: 'farhome.cold',
+  lightning: 'farhome.lightning',
+  thunder: 'farhome.thunder',
+  poison: 'farhome.poison',
+  force: 'farhome.force',
+  holy: 'farhome.holy',
+  death: 'farhome.death',
+  psychic: 'farhome.psychic',
+};
+
+FARHOME.aoeTypes = {
+  line: 'farhome.line',
+  rectangle: 'farhome.rectangle',
+  diamond: 'farhome.diamond',
+  cone: 'farhome.cone',
+  touch: 'farhome.touch',
+};
