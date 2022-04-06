@@ -25,5 +25,10 @@
     {{!-- Attributes Tab --}}
     <div class="tab attributes" data-group="primary" data-tab="attributes">
     </div>
+
+    {{!-- Roll Template Tab --}}
+    <div class="tab" data-group="primary" data-tab="rollTemplate">
+      {{editor content=data.rollTemplate.value target="data.rollTemplate.value" button=true owner=owner editable=editable}}
+    </div>
   </div>
 </form>
