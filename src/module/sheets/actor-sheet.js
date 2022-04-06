@@ -155,7 +155,7 @@ export default class FarhomeActorSheet extends ActorSheet {
       }
       // Append to spells.
       else if (i.type === 'spell') {
-        if (i.data.spellLevel !== undefined) {
+        if (i.data.spellLevel.value !== null) {
           spells[i.data.spellLevel.value].push(i);
         }
       }

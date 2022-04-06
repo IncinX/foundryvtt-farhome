@@ -1,9 +1,6 @@
 <form class="{{cssClass}}" autocomplete="off">
   {{!-- Uncomment to debug data context --}}
-  {{!--{{log .}}--}}
-
-  {{!-- TODO Need to add under-labels for some things similar to Actor sheet. --}}
-  {{!-- TODO Create common parts to allow for common elements between the different item sheet types. --}}
+  {{log .}}
 
   {{!-- Item Sheet Header --}}
   {{> "systems/farhome/templates/partials/item-header-partial.hbs"}}
@@ -38,12 +35,28 @@
         "systems/farhome/templates/partials/row-number-partial.hbs"
         data.spellLevel
         objectString="data.spellLevel"}}
-        {{!-- TODO Move this into row-select-partial if possible --}}
         {{>
         "systems/farhome/templates/partials/row-select-partial.hbs"
         data.spellSchool
         objectString="data.spellSchool"
         mapping=config.spellSchools}}
+        {{>
+        "systems/farhome/templates/partials/row-select-partial.hbs"
+        data.damageType
+        objectString="data.damageType"
+        mapping=config.damageTypes}}
+        {{>
+        "systems/farhome/templates/partials/row-string-partial.hbs"
+        data.range
+        objectString="data.range"}}
+        {{>
+        "systems/farhome/templates/partials/row-string-partial.hbs"
+        data.duration
+        objectString="data.duration"}}
+        {{>
+        "systems/farhome/templates/partials/row-string-partial.hbs"
+        data.castingTime
+        objectString="data.castingTime"}}
       </table>
     </div>
 

@@ -3,6 +3,6 @@
     <label class="resource-label" for="{{objectString}}.value" data-label="{{label}}">{{label}}</label>
   </td>
   <td>
-    <input type="text" name="{{objectString}}.value" data-dtype="Number" value="{{value}}"/>
+    <input type="text" name="{{objectString}}.value" value="{{value}}" data-dtype="Number" pattern="[0-9]+" min="0" required/>
   </td>
 </tr>
