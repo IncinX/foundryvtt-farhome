@@ -272,12 +272,12 @@
       },
       "range": {
         "range": {
-          "value": "Melee"
+          "value": "melee"
         }
       },
       "damageType": {
         "damageType": {
-          "value": "Bludgeoning"
+          "value": "bludgeoning"
         }
       }
     },
@@ -295,10 +295,7 @@
     "weapon": {
       "templates": ["base", "rarity", "equippable", "range", "damageType"],
       "weaponType": {
-        "value": "One Handed Melee"
-      },
-      "weaponBonus": {
-        "value": 0
+        "value": "oneHand"
       },
       "properties": {
         "finesse": {
@@ -374,13 +371,13 @@
         "value": 0
       },
       "spellSchool": {
-        "value": "Arcane"
+        "value": "arcane"
       },
       "duration": {
-        "value": "Instant"
+        "value": "instant"
       },
       "castingTime": {
-        "castingTime": "1 AP"
+        "value": "1 AP"
       }
     }
   }

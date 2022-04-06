@@ -152,8 +152,8 @@ export default class FarhomeActorSheet extends ActorSheet {
       }
       // Append to spells.
       else if (i.type === 'spell') {
-        if (i.data.spellLevel != undefined) {
-          spells[i.data.spellLevel].push(i);
+        if (i.data.spellLevel !== undefined) {
+          spells[i.data.spellLevel.value].push(i);
         }
       }
     }
@@ -231,13 +231,17 @@ export default class FarhomeActorSheet extends ActorSheet {
     const itemData = {
       name: name,
       type: type,
-      data: data,
+      data: {},
+    };
+
+    // TODO This is no longer working.  Find out why and fix it.
+    if (type === 'spell') {
+      itemData.data.spellLevel = {
+        value: parseInt(data.spellLevel),
+      };
     };
 
     // TODO When a new item of a type is created, it should fill the rollTemplate field with an appropriate template for it's type.
-
-    // Remove the type from the dataset since it's in the itemData.type prop.
-    delete itemData.data['type'];
 
     // Finally, create the item!
     return await Item.create(itemData, { parent: this.actor });

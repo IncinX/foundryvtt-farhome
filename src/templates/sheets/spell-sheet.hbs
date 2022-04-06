@@ -24,6 +24,21 @@
 
     {{!-- Attributes Tab --}}
     <div class="tab attributes" data-group="primary" data-tab="attributes">
+      <table>
+        <colgroup>
+          <col class="attribute-label" />
+          <col class="attribute-data" />
+        </colgroup>
+        {{!-- TODO Consider changing the name of these "-proficiency-partial" to something more generic since it is used for more than just proficiency now. --}}
+        {{>
+        "systems/farhome/templates/partials/number-proficiency-partial.hbs"
+        data.spellLevel
+        objectString="data.spellLevel"}}
+        {{>
+        "systems/farhome/templates/partials/bool-proficiency-partial.hbs"
+        data.prepared
+        objectString="data.prepared"}}
+      </table>
     </div>
 
     {{!-- Roll Template Tab --}}
