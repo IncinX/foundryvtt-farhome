@@ -31,13 +31,14 @@
         </colgroup>
         {{!-- TODO Consider changing the name of these "-proficiency-partial" to something more generic since it is used for more than just proficiency now. --}}
         {{>
-        "systems/farhome/templates/partials/bool-proficiency-partial.hbs"
+        "systems/farhome/templates/partials/row-bool-partial.hbs"
         data.prepared
         objectString="data.prepared"}}
         {{>
-        "systems/farhome/templates/partials/number-proficiency-partial.hbs"
+        "systems/farhome/templates/partials/row-number-partial.hbs"
         data.spellLevel
         objectString="data.spellLevel"}}
+        {{!-- TODO Move this into row-select-partial if possible --}}
         <tr>
           <td>
             <label class="resource-label" for="data.spellSchool.value" data-label="data.spellSchool.label">{{data.spellSchool.label}}</label>

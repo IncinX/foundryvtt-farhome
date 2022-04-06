@@ -3,10 +3,11 @@ export async function preloadTemplates() {
     'systems/farhome/templates/partials/attribute-partial.hbs',
     'systems/farhome/templates/partials/max-resource-partial.hbs',
     'systems/farhome/templates/partials/resource-partial.hbs',
-    'systems/farhome/templates/partials/rollable-number-proficiency-partial.hbs',
-    'systems/farhome/templates/partials/number-proficiency-partial.hbs',
-    'systems/farhome/templates/partials/bool-proficiency-partial.hbs',
-    'systems/farhome/templates/partials/string-proficiency-partial.hbs',
+    'systems/farhome/templates/partials/row-rollable-number-partial.hbs',
+    'systems/farhome/templates/partials/row-number-partial.hbs',
+    'systems/farhome/templates/partials/row-bool-partial.hbs',
+    'systems/farhome/templates/partials/row-select-partial.hbs',
+    'systems/farhome/templates/partials/row-string-partial.hbs',
     'systems/farhome/templates/partials/item-header-partial.hbs',
   ];
 
