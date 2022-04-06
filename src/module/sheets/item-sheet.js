@@ -81,16 +81,16 @@ export default class FarhomeItemSheet extends ItemSheet {
       let sampleData = {
         attributes: {
           dex: {
-            value: 3
-          }
+            value: 3,
+          },
         },
         proficiencies: {
           dex: {
             acrobatics: {
-              value: 2
-            }
-          }
-        }
+              value: 2,
+            },
+          },
+        },
       };
 
       console.log(evaluateTemplate('[${dex}]', sampleData));

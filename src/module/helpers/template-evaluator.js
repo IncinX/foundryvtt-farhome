@@ -1,34 +1,53 @@
 import { proficiencyRollFormula } from './roll';
 
-export function evaluateTemplate(templateString, context) {
-  let farhomeContext = {
-    roll: proficiencyRollFormula,
+export function evaluateTemplate(templatString, actorData, itemData) {
+  let evaluatedString = templateString;
+
+  // Get a list of matches
+  let pattern = /\[\[(.*?)\]\]/g;
+  let rollChunks = templateString.match(pattern);
+
+  // Iterate through the chunks and swap in the replacements
+  for (const rollChunk of rollChunks) {
+    // Strip the first two and last two characters (which represent [[]] based on the regular expression.)
+    let strippedRollChunk = rollChunk.substring(2, rollChunk.length - 2);
+
+    let rollChunkReplacement = evaluateRoll(strippedRollChunk, actorData, itemData);
+
+    evaluatedString = evaluatedString.replace(rollChunk, rollChunkReplacement);
   }
 
+  return evaluatedString;
+}
+
+export function evaluateRoll(rollFormula, actorData, itemData) {
+  let farhomeContext = {
+    getRollString: proficiencyRollFormula, // TODO Come up with something more concise than this.
+    roll: function (string) {
+      // TODO Change this to the fh.Roll function provided by the special dice roller.
+      return string;
+    },
+  };
+
   let actorContext = {
-    dex: context.attributes.dex.value,
-    acrobatics: context.proficiencies.dex.acrobatics.value,
+    dex: actorData.attributes.dex.value,
+    acrobatics: actorData.proficiencies.dex.acrobatics.value,
   };
 
   let itemContext = {
-    bonus: 's',
-  }
+    extraDice: 's',
+  };
 
   // TODO Need to get the text between the [[]], evaluate it and replace the whole [[]] expression.
-  
+
   // TODO This is debug code to start off simple
   // TODO Can I change this to this?  Better yet, can I just refer to the variables directly?
-  /* This Works
-  let evaluationFunction = Function('d', 'return d.roll(d.acrobatics, d.dex);');
-  let evaluatedOutput = evaluationFunction(evaluateContext);
-  console.log(evaluatedOutput);
-  */
-  /* This Works
-  let evaluationFunction = Function('return this.roll(this.acrobatics, this.dex);').bind(evaluateContext);
-  let evaluatedOutput = evaluationFunction(evaluateContext);
-  console.log(evaluatedOutput);
-  */
-  let evaluationFunction = Function('fh', 'a', 'i', 'return ' + 'fh.roll(a.acrobatics, a.dex) + i.bonus;');
+  let evaluationFunction = Function(
+    'fh',
+    'a',
+    'i',
+    'return ' + 'fh.roll(fh.getRollString(a.acrobatics, a.dex) + i.extraDice);',
+  );
   let evaluatedOutput = evaluationFunction(farhomeContext, actorContext, itemContext);
   console.log(evaluatedOutput);
 
