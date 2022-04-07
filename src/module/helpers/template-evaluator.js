@@ -23,9 +23,10 @@ export function evaluateTemplate(templateString, actorContext, itemContext) {
 }
 
 export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) {
-  let evaluatorFarhomeContext = {
+  let evaluatorRollerContext = game.specialDiceRoller.fh;
+
+  let evaluatorSystemContext = {
     getRollFormula: proficiencyRollFormula, // TODO Come up with something more concise than this.
-    r: game.specialDiceRoller.fh, // TODO This might need to be provided as a parameter for unit testing purposes?  Or perhaps I can mock it on the global level.
   };
 
   // TODO Try to automate this with some loops but still keep the concise syntax?
@@ -111,11 +112,14 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
   };
 
   // Build the help text
-  let help = '<b>fh (farhome context):</b><br/>';
+  let help = '<b>r (roll context):</b><br/>';
   help += '<ul>';
-  for (const [key, value] of Object.entries(evaluatorFarhomeContext)) {
-    help += `<li>${key}</li><br/>`;
-  }
+  help += '<li>rollFormula(formulaString)</li><br/>';
+  help += '</ul>';
+
+  help += '<b>s (system context):</b><br/>';
+  help += '<ul>';
+  help += '<li>getRollFormula(proficiency, attribute)</li><br/>';
   help += '</ul>';
 
   help += '<b>a (actor context):</b><br/>';
@@ -133,8 +137,14 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
   help += '</ul>';
 
   // Evaluate the template chunk
-  let evaluationFunction = Function('fh', 'a', 'i', 'help', 'return ' + templateChunk + ';');
-  let evaluatedOutput = evaluationFunction(evaluatorFarhomeContext, evaluatorActorContext, evaluatorItemContext, help);
+  let evaluationFunction = Function('fh', 's', 'a', 'i', 'help', 'return ' + templateChunk + ';');
+  let evaluatedOutput = evaluationFunction(
+    evaluatorRollerContext,
+    evaluatorSystemContext,
+    evaluatorActorContext,
+    evaluatorItemContext,
+    help,
+  );
 
   return evaluatedOutput;
 }
