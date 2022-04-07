@@ -44,7 +44,6 @@ export class FarhomeItem extends Item {
     const itemContext = this.data;
 
     let evaluatedTemplate = evaluateTemplate(itemContext.data.rollTemplate.value, actorContext, itemContext);
-    console.log(evaluatedTemplate);
 
     // Initialize chat data.
     const speaker = ChatMessage.getSpeaker({ actor: this.actor });

@@ -24,8 +24,8 @@ export function evaluateTemplate(templateString, actorData, itemData) {
 
 export function evaluateRoll(rollFormula, actorContext, itemContext) {
   let evaluatorFarhomeContext = {
-    getRollString: proficiencyRollFormula, // TODO Come up with something more concise than this.
-    roll: game.specialDiceRoller.fh.rollFormula, // TODO This might need to be provided as a parameter for unit testing purposes?  Or perhaps I can mock it on the global level.
+    getRollFormula: proficiencyRollFormula, // TODO Come up with something more concise than this.
+    r: game.specialDiceRoller.fh, // TODO This might need to be provided as a parameter for unit testing purposes?  Or perhaps I can mock it on the global level.
   };
 
   // TODO Try to automate this with some loops but still keep the concise syntax?
@@ -97,7 +97,6 @@ export function evaluateRoll(rollFormula, actorContext, itemContext) {
 
   let evaluationFunction = Function('fh', 'a', 'i', 'return ' + rollFormula + ';');
   let evaluatedOutput = evaluationFunction(evaluatorFarhomeContext, evaluatorActorContext, evaluatorItemContext);
-  console.log(evaluatedOutput);
 
   return evaluatedOutput;
 }
