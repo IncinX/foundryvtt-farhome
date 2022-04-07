@@ -90,13 +90,11 @@ export function evaluateRoll(rollFormula, actorContext, itemContext) {
 
   let evaluatorItemContext = {
     name: itemContext.name,
-    description: itemContext.data.description,
+    description: itemContext.data.description.value,
   };
 
-  // TODO Need to get the text between the [[]], evaluate it and replace the whole [[]] expression.
+  // TODO Add a help variable that when evaluated, prints the list of all functions and variables available.
 
-  // TODO This is debug code to start off simple
-  // TODO Can I change this to this?  Better yet, can I just refer to the variables directly?
   let evaluationFunction = Function('fh', 'a', 'i', 'return ' + rollFormula + ';');
   let evaluatedOutput = evaluationFunction(evaluatorFarhomeContext, evaluatorActorContext, evaluatorItemContext);
   console.log(evaluatedOutput);
