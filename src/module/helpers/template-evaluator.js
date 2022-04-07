@@ -1,28 +1,28 @@
 import { proficiencyRollFormula } from './roll';
 
-export function evaluateTemplate(templateString, actorData, itemData) {
+export function evaluateTemplate(templateString, actorContext, itemContext) {
   let evaluatedString = templateString;
 
   // Get a list of matches
   let pattern = /\[\[(.*?)\]\]/g;
-  let rollChunks = templateString.match(pattern);
+  let templateChunks = templateString.match(pattern);
 
-  if (rollChunks !== null) {
+  if (templateChunks !== null) {
     // Iterate through the chunks and swap in the replacements
-    for (const rollChunk of rollChunks) {
+    for (const templateChunk of templateChunks) {
       // Strip the first two and last two characters (which represent [[]] based on the regular expression.)
-      let strippedRollChunk = rollChunk.substring(2, rollChunk.length - 2);
+      let strippedRollChunk = templateChunk.substring(2, templateChunk.length - 2);
 
-      let rollChunkReplacement = evaluateRoll(strippedRollChunk, actorData, itemData);
+      let rollChunkReplacement = evaluateTemplateChunk(strippedRollChunk, actorContext, itemContext);
 
-      evaluatedString = evaluatedString.replace(rollChunk, rollChunkReplacement);
+      evaluatedString = evaluatedString.replace(templateChunk, rollChunkReplacement);
     }
   }
 
   return evaluatedString;
 }
 
-export function evaluateRoll(rollFormula, actorContext, itemContext) {
+export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) {
   let evaluatorFarhomeContext = {
     getRollFormula: proficiencyRollFormula, // TODO Come up with something more concise than this.
     r: game.specialDiceRoller.fh, // TODO This might need to be provided as a parameter for unit testing purposes?  Or perhaps I can mock it on the global level.
@@ -38,14 +38,14 @@ export function evaluateRoll(rollFormula, actorContext, itemContext) {
     int: actorContext.data.attributes.int.value,
     will: actorContext.data.attributes.will.value,
     cha: actorContext.data.attributes.cha.value,
-    
+
     strSave: actorContext.data.proficiencies.saves.str.value,
     dexSave: actorContext.data.proficiencies.saves.dex.value,
     staSave: actorContext.data.proficiencies.saves.sta.value,
     intSave: actorContext.data.proficiencies.saves.int.value,
     willSave: actorContext.data.proficiencies.saves.will.value,
     chaSave: actorContext.data.proficiencies.saves.cha.value,
-    
+
     athletics: actorContext.data.proficiencies.attributes.str.athletics.value,
     intimidation: actorContext.data.proficiencies.attributes.str.intimidation.value,
 
@@ -56,17 +56,17 @@ export function evaluateRoll(rollFormula, actorContext, itemContext) {
 
     exhaustion: actorContext.data.proficiencies.attributes.sta.exhaustion.value,
     survival: actorContext.data.proficiencies.attributes.sta.survival.value,
-    
+
     arcana: actorContext.data.proficiencies.attributes.int.arcana.value,
     investigation: actorContext.data.proficiencies.attributes.int.investigation.value,
     lore: actorContext.data.proficiencies.attributes.int.lore.value,
     medicine: actorContext.data.proficiencies.attributes.int.medicine.value,
-    
+
     animalHandling: actorContext.data.proficiencies.attributes.will.animalHandling.value,
     insight: actorContext.data.proficiencies.attributes.will.insight.value,
     nature: actorContext.data.proficiencies.attributes.will.nature.value,
     perception: actorContext.data.proficiencies.attributes.will.perception.value,
-    
+
     conversation: actorContext.data.proficiencies.attributes.cha.conversation.value,
     diplomacy: actorContext.data.proficiencies.attributes.cha.diplomacy.value,
     performance: actorContext.data.proficiencies.attributes.cha.performance.value,
@@ -91,12 +91,50 @@ export function evaluateRoll(rollFormula, actorContext, itemContext) {
   let evaluatorItemContext = {
     name: itemContext.name,
     description: itemContext.data.description.value,
+    rarity: itemContext.data.rarity ? itemContext.data.rarity.value : '',
+    apCost: itemContext.data.apCost ? itemContext.data.apCost.value : '',
+    range: itemContext.data.range ? itemContext.data.range.value : '',
+    damageType: itemContext.data.damageType ? itemContext.data.damageType.value : '',
+    quantity: itemContext.data.quantity ? itemContext.data.quantity.value : '',
+    weight: itemContext.data.weight ? itemContext.data.weight : '',
+    weaponType: itemContext.data.weaponType ? itemContext.data.weaponType.value : '',
+    armorBonus: itemContext.data.armorBonus ? itemContext.data.armorBonus.value : '',
+    armorPenalty: itemContext.data.armorPenalty ? itemContext.data.armorPenalty.value : '',
+    armorType: itemContext.data.armorType ? itemContext.data.armorType.value : '',
+    levelRequirements: itemContext.data.levelRequirements ? itemContext.data.levelRequirements.value : '',
+    apCosts: itemContext.data.apCosts ? itemContext.data.apCosts.value : '',
+    spellLevel: itemContext.data.spellLevel ? itemContext.data.spellLevel.value : '',
+    spellSchool: itemContext.data.spellSchool ? itemContext.data.spellSchool.value : '',
+    spellDuration: itemContext.data.duration ? itemContext.data.duration.value : '',
+    castingTime: itemContext.data.castingTime ? itemContext.data.castingTime.value : '',
+    areaOfEffect: itemContext.data.areaOfEffect ? itemContext.data.areaOfEffect.value : '',
   };
 
-  // TODO Add a help variable that when evaluated, prints the list of all functions and variables available.
+  // Build the help text
+  let help = '<b>fh (farhome context):</b><br/>';
+  help += '<ul>';
+  for (const [key, value] of Object.entries(evaluatorFarhomeContext)) {
+    help += `<li>${key}</li><br/>`;
+  }
+  help += '</ul>';
 
-  let evaluationFunction = Function('fh', 'a', 'i', 'return ' + rollFormula + ';');
-  let evaluatedOutput = evaluationFunction(evaluatorFarhomeContext, evaluatorActorContext, evaluatorItemContext);
+  help += '<b>a (actor context):</b><br/>';
+  help += '<ul>';
+  for (const [key, value] of Object.entries(evaluatorActorContext)) {
+    help += `<li>${key}</li><br/>`;
+  }
+  help += '</ul>';
+
+  help += '<b>i (item context):</b><br/>';
+  help += '<ul>';
+  for (const [key, value] of Object.entries(evaluatorItemContext)) {
+    help += `<li>${key}</li><br/>`;
+  }
+  help += '</ul>';
+
+  // Evaluate the template chunk
+  let evaluationFunction = Function('fh', 'a', 'i', 'help', 'return ' + templateChunk + ';');
+  let evaluatedOutput = evaluationFunction(evaluatorFarhomeContext, evaluatorActorContext, evaluatorItemContext, help);
 
   return evaluatedOutput;
 }
