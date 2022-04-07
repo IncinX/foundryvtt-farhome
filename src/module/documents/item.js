@@ -40,27 +40,11 @@ export class FarhomeItem extends Item {
    * @private
    */
   async roll() {
-    const item = this.data;
+    const actorContext = this.actor.data;
+    const itemContext = this.data;
 
-    console.log('The item.roll() function was called!');
-
-    // TODO Remove this debug code later.  It should go in the item roll function.
-    let sampleData = {
-      attributes: {
-        dex: {
-          value: 3,
-        },
-      },
-      proficiencies: {
-        dex: {
-          acrobatics: {
-            value: 2,
-          },
-        },
-      },
-    };
-
-    console.log(evaluateTemplate('[${dex}]', sampleData));
+    let evaluatedTemplate = evaluateTemplate(itemContext.data.rollTemplate, actorContext, itemContext);
+    console.log(evaluatedTemplate);
 
     // TODO Look into Roll.replaceFormulaData() and foundry.utils.getProperty as a way to replace context data from the actor and items.
     //      Use this as a means to build embedded descriptions for auto-rolling.
@@ -69,33 +53,15 @@ export class FarhomeItem extends Item {
 
     // Initialize chat data.
     const speaker = ChatMessage.getSpeaker({ actor: this.actor });
-    const rollMode = game.settings.get('core', 'rollMode');
-    const label = `[${item.type}] ${item.name}`;
 
-    // If there's no roll data, send a chat message.
-    if (!this.data.data.formula) {
-      ChatMessage.create({
-        speaker: speaker,
-        rollMode: rollMode,
-        flavor: label,
-        content: item.data.description ?? '',
-      });
-    }
-    // Otherwise, create a roll and send a chat message from it.
-    else {
-      // Retrieve roll data.
-      const rollData = this.getRollData();
+    // TODO What should I put here?
+    //const rollMode = game.settings.get('core', 'rollMode');
 
-      // Invoke the roll and submit it to chat.
-      const roll = new Roll(rollData.item.formula, rollData);
-      // If you need to store the value first, uncomment the next line.
-      // let result = await roll.roll({async: true});
-      roll.toMessage({
-        speaker: speaker,
-        rollMode: rollMode,
-        flavor: label,
-      });
-      return roll;
-    }
+    ChatMessage.create({
+      user: game.user._id,
+      speaker: speaker,
+      content: evaluatedTemplate,
+      //rollMode: rollMode,
+    });
   }
 }

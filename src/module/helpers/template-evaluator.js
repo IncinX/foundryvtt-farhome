@@ -22,37 +22,30 @@ export function evaluateTemplate(templateString, actorData, itemData) {
   return evaluatedString;
 }
 
-export function evaluateRoll(rollFormula, actorData, itemData) {
-  let farhomeContext = {
+export function evaluateRoll(rollFormula, actorContext, itemContext) {
+  let evaluatorFarhomeContext = {
     getRollString: proficiencyRollFormula, // TODO Come up with something more concise than this.
-    roll: function (string) {
-      // TODO Change this to the fh.Roll function provided by the special dice roller.
-      return string;
-    },
+    roll: game.specialDiceRoller.fh.rollFormula, // TODO This might need to be provided as a parameter for unit testing purposes?  Or perhaps I can mock it on the global level.
   };
 
   // TODO Add some more data related to the actor and item contexts that are relevant and important
-  let actorContext = {
-    dex: actorData.attributes.dex.value,
-    acrobatics: actorData.proficiencies.dex.acrobatics.value,
+  let evaluatorActorContext = {
+    name: actorContext.name,
+    dex: actorContext.data.attributes.dex.value,
+    acrobatics: actorContext.data.proficiencies.dex.acrobatics.value,
   };
 
-  let itemContext = {
-    name: 'Test Item Name',
-    description: 'Test Item Description', // TODO Fill this with the item description
+  let evaluatorItemContext = {
+    name: itemContext.name,
+    description: itemContext.name.description,
   };
 
   // TODO Need to get the text between the [[]], evaluate it and replace the whole [[]] expression.
 
   // TODO This is debug code to start off simple
   // TODO Can I change this to this?  Better yet, can I just refer to the variables directly?
-  let evaluationFunction = Function(
-    'fh',
-    'a',
-    'i',
-    'return ' + 'fh.roll(fh.getRollString(a.acrobatics, a.dex) + "s");',
-  );
-  let evaluatedOutput = evaluationFunction(farhomeContext, actorContext, itemContext);
+  let evaluationFunction = Function('fh', 'a', 'i', 'return ' + rollFormula + ';');
+  let evaluatedOutput = evaluationFunction(evaluatorFarhomeContext, evaluatorActorContext, evaluatorItemContext);
   console.log(evaluatedOutput);
 
   return evaluatedOutput;
