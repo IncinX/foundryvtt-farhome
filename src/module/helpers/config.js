@@ -14,7 +14,7 @@ FARHOME.weaponTypes = {
   unarmed: 'farhome.unarmed',
 };
 
-FARHOME.armorType = {
+FARHOME.armorTypes = {
   light: 'farhome.light',
   medium: 'farhome.medium',
   heavy: 'farhome.heavy',

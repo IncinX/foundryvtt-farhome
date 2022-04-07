@@ -399,6 +399,8 @@
       </div>
     </div>
 
+    {{!-- TODO Localize the Create/Edit/Delete Feat/Maneuver/Spell/Weapon/Armor/Item text below in the "titles" area and when provided via Javascript. --}}
+
     {{!-- Feats Tab --}}
     <div class="tab feats-tab" data-group="primary" data-tab="feats">
       <ol class="items-list">
@@ -455,7 +457,7 @@
           <div class="item-controls"></div>
         </li>
         {{#each spells as |spellsByLevel spellLevel|}}
-          <li class="item flexrow spell-divider">
+          <li class="item flexrow item-divider">
             <div class="item-image"></div>
             <div class="item-name">Level {{spellLevel}} Spells</div>
             <div class="item-controls">
@@ -479,11 +481,45 @@
     {{!-- Inventory Tab --}}
     <div class="tab inventory-tab" data-group="primary" data-tab="inventory">
       <ol class="items-list">
-        <li class="item flexrow item-header">
+        <li class="item flexrow item-divider">
           <div class="item-image"></div>
-          <div class="item-name">Name</div>
+          <div class="item-name">Weapons</div>
           <div class="item-controls">
-            <a class="item-control item-create" title="Create Item" data-type="item"><i class="fas fa-plus"></i> Add Item</a>
+            <a class="item-control item-create" title="Create Weapon" data-type="weapon"><i class="fas fa-plus"></i> Add Weapon</a>
+          </div>
+        </li>
+        {{#each weapons as |weapon id|}}
+        <li class="item flexrow" data-item-id="{{weapon._id}}">
+          <div class="item-image"><img src="{{weapon.img}}" title="{{weapon.name}}" width="24" height="24" /></div>
+          <h4 class="item-name">{{weapon.name}}</h4>
+          <div class="item-controls">
+            <a class="item-control item-edit" title="Edit Weapon"><i class="fas fa-edit"></i></a>
+            <a class="item-control item-delete" title="Delete Weapon"><i class="fas fa-trash"></i></a>
+          </div>
+        </li>
+        {{/each}}
+        <li class="item flexrow item-divider">
+          <div class="item-image"></div>
+          <div class="item-name">Armors</div>
+          <div class="item-controls">
+            <a class="item-control item-create" title="Create Armor" data-type="armor"><i class="fas fa-plus"></i> Add Armor</a>
+          </div>
+        </li>
+        {{#each armors as |armor id|}}
+        <li class="item flexrow" data-item-id="{{armor._id}}">
+          <div class="item-image"><img src="{{armor.img}}" title="{{armor.name}}" width="24" height="24" /></div>
+          <h4 class="item-name">{{armor.name}}</h4>
+          <div class="item-controls">
+            <a class="item-control item-edit" title="Edit Armor"><i class="fas fa-edit"></i></a>
+            <a class="item-control item-delete" title="Delete Armor"><i class="fas fa-trash"></i></a>
+          </div>
+        </li>
+        {{/each}}
+        <li class="item flexrow item-divider">
+          <div class="item-image"></div>
+          <div class="item-name">Items</div>
+          <div class="item-controls">
+            <a class="item-control item-create" title="Create Spell" data-type="item"><i class="fas fa-plus"></i> Add Item</a>
           </div>
         </li>
         {{#each inventory as |item id|}}
