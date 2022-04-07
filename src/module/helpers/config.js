@@ -45,7 +45,7 @@ FARHOME.damageTypes = {
   psychic: 'farhome.psychic',
 };
 
-FARHOME.aoeTypes = {
+FARHOME.areaOfEffectTypes = {
   line: 'farhome.line',
   rectangle: 'farhome.rectangle',
   diamond: 'farhome.diamond',
