@@ -5,6 +5,8 @@
 // TODO Add mana deduction
 
 import { onManageActiveEffect, prepareActiveEffectCategories } from '../helpers/effects.js';
+import { localizeObject } from '../helpers/localization.js';
+import { _getDefaultRollTemplate } from '../helpers/roll-templates.js';
 
 // TODO Add Poison/Hex icons later
 
@@ -30,6 +32,9 @@ export default class FarhomeActorSheet extends ActorSheet {
     // sheets are the actor object, the data object, whether or not it's
     // editable, the items array, and the effects array.
     const context = super.getData();
+
+    // Add the farhome configuration so it is available in handlebars.
+    context.config = CONFIG.FARHOME;
 
     // Use a safe clone of the actor data for further operations.
     const actorData = this.actor.data.toObject(false);
@@ -70,42 +75,7 @@ export default class FarhomeActorSheet extends ActorSheet {
    */
   _prepareActorData(context) {
     // Do derived localization of the entire context data.
-    this._localizeObject(null, context.data);
-  }
-
-  /**
-   * Recursively localizes an object by adding a label sub-key with the localization of it's key name.
-   *
-   * @param {Object} object Any javascript object
-   *
-   * @return {undefined}
-   */
-  _localizeObject(objectKeyName, objectValue) {
-    let hasLabel = false;
-
-    if (objectValue === null) {
-      return;
-    }
-
-    for (let [k, v] of Object.entries(objectValue)) {
-      if (k === 'label') {
-        console.warn(`Label field already found for key: ${objectKeyName}`);
-        hasLabel = true;
-      } else if (k !== 'value' && typeof v === 'object') {
-        this._localizeObject(k, v);
-      }
-    }
-
-    if (objectKeyName !== null && !hasLabel) {
-      let localizationKey = `farhome.${objectKeyName}`;
-      let labelText = game.i18n.localize(localizationKey);
-
-      if (labelText === localizationKey) {
-        console.warn(`Localization not found: farhome.${objectKeyName}`);
-      }
-
-      objectValue.label = labelText;
-    }
+    localizeObject(null, context.data);
   }
 
   /**
@@ -186,8 +156,8 @@ export default class FarhomeActorSheet extends ActorSheet {
       }
       // Append to spells.
       else if (i.type === 'spell') {
-        if (i.data.spellLevel != undefined) {
-          spells[i.data.spellLevel].push(i);
+        if (i.data.spellLevel.value !== null) {
+          spells[i.data.spellLevel.value].push(i);
         }
       }
     }
@@ -214,26 +184,14 @@ export default class FarhomeActorSheet extends ActorSheet {
     // Everything below here is only needed if the sheet is editable
     if (!this.isEditable) return;
 
-    // TODO Move a lot of this to separate methods.
-
     // Add Inventory Item
     html.find('.item-create').click(this._onItemCreate.bind(this));
 
     // Render the item sheet for viewing/editing prior to the editable check.
-    html.find('.item-edit').click((ev) => {
-      const li = $(ev.currentTarget).parents('.item');
-      const item = this.actor.items.get(li.data('itemId'));
-      item.sheet.render(true);
-    });
+    html.find('.item-edit').click(this._onItemEdit.bind(this));
 
     // Delete Inventory Item
-    html.find('.item-delete').click((ev) => {
-      const li = $(ev.currentTarget).parents('.item');
-      const item = this.actor.items.get(li.data('itemId'));
-      item.delete();
-      // TODO I don't think this sliding motion actually works, add it later.
-      li.slideUp(200, () => this.render(false));
-    });
+    html.find('.item-delete').click(this._onItemDelete.bind(this));
 
     // Active Effect management
     // TODO Add support for effects
@@ -261,23 +219,63 @@ export default class FarhomeActorSheet extends ActorSheet {
   async _onItemCreate(event) {
     event.preventDefault();
     const header = event.currentTarget;
+
     // Get the type of item to create.
     const type = header.dataset.type;
+
     // Grab any data associated with this control.
     const data = duplicate(header.dataset);
+
     // Initialize a default name.
     const name = `New ${type.capitalize()}`;
+
     // Prepare the item object.
     const itemData = {
       name: name,
       type: type,
-      data: data,
+      data: {},
     };
-    // Remove the type from the dataset since it's in the itemData.type prop.
-    delete itemData.data['type'];
+
+    // TODO This is no longer working.  Find out why and fix it.
+    if (type === 'spell') {
+      itemData.data.spellLevel = {
+        value: parseInt(data.spellLevel),
+      };
+    }
+
+    // TODO When a new item of a type is created, it should fill the rollTemplate field with an appropriate template for it's type.
+    //      This roll template should vary depending on type.
+    itemData.data.rollTemplate = {
+      value: _getDefaultRollTemplate(),
+    };
 
     // Finally, create the item!
     return await Item.create(itemData, { parent: this.actor });
+  }
+
+  /**
+   * Handle editing an Owned Item
+   * @param {Event} event   The originating click event
+   * @private
+   */
+  async _onItemEdit(event) {
+    const li = $(event.currentTarget).parents('.item');
+    const item = this.actor.items.get(li.data('itemId'));
+    item.sheet.render(true);
+  }
+
+  /**
+   * Handle deleting an Owned Item
+   * @param {Event} event   The originating click event
+   * @private
+   */
+  async _onItemDelete(event) {
+    const li = $(event.currentTarget).parents('.item');
+    const item = this.actor.items.get(li.data('itemId'));
+    item.delete();
+
+    // TODO I don't think this sliding motion actually works, add it later.
+    li.slideUp(200, () => this.render(false));
   }
 
   /**

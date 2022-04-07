@@ -1,3 +1,5 @@
+import { evaluateTemplate } from '../helpers/template-evaluator';
+
 /**
  * Extend the basic Item with some very simple modifications.
  * @extends {Item}
@@ -38,37 +40,22 @@ export class FarhomeItem extends Item {
    * @private
    */
   async roll() {
-    const item = this.data;
+    const actorContext = this.actor.data;
+    const itemContext = this.data;
+
+    let evaluatedTemplate = evaluateTemplate(itemContext.data.rollTemplate.value, actorContext, itemContext);
 
     // Initialize chat data.
     const speaker = ChatMessage.getSpeaker({ actor: this.actor });
-    const rollMode = game.settings.get('core', 'rollMode');
-    const label = `[${item.type}] ${item.name}`;
 
-    // If there's no roll data, send a chat message.
-    if (!this.data.data.formula) {
-      ChatMessage.create({
-        speaker: speaker,
-        rollMode: rollMode,
-        flavor: label,
-        content: item.data.description ?? '',
-      });
-    }
-    // Otherwise, create a roll and send a chat message from it.
-    else {
-      // Retrieve roll data.
-      const rollData = this.getRollData();
+    // TODO What should I put here?
+    //const rollMode = game.settings.get('core', 'rollMode');
 
-      // Invoke the roll and submit it to chat.
-      const roll = new Roll(rollData.item.formula, rollData);
-      // If you need to store the value first, uncomment the next line.
-      // let result = await roll.roll({async: true});
-      roll.toMessage({
-        speaker: speaker,
-        rollMode: rollMode,
-        flavor: label,
-      });
-      return roll;
-    }
+    ChatMessage.create({
+      user: game.user._id,
+      speaker: speaker,
+      content: evaluatedTemplate,
+      //rollMode: rollMode,
+    });
   }
 }

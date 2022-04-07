@@ -2,34 +2,71 @@
   {{!-- Uncomment to debug data context --}}
   {{!--{{log .}}--}}
 
-  {{!-- TODO Need to add under-labels for some things similar to Actor sheet. --}}
-  {{!-- TODO Create common parts to allow for common elements between the different item sheet types. --}}
-
   {{!-- Item Sheet Header --}}
-  <header class="sheet-header">
-    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}"/>
-    <div class="header-fields">
-      <h1>
-        <input name="name" type="text" value="{{item.name}}" placeholder="{{localize 'farhome.itemName'}}" />
-      </h1>
-    </div>
-  </header>
+  {{> "systems/farhome/templates/partials/item-header-partial.hbs"}}
 
   {{!-- Sheet Tab Navigation --}}
   <nav class="sheet-tabs tabs" data-group="primary">
-    <a class="item" data-tab="description">Description</a>
-    <a class="item" data-tab="attributes">Attributes</a>
+    <a class="item" data-tab="description">{{localize "farhome.description"}}</a>
+    <a class="item" data-tab="attributes">{{localize "farhome.attributes"}}</a>
+    <a class="item" data-tab="rollTemplate">{{localize "farhome.rollTemplate"}}</a>
   </nav>
 
   {{!-- Item Sheet Content --}}
   <section class="sheet-body">
     {{!-- Description Tab --}}
     <div class="tab" data-group="primary" data-tab="description">
-      {{editor content=data.description.value target="data.description.value" rollData=rollData button=true owner=owner editable=editable}}
+      {{editor content=data.description.value target="data.description.value" button=true owner=owner editable=editable}}
     </div>
 
     {{!-- Attributes Tab --}}
     <div class="tab attributes" data-group="primary" data-tab="attributes">
+      <table>
+        <colgroup>
+          <col class="attribute-label" />
+          <col class="attribute-data" />
+        </colgroup>
+        {{>
+        "systems/farhome/templates/partials/row-bool-partial.hbs"
+        data.prepared
+        objectString="data.prepared"}}
+        {{>
+        "systems/farhome/templates/partials/row-number-partial.hbs"
+        data.spellLevel
+        objectString="data.spellLevel"}}
+        {{>
+        "systems/farhome/templates/partials/row-select-partial.hbs"
+        data.spellSchool
+        objectString="data.spellSchool"
+        mapping=config.spellSchools}}
+        {{>
+        "systems/farhome/templates/partials/row-select-partial.hbs"
+        data.damageType
+        objectString="data.damageType"
+        mapping=config.damageTypes}}
+        {{>
+        "systems/farhome/templates/partials/row-select-partial.hbs"
+        data.areaOfEffect
+        objectString="data.areaOfEffect"
+        mapping=config.areaOfEffectTypes}}
+        {{>
+        "systems/farhome/templates/partials/row-string-partial.hbs"
+        data.range
+        objectString="data.range"}}
+        {{>
+        "systems/farhome/templates/partials/row-string-partial.hbs"
+        data.duration
+        objectString="data.duration"}}
+        {{>
+        "systems/farhome/templates/partials/row-string-partial.hbs"
+        data.castingTime
+        objectString="data.castingTime"}}
+      </table>
+    </div>
+
+    {{!-- Roll Template Tab --}}
+    <div class="tab" data-group="primary" data-tab="rollTemplate">
+      {{editor content=data.rollTemplate.value target="data.rollTemplate.value" button=true owner=owner editable=editable}}
     </div>
   </div>
 </form>

@@ -10,10 +10,10 @@
           "value": ""
         },
         "biography": {
-          "value": "<h1>Biography</h1>"
+          "value": "<h1>Biography</h1><p>Insert biography here. Click the edit button that shows up when you hover this text.</p>"
         },
         "notes": {
-          "value": "<h1>Notes</h1>"
+          "value": "<h1>Notes</h1><p>Insert biography here. Click the edit button that shows up when you hover this text.</p>"
         },
         "features": {
           "wounds": {
@@ -49,9 +49,6 @@
             "value": 1,
             "min": 0,
             "max": 1
-          },
-          "exhaustion": {
-            "value": 0
           }
         },
         "attributes": {
@@ -253,16 +250,34 @@
       "base": {
         "description": {
           "value": "Insert item description here.  Click the edit button that shows up when you hover this text."
+        },
+        "rollTemplate": {
+          "value": ""
         }
       },
       "rarity": {
         "rarity": {
-          "value": ""
+          "value": "Common"
         }
       },
       "equippable": {
         "equipped": {
           "value": false
+        }
+      },
+      "apCost": {
+        "ap": {
+          "value": 1
+        }
+      },
+      "range": {
+        "range": {
+          "value": "Melee"
+        }
+      },
+      "damageType": {
+        "damageType": {
+          "value": "bludgeoning"
         }
       }
     },
@@ -278,13 +293,9 @@
       }
     },
     "weapon": {
-      "templates": ["base", "rarity", "equippable"],
-      "damage": {
-        "value": 1,
-        "type": "bludgeoning"
-      },
-      "range": {
-        "value": 0
+      "templates": ["base", "rarity", "equippable", "range", "damageType"],
+      "weaponType": {
+        "value": "oneHand"
       },
       "properties": {
         "finesse": {
@@ -293,20 +304,14 @@
         "heavy": {
           "value": false
         },
-        "light": {
-          "value": false
-        },
         "loading": {
           "value": false
         },
         "reach": {
-          "value": false
-        },
-        "twoHanded": {
-          "value": false
+          "value": 0
         },
         "versatile": {
-          "value": false
+          "value": 0
         }
       }
     },
@@ -318,40 +323,47 @@
       "maxDex": {
         "value": 0
       },
-      "stealth": {
-        "value": false
+      "armorPenalty": {
+        "value": 0
       },
-      "properties": {
-        "light": {
-          "value": false
-        },
-        "medium": {
-          "value": false
-        },
-        "heavy": {
-          "value": false
-        },
-        "shield": {
-          "value": false
-        },
-        "masterwork": {
-          "value": false
-        }
+      "armorType": {
+        "value": "light"
+      },
+      "masterwork": {
+        "value": false
       }
     },
     "feat": {
       "templates": ["base"]
     },
     "maneuver": {
-      "templates": ["base"]
+      "templates": ["base", "range"],
+      "levelRequirements": {
+        "value": "1/5/11"
+      },
+      "apCosts": {
+        "value": "3/2/1"
+      }
     },
     "spell": {
-      "templates": ["base"],
+      "templates": ["base", "range", "damageType"],
       "prepared": {
         "value": false
       },
       "spellLevel": {
         "value": 0
+      },
+      "spellSchool": {
+        "value": "arcane"
+      },
+      "duration": {
+        "value": "Instant"
+      },
+      "castingTime": {
+        "value": "1 AP"
+      },
+      "areaOfEffect": {
+        "value": "touch"
       }
     }
   }

@@ -44,6 +44,17 @@ export class FarhomeActor extends Actor {
     this._prepareNpcData(actorData);
   }
 
+  /** @inheritdoc */
+  _preCreate(data, options, user) {
+    if (this.type === 'character') {
+      this.data.token.update({
+        vision: true,
+        actorLink: true,
+        disposition: 1,
+      });
+    }
+  }
+
   /**
    * Prepare Actor general derived data data
    */
@@ -67,7 +78,41 @@ export class FarhomeActor extends Actor {
       }
     }
 
-    // TODO Add the roll strings for spells and weapons too
+    // Setup rolls for spells
+    data.proficiencies.spells.arcane.roll = proficiencyRollFormula(
+      data.proficiencies.spells.arcane.value,
+      data.attributes.int.value,
+    );
+    data.proficiencies.spells.curse.roll = proficiencyRollFormula(
+      data.proficiencies.spells.curse.value,
+      data.attributes.will.value,
+    );
+    data.proficiencies.spells.divine.roll = proficiencyRollFormula(
+      data.proficiencies.spells.divine.value,
+      data.attributes.cha.value,
+    );
+    data.proficiencies.spells.druidic.roll = proficiencyRollFormula(
+      data.proficiencies.spells.druidic.value,
+      data.attributes.will.value,
+    );
+
+    // Setup rolls for tools
+    data.proficiencies.tools.repairKit.roll = proficiencyRollFormula(
+      data.proficiencies.tools.repairKit.value,
+      data.attributes.str.value,
+    );
+    data.proficiencies.tools.enchantersTools.roll = proficiencyRollFormula(
+      data.proficiencies.tools.enchantersTools.value,
+      data.attributes.int.value,
+    );
+    data.proficiencies.tools.apothecarySet.roll = proficiencyRollFormula(
+      data.proficiencies.tools.apothecarySet.value,
+      data.attributes.will.value,
+    );
+    data.proficiencies.tools.scribingTools.roll = proficiencyRollFormula(
+      data.proficiencies.tools.scribingTools.value,
+      data.attributes.int.value,
+    );
   }
 
   /**
@@ -99,41 +144,42 @@ export class FarhomeActor extends Actor {
     const data = super.getRollData();
 
     // Prepare character roll data.
-    this._getCharacterRollData(data);
-    this._getNpcRollData(data);
+    let actorRollData = this._getCharacterRollData(data);
+    let characterRollData = this._getCharacterRollData(data);
+    let npcRollData = this._getNpcRollData(data);
 
-    return data;
+    return {
+      ...actorRollData,
+      ...characterRollData,
+      ...npcRollData,
+    };
+  }
+
+  /**
+   * Prepare generic actor roll data.
+   */
+  _getCharacterRollData(data) {
+    // Generate a generic actor roll context and return it
+    return {};
   }
 
   /**
    * Prepare character roll data.
    */
   _getCharacterRollData(data) {
-    if (this.data.type !== 'character') return;
+    if (this.data.type !== 'character') return {};
 
-    // Copy the ability scores to the top level, so that rolls can use
-    // formulas like `@str.mod + 4`.
-    // TODO This doesn't apply to farhome but I can extend it to something similar later.
-    /*
-    if (data.abilities) {
-      for (let [k, v] of Object.entries(data.attributes)) {
-        data[k] = foundry.utils.deepClone(v);
-      }
-    }
-
-    // Add level for easier access, or fall back to 0.
-    if (data.essence.level) {
-      data.lvl = data.essence.level.value ?? 0;
-    }
-    */
+    // Generate a character roll context and return it
+    return {};
   }
 
   /**
    * Prepare NPC roll data.
    */
   _getNpcRollData(data) {
-    if (this.data.type !== 'npc') return;
+    if (this.data.type !== 'npc') return {};
 
-    // Process additional NPC data here.
+    // Generate an NPC roll context and return it
+    return {};
   }
 }

@@ -1,0 +1,14 @@
+<tr>
+  <td>
+    <label class="resource-label" for="{{objectString}}.value" data-label="{{label}}">{{label}}</label>
+  </td>
+  <td>
+    <select name="{{objectString}}.value">
+      {{#select value}}
+        {{#each mapping as |name type|}}
+          <option value="{{type}}">{{localize name}}</option>
+        {{/each}}
+      {{/select}}
+    </select>
+  </td>
+</tr>
