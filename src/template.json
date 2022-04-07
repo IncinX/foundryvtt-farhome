@@ -272,7 +272,7 @@
       },
       "range": {
         "range": {
-          "value": "melee"
+          "value": "Melee"
         }
       },
       "damageType": {
@@ -304,20 +304,14 @@
         "heavy": {
           "value": false
         },
-        "light": {
-          "value": false
-        },
         "loading": {
           "value": false
         },
         "reach": {
-          "value": false
-        },
-        "twoHanded": {
-          "value": false
+          "value": 0
         },
         "versatile": {
-          "value": false
+          "value": 0
         }
       }
     },
@@ -329,25 +323,14 @@
       "maxDex": {
         "value": 0
       },
-      "stealth": {
-        "value": false
+      "armorPenalty": {
+        "value": 0
       },
-      "properties": {
-        "light": {
-          "value": false
-        },
-        "medium": {
-          "value": false
-        },
-        "heavy": {
-          "value": false
-        },
-        "shield": {
-          "value": false
-        },
-        "masterwork": {
-          "value": false
-        }
+      "armorType": {
+        "value": "light"
+      },
+      "masterwork": {
+        "value": false
       }
     },
     "feat": {
@@ -355,11 +338,11 @@
     },
     "maneuver": {
       "templates": ["base", "range"],
-      "levelRequired": {
-        "value": ""
+      "levelRequirements": {
+        "value": "1/5/11"
       },
-      "apCost": {
-        "value": ""
+      "apCosts": {
+        "value": "3/2/1"
       }
     },
     "spell": {

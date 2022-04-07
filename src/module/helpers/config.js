@@ -14,6 +14,13 @@ FARHOME.weaponTypes = {
   unarmed: 'farhome.unarmed',
 };
 
+FARHOME.armorType = {
+  light: 'farhome.light',
+  medium: 'farhome.medium',
+  heavy: 'farhome.heavy',
+  shield: 'farhome.shield',
+};
+
 FARHOME.rarities = {
   common: 'farhome.common',
   uncommon: 'farhome.uncommon',

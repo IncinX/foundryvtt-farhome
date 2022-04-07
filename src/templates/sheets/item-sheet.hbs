@@ -30,6 +30,15 @@
           <col class="attribute-data" />
         </colgroup>
         {{>
+        "systems/farhome/templates/partials/row-bool-partial.hbs"
+        data.equipped
+        objectString="data.equipped"}}
+        {{>
+        "systems/farhome/templates/partials/row-select-partial.hbs"
+        data.rarity
+        objectString="data.rarity"
+        mapping=config.rarities}}
+        {{>
         "systems/farhome/templates/partials/row-number-partial.hbs"
         data.quantity
         objectString="data.quantity"}}

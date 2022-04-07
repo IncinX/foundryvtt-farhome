@@ -21,6 +21,38 @@
 
     {{!-- Attributes Tab --}}
     <div class="tab attributes" data-group="primary" data-tab="attributes">
+      <table>
+        <colgroup>
+          <col class="attribute-label" />
+          <col class="attribute-data" />
+        </colgroup>
+        {{>
+        "systems/farhome/templates/partials/row-bool-partial.hbs"
+        data.equipped
+        objectString="data.equipped"}}
+        {{>
+        "systems/farhome/templates/partials/row-select-partial.hbs"
+        data.rarity
+        objectString="data.rarity"
+        mapping=config.rarities}}
+        {{>
+        "systems/farhome/templates/partials/row-select-partial.hbs"
+        data.armorType
+        objectString="data.armorType"
+        mapping=config.armorTypes}}
+        {{>
+        "systems/farhome/templates/partials/row-number-partial.hbs"
+        data.armorBonus
+        objectString="data.armorBonus"}}
+        {{>
+        "systems/farhome/templates/partials/row-number-partial.hbs"
+        data.armorPenalty
+        objectString="data.armorPenalty"}}
+        {{>
+        "systems/farhome/templates/partials/row-bool-partial.hbs"
+        data.masterwork
+        objectString="data.masterwork"}}
+      </table>
     </div>
 
     {{!-- Roll Template Tab --}}
