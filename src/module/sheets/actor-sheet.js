@@ -6,6 +6,7 @@
 
 import { onManageActiveEffect, prepareActiveEffectCategories } from '../helpers/effects.js';
 import { localizeObject } from '../helpers/localization.js';
+import { _getDefaultRollTemplate } from '../helpers/roll-templates.js';
 
 // TODO Add Poison/Hex icons later
 
@@ -183,8 +184,6 @@ export default class FarhomeActorSheet extends ActorSheet {
     // Everything below here is only needed if the sheet is editable
     if (!this.isEditable) return;
 
-    // TODO Move a lot of this to separate methods.
-
     // Add Inventory Item
     html.find('.item-create').click(this._onItemCreate.bind(this));
 
@@ -245,6 +244,10 @@ export default class FarhomeActorSheet extends ActorSheet {
     }
 
     // TODO When a new item of a type is created, it should fill the rollTemplate field with an appropriate template for it's type.
+    //      This roll template should vary depending on type.
+    itemData.data.rollTemplate = {
+      value: _getDefaultRollTemplate(),
+    };
 
     // Finally, create the item!
     return await Item.create(itemData, { parent: this.actor });
