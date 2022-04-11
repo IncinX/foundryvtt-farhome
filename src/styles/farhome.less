@@ -17,3 +17,53 @@
 
 @import './sheets/actor-sheet.less';
 @import './sheets/item-sheet.less';
+
+
+// BEGIN DEBUG -- Move this to somewhere generic for actors/items
+// TODO Consider a more medievely type of font
+.farhome.sheet {
+  background-color: rgba(122, 168, 255, 0.76);
+  font-family: 'Cardo-Regular';
+  font-size: 1.2em;
+
+  .window-content {
+    background: none;
+    background-color: rgb(220, 232, 255);
+  }
+
+  input {
+    background-color: rgb(246, 249, 255);
+    border: 0;
+  }
+
+  .under-label {
+    font-weight: bold;
+    margin: 3px 0 3px 3px;
+  }
+
+  .name-input {
+    font-size: 3em;
+    height: 3em;
+  }
+
+  .level-input {
+    font-size: 3em;
+    height: 3em;
+  }
+
+  .header-input {
+    padding: 5px;
+  }
+
+  // TODO Try to get this centered
+  .resource-label {
+  }
+
+  // TODO Try to make the top corners rounded, the bottom square and set the background
+  .item.active {
+    text-shadow: 0;
+    background-color: green;
+  }
+}
+
+  // END DEBUG
