@@ -42,7 +42,7 @@ describe('Proficiency Roll Formula', () => {
   it('(0, -1) will be "4n1b"', () => {
     expect(proficiencyRollFormula(0, -1)).toBe('4n1b');
   });
-  
+
   it('(0, -2) will be "3n2b"', () => {
     expect(proficiencyRollFormula(0, -2)).toBe('3n2b');
   });

@@ -26,7 +26,7 @@ export function proficiencyRollFormula(proficiency, attribute) {
   if (normalDice > 0) {
     rollFormula += `${normalDice}n`;
   }
-  
+
   if (badDice > 0) {
     rollFormula += `${badDice}b`;
   }
