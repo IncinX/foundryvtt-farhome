@@ -67,8 +67,12 @@ export class FarhomeActor extends Actor {
     }
 
     // Loop through the saves, and add their roll string as derived data.
+    // Note that according to the rules that negative attribute scores do not replace normal dice with bad dice.  Thereforce, clamp the lower bound to 0.
     for (let [attributeKey, proficiencyObject] of Object.entries(data.proficiencies.saves)) {
-      proficiencyObject.roll = proficiencyRollFormula(proficiencyObject.value, data.attributes[attributeKey].value);
+      proficiencyObject.roll = proficiencyRollFormula(
+        proficiencyObject.value,
+        Math.max(data.attributes[attributeKey].value, 0),
+      );
     }
 
     // Loop through the attribute proficiencies, and add their roll string as derived data.
@@ -82,6 +86,10 @@ export class FarhomeActor extends Actor {
     data.proficiencies.spells.arcane.roll = proficiencyRollFormula(
       data.proficiencies.spells.arcane.value,
       data.attributes.int.value,
+    );
+    data.proficiencies.spells.blood.roll = proficiencyRollFormula(
+      data.proficiencies.spells.blood.value,
+      data.attributes.sta.value,
     );
     data.proficiencies.spells.curse.roll = proficiencyRollFormula(
       data.proficiencies.spells.curse.value,
