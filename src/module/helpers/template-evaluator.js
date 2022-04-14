@@ -26,7 +26,7 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
   let evaluatorRollerContext = game.specialDiceRoller.fh;
 
   let evaluatorSystemContext = {
-    getRollFormula: proficiencyRollFormula, // TODO Come up with something more concise than this.
+    getRollFormula: proficiencyRollFormula,
   };
 
   // TODO Try to automate this with some loops but still keep the concise syntax?
@@ -79,6 +79,7 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
     unarmed: actorContext.data.proficiencies.weapons.unarmed.value,
 
     arcane: actorContext.data.proficiencies.spells.arcane.value,
+    blood: actorContext.data.proficiencies.spells.blood.value,
     curse: actorContext.data.proficiencies.spells.curse.value,
     divine: actorContext.data.proficiencies.spells.divine.value,
     druidic: actorContext.data.proficiencies.spells.druidic.value,

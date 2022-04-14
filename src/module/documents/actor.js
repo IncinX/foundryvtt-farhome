@@ -83,6 +83,10 @@ export class FarhomeActor extends Actor {
       data.proficiencies.spells.arcane.value,
       data.attributes.int.value,
     );
+    data.proficiencies.spells.blood.roll = proficiencyRollFormula(
+      data.proficiencies.spells.blood.value,
+      data.attributes.sta.value,
+    );
     data.proficiencies.spells.curse.roll = proficiencyRollFormula(
       data.proficiencies.spells.curse.value,
       data.attributes.will.value,
