@@ -304,7 +304,7 @@
       }
     },
     "weapon": {
-      "templates": ["base", "rarity", "equippable", "attunable", "range", "damageType"],
+      "templates": ["base", "item", "rarity", "equippable", "attunable", "range", "damageType"],
       "weaponType": {
         "value": "oneHand"
       },
@@ -325,7 +325,7 @@
       }
     },
     "armor": {
-      "templates": ["base", "rarity", "equippable", "attunable"],
+      "templates": ["base", "item", "rarity", "equippable", "attunable"],
       "armorBonus": {
         "value": 0
       },
