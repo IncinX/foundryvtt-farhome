@@ -1,5 +1,3 @@
-// TODO Add facilities to potentially calculate spell power
-
 import { clamp } from '../helpers/math';
 import { proficiencyRollFormula } from '../helpers/roll';
 import { getSpellPowerToManaTable } from '../helpers/manaTable';
@@ -153,11 +151,11 @@ export class FarhomeActor extends Actor {
 
     // NPC specific derived data should be calculated here
   }
-  
+
   /**
    * Prepare stash type specific data.
    */
-   _prepareStashData(actorData) {
+  _prepareStashData(actorData) {
     if (actorData.type !== 'stash') return;
 
     const data = actorData.data;

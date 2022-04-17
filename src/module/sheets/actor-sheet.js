@@ -23,7 +23,7 @@ export default class FarhomeActorSheet extends ActorSheet {
       tabs: [{ navSelector: '.sheet-tabs', contentSelector: '.sheet-body', initial: 'attributes' }],
     });
   }
-  
+
   /** @override */
   get template() {
     return `systems/farhome/templates/sheets/actor/${this.actor.data.type}-sheet.hbs`;
