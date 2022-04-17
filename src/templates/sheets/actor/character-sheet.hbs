@@ -495,6 +495,28 @@
     {{!-- Inventory Tab --}}
     <div class="tab inventory-tab" data-group="primary" data-tab="inventory">
       <ol class="items-list">
+        <li class="item flexrow item-header">
+          <div class="item-image"></div>
+          <div class="item-name">Name</div>
+          <div class="item-controls"></div>
+        </li>
+        <li class="item flexrow item-divider">
+          <div class="item-image"></div>
+          <div class="item-name">Money</div>
+          <div class="item-controls">
+            <a class="item-control item-create" title="Create Money" data-type="money"><i class="fas fa-plus"></i> Add Money</a>
+          </div>
+        </li>
+        {{#each money as |money id|}}
+        <li class="item flexrow" data-item-id="{{money._id}}">
+          <div class="item-image"><img src="{{money.img}}" title="{{money.name}}" width="24" height="24"></div>
+          <h4 class="item-name">{{money.name}}</h4>
+          <div class="item-controls">
+            <a class="item-control item-edit" title="Edit Money"><i class="fas fa-edit"></i></a>
+            <a class="item-control item-delete" title="Delete Money"><i class="fas fa-trash"></i></a>
+          </div>
+        </li>
+        {{/each}}
         <li class="item flexrow item-divider">
           <div class="item-image"></div>
           <div class="item-name">Weapons</div>

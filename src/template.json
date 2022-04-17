@@ -251,7 +251,7 @@
     }
   },
   "Item": {
-    "types": ["item", "weapon", "armor", "feat", "maneuver", "spell"],
+    "types": ["money", "item", "weapon", "armor", "feat", "maneuver", "spell"],
     "templates": {
       "base": {
         "description": {
@@ -290,18 +290,23 @@
         "damageType": {
           "value": "bludgeoning"
         }
+      },
+      "item": {
+        "quantity": {
+          "value": 1,
+          "min": 0
+        },
+        "weight": {
+          "value": 0,
+          "min": 0
+        }
       }
     },
+    "money": {
+      "templates": ["base", "item"]
+    },
     "item": {
-      "templates": ["base", "rarity", "equippable", "attunable"],
-      "quantity": {
-        "value": 1,
-        "min": 0
-      },
-      "weight": {
-        "value": 0,
-        "min": 0
-      }
+      "templates": ["base", "item", "rarity", "equippable", "attunable"]
     },
     "weapon": {
       "templates": ["base", "item", "rarity", "equippable", "attunable", "range", "damageType"],

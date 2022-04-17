@@ -113,6 +113,7 @@ export default class FarhomeActorSheet extends ActorSheet {
    */
   _prepareItems(context) {
     // Initialize containers.
+    const money = [];
     const inventory = [];
     const weapons = [];
     const armors = [];
@@ -138,8 +139,12 @@ export default class FarhomeActorSheet extends ActorSheet {
     // Iterate through items, allocating to containers
     for (let i of context.items) {
       i.img = i.img || DEFAULT_TOKEN;
+      // Append to money
+      if (i.type === 'money') {
+        money.push(i);
+      }
       // Append to inventory.
-      if (i.type === 'item') {
+      else if (i.type === 'item') {
         inventory.push(i);
       }
       // Append to weapons.
@@ -166,10 +171,8 @@ export default class FarhomeActorSheet extends ActorSheet {
       }
     }
 
-    // TODO Create roll formula's for items
-    // TODO Adjust existing roll formula's based on feats and such
-
     // Assign and return
+    context.money = money;
     context.inventory = inventory;
     context.weapons = weapons;
     context.armors = armors;
@@ -289,10 +292,8 @@ export default class FarhomeActorSheet extends ActorSheet {
    * @private
    */
   async _onItemRoll(event) {
-    // TODO Add code here
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
-    console.log(item.data._id);
     item.roll();
   }
 
