@@ -31,27 +31,48 @@
         data.equipped
         objectString="data.equipped"}}
         {{>
+        "systems/farhome/templates/partials/row-bool-partial.hbs"
+        data.attuned
+        objectString="data.attuned"}}
+        {{>
         "systems/farhome/templates/partials/row-select-partial.hbs"
         data.rarity
         objectString="data.rarity"
         mapping=config.rarities}}
         {{>
         "systems/farhome/templates/partials/row-select-partial.hbs"
-        data.armorType
-        objectString="data.armorType"
-        mapping=config.armorTypes}}
+        data.weaponType
+        objectString="data.weaponType"
+        mapping=config.weaponTypes}}
         {{>
-        "systems/farhome/templates/partials/row-number-partial.hbs"
-        data.armorBonus
-        objectString="data.armorBonus"}}
+        "systems/farhome/templates/partials/row-select-partial.hbs"
+        data.damageType
+        objectString="data.damageType"
+        mapping=config.damageTypes}}
         {{>
-        "systems/farhome/templates/partials/row-number-partial.hbs"
-        data.armorPenalty
-        objectString="data.armorPenalty"}}
+        "systems/farhome/templates/partials/row-string-partial.hbs"
+        data.range
+        objectString="data.range"}}
         {{>
         "systems/farhome/templates/partials/row-bool-partial.hbs"
-        data.masterwork
-        objectString="data.masterwork"}}
+        data.finesse
+        objectString="data.finesse"}}
+        {{>
+        "systems/farhome/templates/partials/row-bool-partial.hbs"
+        data.heavy
+        objectString="data.heavy"}}
+        {{>
+        "systems/farhome/templates/partials/row-bool-partial.hbs"
+        data.loading
+        objectString="data.loading"}}
+        {{>
+        "systems/farhome/templates/partials/row-number-partial.hbs"
+        data.versatile
+        objectString="data.versatile"}}
+        {{>
+        "systems/farhome/templates/partials/row-number-partial.hbs"
+        data.reach
+        objectString="data.reach"}}
       </table>
     </div>
 

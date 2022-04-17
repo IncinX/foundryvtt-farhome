@@ -1,6 +1,6 @@
 {
   "Actor": {
-    "types": ["character", "npc"],
+    "types": ["character", "npc", "stash"],
     "templates": {
       "base": {
         "race": {
@@ -201,16 +201,16 @@
             "arcane": {
               "value": 0
             },
-            "blood": {
-              "value": 0
-            },
-            "curse": {
-              "value": 0
-            },
             "divine": {
               "value": 0
             },
             "druidic": {
+              "value": 0
+            },
+            "elder": {
+              "value": 0
+            },
+            "occult": {
               "value": 0
             }
           },
@@ -245,6 +245,9 @@
       "cr": {
         "value": 0
       }
+    },
+    "partyStash": {
+      "templates": []
     }
   },
   "Item": {
@@ -268,6 +271,11 @@
           "value": false
         }
       },
+      "attunable": {
+        "attuned": {
+          "value": false
+        }
+      },
       "apCost": {
         "ap": {
           "value": 1
@@ -285,7 +293,7 @@
       }
     },
     "item": {
-      "templates": ["base", "rarity", "equippable"],
+      "templates": ["base", "rarity", "equippable", "attunable"],
       "quantity": {
         "value": 1,
         "min": 0
@@ -296,7 +304,7 @@
       }
     },
     "weapon": {
-      "templates": ["base", "rarity", "equippable", "range", "damageType"],
+      "templates": ["base", "rarity", "equippable", "attunable", "range", "damageType"],
       "weaponType": {
         "value": "oneHand"
       },
@@ -319,7 +327,7 @@
       }
     },
     "armor": {
-      "templates": ["base", "rarity", "equippable"],
+      "templates": ["base", "rarity", "equippable", "attunable"],
       "armorBonus": {
         "value": 0
       },

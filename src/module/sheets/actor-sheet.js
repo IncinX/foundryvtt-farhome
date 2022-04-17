@@ -18,11 +18,15 @@ export default class FarhomeActorSheet extends ActorSheet {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ['farhome', 'sheet', 'actor'],
-      template: 'systems/farhome/templates/sheets/actor-sheet.hbs',
       width: 800,
       height: 800,
       tabs: [{ navSelector: '.sheet-tabs', contentSelector: '.sheet-body', initial: 'attributes' }],
     });
+  }
+  
+  /** @override */
+  get template() {
+    return `systems/farhome/templates/sheets/actor/${this.actor.data.type}-sheet.hbs`;
   }
 
   /** @override */

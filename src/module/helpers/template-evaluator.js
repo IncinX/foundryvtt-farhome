@@ -79,10 +79,10 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
     unarmed: actorContext.data.proficiencies.weapons.unarmed.value,
 
     arcane: actorContext.data.proficiencies.spells.arcane.value,
-    blood: actorContext.data.proficiencies.spells.blood.value,
-    curse: actorContext.data.proficiencies.spells.curse.value,
     divine: actorContext.data.proficiencies.spells.divine.value,
     druidic: actorContext.data.proficiencies.spells.druidic.value,
+    elder: actorContext.data.proficiencies.spells.elder.value,
+    occult: actorContext.data.proficiencies.spells.occult.value,
 
     repairKit: actorContext.data.proficiencies.tools.repairKit.value,
     enchantersTools: actorContext.data.proficiencies.tools.enchantersTools.value,

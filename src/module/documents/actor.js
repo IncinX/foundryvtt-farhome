@@ -2,6 +2,7 @@
 
 import { clamp } from '../helpers/math';
 import { proficiencyRollFormula } from '../helpers/roll';
+import { getSpellPowerToManaTable } from '../helpers/manaTable';
 
 /**
  * Extend the base Actor document by defining a custom roll data structure which is ideal for the Simple system.
@@ -39,9 +40,10 @@ export class FarhomeActor extends Actor {
 
     // Make separate methods for each Actor type (character, npc, etc.) to keep
     // things organized.
-    this._prepareActorData(actorData);
+    this._prepareActorBaseData(actorData);
     this._prepareCharacterData(actorData);
     this._prepareNpcData(actorData);
+    this._prepareStashData(actorData);
   }
 
   /** @inheritdoc */
@@ -56,10 +58,17 @@ export class FarhomeActor extends Actor {
   }
 
   /**
-   * Prepare Actor general derived data data
+   * Prepare Actor general derived data
    */
-  _prepareActorData(actorData) {
+  _prepareActorBaseData(actorData) {
+    // Stash is special and isn't treated like a regular actor with base data.
+    if (actorData.type === 'stash') return;
+
     const data = actorData.data;
+
+    // Calculate the max mana based on the spell power
+    let spellPowerToManaTable = getSpellPowerToManaTable();
+    data.features.mana.max = spellPowerToManaTable[data.features.spellPower.value];
 
     // Loop through attribute scores, and add their roll string as derived data.
     for (let [_, attributeObject] of Object.entries(data.attributes)) {
@@ -87,20 +96,20 @@ export class FarhomeActor extends Actor {
       data.proficiencies.spells.arcane.value,
       data.attributes.int.value,
     );
-    data.proficiencies.spells.blood.roll = proficiencyRollFormula(
-      data.proficiencies.spells.blood.value,
-      data.attributes.sta.value,
-    );
-    data.proficiencies.spells.curse.roll = proficiencyRollFormula(
-      data.proficiencies.spells.curse.value,
-      data.attributes.will.value,
-    );
     data.proficiencies.spells.divine.roll = proficiencyRollFormula(
       data.proficiencies.spells.divine.value,
       data.attributes.cha.value,
     );
     data.proficiencies.spells.druidic.roll = proficiencyRollFormula(
       data.proficiencies.spells.druidic.value,
+      data.attributes.will.value,
+    );
+    data.proficiencies.spells.elder.roll = proficiencyRollFormula(
+      data.proficiencies.spells.elder.value,
+      data.attributes.sta.value,
+    );
+    data.proficiencies.spells.occult.roll = proficiencyRollFormula(
+      data.proficiencies.spells.occult.value,
       data.attributes.will.value,
     );
 
@@ -144,6 +153,17 @@ export class FarhomeActor extends Actor {
 
     // NPC specific derived data should be calculated here
   }
+  
+  /**
+   * Prepare stash type specific data.
+   */
+   _prepareStashData(actorData) {
+    if (actorData.type !== 'stash') return;
+
+    const data = actorData.data;
+
+    // Stash specific derived data should be calculated here
+  }
 
   /**
    * Override getRollData() that's supplied to rolls.
@@ -152,21 +172,23 @@ export class FarhomeActor extends Actor {
     const data = super.getRollData();
 
     // Prepare character roll data.
-    let actorRollData = this._getCharacterRollData(data);
+    let actorRollData = this._getActorRollData(data);
     let characterRollData = this._getCharacterRollData(data);
     let npcRollData = this._getNpcRollData(data);
+    let stashRollData = this._getStashRollData(data);
 
     return {
       ...actorRollData,
       ...characterRollData,
       ...npcRollData,
+      ...stashRollData,
     };
   }
 
   /**
    * Prepare generic actor roll data.
    */
-  _getCharacterRollData(data) {
+  _getActorRollData(data) {
     // Generate a generic actor roll context and return it
     return {};
   }
@@ -188,6 +210,16 @@ export class FarhomeActor extends Actor {
     if (this.data.type !== 'npc') return {};
 
     // Generate an NPC roll context and return it
+    return {};
+  }
+
+  /**
+   * Prepare stash roll data.
+   */
+  _getStashRollData(data) {
+    if (this.data.type !== 'stash') return {};
+
+    // Generate an stash roll context and return it
     return {};
   }
 }

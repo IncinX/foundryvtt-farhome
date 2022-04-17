@@ -2,6 +2,8 @@
   {{!-- Uncomment to debug data context --}}
   {{!--{{log data}}--}}
 
+  {{!-- TODO Try to remove duplication between this sheet and the character sheet. Make partials for the common parts. --}}
+
   {{!-- Character Sheet Header --}}
   <div class "top-bar flexcol">
     <header class="sheet-header flexrow">
@@ -25,12 +27,9 @@
           </div>
         </div>
         <div class="character-info flexcol flex1">
-          <input class="header-input" name="data.level.value" type="text" value="{{data.level.value}}"
-            data-dtype="Number" placeholder="{{data.level.label}}" />
-          <label class="under-label" for="data.level.value">{{localize 'farhome.level'}}</label>
-          <input class="header-input" name="data.xp.value" type="text" value="{{data.xp.value}}" data-dtype="Number"
-            placeholder="{{data.xp.label}}" />
-          <label class="under-label" for="data.xp.value">{{localize 'farhome.xp'}}</label>
+          <input class="header-input" name="data.cr.value" type="text" value="{{data.cr.value}}"
+            data-dtype="Number" placeholder="{{data.cr.label}}" />
+          <label class="under-label" for="data.cr.value">{{localize 'farhome.cr'}}</label>
         </div>
       </div>
     </header>
@@ -58,14 +57,17 @@
       objectString="data.features.ap"
       separatorString=" / "}}
       {{>
-      "systems/farhome/templates/partials/max-resource-partial.hbs"
-      data.features.mana
-      objectString="data.features.mana"
-      separatorString=" / "}}
-      {{>
       "systems/farhome/templates/partials/resource-partial.hbs"
       data.features.spellPower
       objectString="data.features.spellPower"}}
+      <div class="resource-box flex-group-center">
+        <div class="resource-content flexrow flex-center flex-between">
+          <input type="text" name="data.features.mana.value" value="{{data.features.mana.value}}" data-dtype="Number"/>
+          <span> / </span>
+          <input type="text" name="data.features.mana.max" value="{{data.features.mana.max}}" data-dtype="Number" disabled/>
+        </div>
+        <label for="data.features.mana.value" class="resource-label">{{data.features.mana.label}}</label>
+      </div>
       <div class="resource-box flex-group-center">
         <div class="resource-content flexrow flex-center flex-between">
           <input type="text" name="data.features.move.value" value="{{data.features.move.value}}" data-dtype="Number"
@@ -359,20 +361,20 @@
             objectString="data.proficiencies.spells.arcane"}}
             {{>
             "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-            data.proficiencies.spells.blood
-            objectString="data.proficiencies.spells.blood"}}
-            {{>
-            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-            data.proficiencies.spells.curse
-            objectString="data.proficiencies.spells.curse"}}
-            {{>
-            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
             data.proficiencies.spells.divine
             objectString="data.proficiencies.spells.divine"}}
             {{>
             "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
             data.proficiencies.spells.druidic
             objectString="data.proficiencies.spells.druidic"}}
+            {{>
+            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+            data.proficiencies.spells.elder
+            objectString="data.proficiencies.spells.elder"}}
+            {{>
+            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+            data.proficiencies.spells.occult
+            objectString="data.proficiencies.spells.occult"}}
           </table>
         </div>
         <div class="tools-proficiency-group flex-group-center proficiency-group-box">
