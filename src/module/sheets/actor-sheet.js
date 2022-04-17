@@ -200,7 +200,16 @@ export default class FarhomeActorSheet extends ActorSheet {
     // Delete Inventory Item
     html.find('.item-delete').click(this._onItemDelete.bind(this));
 
+    // Rollable Inventory Item
     html.find('.item-name-link').click(this._onItemRoll.bind(this));
+
+    // Equipped/Attuned/Prepared Item Checkboxes
+    html.find('.item-equipped-input').change(this._onItemEquippedChanged.bind(this));
+    html.find('.item-attuned-input').change(this._onItemAttunedChanged.bind(this));
+    html.find('.item-prepared-input').change(this._onItemPreparedChanged.bind(this));
+
+    // Item quantities
+    html.find('.item-quantity-input').change(this._onItemQuantityChanged.bind(this));
 
     // Active Effect management
     // TODO Add support for effects
@@ -285,7 +294,7 @@ export default class FarhomeActorSheet extends ActorSheet {
     // TODO I don't think this sliding motion actually works, add it later.
     li.slideUp(200, () => this.render(false));
   }
-  
+
   /**
    * Handle rolling an Owned Item
    * @param {Event} event   The originating click event
@@ -295,6 +304,50 @@ export default class FarhomeActorSheet extends ActorSheet {
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
     item.roll();
+  }
+
+  /**
+   * Handle equipped change of an Owned Item
+   * @param {Event} event   The originating click event
+   * @private
+   */
+  async _onItemEquippedChanged(event) {
+    const li = $(event.currentTarget).parents('.item');
+    const item = this.actor.items.get(li.data('itemId'));
+    item.data.data.equipped.value = event.target.value === "on" ? true : false;
+  }
+
+  /**
+   * Handle attuned change of an Owned Item
+   * @param {Event} event   The originating click event
+   * @private
+   */
+  async _onItemAttunedChanged(event) {
+    const li = $(event.currentTarget).parents('.item');
+    const item = this.actor.items.get(li.data('itemId'));
+    item.data.data.attuned.value = event.target.value === "on" ? true : false;
+  }
+
+  /**
+   * Handle prepared change of an Owned Item
+   * @param {Event} event   The originating click event
+   * @private
+   */
+  async _onItemPreparedChanged(event) {
+    const li = $(event.currentTarget).parents('.item');
+    const item = this.actor.items.get(li.data('itemId'));
+    item.data.data.prepared.value = event.target.value === "on" ? true : false;
+  }
+
+  /**
+   * Handle quantity changes of an Owned Item
+   * @param {Event} event   The originating click event
+   * @private
+   */
+  async _onItemQuantityChanged(event) {
+    const li = $(event.currentTarget).parents('.item');
+    const item = this.actor.items.get(li.data('itemId'));
+    item.data.data.quantity.value = parseInt(event.target.value);
   }
 
   /**
