@@ -197,6 +197,8 @@ export default class FarhomeActorSheet extends ActorSheet {
     // Delete Inventory Item
     html.find('.item-delete').click(this._onItemDelete.bind(this));
 
+    html.find('.item-name-link').click(this._onItemRoll.bind(this));
+
     // Active Effect management
     // TODO Add support for effects
     html.find('.effect-control').click((ev) => onManageActiveEffect(ev, this.actor));
@@ -240,7 +242,6 @@ export default class FarhomeActorSheet extends ActorSheet {
       data: {},
     };
 
-    // TODO This is no longer working.  Find out why and fix it.
     if (type === 'spell') {
       itemData.data.spellLevel = {
         value: parseInt(data.spellLevel),
@@ -280,6 +281,19 @@ export default class FarhomeActorSheet extends ActorSheet {
 
     // TODO I don't think this sliding motion actually works, add it later.
     li.slideUp(200, () => this.render(false));
+  }
+  
+  /**
+   * Handle rolling an Owned Item
+   * @param {Event} event   The originating click event
+   * @private
+   */
+  async _onItemRoll(event) {
+    // TODO Add code here
+    const li = $(event.currentTarget).parents('.item');
+    const item = this.actor.items.get(li.data('itemId'));
+    console.log(item.data._id);
+    item.roll();
   }
 
   /**
