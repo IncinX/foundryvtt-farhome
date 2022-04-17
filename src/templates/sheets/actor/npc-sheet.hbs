@@ -482,7 +482,7 @@
                 <a class="item-name-link">{{spell.name}}</a>
               </h4>
               <div class="item-prepared">
-                <input type="checkbox" class="item-prepared-input" data-dtype="Boolean" {{checked item.data.prepared.value}}/>                
+                <input type="checkbox" class="item-prepared-input" data-dtype="Boolean" {{checked spell.data.prepared.value}}/>                
               </div>
               <div class="item-controls">
                 <a class="item-control item-edit" title="Edit Spell"><i class="fas fa-edit"></i></a>
@@ -548,10 +548,10 @@
             <a class="item-name-link">{{weapon.name}}</a>
           </h4>
           <div class="item-equipped">
-            <input type="checkbox" class="item-equipped-input" data-dtype="Boolean" {{checked item.data.equipped.value}}/>
+            <input type="checkbox" class="item-equipped-input" data-dtype="Boolean" {{checked weapon.data.equipped.value}}/>
           </div>
           <div class="item-attuned">
-            <input type="checkbox" class="item-attuned-input" data-dtype="Boolean" {{checked item.data.attuned.value}}/>
+            <input type="checkbox" class="item-attuned-input" data-dtype="Boolean" {{checked weapon.data.attuned.value}}/>
           </div>
           <div class="item-quantity">
             <input type="text" class="item-quantity-input" value="{{weapon.data.quantity.value}}" min="0" data-dtype="Number">
@@ -579,10 +579,10 @@
             <a class="item-name-link">{{armor.name}}</a>
           </h4>
           <div class="item-equipped">
-            <input type="checkbox" class="item-equipped-input" data-dtype="Boolean" {{checked item.data.equipped.value}}/>
+            <input type="checkbox" class="item-equipped-input" data-dtype="Boolean" {{checked armor.data.equipped.value}}/>
           </div>
           <div class="item-attuned">
-            <input type="checkbox" class="item-attuned-input" data-dtype="Boolean" {{checked item.data.attuned.value}}/>
+            <input type="checkbox" class="item-attuned-input" data-dtype="Boolean" {{checked armor.data.attuned.value}}/>
           </div>
           <div class="item-quantity">
             <input type="text" class="item-quantity-input" value="{{armor.data.quantity.value}}" min="0" data-dtype="Number">

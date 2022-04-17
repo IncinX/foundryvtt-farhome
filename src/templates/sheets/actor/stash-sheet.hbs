@@ -14,9 +14,37 @@
     {{!-- Inventory Tab --}}
     <div class="tab inventory-tab" data-group="primary" data-tab="inventory">
       <ol class="items-list">
+        <li class="item flexrow item-header">
+          <div class="item-image"></div>
+          <div class="item-name">Name</div>
+          <div class="item-quantity">Quantity</div>
+          <div class="item-controls"></div>
+        </li>
+        <li class="item flexrow item-divider">
+          <div class="item-image"></div>
+          <div class="item-name">Money</div>
+          <div class="item-quantity"></div>
+          <div class="item-controls">
+            <a class="item-control item-create" title="Create Money" data-type="money"><i class="fas fa-plus"></i> Add Money</a>
+          </div>
+        </li>
+        {{#each money as |money id|}}
+        <li class="item flexrow" data-item-id="{{money._id}}">
+          <div class="item-image"><img src="{{money.img}}" title="{{money.name}}" width="24" height="24"></div>
+          <h4 class="item-name">{{money.name}}</h4>
+          <div class="item-quantity">
+            <input type="text" class="item-quantity-input" value="{{money.data.quantity.value}}" min="0" data-dtype="Number">
+          </div>
+          <div class="item-controls">
+            <a class="item-control item-edit" title="Edit Money"><i class="fas fa-edit"></i></a>
+            <a class="item-control item-delete" title="Delete Money"><i class="fas fa-trash"></i></a>
+          </div>
+        </li>
+        {{/each}}
         <li class="item flexrow item-divider">
           <div class="item-image"></div>
           <div class="item-name">Weapons</div>
+          <div class="item-quantity"></div>
           <div class="item-controls">
             <a class="item-control item-create" title="Create Weapon" data-type="weapon"><i class="fas fa-plus"></i> Add Weapon</a>
           </div>
@@ -24,7 +52,12 @@
         {{#each weapons as |weapon id|}}
         <li class="item flexrow" data-item-id="{{weapon._id}}">
           <div class="item-image"><img src="{{weapon.img}}" title="{{weapon.name}}" width="24" height="24"></div>
-          <h4 class="item-name">{{weapon.name}}</h4>
+          <h4 class="item-name">
+            <a class="item-name-link">{{weapon.name}}</a>
+          </h4>
+          <div class="item-quantity">
+            <input type="text" class="item-quantity-input" value="{{weapon.data.quantity.value}}" min="0" data-dtype="Number">
+          </div>
           <div class="item-controls">
             <a class="item-control item-edit" title="Edit Weapon"><i class="fas fa-edit"></i></a>
             <a class="item-control item-delete" title="Delete Weapon"><i class="fas fa-trash"></i></a>
@@ -34,6 +67,7 @@
         <li class="item flexrow item-divider">
           <div class="item-image"></div>
           <div class="item-name">Armors</div>
+          <div class="item-quantity"></div>
           <div class="item-controls">
             <a class="item-control item-create" title="Create Armor" data-type="armor"><i class="fas fa-plus"></i> Add Armor</a>
           </div>
@@ -41,7 +75,12 @@
         {{#each armors as |armor id|}}
         <li class="item flexrow" data-item-id="{{armor._id}}">
           <div class="item-image"><img src="{{armor.img}}" title="{{armor.name}}" width="24" height="24"></div>
-          <h4 class="item-name">{{armor.name}}</h4>
+          <h4 class="item-name">
+            <a class="item-name-link">{{armor.name}}</a>
+          </h4>
+          <div class="item-quantity">
+            <input type="text" class="item-quantity-input" value="{{armor.data.quantity.value}}" min="0" data-dtype="Number">
+          </div>
           <div class="item-controls">
             <a class="item-control item-edit" title="Edit Armor"><i class="fas fa-edit"></i></a>
             <a class="item-control item-delete" title="Delete Armor"><i class="fas fa-trash"></i></a>
@@ -51,14 +90,20 @@
         <li class="item flexrow item-divider">
           <div class="item-image"></div>
           <div class="item-name">Items</div>
+          <div class="item-quantity"></div>
           <div class="item-controls">
-            <a class="item-control item-create" title="Create Spell" data-type="item"><i class="fas fa-plus"></i> Add Item</a>
+            <a class="item-control item-create" title="Create Item" data-type="item"><i class="fas fa-plus"></i> Add Item</a>
           </div>
         </li>
         {{#each inventory as |item id|}}
         <li class="item flexrow" data-item-id="{{item._id}}">
           <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24"></div>
-          <h4 class="item-name">{{item.name}}</h4>
+          <h4 class="item-name">
+            <a class="item-name-link">{{item.name}}</a>
+          </h4>
+          <div class="item-quantity">
+            <input type="text" class="item-quantity-input" min="0" data-dtype="Number" value="{{item.data.quantity.value}}">
+          </div>
           <div class="item-controls">
             <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
             <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
