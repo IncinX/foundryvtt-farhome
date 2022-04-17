@@ -13,7 +13,7 @@ export default class FarhomeItemSheet extends ItemSheet {
 
   /** @override */
   get template() {
-    return `systems/farhome/templates/sheets/${this.item.data.type}-sheet.hbs`;
+    return `systems/farhome/templates/sheets/item/${this.item.data.type}-sheet.hbs`;
   }
 
   /** @override */

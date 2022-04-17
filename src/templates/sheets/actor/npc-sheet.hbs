@@ -2,6 +2,8 @@
   {{!-- Uncomment to debug data context --}}
   {{!--{{log data}}--}}
 
+  {{!-- TODO Try to remove duplication between this sheet and the character sheet. Make partials for the common parts. --}}
+
   {{!-- Character Sheet Header --}}
   <div class "top-bar flexcol">
     <header class="sheet-header flexrow">
@@ -25,12 +27,9 @@
           </div>
         </div>
         <div class="character-info flexcol flex1">
-          <input class="header-input" name="data.level.value" type="text" value="{{data.level.value}}"
-            data-dtype="Number" placeholder="{{data.level.label}}" />
-          <label class="under-label" for="data.level.value">{{localize 'farhome.level'}}</label>
-          <input class="header-input" name="data.xp.value" type="text" value="{{data.xp.value}}" data-dtype="Number"
-            placeholder="{{data.xp.label}}" />
-          <label class="under-label" for="data.xp.value">{{localize 'farhome.xp'}}</label>
+          <input class="header-input" name="data.cr.value" type="text" value="{{data.cr.value}}"
+            data-dtype="Number" placeholder="{{data.cr.label}}" />
+          <label class="under-label" for="data.cr.value">{{localize 'farhome.cr'}}</label>
         </div>
       </div>
     </header>
@@ -58,14 +57,17 @@
       objectString="data.features.ap"
       separatorString=" / "}}
       {{>
-      "systems/farhome/templates/partials/max-resource-partial.hbs"
-      data.features.mana
-      objectString="data.features.mana"
-      separatorString=" / "}}
-      {{>
       "systems/farhome/templates/partials/resource-partial.hbs"
       data.features.spellPower
       objectString="data.features.spellPower"}}
+      <div class="resource-box flex-group-center">
+        <div class="resource-content flexrow flex-center flex-between">
+          <input type="text" name="data.features.mana.value" value="{{data.features.mana.value}}" data-dtype="Number"/>
+          <span> / </span>
+          <input type="text" name="data.features.mana.max" value="{{data.features.mana.max}}" data-dtype="Number" disabled/>
+        </div>
+        <label for="data.features.mana.value" class="resource-label">{{data.features.mana.label}}</label>
+      </div>
       <div class="resource-box flex-group-center">
         <div class="resource-content flexrow flex-center flex-between">
           <input type="text" name="data.features.move.value" value="{{data.features.move.value}}" data-dtype="Number"
@@ -359,20 +361,20 @@
             objectString="data.proficiencies.spells.arcane"}}
             {{>
             "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-            data.proficiencies.spells.blood
-            objectString="data.proficiencies.spells.blood"}}
-            {{>
-            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-            data.proficiencies.spells.curse
-            objectString="data.proficiencies.spells.curse"}}
-            {{>
-            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
             data.proficiencies.spells.divine
             objectString="data.proficiencies.spells.divine"}}
             {{>
             "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
             data.proficiencies.spells.druidic
             objectString="data.proficiencies.spells.druidic"}}
+            {{>
+            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+            data.proficiencies.spells.elder
+            objectString="data.proficiencies.spells.elder"}}
+            {{>
+            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+            data.proficiencies.spells.occult
+            objectString="data.proficiencies.spells.occult"}}
           </table>
         </div>
         <div class="tools-proficiency-group flex-group-center proficiency-group-box">
@@ -417,8 +419,10 @@
         </li>
         {{#each feats as |feat id|}}
         <li class="item flexrow" data-item-id="{{feat._id}}">
-          <div class="item-image"><img src="{{feat.img}}" title="{{feat.name}}" width="24" height="24" /></div>
-          <h4 class="item-name">{{feat.name}}</h4>
+          <div class="item-image"><img src="{{feat.img}}" title="{{feat.name}}" width="24" height="24"></div>
+          <h4 class="item-name">
+            <a class="item-name-link">{{feat.name}}</a>
+          </h4>
           <div class="item-controls">
             <a class="item-control item-edit" title="Edit Feat"><i class="fas fa-edit"></i></a>
             <a class="item-control item-delete" title="Delete Feat"><i class="fas fa-trash"></i></a>
@@ -440,8 +444,10 @@
         </li>
         {{#each maneuvers as |maneuver id|}}
         <li class="item flexrow" data-item-id="{{maneuver._id}}">
-          <div class="item-image"><img src="{{maneuver.img}}" title="{{maneuver.name}}" width="24" height="24" /></div>
-          <h4 class="item-name">{{maneuver.name}}</h4>
+          <div class="item-image"><img src="{{maneuver.img}}" title="{{maneuver.name}}" width="24" height="24"></div>
+          <h4 class="item-name">
+            <a class="item-name-link">{{maneuver.name}}</a>
+          </h4>
           <div class="item-controls">
             <a class="item-control item-edit" title="Edit Maneuver"><i class="fas fa-edit"></i></a>
             <a class="item-control item-delete" title="Delete Maneuver"><i class="fas fa-trash"></i></a>
@@ -452,26 +458,32 @@
     </div>
 
     {{!-- Spells Tab --}}
-    {{!-- TODO This needs to add the ability for different levels of spells. --}}
     <div class="tab spells-tab" data-group="primary" data-tab="spells">
       <ol class="items-list">
         <li class="item flexrow item-header">
           <div class="item-image"></div>
           <div class="item-name">Name</div>
+          <div class="item-prepared">Prepared</div>
           <div class="item-controls"></div>
         </li>
         {{#each spells as |spellsByLevel spellLevel|}}
           <li class="item flexrow item-divider">
             <div class="item-image"></div>
             <div class="item-name">Level {{spellLevel}} Spells</div>
+            <div class="item-prepared"></div>
             <div class="item-controls">
               <a class="item-control item-create" title="Create Spell" data-type="spell" data-spell-level="{{spellLevel}}"><i class="fas fa-plus"></i> Add Level {{spellLevel}} Spell</a>
             </div>
           </li>
           {{#each spellsByLevel as |spell id|}}
             <li class="item flexrow" data-item-id="{{spell._id}}">
-              <div class="item-image"><img src="{{spell.img}}" title="{{spell.name}}" width="24" height="24" /></div>
-              <h4 class="item-name">{{spell.name}}</h4>
+              <div class="item-image"><img src="{{spell.img}}" title="{{spell.name}}" width="24" height="24"></div>
+              <h4 class="item-name">
+                <a class="item-name-link">{{spell.name}}</a>
+              </h4>
+              <div class="item-prepared">
+                <input type="checkbox" class="item-prepared-input" data-dtype="Boolean" {{checked spell.data.prepared.value}}/>                
+              </div>
               <div class="item-controls">
                 <a class="item-control item-edit" title="Edit Spell"><i class="fas fa-edit"></i></a>
                 <a class="item-control item-delete" title="Delete Spell"><i class="fas fa-trash"></i></a>
@@ -483,19 +495,67 @@
     </div>
 
     {{!-- Inventory Tab --}}
+    {{!-- TODO Try to reduce code duplication with the various fields in inventory --}}
     <div class="tab inventory-tab" data-group="primary" data-tab="inventory">
       <ol class="items-list">
+        <li class="item flexrow item-header">
+          <div class="item-image"></div>
+          <div class="item-name">Name</div>
+          <div class="item-equipped">Equipped</div>
+          <div class="item-attuned">Attuned</div>
+          <div class="item-quantity">Quantity</div>
+          <div class="item-controls"></div>
+        </li>
+        <li class="item flexrow item-divider">
+          <div class="item-image"></div>
+          <div class="item-name">Money</div>
+          <div class="item-equipped"></div>
+          <div class="item-attuned"></div>
+          <div class="item-quantity"></div>
+          <div class="item-controls">
+            <a class="item-control item-create" title="Create Money" data-type="money"><i class="fas fa-plus"></i> Add Money</a>
+          </div>
+        </li>
+        {{#each money as |money id|}}
+        <li class="item flexrow" data-item-id="{{money._id}}">
+          <div class="item-image"><img src="{{money.img}}" title="{{money.name}}" width="24" height="24"></div>
+          <h4 class="item-name">{{money.name}}</h4>
+          <div class="item-equipped"></div>
+          <div class="item-attuned"></div>
+          <div class="item-quantity">
+            <input type="text" class="item-quantity-input" value="{{money.data.quantity.value}}" min="0" data-dtype="Number">
+          </div>
+          <div class="item-controls">
+            <a class="item-control item-edit" title="Edit Money"><i class="fas fa-edit"></i></a>
+            <a class="item-control item-delete" title="Delete Money"><i class="fas fa-trash"></i></a>
+          </div>
+        </li>
+        {{/each}}
         <li class="item flexrow item-divider">
           <div class="item-image"></div>
           <div class="item-name">Weapons</div>
+          <div class="item-equipped"></div>
+          <div class="item-attuned"></div>
+          <div class="item-quantity"></div>
           <div class="item-controls">
             <a class="item-control item-create" title="Create Weapon" data-type="weapon"><i class="fas fa-plus"></i> Add Weapon</a>
           </div>
         </li>
         {{#each weapons as |weapon id|}}
         <li class="item flexrow" data-item-id="{{weapon._id}}">
-          <div class="item-image"><img src="{{weapon.img}}" title="{{weapon.name}}" width="24" height="24" /></div>
-          <h4 class="item-name">{{weapon.name}}</h4>
+          <div class="item-image"><img src="{{weapon.img}}" title="{{weapon.name}}" width="24" height="24"></div>
+          <h4 class="item-name">
+            <a class="item-name-link">{{weapon.name}}</a>
+          </h4>
+          <div class="item-equipped">
+            <input type="checkbox" class="item-equipped-input" data-dtype="Boolean" {{checked weapon.data.equipped.value}}/>
+          </div>
+          <div class="item-attuned">
+            <input type="checkbox" class="item-attuned-input" data-dtype="Boolean" {{checked weapon.data.attuned.value}}/>
+          </div>
+          <div class="item-quantity">
+            <input type="text" class="item-quantity-input" value="{{weapon.data.quantity.value}}" min="0" data-dtype="Number">
+          </div>
           <div class="item-controls">
             <a class="item-control item-edit" title="Edit Weapon"><i class="fas fa-edit"></i></a>
             <a class="item-control item-delete" title="Delete Weapon"><i class="fas fa-trash"></i></a>
@@ -505,14 +565,28 @@
         <li class="item flexrow item-divider">
           <div class="item-image"></div>
           <div class="item-name">Armors</div>
+          <div class="item-equipped"></div>
+          <div class="item-attuned"></div>
+          <div class="item-quantity"></div>
           <div class="item-controls">
             <a class="item-control item-create" title="Create Armor" data-type="armor"><i class="fas fa-plus"></i> Add Armor</a>
           </div>
         </li>
         {{#each armors as |armor id|}}
         <li class="item flexrow" data-item-id="{{armor._id}}">
-          <div class="item-image"><img src="{{armor.img}}" title="{{armor.name}}" width="24" height="24" /></div>
-          <h4 class="item-name">{{armor.name}}</h4>
+          <div class="item-image"><img src="{{armor.img}}" title="{{armor.name}}" width="24" height="24"></div>
+          <h4 class="item-name">
+            <a class="item-name-link">{{armor.name}}</a>
+          </h4>
+          <div class="item-equipped">
+            <input type="checkbox" class="item-equipped-input" data-dtype="Boolean" {{checked armor.data.equipped.value}}/>
+          </div>
+          <div class="item-attuned">
+            <input type="checkbox" class="item-attuned-input" data-dtype="Boolean" {{checked armor.data.attuned.value}}/>
+          </div>
+          <div class="item-quantity">
+            <input type="text" class="item-quantity-input" value="{{armor.data.quantity.value}}" min="0" data-dtype="Number">
+          </div>
           <div class="item-controls">
             <a class="item-control item-edit" title="Edit Armor"><i class="fas fa-edit"></i></a>
             <a class="item-control item-delete" title="Delete Armor"><i class="fas fa-trash"></i></a>
@@ -522,14 +596,28 @@
         <li class="item flexrow item-divider">
           <div class="item-image"></div>
           <div class="item-name">Items</div>
+          <div class="item-equipped"></div>
+          <div class="item-attuned"></div>
+          <div class="item-quantity"></div>
           <div class="item-controls">
-            <a class="item-control item-create" title="Create Spell" data-type="item"><i class="fas fa-plus"></i> Add Item</a>
+            <a class="item-control item-create" title="Create Item" data-type="item"><i class="fas fa-plus"></i> Add Item</a>
           </div>
         </li>
         {{#each inventory as |item id|}}
         <li class="item flexrow" data-item-id="{{item._id}}">
-          <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24" /></div>
-          <h4 class="item-name">{{item.name}}</h4>
+          <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24"></div>
+          <h4 class="item-name">
+            <a class="item-name-link">{{item.name}}</a>
+          </h4>
+          <div class="item-equipped">
+            <input type="checkbox" class="item-equipped-input" data-dtype="Boolean" {{checked item.data.equipped.value}}/>
+          </div>
+          <div class="item-attuned">
+            <input type="checkbox" class="item-attuned-input" data-dtype="Boolean" {{checked item.data.attuned.value}}/>
+          </div>
+          <div class="item-quantity">
+            <input type="text" class="item-quantity-input" min="0" data-dtype="Number" value="{{item.data.quantity.value}}">
+          </div>
           <div class="item-controls">
             <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
             <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
@@ -545,7 +633,6 @@
     </div>
 
     {{!-- Notes Tab --}}
-    {{!-- TODO Figure out how to fix the initial text section. --}}
     <div class="tab notes-tab" data-group="primary" data-tab="notes">
       {{editor content=data.notes.value target="data.notes.value" button=true owner=owner editable=editable}}
     </div>

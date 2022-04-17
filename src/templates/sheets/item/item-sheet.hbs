@@ -1,0 +1,61 @@
+<form class="{{cssClass}}" autocomplete="off">
+  {{!-- Uncomment to debug data context --}}
+  {{!--{{log .}}--}}
+
+  {{!-- TODO Need to add under-labels for some things similar to Actor sheet. --}}
+  {{!-- TODO Create common parts to allow for common elements between the different item sheet types. --}}
+
+  {{!-- Item Sheet Header --}}
+  {{> "systems/farhome/templates/partials/item-header-partial.hbs"}}
+
+  {{!-- Sheet Tab Navigation --}}
+  <nav class="sheet-tabs tabs" data-group="primary">
+    <a class="item" data-tab="description">{{localize "farhome.description"}}</a>
+    <a class="item" data-tab="attributes">{{localize "farhome.attributes"}}</a>
+    <a class="item" data-tab="rollTemplate">{{localize "farhome.rollTemplate"}}</a>
+  </nav>
+
+  {{!-- Item Sheet Content --}}
+  <section class="sheet-body">
+    {{!-- Description Tab --}}
+    <div class="tab" data-group="primary" data-tab="description">
+      {{editor content=data.description.value target="data.description.value" button=true owner=owner editable=editable}}
+    </div>
+
+    {{!-- Attributes Tab --}}
+    <div class="tab attributes" data-group="primary" data-tab="attributes">
+      <table>
+        <colgroup>
+          <col class="attribute-label" />
+          <col class="attribute-data" />
+        </colgroup>
+        {{>
+        "systems/farhome/templates/partials/row-bool-partial.hbs"
+        data.equipped
+        objectString="data.equipped"}}
+        {{>
+        "systems/farhome/templates/partials/row-bool-partial.hbs"
+        data.attuned
+        objectString="data.attuned"}}
+        {{>
+        "systems/farhome/templates/partials/row-number-partial.hbs"
+        data.quantity
+        objectString="data.quantity"}}
+        {{>
+        "systems/farhome/templates/partials/row-number-partial.hbs"
+        data.weight
+        objectString="data.weight"}}
+        {{>
+        "systems/farhome/templates/partials/row-select-partial.hbs"
+        data.rarity
+        objectString="data.rarity"
+        mapping=config.rarities}}
+      </table>
+    </div>
+
+    {{!-- Roll Template Tab --}}
+    <div class="tab" data-group="primary" data-tab="rollTemplate">
+      {{editor content=data.rollTemplate.value target="data.rollTemplate.value" button=true owner=owner editable=editable}}
+    </div>
+  </div>
+</form>

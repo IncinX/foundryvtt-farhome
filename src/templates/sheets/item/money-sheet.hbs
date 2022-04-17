@@ -12,7 +12,6 @@
   <nav class="sheet-tabs tabs" data-group="primary">
     <a class="item" data-tab="description">{{localize "farhome.description"}}</a>
     <a class="item" data-tab="attributes">{{localize "farhome.attributes"}}</a>
-    <a class="item" data-tab="rollTemplate">{{localize "farhome.rollTemplate"}}</a>
   </nav>
 
   {{!-- Item Sheet Content --}}
@@ -30,15 +29,6 @@
           <col class="attribute-data" />
         </colgroup>
         {{>
-        "systems/farhome/templates/partials/row-bool-partial.hbs"
-        data.equipped
-        objectString="data.equipped"}}
-        {{>
-        "systems/farhome/templates/partials/row-select-partial.hbs"
-        data.rarity
-        objectString="data.rarity"
-        mapping=config.rarities}}
-        {{>
         "systems/farhome/templates/partials/row-number-partial.hbs"
         data.quantity
         objectString="data.quantity"}}
@@ -47,11 +37,6 @@
         data.weight
         objectString="data.weight"}}
       </table>
-    </div>
-
-    {{!-- Roll Template Tab --}}
-    <div class="tab" data-group="primary" data-tab="rollTemplate">
-      {{editor content=data.rollTemplate.value target="data.rollTemplate.value" button=true owner=owner editable=editable}}
     </div>
   </div>
 </form>

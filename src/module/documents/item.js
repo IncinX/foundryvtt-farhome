@@ -48,14 +48,14 @@ export class FarhomeItem extends Item {
     // Initialize chat data.
     const speaker = ChatMessage.getSpeaker({ actor: this.actor });
 
-    // TODO What should I put here?
-    //const rollMode = game.settings.get('core', 'rollMode');
+    // Roll mode controls what chat it goes to
+    const rollMode = game.settings.get('core', 'rollMode');
 
     ChatMessage.create({
       user: game.user._id,
       speaker: speaker,
+      rollMode: rollMode,
       content: evaluatedTemplate,
-      //rollMode: rollMode,
     });
   }
 }

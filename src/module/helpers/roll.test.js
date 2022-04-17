@@ -1,5 +1,3 @@
-// TODO This currently doesn't work due to the import
-
 import { proficiencyRollFormula } from './roll';
 
 describe('Proficiency Roll Formula', () => {

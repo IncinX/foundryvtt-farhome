@@ -1,6 +1,6 @@
 {
   "Actor": {
-    "types": ["character", "npc"],
+    "types": ["character", "npc", "stash"],
     "templates": {
       "base": {
         "race": {
@@ -201,16 +201,16 @@
             "arcane": {
               "value": 0
             },
-            "blood": {
-              "value": 0
-            },
-            "curse": {
-              "value": 0
-            },
             "divine": {
               "value": 0
             },
             "druidic": {
+              "value": 0
+            },
+            "elder": {
+              "value": 0
+            },
+            "occult": {
               "value": 0
             }
           },
@@ -245,10 +245,13 @@
       "cr": {
         "value": 0
       }
+    },
+    "partyStash": {
+      "templates": []
     }
   },
   "Item": {
-    "types": ["item", "weapon", "armor", "feat", "maneuver", "spell"],
+    "types": ["money", "item", "weapon", "armor", "feat", "maneuver", "spell"],
     "templates": {
       "base": {
         "description": {
@@ -268,6 +271,11 @@
           "value": false
         }
       },
+      "attunable": {
+        "attuned": {
+          "value": false
+        }
+      },
       "apCost": {
         "ap": {
           "value": 1
@@ -282,44 +290,47 @@
         "damageType": {
           "value": "bludgeoning"
         }
-      }
-    },
-    "item": {
-      "templates": ["base", "rarity", "equippable"],
-      "quantity": {
-        "value": 1,
-        "min": 0
       },
-      "weight": {
-        "value": 0,
-        "min": 0
-      }
-    },
-    "weapon": {
-      "templates": ["base", "rarity", "equippable", "range", "damageType"],
-      "weaponType": {
-        "value": "oneHand"
-      },
-      "properties": {
-        "finesse": {
-          "value": false
+      "item": {
+        "quantity": {
+          "value": 1,
+          "min": 0
         },
-        "heavy": {
-          "value": false
-        },
-        "loading": {
-          "value": false
-        },
-        "reach": {
-          "value": 0
-        },
-        "versatile": {
-          "value": 0
+        "weight": {
+          "value": 0,
+          "min": 0
         }
       }
     },
+    "money": {
+      "templates": ["base", "item"]
+    },
+    "item": {
+      "templates": ["base", "item", "rarity", "equippable", "attunable"]
+    },
+    "weapon": {
+      "templates": ["base", "item", "rarity", "equippable", "attunable", "range", "damageType"],
+      "weaponType": {
+        "value": "oneHand"
+      },
+      "finesse": {
+        "value": false
+      },
+      "heavy": {
+        "value": false
+      },
+      "loading": {
+        "value": false
+      },
+      "reach": {
+        "value": 0
+      },
+      "versatile": {
+        "value": 0
+      }
+    },
     "armor": {
-      "templates": ["base", "rarity", "equippable"],
+      "templates": ["base", "item", "rarity", "equippable", "attunable"],
       "armorBonus": {
         "value": 0
       },
