@@ -308,22 +308,20 @@
       "weaponType": {
         "value": "oneHand"
       },
-      "properties": {
-        "finesse": {
-          "value": false
-        },
-        "heavy": {
-          "value": false
-        },
-        "loading": {
-          "value": false
-        },
-        "reach": {
-          "value": 0
-        },
-        "versatile": {
-          "value": 0
-        }
+      "finesse": {
+        "value": false
+      },
+      "heavy": {
+        "value": false
+      },
+      "loading": {
+        "value": false
+      },
+      "reach": {
+        "value": 0
+      },
+      "versatile": {
+        "value": 0
       }
     },
     "armor": {

@@ -419,8 +419,10 @@
         </li>
         {{#each feats as |feat id|}}
         <li class="item flexrow" data-item-id="{{feat._id}}">
-          <div class="item-image"><img src="{{feat.img}}" title="{{feat.name}}" width="24" height="24" /></div>
-          <h4 class="item-name">{{feat.name}}</h4>
+          <div class="item-image"><img src="{{feat.img}}" title="{{feat.name}}" width="24" height="24"></div>
+          <h4 class="item-name">
+            <a class="item-name-link" data-item-id="{{feat._id}}">{{feat.name}}</a>
+          </h4>
           <div class="item-controls">
             <a class="item-control item-edit" title="Edit Feat"><i class="fas fa-edit"></i></a>
             <a class="item-control item-delete" title="Delete Feat"><i class="fas fa-trash"></i></a>
@@ -442,8 +444,10 @@
         </li>
         {{#each maneuvers as |maneuver id|}}
         <li class="item flexrow" data-item-id="{{maneuver._id}}">
-          <div class="item-image"><img src="{{maneuver.img}}" title="{{maneuver.name}}" width="24" height="24" /></div>
-          <h4 class="item-name">{{maneuver.name}}</h4>
+          <div class="item-image"><img src="{{maneuver.img}}" title="{{maneuver.name}}" width="24" height="24"></div>
+          <h4 class="item-name">
+            <a class="item-name-link" data-item-id="{{maneuver._id}}">{{maneuver.name}}</a>
+          </h4>
           <div class="item-controls">
             <a class="item-control item-edit" title="Edit Maneuver"><i class="fas fa-edit"></i></a>
             <a class="item-control item-delete" title="Delete Maneuver"><i class="fas fa-trash"></i></a>
@@ -454,7 +458,6 @@
     </div>
 
     {{!-- Spells Tab --}}
-    {{!-- TODO This needs to add the ability for different levels of spells. --}}
     <div class="tab spells-tab" data-group="primary" data-tab="spells">
       <ol class="items-list">
         <li class="item flexrow item-header">
@@ -472,8 +475,10 @@
           </li>
           {{#each spellsByLevel as |spell id|}}
             <li class="item flexrow" data-item-id="{{spell._id}}">
-              <div class="item-image"><img src="{{spell.img}}" title="{{spell.name}}" width="24" height="24" /></div>
-              <h4 class="item-name">{{spell.name}}</h4>
+              <div class="item-image"><img src="{{spell.img}}" title="{{spell.name}}" width="24" height="24"></div>
+              <h4 class="item-name">
+                <a class="item-name-link" data-item-id="{{spell._id}}">{{spell.name}}</a>
+              </h4>
               <div class="item-controls">
                 <a class="item-control item-edit" title="Edit Spell"><i class="fas fa-edit"></i></a>
                 <a class="item-control item-delete" title="Delete Spell"><i class="fas fa-trash"></i></a>
@@ -496,8 +501,10 @@
         </li>
         {{#each weapons as |weapon id|}}
         <li class="item flexrow" data-item-id="{{weapon._id}}">
-          <div class="item-image"><img src="{{weapon.img}}" title="{{weapon.name}}" width="24" height="24" /></div>
-          <h4 class="item-name">{{weapon.name}}</h4>
+          <div class="item-image"><img src="{{weapon.img}}" title="{{weapon.name}}" width="24" height="24"></div>
+          <h4 class="item-name">
+            <a class="item-name-link" data-item-id="{{weapon._id}}">{{weapon.name}}</a>
+          </h4>
           <div class="item-controls">
             <a class="item-control item-edit" title="Edit Weapon"><i class="fas fa-edit"></i></a>
             <a class="item-control item-delete" title="Delete Weapon"><i class="fas fa-trash"></i></a>
@@ -513,8 +520,10 @@
         </li>
         {{#each armors as |armor id|}}
         <li class="item flexrow" data-item-id="{{armor._id}}">
-          <div class="item-image"><img src="{{armor.img}}" title="{{armor.name}}" width="24" height="24" /></div>
-          <h4 class="item-name">{{armor.name}}</h4>
+          <div class="item-image"><img src="{{armor.img}}" title="{{armor.name}}" width="24" height="24"></div>
+          <h4 class="item-name">
+            <a class="item-name-link" data-item-id="{{armor._id}}">{{armor.name}}</a>
+          </h4>
           <div class="item-controls">
             <a class="item-control item-edit" title="Edit Armor"><i class="fas fa-edit"></i></a>
             <a class="item-control item-delete" title="Delete Armor"><i class="fas fa-trash"></i></a>
@@ -530,8 +539,10 @@
         </li>
         {{#each inventory as |item id|}}
         <li class="item flexrow" data-item-id="{{item._id}}">
-          <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24" /></div>
-          <h4 class="item-name">{{item.name}}</h4>
+          <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24"></div>
+          <h4 class="item-name">
+            <a class="item-name-link" data-item-id="{{item._id}}">{{item.name}}</a>
+          </h4>
           <div class="item-controls">
             <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
             <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
@@ -547,7 +558,6 @@
     </div>
 
     {{!-- Notes Tab --}}
-    {{!-- TODO Figure out how to fix the initial text section. --}}
     <div class="tab notes-tab" data-group="primary" data-tab="notes">
       {{editor content=data.notes.value target="data.notes.value" button=true owner=owner editable=editable}}
     </div>

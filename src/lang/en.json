@@ -23,6 +23,7 @@
     "duration": "Duration",
     "rarity": "Rarity",
     "equipped": "Equipped",
+    "attuned": "Attuned",
     "weaponType": "Weapon Type",
     "range": "Range",
     "damageType": "Damage Type",
