@@ -314,7 +314,7 @@ export default class FarhomeActorSheet extends ActorSheet {
   async _onItemEquippedChanged(event) {
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
-    item.data.data.equipped.value = event.target.value === "on" ? true : false;
+    item.data.data.equipped.value = event.target.value === 'on' ? true : false;
   }
 
   /**
@@ -325,7 +325,7 @@ export default class FarhomeActorSheet extends ActorSheet {
   async _onItemAttunedChanged(event) {
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
-    item.data.data.attuned.value = event.target.value === "on" ? true : false;
+    item.data.data.attuned.value = event.target.value === 'on' ? true : false;
   }
 
   /**
@@ -336,7 +336,7 @@ export default class FarhomeActorSheet extends ActorSheet {
   async _onItemPreparedChanged(event) {
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
-    item.data.data.prepared.value = event.target.value === "on" ? true : false;
+    item.data.data.prepared.value = event.target.value === 'on' ? true : false;
   }
 
   /**
@@ -375,7 +375,7 @@ export default class FarhomeActorSheet extends ActorSheet {
       console.log(game.specialDiceRoller);
       let roll = game.specialDiceRoller.fh.rollFormula(dataset.roll);
       let results_html = `<h1>${label}</h1>${roll}`;
-      
+
       // Roll mode controls what chat it goes to
       const rollMode = game.settings.get('core', 'rollMode');
 
