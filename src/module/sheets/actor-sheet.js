@@ -306,24 +306,16 @@ export default class FarhomeActorSheet extends ActorSheet {
       let label = dataset.label ?? '';
       console.log(game.specialDiceRoller);
       let roll = game.specialDiceRoller.fh.rollFormula(dataset.roll);
-      // TODO Add support for doing appends and resolving more advanced roll formula's
-      //let roll = new Roll(dataset.roll, this.actor.getRollData());
-
-      // TODO Add support for embedding formula's like [[@dex.roll]]ss to append two superior dice to the rolls. NO clue how to do this yet.
-      // TODO Add ability to incorporate poison and hex into the calculations.
-      //      Experiment with some systems that have custom dice.
-      //      Another approach is to use something like this: https://foundryvtt.com/packages/itemacro
-      //      Also see dnd5e create5eMacro
-      //      I could also have a really robust attribute system and roll function that uses the attributes properly to form a roll chat message.
-      // TODO Can I add custom buttons to chat messages?  That would be cool to build more sophisticated macros.
-      // TODO Also see this: https://gitlab.com/asacolips-projects/foundry-mods/boilerplate/-/blob/master/module/documents/item.mjs (See how they do item rolls!!)
-
       let results_html = `<h1>${label}</h1>${roll}`;
+      
+      // Roll mode controls what chat it goes to
+      const rollMode = game.settings.get('core', 'rollMode');
 
       ChatMessage.create({
         user: game.user._id,
         speaker: ChatMessage.getSpeaker({ actor: this.actor }),
         //speaker: ChatMessage.getSpeaker({token: actor}),
+        rollMode: rollMode,
         content: results_html,
       });
       return roll;
