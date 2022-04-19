@@ -1,7 +1,7 @@
 import { FARHOME } from './helpers/config';
 import { createItemMacro, rollItemMacro } from './helpers/macros';
 import { registerSettings } from './settings';
-import { preloadTemplates } from './preloadTemplates';
+import { preloadTemplates } from './preload-templates';
 import { FarhomeActor } from './documents/actor';
 import { FarhomeItem } from './documents/item';
 import FarhomeItemSheet from './sheets/item-sheet';
