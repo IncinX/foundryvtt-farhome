@@ -40,7 +40,7 @@ export class FarhomeItem extends Item {
    * @private
    */
   async roll() {
-    const actorContext = this.actor.data;
+    const actorContext = this.actor ? this.actor.data : null;
     const itemContext = this.data;
 
     let evaluatedTemplate = evaluateTemplate(itemContext.data.rollTemplate.value, actorContext, itemContext);

@@ -30,65 +30,67 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
   };
 
   // TODO Try to automate this with some loops but still keep the concise syntax?
-  let evaluatorActorContext = {
-    name: actorContext.name,
+  let evaluatorActorContext = actorContext
+    ? {
+        name: actorContext.name,
 
-    str: actorContext.data.attributes.str.value,
-    dex: actorContext.data.attributes.dex.value,
-    sta: actorContext.data.attributes.sta.value,
-    int: actorContext.data.attributes.int.value,
-    will: actorContext.data.attributes.will.value,
-    cha: actorContext.data.attributes.cha.value,
+        str: actorContext.data.attributes.str.value,
+        dex: actorContext.data.attributes.dex.value,
+        sta: actorContext.data.attributes.sta.value,
+        int: actorContext.data.attributes.int.value,
+        will: actorContext.data.attributes.will.value,
+        cha: actorContext.data.attributes.cha.value,
 
-    strSave: actorContext.data.proficiencies.saves.str.value,
-    dexSave: actorContext.data.proficiencies.saves.dex.value,
-    staSave: actorContext.data.proficiencies.saves.sta.value,
-    intSave: actorContext.data.proficiencies.saves.int.value,
-    willSave: actorContext.data.proficiencies.saves.will.value,
-    chaSave: actorContext.data.proficiencies.saves.cha.value,
+        strSave: actorContext.data.proficiencies.saves.str.value,
+        dexSave: actorContext.data.proficiencies.saves.dex.value,
+        staSave: actorContext.data.proficiencies.saves.sta.value,
+        intSave: actorContext.data.proficiencies.saves.int.value,
+        willSave: actorContext.data.proficiencies.saves.will.value,
+        chaSave: actorContext.data.proficiencies.saves.cha.value,
 
-    athletics: actorContext.data.proficiencies.attributes.str.athletics.value,
-    intimidation: actorContext.data.proficiencies.attributes.str.intimidation.value,
+        athletics: actorContext.data.proficiencies.attributes.str.athletics.value,
+        intimidation: actorContext.data.proficiencies.attributes.str.intimidation.value,
 
-    acrobatics: actorContext.data.proficiencies.attributes.dex.acrobatics.value,
-    lockpicking: actorContext.data.proficiencies.attributes.dex.lockpicking.value,
-    stealth: actorContext.data.proficiencies.attributes.dex.stealth.value,
-    sleightOfHand: actorContext.data.proficiencies.attributes.dex.sleightOfHand.value,
+        acrobatics: actorContext.data.proficiencies.attributes.dex.acrobatics.value,
+        lockpicking: actorContext.data.proficiencies.attributes.dex.lockpicking.value,
+        stealth: actorContext.data.proficiencies.attributes.dex.stealth.value,
+        sleightOfHand: actorContext.data.proficiencies.attributes.dex.sleightOfHand.value,
 
-    exhaustion: actorContext.data.proficiencies.attributes.sta.exhaustion.value,
-    survival: actorContext.data.proficiencies.attributes.sta.survival.value,
+        exhaustion: actorContext.data.proficiencies.attributes.sta.exhaustion.value,
+        survival: actorContext.data.proficiencies.attributes.sta.survival.value,
 
-    arcana: actorContext.data.proficiencies.attributes.int.arcana.value,
-    investigation: actorContext.data.proficiencies.attributes.int.investigation.value,
-    lore: actorContext.data.proficiencies.attributes.int.lore.value,
-    medicine: actorContext.data.proficiencies.attributes.int.medicine.value,
+        arcana: actorContext.data.proficiencies.attributes.int.arcana.value,
+        investigation: actorContext.data.proficiencies.attributes.int.investigation.value,
+        lore: actorContext.data.proficiencies.attributes.int.lore.value,
+        medicine: actorContext.data.proficiencies.attributes.int.medicine.value,
 
-    animalHandling: actorContext.data.proficiencies.attributes.will.animalHandling.value,
-    insight: actorContext.data.proficiencies.attributes.will.insight.value,
-    nature: actorContext.data.proficiencies.attributes.will.nature.value,
-    perception: actorContext.data.proficiencies.attributes.will.perception.value,
+        animalHandling: actorContext.data.proficiencies.attributes.will.animalHandling.value,
+        insight: actorContext.data.proficiencies.attributes.will.insight.value,
+        nature: actorContext.data.proficiencies.attributes.will.nature.value,
+        perception: actorContext.data.proficiencies.attributes.will.perception.value,
 
-    conversation: actorContext.data.proficiencies.attributes.cha.conversation.value,
-    diplomacy: actorContext.data.proficiencies.attributes.cha.diplomacy.value,
-    performance: actorContext.data.proficiencies.attributes.cha.performance.value,
-    religion: actorContext.data.proficiencies.attributes.cha.religion.value,
+        conversation: actorContext.data.proficiencies.attributes.cha.conversation.value,
+        diplomacy: actorContext.data.proficiencies.attributes.cha.diplomacy.value,
+        performance: actorContext.data.proficiencies.attributes.cha.performance.value,
+        religion: actorContext.data.proficiencies.attributes.cha.religion.value,
 
-    oneHand: actorContext.data.proficiencies.weapons.oneHand.value,
-    twoHand: actorContext.data.proficiencies.weapons.twoHand.value,
-    ranged: actorContext.data.proficiencies.weapons.ranged.value,
-    unarmed: actorContext.data.proficiencies.weapons.unarmed.value,
+        oneHand: actorContext.data.proficiencies.weapons.oneHand.value,
+        twoHand: actorContext.data.proficiencies.weapons.twoHand.value,
+        ranged: actorContext.data.proficiencies.weapons.ranged.value,
+        unarmed: actorContext.data.proficiencies.weapons.unarmed.value,
 
-    arcane: actorContext.data.proficiencies.spells.arcane.value,
-    divine: actorContext.data.proficiencies.spells.divine.value,
-    druidic: actorContext.data.proficiencies.spells.druidic.value,
-    elder: actorContext.data.proficiencies.spells.elder.value,
-    occult: actorContext.data.proficiencies.spells.occult.value,
+        arcane: actorContext.data.proficiencies.spells.arcane.value,
+        divine: actorContext.data.proficiencies.spells.divine.value,
+        druidic: actorContext.data.proficiencies.spells.druidic.value,
+        elder: actorContext.data.proficiencies.spells.elder.value,
+        occult: actorContext.data.proficiencies.spells.occult.value,
 
-    repairKit: actorContext.data.proficiencies.tools.repairKit.value,
-    enchantersTools: actorContext.data.proficiencies.tools.enchantersTools.value,
-    apothecarySet: actorContext.data.proficiencies.tools.apothecarySet.value,
-    scribingTools: actorContext.data.proficiencies.tools.scribingTools.value,
-  };
+        repairKit: actorContext.data.proficiencies.tools.repairKit.value,
+        enchantersTools: actorContext.data.proficiencies.tools.enchantersTools.value,
+        apothecarySet: actorContext.data.proficiencies.tools.apothecarySet.value,
+        scribingTools: actorContext.data.proficiencies.tools.scribingTools.value,
+      }
+    : {};
 
   let evaluatorItemContext = {
     name: itemContext.name,
