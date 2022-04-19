@@ -1,4 +1,4 @@
-import { getSpellPowerToManaTable } from './manaTable';
+import { getSpellPowerToManaTable } from './mana-table';
 
 describe('Mana Table', () => {
   it('getSpellPowerToManaTable()[7] = 48', () => {
