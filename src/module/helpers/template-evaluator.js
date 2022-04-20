@@ -122,13 +122,15 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
   help += '<li>s -- System helper function context (see below).</li><br/>';
   help += '<li>a -- Actor data context (see below).</li><br/>';
   help += '<li>i -- Item data context (see below).</li><br/>';
-  
+
   help += '</ul>';
 
   help += '<b>s (system context):</b><br/>';
   help += '<ul>';
-  help += '<li>skill(proficiency, attribute) -- Performs a skill roll with the given proficiency and attribute.</li><br/>';
-  help += '<li>getRollFormula(proficiency, attribute) -- Gets the roll formula with the given proficiency and attribute.</li><br/>';
+  help +=
+    '<li>skill(proficiency, attribute) -- Performs a skill roll with the given proficiency and attribute.</li><br/>';
+  help +=
+    '<li>getRollFormula(proficiency, attribute) -- Gets the roll formula with the given proficiency and attribute.</li><br/>';
   help += '</ul>';
 
   help += '<b>a (actor context):</b><br/>';
