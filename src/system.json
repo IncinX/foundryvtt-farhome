@@ -20,7 +20,7 @@
   "dependencies": [
     {
       "name": "special-dice-roller",
-      "manifest": "https://raw.githubusercontent.com/IncinX/foundryvtt-special-dice-roller/master/module.json"
+      "manifest": "https://github.com/IncinX/foundryvtt-special-dice-roller/releases/latest/download/module.json"
     }
   ],
   "languages": [
