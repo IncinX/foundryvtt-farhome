@@ -1,4 +1,4 @@
-import { proficiencyRollFormula } from './roll';
+import { proficiencyRollFormula, proficiencyRoll } from './roll';
 
 export function evaluateTemplate(templateString, actorContext, itemContext) {
   let evaluatedString = templateString;
@@ -23,9 +23,10 @@ export function evaluateTemplate(templateString, actorContext, itemContext) {
 }
 
 export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) {
-  let evaluatorRollerContext = game.specialDiceRoller.fh;
+  let evaluatorRollerContext = game.specialDiceRoller.fh.rollFormula.bind(game.specialDiceRoller.fh);
 
   let evaluatorSystemContext = {
+    skill: proficiencyRoll.bind(null, evaluatorRollerContext),
     getRollFormula: proficiencyRollFormula,
   };
 
@@ -115,14 +116,21 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
   };
 
   // Build the help text
-  let help = '<b>r (roll context):</b><br/>';
+  let help = '<b>global context:</b><br/>';
   help += '<ul>';
-  help += '<li>rollFormula(formulaString)</li><br/>';
+  help += '<li>fh(formulaString) -- Performs a roll given the formula.</li><br/>';
+  help += '<li>s -- System helper function context (see below).</li><br/>';
+  help += '<li>a -- Actor data context (see below).</li><br/>';
+  help += '<li>i -- Item data context (see below).</li><br/>';
+
   help += '</ul>';
 
   help += '<b>s (system context):</b><br/>';
   help += '<ul>';
-  help += '<li>getRollFormula(proficiency, attribute)</li><br/>';
+  help +=
+    '<li>skill(proficiency, attribute) -- Performs a skill roll with the given proficiency and attribute.</li><br/>';
+  help +=
+    '<li>getRollFormula(proficiency, attribute) -- Gets the roll formula with the given proficiency and attribute.</li><br/>';
   help += '</ul>';
 
   help += '<b>a (actor context):</b><br/>';

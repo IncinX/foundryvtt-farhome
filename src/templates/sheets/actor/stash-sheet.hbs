@@ -2,6 +2,18 @@
   {{!-- Uncomment to debug data context --}}
   {{!--{{log data}}--}}
 
+  {{!-- Stash Sheet Header --}}
+  <div class "top-bar flexcol">
+    <header class="sheet-header flexrow">
+      <img class="profile-img" src="{{actor.img}}" title="{{actor.name}}" data-edit="img" />
+      <div class="header-fields flexcol">
+        <input class="name-input header-input align-stretch" name="name" type="text" value="{{actor.name}}"
+          placeholder="{{localize 'farhome.stashName'}}" />
+        <label class="under-label" for="name">{{localize 'farhome.stashName'}}</label>
+      </div>
+    </header>
+  </div>
+
   {{!-- Sheet Tab Navigation --}}
   <nav class="sheet-tabs tabs" data-group="primary">
     <a class="item" data-tab="inventory">{{localize 'farhome.inventory'}}</a>
