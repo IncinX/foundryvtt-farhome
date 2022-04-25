@@ -4,6 +4,7 @@ import { registerSettings } from './settings';
 import { preloadTemplates } from './preload-templates';
 import { FarhomeActor } from './documents/actor';
 import { FarhomeItem } from './documents/item';
+import { _getInitiativeFormula } from './helpers/initiative';
 import FarhomeItemSheet from './sheets/item-sheet';
 import FarhomeActorSheet from './sheets/actor-sheet';
 
@@ -24,7 +25,9 @@ Hooks.once('init', async () => {
   // Assign custom classes and constants here
   CONFIG.FARHOME = FARHOME;
 
-  // TODO Need to create an initiative formula for the system
+  // Configure the initiative formula
+  CONFIG.Combat.initiative.formula = '';
+  Combatant.prototype._getInitiativeFormula = _getInitiativeFormula;
 
   // Register custom system settings
   registerSettings();

@@ -17,8 +17,6 @@ export class FarhomeItem extends Item {
     const itemData = this.data;
     const actorData = this.actor ? this.actor.data : {};
     const data = itemData.data;
-
-    // TODO Add custom rollable stuff here and prepare functions to set up the rollables.
   }
 
   /**
@@ -51,11 +49,13 @@ export class FarhomeItem extends Item {
     // Roll mode controls what chat it goes to
     const rollMode = game.settings.get('core', 'rollMode');
 
-    ChatMessage.create({
+    let chatData = {
       user: game.user._id,
       speaker: speaker,
-      rollMode: rollMode,
       content: evaluatedTemplate,
-    });
+    };
+
+    ChatMessage.applyRollMode(chatData, rollMode);
+    ChatMessage.create(chatData);
   }
 }
