@@ -370,6 +370,7 @@ export default class FarhomeActorSheet extends ActorSheet {
     }
 
     // Handle rolls that supply the formula directly.
+    // TODO Consider moving all this chat message roll code into a helper function
     if (dataset.roll) {
       let label = dataset.label ?? '';
       console.log(game.specialDiceRoller);
@@ -383,7 +384,6 @@ export default class FarhomeActorSheet extends ActorSheet {
         user: game.user._id,
         speaker: ChatMessage.getSpeaker({ actor: this.actor }),
         //speaker: ChatMessage.getSpeaker({token: actor}),
-        rollMode: rollMode,
         content: results_html,
       };
       ChatMessage.applyRollMode(chatData, rollMode);

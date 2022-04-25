@@ -17,8 +17,6 @@ export class FarhomeItem extends Item {
     const itemData = this.data;
     const actorData = this.actor ? this.actor.data : {};
     const data = itemData.data;
-
-    // TODO Add custom rollable stuff here and prepare functions to set up the rollables.
   }
 
   /**
