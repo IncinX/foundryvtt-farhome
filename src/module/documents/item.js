@@ -51,11 +51,13 @@ export class FarhomeItem extends Item {
     // Roll mode controls what chat it goes to
     const rollMode = game.settings.get('core', 'rollMode');
 
-    ChatMessage.create({
+    let chatData = {
       user: game.user._id,
       speaker: speaker,
-      rollMode: rollMode,
       content: evaluatedTemplate,
-    });
+    };
+
+    ChatMessage.applyRollMode(chatData, rollMode);
+    ChatMessage.create(chatData);
   }
 }
