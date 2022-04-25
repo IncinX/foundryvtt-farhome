@@ -26,7 +26,7 @@ Hooks.once('init', async () => {
   CONFIG.FARHOME = FARHOME;
 
   // Configure the initiative formula
-  CONFIG.Combat.initiative.formula = "";
+  CONFIG.Combat.initiative.formula = '';
   Combatant.prototype._getInitiativeFormula = _getInitiativeFormula;
 
   // Register custom system settings
