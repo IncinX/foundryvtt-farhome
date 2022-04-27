@@ -70,7 +70,7 @@ export class FarhomeItem extends Item {
     dialogContent += '</select>';
 
     let d = new Dialog({
-      title: 'Cast Content',
+      title: 'Select Spell Level',
       content: dialogContent,
       buttons: {
         cast: {
