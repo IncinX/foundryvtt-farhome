@@ -2,9 +2,9 @@
   <ol class="items-list">
     <li class="item flexrow item-header">
       <div class="item-image"></div>
-      <div class="item-name">Name</div>
+      <div class="item-name">{{localize 'farhome.name'}}</div>
       <div class="item-controls">
-        <a class="item-control item-create" title="Create Maneuver" data-type="maneuver"><i class="fas fa-plus"></i> Add Maneuver</a>
+        <a class="item-control item-create" title="{{localize 'farhome.createManeuver'}}" data-type="maneuver"><i class="fas fa-plus"></i> {{localize 'farhome.createManeuver'}}</a>
       </div>
     </li>
     {{#each maneuvers as |maneuver id|}}
@@ -14,8 +14,8 @@
         <a class="item-name-link">{{maneuver.name}}</a>
       </h4>
       <div class="item-controls">
-        <a class="item-control item-edit" title="Edit Maneuver"><i class="fas fa-edit"></i></a>
-        <a class="item-control item-delete" title="Delete Maneuver"><i class="fas fa-trash"></i></a>
+        <a class="item-control item-edit" title="{{localize 'farhome.editManeuver'}}"><i class="fas fa-edit"></i></a>
+        <a class="item-control item-delete" title="{{localize 'farhome.deleteManeuver'}}"><i class="fas fa-trash"></i></a>
       </div>
     </li>
     {{/each}}

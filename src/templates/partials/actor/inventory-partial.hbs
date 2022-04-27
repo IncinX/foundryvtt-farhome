@@ -2,20 +2,20 @@
   <ol class="items-list">
     <li class="item flexrow item-header">
       <div class="item-image"></div>
-      <div class="item-name">Name</div>
-      <div class="item-equipped">Equipped</div>
-      <div class="item-attuned">Attuned</div>
-      <div class="item-quantity">Quantity</div>
+      <div class="item-name">{{localize 'farhome.name'}}</div>
+      <div class="item-equipped">{{localize 'farhome.equipped'}}</div>
+      <div class="item-attuned">{{localize 'farhome.attuned'}}</div>
+      <div class="item-quantity">{{localize 'farhome.quantity'}}</div>
       <div class="item-controls"></div>
     </li>
     <li class="item flexrow item-divider">
       <div class="item-image"></div>
-      <div class="item-name">Money</div>
+      <div class="item-name">{{localize 'farhome.money'}}</div>
       <div class="item-equipped"></div>
       <div class="item-attuned"></div>
       <div class="item-quantity"></div>
       <div class="item-controls">
-        <a class="item-control item-create" title="Create Money" data-type="money"><i class="fas fa-plus"></i> Add Money</a>
+        <a class="item-control item-create" title="{{localize 'farhome.createMoney'}}" data-type="money"><i class="fas fa-plus"></i> {{localize 'farhome.createMoney'}}</a>
       </div>
     </li>
     {{#each money as |money id|}}
@@ -28,19 +28,19 @@
         <input type="text" class="item-quantity-input" value="{{money.data.quantity.value}}" min="0" data-dtype="Number">
       </div>
       <div class="item-controls">
-        <a class="item-control item-edit" title="Edit Money"><i class="fas fa-edit"></i></a>
-        <a class="item-control item-delete" title="Delete Money"><i class="fas fa-trash"></i></a>
+        <a class="item-control item-edit" title="{{localize 'farhome.editMoney'}}"><i class="fas fa-edit"></i></a>
+        <a class="item-control item-delete" title="{{localize 'farhome.deleteMoney'}}"><i class="fas fa-trash"></i></a>
       </div>
     </li>
     {{/each}}
     <li class="item flexrow item-divider">
       <div class="item-image"></div>
-      <div class="item-name">Weapons</div>
+      <div class="item-name">{{localize 'farhome.weapons'}}</div>
       <div class="item-equipped"></div>
       <div class="item-attuned"></div>
       <div class="item-quantity"></div>
       <div class="item-controls">
-        <a class="item-control item-create" title="Create Weapon" data-type="weapon"><i class="fas fa-plus"></i> Add Weapon</a>
+        <a class="item-control item-create" title="{{localize 'farhome.createWeapon'}}" data-type="weapon"><i class="fas fa-plus"></i> {{localize 'farhome.createWeapon'}}</a>
       </div>
     </li>
     {{#each weapons as |weapon id|}}
@@ -59,19 +59,19 @@
         <input type="text" class="item-quantity-input" value="{{weapon.data.quantity.value}}" min="0" data-dtype="Number">
       </div>
       <div class="item-controls">
-        <a class="item-control item-edit" title="Edit Weapon"><i class="fas fa-edit"></i></a>
-        <a class="item-control item-delete" title="Delete Weapon"><i class="fas fa-trash"></i></a>
+        <a class="item-control item-edit" title="{{localize 'farhome.editWeapon'}}"><i class="fas fa-edit"></i></a>
+        <a class="item-control item-delete" title="{{localize 'farhome.deleteWeapon'}}"><i class="fas fa-trash"></i></a>
       </div>
     </li>
     {{/each}}
     <li class="item flexrow item-divider">
       <div class="item-image"></div>
-      <div class="item-name">Armors</div>
+      <div class="item-name">{{localize 'farhome.armors'}}</div>
       <div class="item-equipped"></div>
       <div class="item-attuned"></div>
       <div class="item-quantity"></div>
       <div class="item-controls">
-        <a class="item-control item-create" title="Create Armor" data-type="armor"><i class="fas fa-plus"></i> Add Armor</a>
+        <a class="item-control item-create" title="{{localize 'farhome.createArmor'}}" data-type="armor"><i class="fas fa-plus"></i> {{localize 'farhome.createArmor'}}</a>
       </div>
     </li>
     {{#each armors as |armor id|}}
@@ -90,19 +90,19 @@
         <input type="text" class="item-quantity-input" value="{{armor.data.quantity.value}}" min="0" data-dtype="Number">
       </div>
       <div class="item-controls">
-        <a class="item-control item-edit" title="Edit Armor"><i class="fas fa-edit"></i></a>
-        <a class="item-control item-delete" title="Delete Armor"><i class="fas fa-trash"></i></a>
+        <a class="item-control item-edit" title="{{localize 'farhome.editArmor'}}"><i class="fas fa-edit"></i></a>
+        <a class="item-control item-delete" title="{{localize 'farhome.deleteArmor'}}"><i class="fas fa-trash"></i></a>
       </div>
     </li>
     {{/each}}
     <li class="item flexrow item-divider">
       <div class="item-image"></div>
-      <div class="item-name">Items</div>
+      <div class="item-name">{{localize 'farhome.items'}}</div>
       <div class="item-equipped"></div>
       <div class="item-attuned"></div>
       <div class="item-quantity"></div>
       <div class="item-controls">
-        <a class="item-control item-create" title="Create Item" data-type="item"><i class="fas fa-plus"></i> Add Item</a>
+        <a class="item-control item-create" title="{{localize 'farhome.createItem'}}" data-type="item"><i class="fas fa-plus"></i> {{localize 'farhome.createItem'}}</a>
       </div>
     </li>
     {{#each inventory as |item id|}}
@@ -121,8 +121,8 @@
         <input type="text" class="item-quantity-input" min="0" data-dtype="Number" value="{{item.data.quantity.value}}">
       </div>
       <div class="item-controls">
-        <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
-        <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+        <a class="item-control item-edit" title="{{localize 'farhome.editItem'}}"><i class="fas fa-edit"></i></a>
+        <a class="item-control item-delete" title="{{localize 'farhome.deleteItem'}}"><i class="fas fa-trash"></i></a>
       </div>
     </li>
     {{/each}}
