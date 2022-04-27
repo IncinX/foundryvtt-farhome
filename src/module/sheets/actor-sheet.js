@@ -18,7 +18,7 @@ export default class FarhomeActorSheet extends ActorSheet {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ['farhome', 'sheet', 'actor'],
-      width: 800,
+      width: 900,
       height: 800,
       tabs: [{ navSelector: '.sheet-tabs', contentSelector: '.sheet-body', initial: 'attributes' }],
     });
