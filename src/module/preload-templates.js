@@ -1,5 +1,6 @@
 export async function preloadTemplates() {
   const templatePaths = [
+    'systems/farhome/templates/partials/actor/resource-bar-partial.hbs',
     'systems/farhome/templates/partials/actor/attributes-partial.hbs',
     'systems/farhome/templates/partials/actor/feats-partial.hbs',
     'systems/farhome/templates/partials/actor/maneuvers-partial.hbs',
