@@ -113,7 +113,7 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
     spellDuration: itemContext.data.duration ? itemContext.data.duration.value : '',
     castingTime: itemContext.data.castingTime ? itemContext.data.castingTime.value : '',
     areaOfEffect: itemContext.data.areaOfEffect ? itemContext.data.areaOfEffect.value : '',
-    
+
     // These items are derived or queried from the user
     castedSpellLevel: itemContext.castedSpellLevel ?? '',
     spellLevelDifference: itemContext.spellLevelDifference ?? '',

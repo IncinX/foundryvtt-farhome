@@ -62,9 +62,9 @@ export class FarhomeItem extends Item {
     dialogContent += `<select id="${selectorUniqueId}">`;
     for (let level = itemContext.data.spellLevel.value; level <= MAX_SPELL_LEVEL; level++) {
       if (level === 0) {
-        dialogContent += "<option value='" + level + "'>Cantrip</option>";
+        dialogContent += '<option value="' + level + '">Cantrip</option>';
       } else {
-        dialogContent += "<option value='" + level + "'>Level " + level + "</option>";
+        dialogContent += '<option value="' + level + '">Level ' + level + '</option>';
       }
     }
     dialogContent += '</select>';
@@ -80,7 +80,7 @@ export class FarhomeItem extends Item {
             let castedSpellLevel = parseInt(document.getElementById(selectorUniqueId).value);
             let spellLevelDifference = castedSpellLevel - itemContext.data.spellLevel.value;
             this._executeRoll({ castedSpellLevel: castedSpellLevel, spellLevelDifference: spellLevelDifference });
-          }
+          },
         },
         cancel: {
           icon: '<i class="fas fa-times"></i>',
@@ -91,7 +91,7 @@ export class FarhomeItem extends Item {
     });
 
     d.render(true);
-    
+
     // TODO Calculate the difference in spell level when provided to the executeRoll function (send in the castedSpellLevel too)
   }
 
