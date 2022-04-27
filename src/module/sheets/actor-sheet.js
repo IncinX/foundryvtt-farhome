@@ -314,7 +314,7 @@ export default class FarhomeActorSheet extends ActorSheet {
   async _onItemEquippedChanged(event) {
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
-    item.data.data.equipped.value = event.target.value === 'on' ? true : false;
+    item.data.data.equipped.value = event.target.checked;
   }
 
   /**
@@ -325,7 +325,7 @@ export default class FarhomeActorSheet extends ActorSheet {
   async _onItemAttunedChanged(event) {
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
-    item.data.data.attuned.value = event.target.value === 'on' ? true : false;
+    item.data.data.attuned.value = event.target.checked;
   }
 
   /**
@@ -336,7 +336,7 @@ export default class FarhomeActorSheet extends ActorSheet {
   async _onItemPreparedChanged(event) {
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
-    item.data.data.prepared.value = event.target.value === 'on' ? true : false;
+    item.data.data.prepared.value = event.target.checked;
   }
 
   /**
