@@ -1,5 +1,7 @@
 import { evaluateTemplate } from '../helpers/template-evaluator';
 
+const MAX_SPELL_LEVEL = 10;
+
 /**
  * Extend the basic Item with some very simple modifications.
  * @extends {Item}
@@ -35,13 +37,81 @@ export class FarhomeItem extends Item {
   /**
    * Handle clickable rolls.
    * @param {Event} event   The originating click event
-   * @private
    */
   async roll() {
-    const actorContext = this.actor ? this.actor.data : null;
     const itemContext = this.data;
 
-    let evaluatedTemplate = evaluateTemplate(itemContext.data.rollTemplate.value, actorContext, itemContext);
+    if (itemContext.type === 'spell') {
+      this._spellLevelDialog();
+    } else {
+      this._executeRoll();
+    }
+  }
+
+  /**
+   * Creates a dialog box to query the spell level from the user and pass it in the system context.
+   * @param {Event} event   The originating click event
+   * @private
+   */
+  async _spellLevelDialog() {
+    const itemContext = this.data;
+
+    let selectorUniqueId = `spell-level-selector-${Math.random().toString(16).substring(2)}`;
+
+    let dialogContent = `<b>Select the level with which to cast the ${itemContext.name} spell.</b><br>`;
+    dialogContent += `<select id="${selectorUniqueId}">`;
+    for (let level = itemContext.data.spellLevel.value; level <= MAX_SPELL_LEVEL; level++) {
+      if (level === 0) {
+        dialogContent += '<option value="' + level + '">Cantrip</option>';
+      } else {
+        dialogContent += '<option value="' + level + '">Level ' + level + '</option>';
+      }
+    }
+    dialogContent += '</select>';
+
+    let d = new Dialog({
+      title: 'Select Spell Level',
+      content: dialogContent,
+      buttons: {
+        cast: {
+          icon: '<i class="fas fa-check"></i>',
+          label: 'Cast',
+          callback: () => {
+            let castedSpellLevel = parseInt(document.getElementById(selectorUniqueId).value);
+            let spellLevelDifference = castedSpellLevel - itemContext.data.spellLevel.value;
+            this._executeRoll({ castedSpellLevel: castedSpellLevel, spellLevelDifference: spellLevelDifference });
+          },
+        },
+        cancel: {
+          icon: '<i class="fas fa-times"></i>',
+          label: 'Cancel',
+        },
+      },
+      default: 'cast',
+    });
+
+    d.render(true);
+
+    // TODO Calculate the difference in spell level when provided to the executeRoll function (send in the castedSpellLevel too)
+  }
+
+  /**
+   * Execute a clickable roll by evaluating it's template and creating the chat message.
+   * @param {Event} event   The originating click event
+   * @private
+   */
+  async _executeRoll(extraItemContext = {}) {
+    const actorContext = this.actor ? this.actor.data : null;
+    let itemContext = this.data;
+
+    // Add the extra item context which may have been queried by a user or inferred.
+    var superItemContext = {
+      ...itemContext,
+      ...extraItemContext,
+    };
+
+    // Evaluate the template text with the given actor and item context.
+    let evaluatedTemplate = evaluateTemplate(itemContext.data.rollTemplate.value, actorContext, superItemContext);
 
     // Initialize chat data.
     const speaker = ChatMessage.getSpeaker({ actor: this.actor });
@@ -49,6 +119,7 @@ export class FarhomeItem extends Item {
     // Roll mode controls what chat it goes to
     const rollMode = game.settings.get('core', 'rollMode');
 
+    // Construct the chat message and send it
     let chatData = {
       user: game.user._id,
       speaker: speaker,
