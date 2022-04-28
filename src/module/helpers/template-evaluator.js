@@ -24,10 +24,12 @@ export function evaluateTemplate(templateString, actorContext, itemContext) {
 
 export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) {
   let evaluatorRollerContext = game.specialDiceRoller.fh.rollFormula.bind(game.specialDiceRoller.fh);
-
+  
   let evaluatorSystemContext = {
     skill: proficiencyRoll.bind(null, evaluatorRollerContext),
     getRollFormula: proficiencyRollFormula,
+
+    targetCount: game.user.targets.size,
   };
 
   // TODO Try to automate this with some loops but still keep the concise syntax?
