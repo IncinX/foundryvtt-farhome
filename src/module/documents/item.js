@@ -1,5 +1,6 @@
 import { evaluateTemplate } from '../helpers/template-evaluator';
 import { convertSpellLevelToManaCost } from '../helpers/mana';
+import { sendStandardMessage } from '../helpers/chat';
 
 const MAX_SPELL_LEVEL = 10;
 
@@ -113,26 +114,51 @@ export class FarhomeItem extends Item {
     let evaluatedTemplate = evaluateTemplate(itemContext.data.rollTemplate.value, actorContext, superItemContext);
 
     // Create a mana spend button if the item is a spell.
-    if (itemContext.type === 'spell') {
+    if (itemContext.type === 'spell' && actorContext !== null) {
       let manaCost = convertSpellLevelToManaCost(extraItemContext.castedSpellLevel);
-      let manaSpendHtml = `<form><button class="spend-mana" data-mana="${manaCost}">Spend Mana (${manaCost}/${actorContext.data.features.mana.max})</button></form>`;
+      let manaSpendHtml = `
+        <form>
+          <button class="spend-mana" data-mana="${manaCost}" data-actor-id="${actorContext._id}">Spend Mana (${manaCost}/${actorContext.data.features.mana.max})</button>
+        </form>`;
       evaluatedTemplate += manaSpendHtml;
     }
 
-    // Initialize chat data.
+    // Send the evaluatedTemplate to chat.
     const speaker = ChatMessage.getSpeaker({ actor: this.actor });
 
-    // Roll mode controls what chat it goes to
-    const rollMode = game.settings.get('core', 'rollMode');
+    sendStandardMessage(speaker, evaluatedTemplate);
+  }
 
-    // Construct the chat message and send it
-    let chatData = {
-      user: game.user._id,
-      speaker: speaker,
-      content: evaluatedTemplate,
-    };
+  /**
+   * Opportunity to subscribe to chat log events.
+   * @param {Document} html   The html document for the chat log.
+   * @private
+   */
+  static _subscribeToChatLog(html) {
+    html.on('click', '.spend-mana', this._handleManaSpend.bind(this));
+  }
 
-    ChatMessage.applyRollMode(chatData, rollMode);
-    ChatMessage.create(chatData);
+  /**
+   * Handle click message generated from the "Spend Mana" button in chat.
+   * @param {Event} event   The originating click event
+   * @private
+   */
+  static async _handleManaSpend(event) {
+    event.preventDefault();
+
+    // Get the data from the button
+    let manaCost = parseInt(event.currentTarget.dataset.mana);
+    let actorId = event.currentTarget.dataset.actorId;
+    let actor = game.actors.get(actorId);
+
+    // Dedudct the mana off of the character's sheet
+    actor.update({'data.features.mana.value': actor.data.data.features.mana.value - manaCost});
+
+    // Disable the button
+    event.currentTarget.disabled = true;
+
+    // Send the confirmation message to the chat
+    const speaker = ChatMessage.getSpeaker({ actor: actor });
+    sendStandardMessage(speaker, `<b>${actor.name}</b> spends ${manaCost} mana.`);
   }
 }

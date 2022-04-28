@@ -82,16 +82,6 @@ Hooks.once('ready', async () => {
 });
 
 // Monitoring button pushes in chat messages
-Hooks.on('renderChatLog', () => {
-  $('#chat-log').on('click', '.spend-mana button', (event) => {
-    /*
-    event.preventDefault();
-
-    const button = event.target;
-    const rollerKey = button.dataset.roller;
-    const form = button.parentElement;
-
-    console.log('button-click');
-    */
-  });
+Hooks.on('renderChatLog', (app, html, data) => {
+  FarhomeItem._subscribeToChatLog(html);
 });
