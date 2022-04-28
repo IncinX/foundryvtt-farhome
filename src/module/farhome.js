@@ -83,7 +83,8 @@ Hooks.once('ready', async () => {
 
 // Monitoring button pushes in chat messages
 Hooks.on('renderChatLog', () => {
-  $('#chat-log').on('click', /*'.spend-mana button'*/ '', (event) => {
+  $('#chat-log').on('click', '.spend-mana button', (event) => {
+    /*
     event.preventDefault();
 
     const button = event.target;
@@ -91,5 +92,6 @@ Hooks.on('renderChatLog', () => {
     const form = button.parentElement;
 
     console.log('button-click');
+    */
   });
 });

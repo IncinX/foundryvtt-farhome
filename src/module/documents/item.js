@@ -115,7 +115,7 @@ export class FarhomeItem extends Item {
     // Create a mana spend button if the item is a spell.
     if (itemContext.type === 'spell') {
       let manaCost = convertSpellLevelToManaCost(extraItemContext.castedSpellLevel);
-      let manaSpendHtml = `<form><button class="spend-mana">Spend Mana (${manaCost}/${actorContext.data.features.mana.max})</button></form>`;
+      let manaSpendHtml = `<form><button class="spend-mana" data-mana="${manaCost}">Spend Mana (${manaCost}/${actorContext.data.features.mana.max})</button></form>`;
       evaluatedTemplate += manaSpendHtml;
     }
 
