@@ -1,4 +1,5 @@
 import { evaluateTemplate } from '../helpers/template-evaluator';
+import { convertSpellLevelToManaCost } from '../helpers/mana';
 
 const MAX_SPELL_LEVEL = 10;
 
@@ -110,6 +111,13 @@ export class FarhomeItem extends Item {
 
     // Evaluate the template text with the given actor and item context.
     let evaluatedTemplate = evaluateTemplate(itemContext.data.rollTemplate.value, actorContext, superItemContext);
+
+    // Create a mana spend button if the item is a spell.
+    if (itemContext.type === 'spell') {
+      let manaCost = convertSpellLevelToManaCost(extraItemContext.castedSpellLevel);
+      let manaSpendHtml = `<form><button class="spend-mana">Spend Mana (${manaCost}/${actorContext.data.features.mana.max})</button></form>`;
+      evaluatedTemplate += manaSpendHtml;
+    }
 
     // Initialize chat data.
     const speaker = ChatMessage.getSpeaker({ actor: this.actor });

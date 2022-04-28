@@ -80,3 +80,16 @@ Hooks.once('ready', async () => {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on('hotbarDrop', (bar, data, slot) => createItemMacro(data, slot));
 });
+
+// Monitoring button pushes in chat messages
+Hooks.on('renderChatLog', () => {
+  $('#chat-log').on('click', /*'.spend-mana button'*/ '', (event) => {
+    event.preventDefault();
+
+    const button = event.target;
+    const rollerKey = button.dataset.roller;
+    const form = button.parentElement;
+
+    console.log('button-click');
+  });
+});

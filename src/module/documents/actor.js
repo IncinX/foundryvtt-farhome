@@ -1,6 +1,6 @@
 import { clamp } from '../helpers/math';
 import { proficiencyRollFormula } from '../helpers/roll';
-import { getSpellPowerToManaTable } from '../helpers/mana-table';
+import { getSpellPowerToMaxManaTable } from '../helpers/mana';
 
 /**
  * Extend the base Actor document by defining a custom roll data structure which is ideal for the Simple system.
@@ -65,7 +65,7 @@ export class FarhomeActor extends Actor {
     const data = actorData.data;
 
     // Calculate the max mana based on the spell power
-    let spellPowerToManaTable = getSpellPowerToManaTable();
+    let spellPowerToManaTable = getSpellPowerToMaxManaTable();
     data.features.mana.max = spellPowerToManaTable[data.features.spellPower.value];
 
     // Loop through attribute scores, and add their roll string as derived data.
