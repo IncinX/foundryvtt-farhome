@@ -10,5 +10,10 @@ export function sendStandardMessage(speaker, content) {
   };
 
   ChatMessage.applyRollMode(chatData, rollMode);
-  ChatMessage.create(chatData);
+  return ChatMessage.create(chatData);
+}
+
+export function sendActorMessage(actor, content) {
+  const speaker = ChatMessage.getSpeaker({ actor: actor });
+  return sendStandardMessage(speaker, content);
 }

@@ -1,4 +1,5 @@
 import { proficiencyRollFormula } from './roll';
+import { sendActorMessage } from './chat';
 
 /**
  * Override the default Initiative formula to customize special behaviors of the system.
@@ -18,17 +19,8 @@ export const _getInitiativeFormula = function () {
   const rolls = game.specialDiceRoller.fh.roll(parsedFormula);
   const rollValues = game.specialDiceRoller.fh.combineRolls(rolls);
   const formattedRoll = game.specialDiceRoller.fh.formatRolls(rolls, null);
-  let results_html = `<h1>Initiative</h1>${formattedRoll}`;
 
-  const rollMode = game.settings.get('core', 'rollMode');
-
-  let chatData = {
-    user: game.user._id,
-    speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-    content: results_html,
-  };
-  ChatMessage.applyRollMode(chatData, rollMode);
-  var chatMessage = ChatMessage.create(chatData);
+  sendActorMessage(this.actor, `<h1>Initiative</h1>${formattedRoll}`);
 
   let initiativeValue = rollValues.successes + data.attributes.dex.value / 10.0;
 

@@ -1,9 +1,4 @@
-// TODO Create auto helper methods to go into template and add a derived label field that auto-resolves localization to farhome.<field_name>
-//      Basically if something is of type 'object' then it will add a label field and attempt to localize it with defaulting to the original name on fallback and logging a warning to console.
-// TODO Use Handlebars If logic to customize the actor sheet based on the actor type.  Only create a seperate sheet if it's absolutely necessary.
-// TODO A lot of the functionality on this sheet was built from the BOILERPLATE from the https://gitlab.com/asacolips-projects/foundry-mods/boilerplate/-/blob/master/module/sheets/actor-sheet.mjs project and likely needs to be modified for FARHOME.
-// TODO Add mana deduction
-
+import { sendActorMessage } from '../helpers/chat.js';
 import { onManageActiveEffect, prepareActiveEffectCategories } from '../helpers/effects.js';
 import { localizeObject } from '../helpers/localization.js';
 import { _getDefaultRollTemplate } from '../helpers/roll-templates.js';
@@ -18,7 +13,7 @@ export default class FarhomeActorSheet extends ActorSheet {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ['farhome', 'sheet', 'actor'],
-      width: 900,
+      width: 850,
       height: 800,
       tabs: [{ navSelector: '.sheet-tabs', contentSelector: '.sheet-body', initial: 'attributes' }],
     });
@@ -131,10 +126,6 @@ export default class FarhomeActorSheet extends ActorSheet {
       8: [],
       9: [],
     };
-
-    // TODO Consider removing weapon and armor as separate types and just embed the fields as part of the item.
-    // TODO The user can then customize the ability.  I could add an isWeapon or isArmor field later if necessary.
-    // TODO Add the ability to do inline rolls.
 
     // Iterate through items, allocating to containers
     for (let i of context.items) {
@@ -371,24 +362,11 @@ export default class FarhomeActorSheet extends ActorSheet {
     }
 
     // Handle rolls that supply the formula directly.
-    // TODO Consider moving all this chat message roll code into a helper function
     if (dataset.roll) {
       let label = dataset.label ?? '';
-      console.log(game.specialDiceRoller);
       let roll = game.specialDiceRoller.fh.rollFormula(dataset.roll);
-      let results_html = `<h1>${label}</h1>${roll}`;
 
-      // Roll mode controls what chat it goes to
-      const rollMode = game.settings.get('core', 'rollMode');
-
-      let chatData = {
-        user: game.user._id,
-        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-        //speaker: ChatMessage.getSpeaker({token: actor}),
-        content: results_html,
-      };
-      ChatMessage.applyRollMode(chatData, rollMode);
-      return ChatMessage.create(chatData);
+      return sendActorMessage(this.actor, `<h1>${label}</h1>${roll}`);
     }
   }
 }

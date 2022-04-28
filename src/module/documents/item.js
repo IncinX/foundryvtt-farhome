@@ -1,6 +1,6 @@
 import { evaluateTemplate } from '../helpers/template-evaluator';
 import { convertSpellLevelToManaCost } from '../helpers/mana';
-import { sendStandardMessage } from '../helpers/chat';
+import { sendActorMessage } from '../helpers/chat';
 
 const MAX_SPELL_LEVEL = 10;
 
@@ -124,9 +124,7 @@ export class FarhomeItem extends Item {
     }
 
     // Send the evaluatedTemplate to chat.
-    const speaker = ChatMessage.getSpeaker({ actor: this.actor });
-
-    sendStandardMessage(speaker, evaluatedTemplate);
+    sendActorMessage(this.actor, evaluatedTemplate);
   }
 
   /**
@@ -158,7 +156,6 @@ export class FarhomeItem extends Item {
     event.currentTarget.disabled = true;
 
     // Send the confirmation message to the chat
-    const speaker = ChatMessage.getSpeaker({ actor: actor });
-    sendStandardMessage(speaker, `<b>${actor.name}</b> spends ${manaCost} mana.`);
+    sendActorMessage(actor, `<b>${actor.name}</b> spent ${manaCost} mana.`);
   }
 }
