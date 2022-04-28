@@ -312,9 +312,10 @@ export default class FarhomeActorSheet extends ActorSheet {
    * @private
    */
   async _onItemEquippedChanged(event) {
+    // TODO Code duplication between all this and attuned/prepared can probably be reduced by binding a string parameter for the data path.
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
-    item.data.data.equipped.value = event.target.checked;
+    await item.update({ 'data.equipped.value': event.target.checked });
   }
 
   /**
@@ -325,7 +326,7 @@ export default class FarhomeActorSheet extends ActorSheet {
   async _onItemAttunedChanged(event) {
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
-    item.data.data.attuned.value = event.target.checked;
+    await item.update({ 'data.attuned.value': event.target.checked });
   }
 
   /**
@@ -336,7 +337,7 @@ export default class FarhomeActorSheet extends ActorSheet {
   async _onItemPreparedChanged(event) {
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
-    item.data.data.prepared.value = event.target.checked;
+    await item.update({ 'data.prepared.value': event.target.checked });
   }
 
   /**
@@ -347,7 +348,7 @@ export default class FarhomeActorSheet extends ActorSheet {
   async _onItemQuantityChanged(event) {
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
-    item.data.data.quantity.value = parseInt(event.target.value);
+    await item.update({ 'data.quantity.value': parseInt(event.target.value) });
   }
 
   /**
