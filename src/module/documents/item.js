@@ -150,7 +150,7 @@ export class FarhomeItem extends Item {
     let actor = game.actors.get(actorId);
 
     // Dedudct the mana off of the character's sheet
-    actor.update({'data.features.mana.value': actor.data.data.features.mana.value - manaCost});
+    actor.update({ 'data.features.mana.value': actor.data.data.features.mana.value - manaCost });
 
     // Disable the button
     event.currentTarget.disabled = true;
