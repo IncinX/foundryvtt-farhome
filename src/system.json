@@ -4,13 +4,6 @@
   "description": "The Farhome game system implemented for FoundryVTT.",
   "version": "This is auto replaced",
   "author": "Thomas Perry",
-  "authors": [
-    {
-      "name": "<your name>",
-      "email": "<optionally your e-mail address>",
-      "discord": "<optionally your discord username>"
-    }
-  ],
   "minimumCoreVersion": "9",
   "compatibleCoreVersion": "9.269",
   "scripts": [],
