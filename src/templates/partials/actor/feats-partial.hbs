@@ -1,0 +1,23 @@
+<div class="tab feats-tab" data-group="primary" data-tab="feats">
+  <ol class="items-list">
+    <li class="item flexrow item-header">
+      <div class="item-image"></div>
+      <div class="item-name">{{localize 'farhome.name'}}</div>
+      <div class="item-controls">
+        <a class="item-control item-create" title="{{localize 'farhome.createFeat'}}" data-type="feat"><i class="fas fa-plus"></i> {{localize 'farhome.createFeat'}}</a>
+      </div>
+    </li>
+    {{#each feats as |feat id|}}
+    <li class="item flexrow" data-item-id="{{feat._id}}">
+      <div class="item-image"><img src="{{feat.img}}" title="{{feat.name}}" width="24" height="24"></div>
+      <h4 class="item-name">
+        <a class="item-name-link">{{feat.name}}</a>
+      </h4>
+      <div class="item-controls">
+        <a class="item-control item-edit" title="{{localize 'farhome.editFeat'}}"><i class="fas fa-edit"></i></a>
+        <a class="item-control item-delete" title="{{localize 'farhome.deleteFeat'}}"><i class="fas fa-trash"></i></a>
+      </div>
+    </li>
+    {{/each}}
+  </ol>
+</div>

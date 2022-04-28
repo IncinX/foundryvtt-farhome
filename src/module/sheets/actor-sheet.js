@@ -18,11 +18,15 @@ export default class FarhomeActorSheet extends ActorSheet {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ['farhome', 'sheet', 'actor'],
-      template: 'systems/farhome/templates/sheets/actor-sheet.hbs',
-      width: 800,
+      width: 900,
       height: 800,
       tabs: [{ navSelector: '.sheet-tabs', contentSelector: '.sheet-body', initial: 'attributes' }],
     });
+  }
+
+  /** @override */
+  get template() {
+    return `systems/farhome/templates/sheets/actor/${this.actor.data.type}-sheet.hbs`;
   }
 
   /** @override */
@@ -109,6 +113,7 @@ export default class FarhomeActorSheet extends ActorSheet {
    */
   _prepareItems(context) {
     // Initialize containers.
+    const money = [];
     const inventory = [];
     const weapons = [];
     const armors = [];
@@ -134,8 +139,12 @@ export default class FarhomeActorSheet extends ActorSheet {
     // Iterate through items, allocating to containers
     for (let i of context.items) {
       i.img = i.img || DEFAULT_TOKEN;
+      // Append to money
+      if (i.type === 'money') {
+        money.push(i);
+      }
       // Append to inventory.
-      if (i.type === 'item') {
+      else if (i.type === 'item') {
         inventory.push(i);
       }
       // Append to weapons.
@@ -162,10 +171,8 @@ export default class FarhomeActorSheet extends ActorSheet {
       }
     }
 
-    // TODO Create roll formula's for items
-    // TODO Adjust existing roll formula's based on feats and such
-
     // Assign and return
+    context.money = money;
     context.inventory = inventory;
     context.weapons = weapons;
     context.armors = armors;
@@ -192,6 +199,17 @@ export default class FarhomeActorSheet extends ActorSheet {
 
     // Delete Inventory Item
     html.find('.item-delete').click(this._onItemDelete.bind(this));
+
+    // Rollable Inventory Item
+    html.find('.item-name-link').click(this._onItemRoll.bind(this));
+
+    // Equipped/Attuned/Prepared Item Checkboxes
+    html.find('.item-equipped-input').change(this._onItemEquippedChanged.bind(this));
+    html.find('.item-attuned-input').change(this._onItemAttunedChanged.bind(this));
+    html.find('.item-prepared-input').change(this._onItemPreparedChanged.bind(this));
+
+    // Item quantities
+    html.find('.item-quantity-input').change(this._onItemQuantityChanged.bind(this));
 
     // Active Effect management
     // TODO Add support for effects
@@ -236,7 +254,6 @@ export default class FarhomeActorSheet extends ActorSheet {
       data: {},
     };
 
-    // TODO This is no longer working.  Find out why and fix it.
     if (type === 'spell') {
       itemData.data.spellLevel = {
         value: parseInt(data.spellLevel),
@@ -279,6 +296,62 @@ export default class FarhomeActorSheet extends ActorSheet {
   }
 
   /**
+   * Handle rolling an Owned Item
+   * @param {Event} event   The originating click event
+   * @private
+   */
+  async _onItemRoll(event) {
+    const li = $(event.currentTarget).parents('.item');
+    const item = this.actor.items.get(li.data('itemId'));
+    item.roll();
+  }
+
+  /**
+   * Handle equipped change of an Owned Item
+   * @param {Event} event   The originating click event
+   * @private
+   */
+  async _onItemEquippedChanged(event) {
+    // TODO Code duplication between all this and attuned/prepared can probably be reduced by binding a string parameter for the data path.
+    const li = $(event.currentTarget).parents('.item');
+    const item = this.actor.items.get(li.data('itemId'));
+    await item.update({ 'data.equipped.value': event.target.checked });
+  }
+
+  /**
+   * Handle attuned change of an Owned Item
+   * @param {Event} event   The originating click event
+   * @private
+   */
+  async _onItemAttunedChanged(event) {
+    const li = $(event.currentTarget).parents('.item');
+    const item = this.actor.items.get(li.data('itemId'));
+    await item.update({ 'data.attuned.value': event.target.checked });
+  }
+
+  /**
+   * Handle prepared change of an Owned Item
+   * @param {Event} event   The originating click event
+   * @private
+   */
+  async _onItemPreparedChanged(event) {
+    const li = $(event.currentTarget).parents('.item');
+    const item = this.actor.items.get(li.data('itemId'));
+    await item.update({ 'data.prepared.value': event.target.checked });
+  }
+
+  /**
+   * Handle quantity changes of an Owned Item
+   * @param {Event} event   The originating click event
+   * @private
+   */
+  async _onItemQuantityChanged(event) {
+    const li = $(event.currentTarget).parents('.item');
+    const item = this.actor.items.get(li.data('itemId'));
+    await item.update({ 'data.quantity.value': parseInt(event.target.value) });
+  }
+
+  /**
    * Handle clickable rolls.
    * @param {Event} event   The originating click event
    * @private
@@ -298,31 +371,24 @@ export default class FarhomeActorSheet extends ActorSheet {
     }
 
     // Handle rolls that supply the formula directly.
+    // TODO Consider moving all this chat message roll code into a helper function
     if (dataset.roll) {
       let label = dataset.label ?? '';
       console.log(game.specialDiceRoller);
       let roll = game.specialDiceRoller.fh.rollFormula(dataset.roll);
-      // TODO Add support for doing appends and resolving more advanced roll formula's
-      //let roll = new Roll(dataset.roll, this.actor.getRollData());
-
-      // TODO Add support for embedding formula's like [[@dex.roll]]ss to append two superior dice to the rolls. NO clue how to do this yet.
-      // TODO Add ability to incorporate poison and hex into the calculations.
-      //      Experiment with some systems that have custom dice.
-      //      Another approach is to use something like this: https://foundryvtt.com/packages/itemacro
-      //      Also see dnd5e create5eMacro
-      //      I could also have a really robust attribute system and roll function that uses the attributes properly to form a roll chat message.
-      // TODO Can I add custom buttons to chat messages?  That would be cool to build more sophisticated macros.
-      // TODO Also see this: https://gitlab.com/asacolips-projects/foundry-mods/boilerplate/-/blob/master/module/documents/item.mjs (See how they do item rolls!!)
-
       let results_html = `<h1>${label}</h1>${roll}`;
 
-      ChatMessage.create({
+      // Roll mode controls what chat it goes to
+      const rollMode = game.settings.get('core', 'rollMode');
+
+      let chatData = {
         user: game.user._id,
         speaker: ChatMessage.getSpeaker({ actor: this.actor }),
         //speaker: ChatMessage.getSpeaker({token: actor}),
         content: results_html,
-      });
-      return roll;
+      };
+      ChatMessage.applyRollMode(chatData, rollMode);
+      return ChatMessage.create(chatData);
     }
   }
 }

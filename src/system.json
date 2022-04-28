@@ -4,15 +4,8 @@
   "description": "The Farhome game system implemented for FoundryVTT.",
   "version": "This is auto replaced",
   "author": "Thomas Perry",
-  "authors": [
-    {
-      "name": "<your name>",
-      "email": "<optionally your e-mail address>",
-      "discord": "<optionally your discord username>"
-    }
-  ],
   "minimumCoreVersion": "9",
-  "compatibleCoreVersion": "9",
+  "compatibleCoreVersion": "9.269",
   "scripts": [],
   "esmodules": ["module/farhome.js"],
   "styles": ["styles/farhome.css"],
@@ -20,7 +13,7 @@
   "dependencies": [
     {
       "name": "special-dice-roller",
-      "manifest": "https://raw.githubusercontent.com/IncinX/foundryvtt-special-dice-roller/master/module.json"
+      "manifest": "https://github.com/IncinX/foundryvtt-special-dice-roller/releases/latest/download/module.json"
     }
   ],
   "languages": [
@@ -36,8 +29,8 @@
   "download": "This is auto replaced",
   "license": "LICENSE",
   "readme": "README.md",
-  "bugs": "",
-  "changelog": "",
+  "bugs": "https://github.com/IncinX/foundryvtt-farhome/issues",
+  "changelog": "https://github.com/IncinX/foundryvtt-farhome/releases",
   "initiative": "",
   "gridDistance": 5,
   "gridUnits": "ft",

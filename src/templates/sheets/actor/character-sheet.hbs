@@ -1,0 +1,83 @@
+<form class="{{cssClass}}" autocomplete="off">
+  {{!-- Uncomment to debug data context --}}
+  {{!--{{log data}}--}}
+
+  {{!-- Character Sheet Header --}}
+  <div class "top-bar flexcol">
+    <header class="sheet-header flexrow">
+      <img class="profile-img" src="{{actor.img}}" title="{{actor.name}}" data-edit="img" />
+      <div class="header-fields flexrow">
+        <div class="name-info flexcol flex-between flex3">
+          <input class="name-input header-input align-stretch" name="name" type="text" value="{{actor.name}}"
+            placeholder="{{localize 'farhome.characterName'}}" />
+          <label class="under-label" for="name">{{localize 'farhome.characterName'}}</label>
+          <div class="race-background-info flexrow flex-between flex2">
+            <div class="race-info flexcol">
+              <input class="header-input" name="data.race.value" type="text" value="{{data.race.value}}"
+                placeholder="{{data.race.label}}" />
+              <label class="under-label" for="data.race.value">{{localize 'farhome.race'}}</label>
+            </div>
+            <div class="background-info flexcol">
+              <input class="header-input" name="data.background.value" type="text" value="{{data.background.value}}"
+                placeholder="{{data.background.label}}" />
+              <label class="under-label" for="data.background.value">{{localize 'farhome.background'}}</label>
+            </div>
+          </div>
+        </div>
+        <div class="character-info flexcol flex1">
+          <input class="header-input" name="data.level.value" type="text" value="{{data.level.value}}"
+            data-dtype="Number" placeholder="{{data.level.label}}" />
+          <label class="under-label" for="data.level.value">{{localize 'farhome.level'}}</label>
+          <input class="header-input" name="data.xp.value" type="text" value="{{data.xp.value}}" data-dtype="Number"
+            placeholder="{{data.xp.label}}" />
+          <label class="under-label" for="data.xp.value">{{localize 'farhome.xp'}}</label>
+        </div>
+      </div>
+    </header>
+
+    {{!-- Resource Bar --}}
+    {{> "systems/farhome/templates/partials/actor/resource-bar-partial.hbs"}}
+  </div>
+
+  {{!-- Sheet Tab Navigation --}}
+  <nav class="sheet-tabs tabs" data-group="primary">
+    <a class="item" data-tab="attributes">{{localize 'farhome.attributes'}}</a>
+    <a class="item" data-tab="feats">{{localize 'farhome.feats'}}</a>
+    <a class="item" data-tab="maneuvers">{{localize 'farhome.maneuvers'}}</a>
+    <a class="item" data-tab="spells">{{localize 'farhome.spells'}}</a>
+    <a class="item" data-tab="inventory">{{localize 'farhome.inventory'}}</a>
+    <a class="item" data-tab="biography">{{localize 'farhome.biography'}}</a>
+    <a class="item" data-tab="notes">{{localize 'farhome.notes'}}</a>
+  </nav>
+
+  {{!-- Sheet Body --}}
+  <section class="sheet-body">
+    {{!-- TODO Localize the Create/Edit/Delete Feat/Maneuver/Spell/Weapon/Armor/Item text below in the "titles" area and when provided via Javascript. --}}
+
+    {{!-- Attributes Tab --}}
+    {{>"systems/farhome/templates/partials/actor/attributes-partial.hbs"}}
+
+    {{!-- Feats Tab --}}
+    {{>"systems/farhome/templates/partials/actor/feats-partial.hbs"}}
+
+    {{!-- Maneuvers Tab --}}
+    {{>"systems/farhome/templates/partials/actor/maneuvers-partial.hbs"}}
+
+    {{!-- Spells Tab --}}
+    {{>"systems/farhome/templates/partials/actor/spells-partial.hbs"}}
+
+    {{!-- Inventory Tab --}}
+    {{>"systems/farhome/templates/partials/actor/inventory-partial.hbs"}}
+
+    {{!-- Biography Tab --}}
+    <div class="tab biography-tab" data-group="primary" data-tab="biography">
+      {{editor content=data.biography.value target="data.biography.value" button=true owner=owner editable=editable}}
+    </div>
+
+    {{!-- Notes Tab --}}
+    <div class="tab notes-tab" data-group="primary" data-tab="notes">
+      {{editor content=data.notes.value target="data.notes.value" button=true owner=owner editable=editable}}
+    </div>
+  </section>
+
+</form>

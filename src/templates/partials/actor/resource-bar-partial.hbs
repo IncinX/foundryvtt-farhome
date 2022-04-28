@@ -1,0 +1,48 @@
+<div class="resource-fields grid grid-7col">
+  {{>
+  "systems/farhome/templates/partials/max-resource-partial.hbs"
+  data.features.hero
+  objectString="data.features.hero"
+  separatorString=" / "}}
+  <div class="resource-box flex-group-center">
+    <div class="resource-content flexrow flex-center flex-between">
+      <input type="text" name="data.features.wounds.value" value="{{data.features.wounds.value}}" data-dtype="Number"/>
+      <span>/</span>
+      <input type="text" name="data.features.wounds.max" value="{{data.features.wounds.max}}" data-dtype="Number"/>
+      <span>+</span>
+      <input type="text" name="data.features.tempWounds.value" value="{{data.features.tempWounds.value}}" data-dtype="Number"/>
+    </div>
+    <label for="data.features.wounds.value" class="resource-label">{{data.features.wounds.label}}</label>
+  </div>
+  {{>
+  "systems/farhome/templates/partials/max-resource-partial.hbs"
+  data.features.healingSurges
+  objectString="data.features.healingSurges"
+  separatorString=" / "}}
+  {{>
+  "systems/farhome/templates/partials/max-resource-partial.hbs"
+  data.features.ap
+  objectString="data.features.ap"
+  separatorString=" / "}}
+  {{>
+  "systems/farhome/templates/partials/resource-partial.hbs"
+  data.features.spellPower
+  objectString="data.features.spellPower"}}
+  <div class="resource-box flex-group-center">
+    <div class="resource-content flexrow flex-center flex-between">
+      <input type="text" name="data.features.mana.value" value="{{data.features.mana.value}}" data-dtype="Number"/>
+      <span> / </span>
+      <input type="text" name="data.features.mana.max" value="{{data.features.mana.max}}" data-dtype="Number" disabled/>
+    </div>
+    <label for="data.features.mana.value" class="resource-label">{{data.features.mana.label}}</label>
+  </div>
+  <div class="resource-box flex-group-center">
+    <div class="resource-content flexrow flex-center flex-between">
+      <input type="text" name="data.features.move.value" value="{{data.features.move.value}}" data-dtype="Number"
+        placeholder="{{localize 'farhome.move'}}" />
+      <input type="text" name="data.features.sprint.value" value="{{data.features.sprint.value}}"
+        data-dtype="Number" placeholder="{{localize 'farhome.sprint'}}" />
+    </div>
+    <label for="data.features.move.value" class="resource-label">{{data.features.move.label}}</label>
+  </div>
+</div>

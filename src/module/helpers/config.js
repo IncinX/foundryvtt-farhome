@@ -2,10 +2,10 @@ export const FARHOME = {};
 
 FARHOME.spellSchools = {
   arcane: 'farhome.arcane',
-  blood: 'farhome.blood',
-  curse: 'farhome.curse',
   divine: 'farhome.divine',
   druidic: 'farhome.druidic',
+  elder: 'farhome.elder',
+  occult: 'farhome.occult',
 };
 
 FARHOME.weaponTypes = {

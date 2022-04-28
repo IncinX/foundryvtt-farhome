@@ -1,0 +1,37 @@
+<form class="{{cssClass}}" autocomplete="off">
+  {{!-- Uncomment to debug data context --}}
+  {{!--{{log data}}--}}
+
+  {{!-- Stash Sheet Header --}}
+  <div class "top-bar flexcol">
+    <header class="sheet-header flexrow">
+      <img class="profile-img" src="{{actor.img}}" title="{{actor.name}}" data-edit="img" />
+      <div class="header-fields flexcol">
+        <input class="name-input header-input align-stretch" name="name" type="text" value="{{actor.name}}"
+          placeholder="{{localize 'farhome.stashName'}}" />
+        <label class="under-label" for="name">{{localize 'farhome.stashName'}}</label>
+      </div>
+    </header>
+  </div>
+
+  {{!-- Sheet Tab Navigation --}}
+  <nav class="sheet-tabs tabs" data-group="primary">
+    <a class="item" data-tab="spells">{{localize 'farhome.spells'}}</a>
+    <a class="item" data-tab="inventory">{{localize 'farhome.inventory'}}</a>
+    <a class="item" data-tab="notes">{{localize 'farhome.notes'}}</a>
+  </nav>
+
+  {{!-- Sheet Body --}}
+  <section class="sheet-body">
+    {{!-- Spells Tab --}}
+    {{>"systems/farhome/templates/partials/actor/spells-partial.hbs"}}
+
+    {{!-- Inventory Tab --}}
+    {{>"systems/farhome/templates/partials/actor/inventory-partial.hbs"}}
+
+    {{!-- Notes Tab --}}
+    <div class="tab notes-tab" data-group="primary" data-tab="notes">
+      {{editor content=data.notes.value target="data.notes.value" button=true owner=owner editable=editable}}
+    </div>
+  </section>
+</form>

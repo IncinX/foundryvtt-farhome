@@ -5,7 +5,7 @@
  *
  * @return {undefined}
  */
-// TODO Extend this object localization to the Item class too!
+
 export function localizeObject(objectKeyName, objectValue) {
   let hasLabel = false;
 
