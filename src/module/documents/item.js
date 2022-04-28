@@ -91,8 +91,6 @@ export class FarhomeItem extends Item {
     });
 
     d.render(true);
-
-    // TODO Calculate the difference in spell level when provided to the executeRoll function (send in the castedSpellLevel too)
   }
 
   /**
