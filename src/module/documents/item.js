@@ -57,22 +57,28 @@ export class FarhomeItem extends Item {
    */
   async _spellLevelDialog() {
     const itemContext = this.data;
+    const actorContext = this.actor ? this.actor.data : null;
+    const currentMana = actorContext ? actorContext.data.features.mana.value : 0;
 
     let selectorUniqueId = `spell-level-selector-${Math.random().toString(16).substring(2)}`;
 
-    let dialogContent = `<b>Select the level with which to cast the ${itemContext.name} spell.</b><br>`;
-    dialogContent += `<select id="${selectorUniqueId}">`;
+    let dialogContent = `<p>${itemContext.data.description.value}</p>`;
+
+    dialogContent += `<p><b>Select the level with which to cast the spell</b></p>`;
+
+    dialogContent += `<p><select id="${selectorUniqueId}" style="width: 100%">`;
     for (let level = itemContext.data.spellLevel.value; level <= MAX_SPELL_LEVEL; level++) {
       if (level === 0) {
-        dialogContent += '<option value="' + level + '">Cantrip</option>';
+        dialogContent += `<option value="${level}">Cantrip</option>`;
       } else {
-        dialogContent += '<option value="' + level + '">Level ' + level + '</option>';
+        const manaCost = convertSpellLevelToManaCost(level);
+        dialogContent += `<option value="${level}">Level ${level} (Mana Cost = ${manaCost}/${currentMana})</option>`;
       }
     }
-    dialogContent += '</select>';
+    dialogContent += '</select></p>';
 
     let d = new Dialog({
-      title: 'Select Spell Level',
+      title: ` ${itemContext.name}: Select Spell Level`,
       content: dialogContent,
       buttons: {
         cast: {
@@ -118,7 +124,7 @@ export class FarhomeItem extends Item {
       let manaCost = convertSpellLevelToManaCost(extraItemContext.castedSpellLevel);
       let manaSpendHtml = `
         <form>
-          <button class="spend-mana" data-mana="${manaCost}" data-actor-id="${actorContext._id}">Spend Mana (${manaCost}/${actorContext.data.features.mana.max})</button>
+          <button class="spend-mana" data-mana="${manaCost}" data-actor-id="${actorContext._id}">Spend Mana (${manaCost}/${actorContext.data.features.mana.value})</button>
         </form>`;
       evaluatedTemplate += manaSpendHtml;
     }
