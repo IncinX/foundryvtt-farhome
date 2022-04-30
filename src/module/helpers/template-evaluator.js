@@ -95,26 +95,31 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
       }
     : {};
 
+  // TODO A helper function could make a lot of this simpler
   let evaluatorItemContext = {
     name: itemContext.name,
     description: itemContext.data.description.value,
-    rarity: itemContext.data.rarity ? itemContext.data.rarity.value : '',
+    rarity: itemContext.data.rarity ? game.i18n.localize(`farhome.${itemContext.data.rarity.value}`) : '',
     apCost: itemContext.data.apCost ? itemContext.data.apCost.value : '',
     range: itemContext.data.range ? itemContext.data.range.value : '',
-    damageType: itemContext.data.damageType ? itemContext.data.damageType.value : '',
+    damageType: itemContext.data.damageType ? game.i18n.localize(`farhome.${itemContext.data.damageType.value}`) : '',
     quantity: itemContext.data.quantity ? itemContext.data.quantity.value : '',
     weight: itemContext.data.weight ? itemContext.data.weight : '',
-    weaponType: itemContext.data.weaponType ? itemContext.data.weaponType.value : '',
+    weaponType: itemContext.data.weaponType ? game.i18n.localize(`farhome.${itemContext.data.weaponType.value}`) : '',
     armorBonus: itemContext.data.armorBonus ? itemContext.data.armorBonus.value : '',
     armorPenalty: itemContext.data.armorPenalty ? itemContext.data.armorPenalty.value : '',
-    armorType: itemContext.data.armorType ? itemContext.data.armorType.value : '',
+    armorType: itemContext.data.armorType ? game.i18n.localize(`farhome.${itemContext.data.armorType.value}`) : '',
     levelRequirements: itemContext.data.levelRequirements ? itemContext.data.levelRequirements.value : '',
     apCosts: itemContext.data.apCosts ? itemContext.data.apCosts.value : '',
     spellLevel: itemContext.data.spellLevel ? itemContext.data.spellLevel.value : '',
-    spellSchool: itemContext.data.spellSchool ? itemContext.data.spellSchool.value : '',
+    spellSchool: itemContext.data.spellSchool
+      ? game.i18n.localize(`farhome.${itemContext.data.spellSchool.value}`)
+      : '',
     spellDuration: itemContext.data.duration ? itemContext.data.duration.value : '',
     castingTime: itemContext.data.castingTime ? itemContext.data.castingTime.value : '',
-    areaOfEffect: itemContext.data.areaOfEffect ? itemContext.data.areaOfEffect.value : '',
+    areaOfEffect: itemContext.data.areaOfEffect
+      ? game.i18n.localize(`farhome.${itemContext.data.areaOfEffect.value}`)
+      : '',
 
     // These items are derived or queried from the user
     castedSpellLevel: itemContext.castedSpellLevel ?? '',

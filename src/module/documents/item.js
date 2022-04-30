@@ -150,16 +150,26 @@ export class FarhomeItem extends Item {
   static async _handleManaSpend(event) {
     event.preventDefault();
 
+    // Disable the button
+    event.currentTarget.disabled = true;
+
     // Get the data from the button
     let manaCost = parseInt(event.currentTarget.dataset.mana);
     let actorId = event.currentTarget.dataset.actorId;
+
+    // Check for ownership
     let actor = game.actors.get(actorId);
+    if (!actor.isOwner) {
+      sendActorMessage(
+        actor,
+        'You do not own this actor, so stop trying to spend their mana. ' +
+          'They are <i>probably</i> competant enough to do that themselves.',
+      );
+      return;
+    }
 
     // Dedudct the mana off of the character's sheet
     actor.update({ 'data.features.mana.value': actor.data.data.features.mana.value - manaCost });
-
-    // Disable the button
-    event.currentTarget.disabled = true;
 
     // Send the confirmation message to the chat
     sendActorMessage(actor, `<b>${actor.name}</b> spent ${manaCost} mana.`);
