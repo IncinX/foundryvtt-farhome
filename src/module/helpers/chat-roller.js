@@ -37,29 +37,31 @@ export class ChatRoller {
 
     console.log('Re-roll requested');
 
-    // TODO base this functionality off of what is available in the special-dice-roller
+    // TODO Construct a new message based on the existing message (but with the rolls replaced).
 
-    // TODO construct the new message with the old images greyed out (likely through a CSS class) and no images should be allowed for another re-roll.
+    // TODO Base this functionality off of what is available in the special-dice-roller
 
-    /*
-    const button = event.target as HTMLButtonElement;
-    const rollerKey = button.dataset.roller;
-    const form = button.parentElement as HTMLFormElement;
-    const rolls = Array.from(form.querySelectorAll('input'));
+    // TODO Construct the new message with the old images greyed out (likely through a CSS class) and no images should be allowed for another re-roll.
+    //      Disabling the input to prevent more re-roll selection can be done by adding a disabled attribute on the input control.
+
+    const button = event.target;
+    const message = button.parentElement.parentElement;
+    const rolls = Array.from(message.querySelectorAll('input'));
     const selectedRolls = rolls.filter((roll) => roll.checked);
 
-    for (const roller of rollers) {
-      if (selectedRolls.length > 0 && roller.command === rollerKey) {
-        const parsedRolls = rolls
-          .map((rollInput) => {
-            const roll = parseRoll(rollInput);
-            return new ReRoll(roll, rollInput.checked);
-          });
+    console.log('Selected rolls:', selectedRolls);
 
-        const result = roller.formatReRolls(parsedRolls);
-        renderNewRoll(result);
-        selectedRolls.forEach((elem) => elem.checked = false);
-      }
+    /*
+    for (const roller of rollers) {
+      const parsedRolls = rolls
+        .map((rollInput) => {
+          const roll = parseRoll(rollInput);
+          return new ReRoll(roll, rollInput.checked);
+        });
+
+      const result = roller.formatReRolls(parsedRolls);
+      renderNewRoll(result);
+      selectedRolls.forEach((elem) => elem.checked = false);
     }
     */
   }
