@@ -120,6 +120,11 @@ export class FarhomeItem extends Item {
     // Evaluate the template text with the given actor and item context.
     let evaluatedTemplate = evaluateTemplate(itemContext.data.rollTemplate.value, actorContext, superItemContext);
 
+    // Hide the default reroll buttons.
+    // TODO This currently won't work because it is not an HTML document
+    //ChatRoller._hideDefaultRerollButton(evaluatedTemplate);
+
+    // Add the custom reroll button.
     evaluatedTemplate += ChatRoller._getButtonHtml();
 
     // TODO Need to disable the re-roll button from the default engine. Do that later.
@@ -139,7 +144,7 @@ export class FarhomeItem extends Item {
     }
 
     // Send the evaluatedTemplate to chat.
-    sendActorMessage(this.actor, evaluatedTemplate);
+    sendActorMessage(evaluatedTemplate);
   }
 
   /**
@@ -169,9 +174,7 @@ export class FarhomeItem extends Item {
     // Check for ownership
     let actor = game.actors.get(actorId);
     if (!actor.isOwner) {
-      // TODO This needs to change the actor to the person that clicked it.
       sendActorMessage(
-        actor,
         'You do not own this actor, so stop trying to spend their mana. ' +
           'They are <i>probably</i> competant enough to do that themselves.',
       );
@@ -182,6 +185,6 @@ export class FarhomeItem extends Item {
     actor.update({ 'data.features.mana.value': actor.data.data.features.mana.value - manaCost });
 
     // Send the confirmation message to the chat
-    sendActorMessage(actor, `<b>${actor.name}</b> spent ${manaCost} mana.`);
+    sendActorMessage(`<b>${actor.name}</b> spent ${manaCost} mana.`);
   }
 }

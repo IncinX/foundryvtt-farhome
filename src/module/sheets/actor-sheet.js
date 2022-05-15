@@ -412,7 +412,7 @@ export default class FarhomeActorSheet extends ActorSheet {
       let label = dataset.label ?? '';
       let roll = game.specialDiceRoller.fh.rollFormula(dataset.roll);
 
-      return sendActorMessage(this.actor, `<h1>${label}</h1>${roll}`);
+      return sendActorMessage(`<h1>${label}</h1>${roll}`);
     }
   }
 }

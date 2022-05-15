@@ -1,3 +1,5 @@
+import { sendActorMessage } from './chat';
+
 export class ChatRoller {
   static chatRerollClass = 'farhome-reroll';
 
@@ -13,6 +15,11 @@ export class ChatRoller {
           ${game.i18n.localize('farhome.reroll')}
         </button>
       </form>`;
+  }
+
+  static _hideDefaultRerollButton() {
+    const button = document.querySelectorAll('.special-dice-roller-reroll');
+    button.style.display = 'none';
   }
 
   /**
@@ -50,6 +57,8 @@ export class ChatRoller {
     const selectedRolls = rolls.filter((roll) => roll.checked);
 
     console.log('Selected rolls:', selectedRolls);
+
+    sendActorMessage(message.innerHTML);
 
     /*
     for (const roller of rollers) {

@@ -20,7 +20,7 @@ export const _getInitiativeFormula = function () {
   const rollValues = game.specialDiceRoller.fh.combineRolls(rolls);
   const formattedRoll = game.specialDiceRoller.fh.formatRolls(rolls, null);
 
-  sendActorMessage(this.actor, `<h1>Initiative</h1>${formattedRoll}`);
+  sendActorMessage(`<h1>Initiative</h1>${formattedRoll}`);
 
   let initiativeValue = rollValues.successes + data.attributes.dex.value / 10.0;
 
