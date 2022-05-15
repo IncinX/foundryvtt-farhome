@@ -9,8 +9,8 @@ export class ChatRoller {
   static _getButtonHtml() {
     return `
       <form>
-        <button class="${chatRerollClass}">
-          ${game.i18n.localize('reroll')}
+        <button class="${this.chatRerollClass}">
+          ${game.i18n.localize('farhome.reroll')}
         </button>
       </form>`;
   }
@@ -21,7 +21,7 @@ export class ChatRoller {
    * @private
    */
   static _subscribeToChatLog(html) {
-    html.on('click', `.${chatRerollClass}`, this._handleReroll.bind(this));
+    html.on('click', `.${this.chatRerollClass}`, this._handleReroll.bind(this));
   }
 
   /**

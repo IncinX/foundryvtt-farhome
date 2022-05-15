@@ -122,7 +122,9 @@ export class FarhomeItem extends Item {
 
     evaluatedTemplate += ChatRoller._getButtonHtml();
 
-    // TODO Need to disable the re-roll button from the default engine.  Do that later.
+    // TODO Need to disable the re-roll button from the default engine. Do that later.
+
+    // TODO Need to have a roll summary at the bottom (such as Successes, Wounds, etc). This needs the ability to hide it with the special-dice-roller. Do that later.
 
     // Create a mana spend button if the item is a spell.
     if (itemContext.type === 'spell' && actorContext !== null) {
@@ -130,7 +132,7 @@ export class FarhomeItem extends Item {
       let manaSpendHtml = `
         <form>
           <button class="spend-mana" data-mana="${manaCost}" data-actor-id="${actorContext._id}">
-            ${game.i18n.localize('spendMana')} (${manaCost}/${actorContext.data.features.mana.value})
+            ${game.i18n.localize('farhome.spendMana')} (${manaCost}/${actorContext.data.features.mana.value})
           </button>
         </form>`;
       evaluatedTemplate += manaSpendHtml;
