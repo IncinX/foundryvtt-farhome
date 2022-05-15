@@ -161,6 +161,8 @@
     "deleteItem": "Delete Item",
     "money": "Money",
     "armors": "Armors",
-    "items": "Items"
+    "items": "Items",
+    "spendMana": "Spend Mana",
+    "reroll": "Reroll"
   }
 }

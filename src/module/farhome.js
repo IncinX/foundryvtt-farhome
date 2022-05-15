@@ -1,5 +1,6 @@
 import { FARHOME } from './helpers/config';
 import { createItemMacro, rollItemMacro } from './helpers/macros';
+import { ChatRoller } from './helpers/chat-roller';
 import { registerSettings } from './settings';
 import { preloadTemplates } from './preload-templates';
 import { FarhomeActor } from './documents/actor';
@@ -83,5 +84,6 @@ Hooks.once('ready', async () => {
 
 // Monitoring button pushes in chat messages
 Hooks.on('renderChatLog', (app, html, data) => {
+  ChatRoller._subscribeToChatLog(html);
   FarhomeItem._subscribeToChatLog(html);
 });

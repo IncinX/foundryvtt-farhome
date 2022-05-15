@@ -1,6 +1,7 @@
 import { evaluateTemplate } from '../helpers/template-evaluator';
 import { convertSpellLevelToManaCost } from '../helpers/mana';
 import { sendActorMessage } from '../helpers/chat';
+import { ChatRoller } from '../helpers/chat-roller';
 
 const MAX_SPELL_LEVEL = 10;
 
@@ -119,12 +120,18 @@ export class FarhomeItem extends Item {
     // Evaluate the template text with the given actor and item context.
     let evaluatedTemplate = evaluateTemplate(itemContext.data.rollTemplate.value, actorContext, superItemContext);
 
+    evaluatedTemplate += ChatRoller._getButtonHtml();
+
+    // TODO Need to disable the re-roll button from the default engine.  Do that later.
+
     // Create a mana spend button if the item is a spell.
     if (itemContext.type === 'spell' && actorContext !== null) {
       let manaCost = convertSpellLevelToManaCost(extraItemContext.castedSpellLevel);
       let manaSpendHtml = `
         <form>
-          <button class="spend-mana" data-mana="${manaCost}" data-actor-id="${actorContext._id}">Spend Mana (${manaCost}/${actorContext.data.features.mana.value})</button>
+          <button class="spend-mana" data-mana="${manaCost}" data-actor-id="${actorContext._id}">
+            ${game.i18n.localize('spendMana')} (${manaCost}/${actorContext.data.features.mana.value})
+          </button>
         </form>`;
       evaluatedTemplate += manaSpendHtml;
     }
@@ -160,6 +167,7 @@ export class FarhomeItem extends Item {
     // Check for ownership
     let actor = game.actors.get(actorId);
     if (!actor.isOwner) {
+      // TODO This needs to change the actor to the person that clicked it.
       sendActorMessage(
         actor,
         'You do not own this actor, so stop trying to spend their mana. ' +
