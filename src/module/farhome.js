@@ -19,7 +19,7 @@ import FarhomeActorSheet from './sheets/actor-sheet';
 Hooks.once('init', async () => {
   console.log('farhome | Initializing farhome');
 
-  const roller =  new FHRoller(secureRandomNumber, 'fh');
+  //const roller =  new FHRoller(secureRandomNumber, 'fh');
 
   game.farhome = {
     FarhomeActor,
@@ -84,8 +84,7 @@ Handlebars.registerHelper('toLowerCase', function (str) {
 
 // Setup system
 Hooks.once('setup', async () => {
-  // Do anything after initialization but before
-  // ready
+  // Do anything after initialization but before ready
 });
 
 /* -------------------------------------------- */

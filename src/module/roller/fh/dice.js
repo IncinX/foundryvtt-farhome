@@ -1,6 +1,3 @@
-import { IMonoid } from '../lang';
-import { Roll } from '../roller';
-
 export const Dice = {
   HERO: 1,
   SUPERIOR: 2,

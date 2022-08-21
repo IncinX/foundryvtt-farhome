@@ -1,7 +1,5 @@
-import { shim } from 'array.prototype.flatmap';
-import { combineAll, IMonoid, Predicate } from './lang';
-import { IParser, parseFormula } from './parser';
-import { RandomNumberGenerator } from './rng';
+import { combineAll } from './lang';
+import { parseFormula } from './parser';
 import { escapeHtml } from './util';
 
 export class Roll {
@@ -58,7 +56,7 @@ export class Roller {
   }
 
   formatReRolls(rolls) {
-    shim();
+    //shim(); // #todo Not sure what this is for, remove it when it is confirmed unnecessary
     const reRolls = rolls
       .flatMap((roll) => {
         const die = roll.indexedRoll[0];

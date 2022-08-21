@@ -1,7 +1,6 @@
 import Mustache from 'mustache';
 import { countMatches } from '../arrays';
 import { combineAll } from '../lang';
-import { RandomNumberGenerator } from '../rng';
 import { combineRolls, Roll, rollDie, Roller } from '../roller';
 import base from '../template';
 import { DieRollView } from '../view';

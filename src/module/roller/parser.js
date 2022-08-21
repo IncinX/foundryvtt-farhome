@@ -1,4 +1,4 @@
-import { combineAll, IMonoid } from './lang';
+import { combineAll } from './lang';
 
 export class Parser {
   constructor(formulaRegex) {
