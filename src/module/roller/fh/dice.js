@@ -128,6 +128,16 @@ export class DicePool {
     guaranteedWound = 0,
     wound = 0,
   ) {
+    this.hero = hero;
+    this.superior = superior;
+    this.enhanced = enhanced;
+    this.normal = normal;
+    this.bad = bad;
+    this.terrible = terrible;
+    this.superiorDefense = superiorDefense;
+    this.defense = defense;
+    this.guaranteedWound = guaranteedWound;
+    this.wound = wound;
   }
 
   toString() {
@@ -141,6 +151,9 @@ export class RollValues {
     crits = 0,
     wounds = 0,
   ) {
+    this.successes = successes;
+    this.crits = crits;
+    this.wounds = wounds;
   }
 
   toString() {

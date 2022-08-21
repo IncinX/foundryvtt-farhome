@@ -8,10 +8,8 @@ import {
   Dice,
   DicePool,
   dieRollImages,
-  Faces,
   interpretResult,
   parseRollValues,
-  RollValues,
   rollValuesMonoid,
   HERO_ROLL_TABLE,
   SUPERIOR_ROLL_TABLE,
@@ -30,6 +28,8 @@ import tpl from './template';
 export class FHRoller extends Roller {
   constructor(rng, command) {
     super(command, [new SimpleParser()], true, false);
+
+    this.rng = rng;
   }
 
   roll(pool) {

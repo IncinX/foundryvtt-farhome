@@ -2,6 +2,7 @@ import { combineAll } from './lang';
 
 export class Parser {
   constructor(formulaRegex) {
+    this.formulaRegex = formulaRegex;
   }
 
   canParse(formula) {
@@ -49,6 +50,12 @@ export class DefaultSimpleParser extends Parser {
     letterExplanation,
   ) {
     super(new RegExp(`^(?:(?:[0-9]*)?[${escapeRegExp(alphabet)}])+$`));
+    
+    this.alphabet = alphabet;
+    this.letterToRolls = letterToRolls;
+    this.rollValuesMonoid = rollValuesMonoid;
+    this.letterExplanation = letterExplanation;
+
     this.letters = alphabet.split('');
     this.numbers.add('0');
     this.numbers.add('1');

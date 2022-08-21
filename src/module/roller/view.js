@@ -8,8 +8,7 @@ export class DieRollView {
   wasReRoll;
   noSelectionPossible;
 
-  constructor(roll, images, noSelectionPossible = false,
-  ) {
+  constructor(roll, images, noSelectionPossible = false) {
     this.die = roll.die;
     this.face = roll.face;
     this.imageName = getDieImage(images, this.die, this.face);

@@ -4,6 +4,9 @@ import { escapeHtml } from './util';
 
 export class Roll {
   constructor(die, face, wasReRoll = false) {
+    this.die = die;
+    this.face = face;
+    this.wasReRoll = wasReRoll;
   }
 
   toString() {
@@ -13,11 +16,17 @@ export class Roll {
 
 export class ReRoll {
   constructor(indexedRoll, shouldReRoll) {
+    this.indexedRoll = indexedRoll;
+    this.shouldReRoll = shouldReRoll;
   }
 }
 
 export class Roller {
   constructor(command, parsers, canReRoll, canKeep) {
+    this.command = command;
+    this.parsers = parsers;
+    this.canReRoll = canReRoll;
+    this.canKeep = canKeep;
   }
 
   handlesCommand(command) {
@@ -113,8 +122,8 @@ export class Roller {
  * @param rng random number generator
  * @return an array with all rolled faces
  */
-export function rollDie(times, die, faces, rng, explodes) {
-  shim();
+export function rollDie(times, die, faces, rng, explodes = () => false) {
+  //shim(); // #todo Not sure what this is for, remove it when it is confirmed unnecessary
   return Array.from({ length: times }, () => rng(faces.length))
     .map((randomNumber) => faces[randomNumber])
     .flatMap((face) => {
