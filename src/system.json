@@ -10,12 +10,7 @@
   "esmodules": ["module/farhome.js"],
   "styles": ["styles/farhome.css"],
   "packs": [],
-  "dependencies": [
-    {
-      "name": "special-dice-roller",
-      "manifest": "https://github.com/IncinX/foundryvtt-special-dice-roller/releases/latest/download/module.json"
-    }
-  ],
+  "dependencies": [],
   "languages": [
     {
       "lang": "en",
