@@ -5,6 +5,9 @@ import { preloadTemplates } from './preload-templates';
 import { FarhomeActor } from './documents/actor';
 import { FarhomeItem } from './documents/item';
 import { _getInitiativeFormula } from './helpers/initiative';
+import { secureRandomNumber } from './roller/rng';
+import { FHRoller } from './roller/fh/roller';
+import { diceRollerChatMessageHandler, diceRollerButtonHandler } from './roller/index';
 import FarhomeItemSheet from './sheets/item-sheet';
 import FarhomeActorSheet from './sheets/actor-sheet';
 
@@ -16,10 +19,13 @@ import FarhomeActorSheet from './sheets/actor-sheet';
 Hooks.once('init', async () => {
   console.log('farhome | Initializing farhome');
 
+  const roller = new FHRoller(secureRandomNumber, 'fh');
+
   game.farhome = {
     FarhomeActor,
     FarhomeItem,
     rollItemMacro,
+    roller,
   };
 
   // Assign custom classes and constants here
@@ -47,6 +53,12 @@ Hooks.once('init', async () => {
   await preloadTemplates();
 });
 
+Hooks.on('init', () => {
+  // Register chat handler
+  // #todo Clean this up a bit later (moving to separate files that specifically handle the roll logic)
+  Hooks.on('chatMessage', diceRollerChatMessageHandler);
+});
+
 /* -------------------------------------------- */
 /*  Handlebars Helpers                          */
 /* -------------------------------------------- */
@@ -67,21 +79,32 @@ Handlebars.registerHelper('toLowerCase', function (str) {
 });
 
 /* -------------------------------------------- */
-/*  Ready/System Hooks                          */
+/*  Setup Hook                                  */
 /* -------------------------------------------- */
 
 // Setup system
 Hooks.once('setup', async () => {
-  // Do anything after initialization but before
-  // ready
+  // Do anything after initialization but before ready
 });
+
+/* -------------------------------------------- */
+/*  Ready Hook                                  */
+/* -------------------------------------------- */
 
 Hooks.once('ready', async () => {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
-  Hooks.on('hotbarDrop', (bar, data, slot) => createItemMacro(data, slot));
+  Hooks.on('hotbarDrop', (_bar, data, slot) => createItemMacro(data, slot));
 });
 
-// Monitoring button pushes in chat messages
-Hooks.on('renderChatLog', (app, html, data) => {
+/* -------------------------------------------- */
+/*  Render Chat Log Hook                        */
+/* -------------------------------------------- */
+
+Hooks.on('renderChatLog', (_app, html, _data) => {
   FarhomeItem._subscribeToChatLog(html);
+
+  // Register the chat log rice roller button handler
+  // #todo Clean this up a bit later (moving to separate files that specifically handle the roll logic)
+  // #todo Should _subscribeToChatLog above also use the JQuery $ first?
+  $('#chatlog').on('click', '.special-dice-roller button', diceRollerButtonHandler);
 });

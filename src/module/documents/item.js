@@ -138,7 +138,7 @@ export class FarhomeItem extends Item {
    * @param {Document} html   The html document for the chat log.
    * @private
    */
-  static _subscribeToChatLog(html) {
+  static _subscribeToRenderChatLog(html) {
     html.on('click', '.spend-mana', this._handleManaSpend.bind(this));
   }
 
