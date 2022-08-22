@@ -35,8 +35,7 @@ export class Roller {
 
   rollCommand(command) {
     // try to match "/{command} {formula} # {flavourText}" pattern
-    const matches = command
-      .match(new RegExp(`^/${this.command} (.*?)(?:\\s*#\\s*([^]+)?)?$`)) || [];
+    const matches = command.match(new RegExp(`^/${this.command} (.*?)(?:\\s*#\\s*([^]+)?)?$`)) || [];
     return this.rollFormula(matches[1] || '', matches[2]);
   }
 
@@ -59,29 +58,26 @@ export class Roller {
   }
 
   formatKeptRolls(keptRolls) {
-    const parsedRolls = keptRolls
-      .map((roll) => this.toRoll(roll[0], roll[1]));
+    const parsedRolls = keptRolls.map((roll) => this.toRoll(roll[0], roll[1]));
     return this.formatRolls(parsedRolls);
   }
 
   formatReRolls(rolls) {
     //shim(); // #todo Not sure what this is for, remove it when it is confirmed unnecessary
-    const reRolls = rolls
-      .flatMap((roll) => {
-        const die = roll.indexedRoll[0];
-        const face = roll.indexedRoll[1];
-        const typedRoll = this.toRoll(die, face);
-        if (roll.shouldReRoll) {
-          const pool = this.toDicePool([typedRoll.die]);
-          return this.roll(pool)
-            .map((reRoll) => {
-              reRoll.wasReRoll = true;
-              return reRoll;
-            });
-        } else {
-          return [typedRoll];
-        }
-      });
+    const reRolls = rolls.flatMap((roll) => {
+      const die = roll.indexedRoll[0];
+      const face = roll.indexedRoll[1];
+      const typedRoll = this.toRoll(die, face);
+      if (roll.shouldReRoll) {
+        const pool = this.toDicePool([typedRoll.die]);
+        return this.roll(pool).map((reRoll) => {
+          reRoll.wasReRoll = true;
+          return reRoll;
+        });
+      } else {
+        return [typedRoll];
+      }
+    });
     return this.formatRolls(reRolls);
   }
 
@@ -90,27 +86,26 @@ export class Roller {
    * @param die
    * @param face
    */
-  toRoll(die, face) { }
+  toRoll(die, face) {}
 
   /**
    * Roll a dice pool and return the result rolls
    * @param dicePool
    */
-  roll(dicePool) { }
+  roll(dicePool) {}
 
   /**
    * Return a template that displays and explains the roll
    * @param rolls
    * @param flavorText an option description of the roll
    */
-  formatRolls(rolls, flavorText) { }
+  formatRolls(rolls, flavorText) {}
 
   /**
    * Create a dice pool from an array of different dice
    * @param dice
    */
-  toDicePool(dice) { }
-
+  toDicePool(dice) {}
 }
 
 /**
@@ -136,12 +131,7 @@ export function rollDie(times, die, faces, rng, explodes = () => false) {
     });
 }
 
-export function combineRolls(
-  rolls,
-  rollToRollResult,
-  rollValuesMonoid,
-) {
-  const results = rolls
-    .map((roll) => rollToRollResult(roll));
+export function combineRolls(rolls, rollToRollResult, rollValuesMonoid) {
+  const results = rolls.map((roll) => rollToRollResult(roll));
   return combineAll(results, rollValuesMonoid);
 }

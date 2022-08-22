@@ -19,7 +19,7 @@ import FarhomeActorSheet from './sheets/actor-sheet';
 Hooks.once('init', async () => {
   console.log('farhome | Initializing farhome');
 
-  const roller =  new FHRoller(secureRandomNumber, 'fh');
+  const roller = new FHRoller(secureRandomNumber, 'fh');
 
   game.farhome = {
     FarhomeActor,
@@ -53,11 +53,11 @@ Hooks.once('init', async () => {
   await preloadTemplates();
 });
 
-Hooks.on('init', () => {  
+Hooks.on('init', () => {
   // Register chat handler
   // #todo Clean this up a bit later (moving to separate files that specifically handle the roll logic)
   Hooks.on('chatMessage', diceRollerChatMessageHandler);
-})
+});
 
 /* -------------------------------------------- */
 /*  Handlebars Helpers                          */
@@ -95,7 +95,6 @@ Hooks.once('ready', async () => {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on('hotbarDrop', (_bar, data, slot) => createItemMacro(data, slot));
 });
-
 
 /* -------------------------------------------- */
 /*  Render Chat Log Hook                        */

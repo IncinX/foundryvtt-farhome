@@ -15,8 +15,7 @@ export class Parser {
 }
 
 export function parseFormula(formula, parsers) {
-  const trimmedFormula = formula.replace(/\s+/g, '')
-    .toLowerCase();
+  const trimmedFormula = formula.replace(/\s+/g, '').toLowerCase();
   const helpMessages = [];
   for (const parser of parsers) {
     if (parser.canParse(trimmedFormula)) {
@@ -40,17 +39,12 @@ function escapeRegExp(value) {
 }
 
 export class DefaultSimpleParser extends Parser {
-  letters = "";
+  letters = '';
   numbers = new Set();
 
-  constructor(
-    alphabet,
-    letterToRolls,
-    rollValuesMonoid,
-    letterExplanation,
-  ) {
+  constructor(alphabet, letterToRolls, rollValuesMonoid, letterExplanation) {
     super(new RegExp(`^(?:(?:[0-9]*)?[${escapeRegExp(alphabet)}])+$`));
-    
+
     this.alphabet = alphabet;
     this.letterToRolls = letterToRolls;
     this.rollValuesMonoid = rollValuesMonoid;
