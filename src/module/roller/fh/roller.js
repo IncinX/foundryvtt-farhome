@@ -48,8 +48,7 @@ export class FHRoller extends Roller {
   }
 
   combineRolls(rolls) {
-    const results = rolls
-      .map((roll) => parseRollValues(roll));
+    const results = rolls.map((roll) => parseRollValues(roll));
     return combineAll(results, rollValuesMonoid);
   }
 
@@ -87,6 +86,17 @@ export class FHRoller extends Roller {
     const defense = countMatches(dice, (die) => die === Dice.DEFENSE);
     const guaranteedWound = countMatches(dice, (die) => die === Dice.GUARANTEED_WOUND);
     const wound = countMatches(dice, (die) => die === Dice.WOUND);
-    return new DicePool(hero, superior, enhanced, normal, bad, terrible, superiorDefense, defense, guaranteedWound, wound);
+    return new DicePool(
+      hero,
+      superior,
+      enhanced,
+      normal,
+      bad,
+      terrible,
+      superiorDefense,
+      defense,
+      guaranteedWound,
+      wound,
+    );
   }
 }

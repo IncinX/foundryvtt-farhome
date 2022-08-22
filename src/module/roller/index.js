@@ -9,22 +9,22 @@ function parseRoll(input) {
 
 function renderNewRoll(rolls) {
   const chatData = {
-      user: game.user.id,
-      content: rolls,
+    user: game.user.id,
+    content: rolls,
   };
-  ChatMessage.create(chatData, {displaySheet: false});
+  ChatMessage.create(chatData, { displaySheet: false });
 }
 
 export function diceRollerChatMessageHandler(_chatLog, messageText, data) {
   if (messageText !== undefined) {
     if (game.farhome.roller.handlesCommand(messageText)) {
-        data.content = game.farhome.roller.rollCommand(messageText);
-        ChatMessage.create(data, {});
-        return false;
+      data.content = game.farhome.roller.rollCommand(messageText);
+      ChatMessage.create(data, {});
+      return false;
     }
   }
   return true;
-};
+}
 
 export function diceRollerButtonHandler(event) {
   event.preventDefault();
@@ -36,21 +36,21 @@ export function diceRollerButtonHandler(event) {
   const selectedRolls = rolls.filter((roll) => roll.checked);
 
   for (const roller of rollers) {
-      if (selectedRolls.length > 0 && roller.command === rollerKey) {
-          if (button.classList.contains('special-dice-roller-keep') && roller.canKeep) {
-              const keptRolls = selectedRolls.map((roll) => parseRoll(roll));
-              const result = roller.formatKeptRolls(keptRolls);
-              renderNewRoll(result);
-          } else if (roller.canReRoll) {
-              const parsedRolls = rolls
-                  .map((rollInput) => {
-                      const roll = parseRoll(rollInput);
-                      return new ReRoll(roll, rollInput.checked);
-                  });
-              const result = roller.formatReRolls(parsedRolls);
-              renderNewRoll(result);
-          }
-          selectedRolls.forEach((elem) => elem.checked = false);
+    if (selectedRolls.length > 0 && roller.command === rollerKey) {
+      if (button.classList.contains('special-dice-roller-keep') && roller.canKeep) {
+        const keptRolls = selectedRolls.map((roll) => parseRoll(roll));
+        const result = roller.formatKeptRolls(keptRolls);
+        renderNewRoll(result);
+      } else if (roller.canReRoll) {
+        const parsedRolls = rolls.map((rollInput) => {
+          const roll = parseRoll(rollInput);
+          return new ReRoll(roll, rollInput.checked);
+        });
+        const result = roller.formatReRolls(parsedRolls);
+        renderNewRoll(result);
       }
+
+      selectedRolls.forEach((elem) => (elem.checked = false));
+    }
   }
-};
+}
