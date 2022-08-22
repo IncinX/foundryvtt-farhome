@@ -19,7 +19,7 @@ import FarhomeActorSheet from './sheets/actor-sheet';
 Hooks.once('init', async () => {
   console.log('farhome | Initializing farhome');
 
-  //const roller =  new FHRoller(secureRandomNumber, 'fh');
+  const roller =  new FHRoller(secureRandomNumber, 'fh');
 
   game.farhome = {
     FarhomeActor,
@@ -56,7 +56,7 @@ Hooks.once('init', async () => {
 Hooks.on('init', () => {  
   // Register chat handler
   // #todo Clean this up a bit later (moving to separate files that specifically handle the roll logic)
-  Hooks.on('chatMessage', chatMessageHandler);
+  Hooks.on('chatMessage', diceRollerChatMessageHandler);
 })
 
 /* -------------------------------------------- */

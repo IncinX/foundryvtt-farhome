@@ -11,7 +11,7 @@ const base = `
       <input
         class="{{#wasReRoll}}special-dice-roller-was-re-roll{{/wasReRoll}}"
         type="checkbox"
-        style="background-image: url('modules/special-dice-roller/public/images/{{system}}/{{imageName}}.png')"
+        style="background-image: url('systems/farhome/images/{{imageName}}.png')"
         name="roll{{rollIndex}}"
         data-die="{{die}}"
         data-face="{{face}}"
