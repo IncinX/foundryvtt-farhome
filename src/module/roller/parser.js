@@ -87,6 +87,8 @@ export class DefaultSimpleParser extends Parser {
     const mappings = this.letterExplanation
       .map((explanation, index) => `${this.letters[index]} = ${explanation}`)
       .join(', ');
-    return `Any combination of the following letters: ${this.letters.join(', ')} (${mappings}). To roll multiple dice simply add multiple letters or prepend a number, e.g.: c3ba`;
+    return `Any combination of the following letters: ${this.letters.join(
+      ', ',
+    )} (${mappings}). To roll multiple dice simply add multiple letters or prepend a number, e.g.: c3ba`;
   }
 }

@@ -25,15 +25,80 @@ export const Faces = {
   WOUND: 11,
 };
 
-export const HERO_ROLL_TABLE = [Faces.SUCCESS, Faces.SUCCESS, Faces.DOUBLE_SUCCESS, Faces.DOUBLE_SUCCESS, Faces.CRITICAL_SUCCESS, Faces.CRITICAL_SUCCESS];
-export const SUPERIOR_ROLL_TABLE = [Faces.BLANK, Faces.SUCCESS, Faces.SUCCESS, Faces.SUCCESS, Faces.DOUBLE_SUCCESS, Faces.CRITICAL_SUCCESS];
-export const ENHANCED_ROLL_TABLE = [Faces.BLANK, Faces.BLANK, Faces.SUCCESS, Faces.SUCCESS, Faces.SUCCESS, Faces.CRITICAL_SUCCESS];
+export const HERO_ROLL_TABLE = [
+  Faces.SUCCESS,
+  Faces.SUCCESS,
+  Faces.DOUBLE_SUCCESS,
+  Faces.DOUBLE_SUCCESS,
+  Faces.CRITICAL_SUCCESS,
+  Faces.CRITICAL_SUCCESS,
+];
+
+export const SUPERIOR_ROLL_TABLE = [
+  Faces.BLANK,
+  Faces.SUCCESS,
+  Faces.SUCCESS,
+  Faces.SUCCESS,
+  Faces.DOUBLE_SUCCESS,
+  Faces.CRITICAL_SUCCESS,
+];
+
+export const ENHANCED_ROLL_TABLE = [
+  Faces.BLANK,
+  Faces.BLANK,
+  Faces.SUCCESS,
+  Faces.SUCCESS,
+  Faces.SUCCESS,
+  Faces.CRITICAL_SUCCESS,
+];
+
 export const NORMAL_ROLL_TABLE = [Faces.BLANK, Faces.BLANK, Faces.BLANK, Faces.BLANK, Faces.SUCCESS, Faces.SUCCESS];
-export const BAD_ROLL_TABLE = [Faces.CRITICAL_FAILURE, Faces.FAILURE, Faces.FAILURE, Faces.FAILURE, Faces.BLANK, Faces.BLANK];
-export const TERRIBLE_ROLL_TABLE = [Faces.CRITICAL_FAILURE, Faces.DOUBLE_FAILURE, Faces.FAILURE, Faces.FAILURE, Faces.FAILURE, Faces.BLANK];
-export const DEFENSE_ROLL_TABLE = [Faces.BLANK, Faces.BLANK, Faces.DEFENSE, Faces.DEFENSE, Faces.DEFENSE, Faces.CRITICAL_DEFENSE];
-export const SUPERIOR_DEFENSE_ROLL_TABLE = [Faces.BLANK, Faces.BLANK, Faces.DEFENSE, Faces.DOUBLE_DEFENSE, Faces.CRITICAL_DEFENSE, Faces.CRITICAL_DEFENSE];
-export const GUARANTEED_WOUND_ROLL_TABLE = [Faces.WOUND, Faces.WOUND, Faces.WOUND, Faces.WOUND, Faces.WOUND, Faces.WOUND];
+
+export const BAD_ROLL_TABLE = [
+  Faces.CRITICAL_FAILURE,
+  Faces.FAILURE,
+  Faces.FAILURE,
+  Faces.FAILURE,
+  Faces.BLANK,
+  Faces.BLANK,
+];
+
+export const TERRIBLE_ROLL_TABLE = [
+  Faces.CRITICAL_FAILURE,
+  Faces.DOUBLE_FAILURE,
+  Faces.FAILURE,
+  Faces.FAILURE,
+  Faces.FAILURE,
+  Faces.BLANK,
+];
+
+export const DEFENSE_ROLL_TABLE = [
+  Faces.BLANK,
+  Faces.BLANK,
+  Faces.DEFENSE,
+  Faces.DEFENSE,
+  Faces.DEFENSE,
+  Faces.CRITICAL_DEFENSE,
+];
+
+export const SUPERIOR_DEFENSE_ROLL_TABLE = [
+  Faces.BLANK,
+  Faces.BLANK,
+  Faces.DEFENSE,
+  Faces.DOUBLE_DEFENSE,
+  Faces.CRITICAL_DEFENSE,
+  Faces.CRITICAL_DEFENSE,
+];
+
+export const GUARANTEED_WOUND_ROLL_TABLE = [
+  Faces.WOUND,
+  Faces.WOUND,
+  Faces.WOUND,
+  Faces.WOUND,
+  Faces.WOUND,
+  Faces.WOUND,
+];
+
 export const WOUND_ROLL_TABLE = [Faces.WOUND, Faces.WOUND, Faces.WOUND, Faces.BLANK, Faces.BLANK, Faces.BLANK];
 
 export class DicePool {
@@ -67,11 +132,7 @@ export class DicePool {
 }
 
 export class RollValues {
-  constructor(
-    successes = 0,
-    crits = 0,
-    wounds = 0,
-  ) {
+  constructor(successes = 0, crits = 0, wounds = 0) {
     this.successes = successes;
     this.crits = crits;
     this.wounds = wounds;
@@ -188,11 +249,7 @@ rollToRollResultMapping.set(Faces.CRITICAL_DEFENSE, { successes: 2, crits: 1 });
 rollToRollResultMapping.set(Faces.WOUND, { wounds: 1 });
 
 export function interpretResult(result) {
-  return new RollValues(
-    result.successes,
-    result.crits,
-    result.wounds,
-  );
+  return new RollValues(result.successes, result.crits, result.wounds);
 }
 
 export function parseRollValues(roll) {
@@ -210,11 +267,8 @@ function toRollResult(partial) {
 
 export const rollValuesMonoid = {
   identity: new RollValues(),
-  combine: (roll1, roll2) => new RollValues(
-    roll1.successes + roll2.successes,
-    roll1.crits + roll2.crits,
-    roll1.wounds + roll2.wounds,
-  ),
+  combine: (roll1, roll2) =>
+    new RollValues(roll1.successes + roll2.successes, roll1.crits + roll2.crits, roll1.wounds + roll2.wounds),
 };
 
 export const dicePoolMonoid = {
