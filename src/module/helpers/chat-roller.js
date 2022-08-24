@@ -51,6 +51,7 @@ export class ChatRoller {
     const rolls = Array.from(message.querySelectorAll('input'));
     const selectedRolls = rolls.filter((roll) => roll.checked);
 
+    // DEBUG message
     console.log('Selected rolls:', selectedRolls);
 
     sendActorMessage(message.innerHTML);
@@ -69,4 +70,6 @@ export class ChatRoller {
     }
     */
   }
+
+  // TODO Need to replace the summary text (successes, wounds, etc) and maybe add some stuff for hex/poison later
 }
