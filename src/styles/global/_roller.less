@@ -1,0 +1,59 @@
+.special-dice-roller form input[type=checkbox] {
+  border: 1px solid transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+  height: 40px;
+  width: 40px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+  margin: 0;
+}
+
+.special-dice-roller form input[type=checkbox]:disabled {
+  cursor: default;
+}
+
+.special-dice-roller form input[type=checkbox]:checked {
+  outline: none;
+  border: 1px solid #ac0f1a;
+}
+
+.special-dice-roller-succeeded {
+  color: darkgreen;
+}
+
+.special-dice-roller-failed {
+  color: darkred;
+}
+
+.special-dice-roller-v5-messy-critical {
+  color: darkred;
+}
+
+.special-dice-roller form input[type=checkbox].special-dice-roller-was-re-roll {
+  border-bottom: 1px solid green;
+}
+
+.special-dice-roller .flavor-text {
+  color: #444;
+  font-size: 85%;
+}
+
+.special-dice-roller img.ova-best {
+  height: 52px;
+  width: 52px;
+  border: 4px solid darkgreen;
+  border-radius: 8px;
+  padding: 2px;
+}
+
+.special-dice-roller img.ova-worst {
+  height: 52px;
+  width: 52px;
+  border: 4px solid darkred;
+  border-radius: 8px;
+  padding: 2px;
+}
