@@ -410,7 +410,7 @@ export default class FarhomeActorSheet extends ActorSheet {
     // Handle rolls that supply the formula directly.
     if (dataset.roll) {
       let label = dataset.label ?? '';
-      let roll = game.specialDiceRoller.fh.rollFormula(dataset.roll);
+      let roll = game.farhome.roller.rollFormula(dataset.roll);
 
       return sendActorMessage(`<h1>${label}</h1>${roll}`);
     }

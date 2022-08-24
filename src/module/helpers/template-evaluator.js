@@ -23,7 +23,7 @@ export function evaluateTemplate(templateString, actorContext, itemContext) {
 }
 
 export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) {
-  let evaluatorRollerContext = game.specialDiceRoller.fh.rollFormula.bind(game.specialDiceRoller.fh);
+  let evaluatorRollerContext = game.farhome.roller.rollFormula.bind(game.farhome.roller);
 
   let evaluatorSystemContext = {
     skill: proficiencyRoll.bind(null, evaluatorRollerContext),

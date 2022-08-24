@@ -15,10 +15,10 @@ export const _getInitiativeFormula = function () {
   let data = actor.data.data;
   let rollFormula = proficiencyRollFormula(0, data.attributes.dex.value);
 
-  const parsedFormula = game.specialDiceRoller.fh.parsers[0].parse(rollFormula);
-  const rolls = game.specialDiceRoller.fh.roll(parsedFormula);
-  const rollValues = game.specialDiceRoller.fh.combineRolls(rolls);
-  const formattedRoll = game.specialDiceRoller.fh.formatRolls(rolls, null);
+  const parsedFormula = game.farhome.roller.parsers[0].parse(rollFormula);
+  const rolls = game.farhome.roller.roll(parsedFormula);
+  const rollValues = game.farhome.roller.combineRolls(rolls);
+  const formattedRoll = game.farhome.roller.formatRolls(rolls, null);
 
   sendActorMessage(`<h1>Initiative</h1>${formattedRoll}`);
 
