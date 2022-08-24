@@ -17,11 +17,6 @@ export class ChatRoller {
       </form>`;
   }
 
-  static _hideDefaultRerollButton() {
-    const button = document.querySelectorAll('.special-dice-roller-reroll');
-    button.style.display = 'none';
-  }
-
   /**
    * Opportunity to subscribe to chat log events.
    * @param {Document} html   The html document for the chat log.

@@ -121,14 +121,10 @@ export class FarhomeItem extends Item {
     let evaluatedTemplate = evaluateTemplate(itemContext.data.rollTemplate.value, actorContext, superItemContext);
 
     // Hide the default reroll buttons.
-    // TODO This currently won't work because it is not an HTML document
-    // TODO Do this via an API to the integrated roller! (and remove the _hideDefaultRerollButton function)
-    //ChatRoller._hideDefaultRerollButton(evaluatedTemplate);
+    // TODO Do this via an API to the integrated roller
 
     // Add the custom reroll button.
     evaluatedTemplate += ChatRoller._getButtonHtml();
-
-    // TODO Need to disable the re-roll button from the default engine. Do that later.
 
     // TODO Need to have a roll summary at the bottom (such as Successes, Wounds, etc). This needs the ability to hide it with the special-dice-roller. Do that later.
 
