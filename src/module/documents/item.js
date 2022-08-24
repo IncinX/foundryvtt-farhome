@@ -122,6 +122,7 @@ export class FarhomeItem extends Item {
 
     // Hide the default reroll buttons.
     // TODO This currently won't work because it is not an HTML document
+    // TODO Do this via an API to the integrated roller! (and remove the _hideDefaultRerollButton function)
     //ChatRoller._hideDefaultRerollButton(evaluatedTemplate);
 
     // Add the custom reroll button.

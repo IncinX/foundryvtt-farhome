@@ -102,7 +102,7 @@ Hooks.once('ready', async () => {
 /* -------------------------------------------- */
 
 Hooks.on('renderChatLog', (_app, html, _data) => {
-  FarhomeItem._subscribeToChatLog(html);
+  ChatRoller._subscribeToChatLog(html);
 
   // Register the chat log rice roller button handler
   // #todo Clean this up a bit later (moving to separate files that specifically handle the roll logic)
