@@ -8,7 +8,7 @@ import { FarhomeItem } from './documents/item';
 import { _getInitiativeFormula } from './helpers/initiative';
 import { secureRandomNumber } from './roller/rng';
 import { FHRoller } from './roller/fh/roller';
-import { diceRollerChatMessageHandler, diceRollerButtonHandler } from './roller/index';
+import { diceRollerChatMessageHandler, diceRollerButtonHandler } from './roller/hooks';
 import FarhomeItemSheet from './sheets/item-sheet';
 import FarhomeActorSheet from './sheets/actor-sheet';
 

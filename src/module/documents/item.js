@@ -120,13 +120,15 @@ export class FarhomeItem extends Item {
     // Evaluate the template text with the given actor and item context.
     let evaluatedTemplate = evaluateTemplate(itemContext.data.rollTemplate.value, actorContext, superItemContext);
 
+    // #todo Can this function just return an HTMLDocument and I can work directly off of that?
+
     // Hide the default reroll buttons.
-    // TODO Do this via an API to the integrated roller
+    // #todo Do this via an API to the integrated roller
 
     // Add the custom reroll button.
     evaluatedTemplate += ChatRoller._getButtonHtml();
 
-    // TODO Need to have a roll summary at the bottom (such as Successes, Wounds, etc). This needs the ability to hide it with the special-dice-roller. Do that later.
+    // #todo Need to have a roll summary at the bottom (such as Successes, Wounds, etc). This needs the ability to hide it with the special-dice-roller. Do that later.
 
     // Create a mana spend button if the item is a spell.
     if (itemContext.type === 'spell' && actorContext !== null) {

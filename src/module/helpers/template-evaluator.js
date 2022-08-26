@@ -32,7 +32,7 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
     targetCount: game.user.targets.size,
   };
 
-  // TODO Try to automate this with some loops but still keep the concise syntax?
+  // #todo Try to automate this with some loops but still keep the concise syntax?
   let evaluatorActorContext = actorContext
     ? {
         name: actorContext.name,
@@ -95,7 +95,7 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
       }
     : {};
 
-  // TODO A helper function could make a lot of this simpler
+  // #todo A helper function could make a lot of this simpler
   let evaluatorItemContext = {
     name: itemContext.name,
     description: itemContext.data.description.value,

@@ -39,11 +39,13 @@ export class ChatRoller {
 
     console.log('Re-roll requested');
 
-    // TODO Construct a new message based on the existing message (but with the rolls replaced).
+    // #todo Try to avoid code duplication with roller's diceRollerButtonHandler() function
 
-    // TODO Base this functionality off of what is available in the special-dice-roller
+    // #todo Construct a new message based on the existing message (but with the rolls replaced).
 
-    // TODO Construct the new message with the old images greyed out (likely through a CSS class) and no images should be allowed for another re-roll.
+    // #todo Base this functionality off of what is available in the special-dice-roller
+
+    // #todo Construct the new message with the old images greyed out (likely through a CSS class) and no images should be allowed for another re-roll.
     //      Disabling the input to prevent more re-roll selection can be done by adding a disabled attribute on the input control.
 
     const button = event.target;
@@ -56,20 +58,17 @@ export class ChatRoller {
 
     sendActorMessage(message.innerHTML);
 
-    /*
-    for (const roller of rollers) {
-      const parsedRolls = rolls
-        .map((rollInput) => {
-          const roll = parseRoll(rollInput);
-          return new ReRoll(roll, rollInput.checked);
-        });
+    // #todo DEBUG AND GET THIS WORKING NEXT!
+    const parsedRolls = rolls
+      .map((rollInput) => {
+        const roll = parseRoll(rollInput);
+        return new ReRoll(roll, rollInput.checked);
+      });
 
-      const result = roller.formatReRolls(parsedRolls);
-      renderNewRoll(result);
-      selectedRolls.forEach((elem) => elem.checked = false);
-    }
-    */
+    const result = game.farhome.roller.formatReRolls(parsedRolls);
+    renderNewRoll(result);
+    selectedRolls.forEach((elem) => elem.checked = false);
+    
+    // #todo Need to replace the summary text (successes, wounds, etc) and maybe add some stuff for hex/poison later
   }
-
-  // TODO Need to replace the summary text (successes, wounds, etc) and maybe add some stuff for hex/poison later
 }

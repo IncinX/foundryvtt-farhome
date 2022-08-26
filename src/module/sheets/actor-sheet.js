@@ -10,7 +10,7 @@ import {
   getManeuverRollTemplate,
 } from '../helpers/roll-templates.js';
 
-// TODO Add Poison/Hex icons later
+// #todo Add Poison/Hex icons later
 
 /**
  * Extend the basic ActorSheet to implement Farhome specifics.
@@ -210,7 +210,7 @@ export default class FarhomeActorSheet extends ActorSheet {
     html.find('.item-quantity-input').change(this._onItemQuantityChanged.bind(this));
 
     // Active Effect management
-    // TODO Add support for effects
+    // #todo Add support for effects
     html.find('.effect-control').click((ev) => onManageActiveEffect(ev, this.actor));
 
     // Rollable abilities.
@@ -328,7 +328,7 @@ export default class FarhomeActorSheet extends ActorSheet {
     const item = this.actor.items.get(li.data('itemId'));
     item.delete();
 
-    // TODO I don't think this sliding motion actually works, add it later.
+    // #todo I don't think this sliding motion actually works, add it later.
     li.slideUp(200, () => this.render(false));
   }
 
@@ -349,7 +349,7 @@ export default class FarhomeActorSheet extends ActorSheet {
    * @private
    */
   async _onItemEquippedChanged(event) {
-    // TODO Code duplication between all this and attuned/prepared can probably be reduced by binding a string parameter for the data path.
+    // #todo Code duplication between all this and attuned/prepared can probably be reduced by binding a string parameter for the data path.
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
     await item.update({ 'data.equipped.value': event.target.checked });
