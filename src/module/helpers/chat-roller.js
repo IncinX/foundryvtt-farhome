@@ -1,14 +1,14 @@
 import { sendActorMessage } from './chat';
 
 export class ChatRoller {
-  static chatRerollClass = 'farhome-reroll';
+  static chatRerollClass = 'fh-reroll';
 
   /**
    * Get the button for the chat re-roll button.
    * @returns {string}  The html string to render the re-roll button.
    * @private
    */
-  static _getButtonHtml() {
+  static getButtonHtml() {
     return `
       <form>
         <button class="${this.chatRerollClass}">
@@ -22,7 +22,7 @@ export class ChatRoller {
    * @param {Document} html   The html document for the chat log.
    * @private
    */
-  static _subscribeToChatLog(html) {
+  static subscribeToChatLog(html) {
     html.on('click', `.${this.chatRerollClass}`, this._handleReroll.bind(this));
   }
 

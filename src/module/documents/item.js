@@ -174,7 +174,7 @@ export class FarhomeItem extends Item {
     rollHtmlString += `<div class='fh-roll-summary'>${rollSummary}</div>`;
 
     // Add the custom reroll button.
-    rollHtmlString += ChatRoller._getButtonHtml();
+    rollHtmlString += ChatRoller.getButtonHtml();
 
     // Create a mana spend button if the item is a spell.
     if (itemContext.type === 'spell' && actorContext !== null) {

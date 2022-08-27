@@ -61,7 +61,6 @@ export class FHRoller extends Roller {
     return Mustache.render(
       base,
       {
-        system: this.command,
         canReRoll: canReRoll,
         showInterpretation: showInterpretation,
         flavorText,

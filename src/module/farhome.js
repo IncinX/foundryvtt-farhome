@@ -8,7 +8,7 @@ import { FarhomeItem } from './documents/item';
 import { _getInitiativeFormula } from './helpers/initiative';
 import { secureRandomNumber } from './roller/rng';
 import { FHRoller } from './roller/fh/roller';
-import { diceRollerChatMessageHandler, diceRollerButtonHandler } from './roller/hooks';
+import { FHRollSystem } from './roller/hooks';
 import FarhomeItemSheet from './sheets/item-sheet';
 import FarhomeActorSheet from './sheets/actor-sheet';
 
@@ -57,7 +57,7 @@ Hooks.once('init', async () => {
 Hooks.on('init', () => {
   // Register chat handler
   // #todo Clean this up a bit later (moving to separate files that specifically handle the roll logic)
-  Hooks.on('chatMessage', diceRollerChatMessageHandler);
+  Hooks.on('chatMessage', FHRollSystem.diceRollerChatMessageHandler);
 });
 
 /* -------------------------------------------- */
@@ -102,10 +102,7 @@ Hooks.once('ready', async () => {
 /* -------------------------------------------- */
 
 Hooks.on('renderChatLog', (_app, html, _data) => {
-  ChatRoller._subscribeToChatLog(html);
-
-  // Register the chat log rice roller button handler
-  // #todo Clean this up a bit later (moving to separate files that specifically handle the roll logic)
-  // #todo Should _subscribeToChatLog above also use the JQuery $ first?
-  $('#chatlog').on('click', '.fh-roller button', diceRollerButtonHandler);
+  // #todo ChatRoller should probably be renamed to TemplateRoller
+  ChatRoller.subscribeToChatLog(html);
+  FHRollSystem.subscribeToChatLog(html);
 });

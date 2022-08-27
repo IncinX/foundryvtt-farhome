@@ -1,4 +1,5 @@
 // #todo Consider using handlebars for all of this, removing mustache dependency and using conditionals like handlebars or mustache to prep and fill content
+// #todo Remove unnecessary stuff like data-roller="{{system}}" below
 
 const base = `
 <div class="fh-roller">
@@ -9,7 +10,7 @@ const base = `
     <form>
       {{#rolls}}
       <input
-        class="{{#wasReRoll}}fh-roller-was-re-roll{{/wasReRoll}}"
+        class="fh-roller-roll"
         type="checkbox"
         style="background-image: url('systems/farhome/images/{{imageName}}.png')"
         name="roll{{rollIndex}}"
@@ -19,7 +20,7 @@ const base = `
       >
       {{/rolls}}
       {{#canReRoll}}
-      <button class="fh-roller-reroll" data-roller="{{system}}">re-roll selected</button>
+      <button class="fh-roller-reroll">re-roll selected</button>
       {{/canReRoll}}
     </form>
   </div>
