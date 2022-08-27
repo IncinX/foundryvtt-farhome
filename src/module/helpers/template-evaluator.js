@@ -213,17 +213,17 @@ function formula(proficiency, attribute) {
 }
 
 function success(successCount) {
-  return `<div class='fh-success' data-success='${successCount}'/>`;
+  return `<div class='fh-success' data-success='${successCount}'></div>`;
 }
 
 function crit(critCount) {
-  return `<div class='fh-crit' data-success='${critCount}'/>`;
+  return `<div class='fh-crit' data-success='${critCount}'></div>`;
 }
 
 function hex(hexCount) {
-  return `<div class='fh-hex' data-success='${hexCount}'/>`;
+  return `<div class='fh-hex' data-success='${hexCount}'></div>`;
 }
 
 function poison(poisonCount) {
-  return `<div class='fh-poison' data-success='${poisonCount}'/>`;
+  return `<div class='fh-poison' data-success='${poisonCount}'></div>`;
 }

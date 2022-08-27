@@ -119,17 +119,22 @@ export class FarhomeItem extends Item {
 
     // #todo Some handlebars or Mustache would make all of this cleaner.
 
-    let rollHtmlString = '';
-
     // Evaluate the template text with the given actor and item context.
     let evaluatedTemplate = evaluateTemplate(itemContext.data.rollTemplate.value, actorContext, superItemContext);
 
-    rollHtmlString = `<div class='fh-evaluated-template'>${evaluatedTemplate}</div>`;
+    // Evaluate the active effects for the character (ie/ hex, poison, etc)
+    // #todo Fill out active effects area
+    let activeEffects = ``;
+
+    let rollHtmlString = `
+      <div class='fh-roll'>
+        <div class='fh-evaluated-template'>${evaluatedTemplate}</div>
+        <div class='fh-active-effects'>${activeEffects}</div>
+      </div>`;
 
     // Process the roll sumamry
-    let rollSummary = ``;
-    
     // #todo Fill out the roll summary area. (rendered through Mustache for now)
+    let rollSummary = ``;
 
     rollHtmlString += `<div class='fh-roll-summary'>${rollSummary}</div>`;
 
