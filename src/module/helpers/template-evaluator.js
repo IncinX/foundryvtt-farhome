@@ -22,8 +22,12 @@ export function evaluateTemplate(templateString, actorContext, itemContext) {
   return evaluatedString;
 }
 
+function templateRoller(formula) {
+  return game.farhome.roller.rollFormula(formula, "", false, false);
+}
+
 export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) {
-  let evaluatorRollerContext = game.farhome.roller.rollFormula.bind(game.farhome.roller);
+  let evaluatorRollerContext = templateRoller;
 
   let evaluatorSystemContext = {
     skill: proficiencyRoll.bind(null, evaluatorRollerContext),

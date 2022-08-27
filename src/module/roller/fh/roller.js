@@ -27,7 +27,7 @@ import tpl from './template';
 
 export class FHRoller extends Roller {
   constructor(rng, command) {
-    super(command, [new SimpleParser()], true, false);
+    super(command, [new SimpleParser()], false);
 
     this.rng = rng;
   }
@@ -56,14 +56,14 @@ export class FHRoller extends Roller {
     return new Roll(die, face);
   }
 
-  formatRolls(rolls, flavorText) {
+  formatRolls(rolls, flavorText, canReRoll = true, showInterpretation = true) {
     const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
     return Mustache.render(
       base,
       {
         system: this.command,
-        canReRoll: this.canReRoll,
-        canKeep: this.canKeep,
+        canReRoll: canReRoll,
+        showInterpretation: showInterpretation,
         flavorText,
         rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
         results: interpretResult(combinedRolls),

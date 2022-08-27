@@ -1,4 +1,4 @@
-// #todo Can I use handlebars for stuff like this?
+// #todo Consider using handlebars for all of this, removing mustache dependency and using conditionals like handlebars or mustache to prep and fill content
 
 const base = `
 <div class="special-dice-roller">
@@ -21,15 +21,14 @@ const base = `
       {{#canReRoll}}
       <button class="special-dice-roller-reroll" data-roller="{{system}}">re-roll selected</button>
       {{/canReRoll}}
-      {{#canKeep}}
-      <button class="special-dice-roller-keep" data-roller="{{system}}">keep selected</button>
-      {{/canKeep}}
     </form>
   </div>
+  {{#showInterpretation}}
   <hr>
   <div>
     {{> interpretation}}
   </div>
+  {{/showInterpretation}}
 </div>
 `;
 

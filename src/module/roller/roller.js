@@ -22,10 +22,10 @@ export class ReRoll {
 }
 
 export class Roller {
-  constructor(command, parsers, canReRoll, canKeep) {
+  constructor(command, parsers, canKeep) {
     this.command = command;
+    // #todo Some of this stuff can be greatly simplified if I remove the generic aspect of it like propagating the parsers
     this.parsers = parsers;
-    this.canReRoll = canReRoll;
     this.canKeep = canKeep;
   }
 
@@ -39,12 +39,12 @@ export class Roller {
     return this.rollFormula(matches[1] || '', matches[2]);
   }
 
-  rollFormula(formula, flavorText) {
+  rollFormula(formula, flavorText, canReRoll = true, showInterpretation = true) {
     try {
       const parsedFormula = parseFormula(formula, this.parsers);
       const rolls = this.roll(parsedFormula);
       console.log(`Rolled ${rolls} with formula ${parsedFormula}`);
-      return this.formatRolls(rolls, flavorText);
+      return this.formatRolls(rolls, flavorText, canReRoll, showInterpretation);
     } catch (e) {
       return escapeHtml(e.message);
     }

@@ -1,3 +1,5 @@
+// #todo Consider using handlebars for all of this, removing mustache dependency and using conditionals like handlebars or mustache to prep and fill content
+
 const tpl = `
 <ul>
 {{#results}}
