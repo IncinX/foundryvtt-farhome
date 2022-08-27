@@ -27,9 +27,11 @@ export function evaluateTemplate(templateString, actorContext, itemContext) {
 }
 
 export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) {
+  // #todo This should be made into an object that pre-evaluates the help text and system function binds, etc.
+
   let evaluatorSystemContext = {
     // #todo skill and getRollFormula are deprecated here and should be removed when the macro fixes everything and it is communicated to players.
-    skill: skill,
+    skill: skill.bind(game.farhome.roller),
     getRollFormula: formula,
 
     targetCount: game.user.targets.size,
@@ -130,6 +132,7 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
   };
 
   // Build the help text
+  // #todo- A lot of this should really be localized, but it's not that important for now
   let help = '<b>global context:</b><br/>';
   help += '<ul>';
   help += '<li>fh(formulaString) -- Performs a roll given the formula.</li><br/>';
@@ -202,7 +205,6 @@ function fh(formula) {
 }
 
 function skill(proficiency, attribute) {
-  console.log(this);
   return proficiencyRoll(fh.bind(this), proficiency, attribute);
 }
 
