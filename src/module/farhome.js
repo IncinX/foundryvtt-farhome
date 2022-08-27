@@ -107,5 +107,5 @@ Hooks.on('renderChatLog', (_app, html, _data) => {
   // Register the chat log rice roller button handler
   // #todo Clean this up a bit later (moving to separate files that specifically handle the roll logic)
   // #todo Should _subscribeToChatLog above also use the JQuery $ first?
-  $('#chatlog').on('click', '.special-dice-roller button', diceRollerButtonHandler);
+  $('#chatlog').on('click', '.fh-roller button', diceRollerButtonHandler);
 });

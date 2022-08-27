@@ -128,7 +128,7 @@ export class FarhomeItem extends Item {
     // Add the custom reroll button.
     evaluatedTemplate += ChatRoller._getButtonHtml();
 
-    // #todo Need to have a roll summary at the bottom (such as Successes, Wounds, etc). This needs the ability to hide it with the special-dice-roller. Do that later.
+    // #todo Need to have a roll summary at the bottom (such as Successes, Wounds, etc). This needs the ability to hide it with the fh-roller. Do that later.
 
     // Create a mana spend button if the item is a spell.
     if (itemContext.type === 'spell' && actorContext !== null) {

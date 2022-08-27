@@ -43,7 +43,7 @@ export class ChatRoller {
 
     // #todo Construct a new message based on the existing message (but with the rolls replaced).
 
-    // #todo Base this functionality off of what is available in the special-dice-roller
+    // #todo Base this functionality off of what is available in the fh-roller
 
     // #todo Construct the new message with the old images greyed out (likely through a CSS class) and no images should be allowed for another re-roll.
     //      Disabling the input to prevent more re-roll selection can be done by adding a disabled attribute on the input control.

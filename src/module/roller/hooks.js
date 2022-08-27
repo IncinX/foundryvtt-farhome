@@ -38,7 +38,7 @@ export function diceRollerButtonHandler(event) {
 
   for (const roller of rollers) {
     if (selectedRolls.length > 0 && roller.command === rollerKey) {
-      if (button.classList.contains('special-dice-roller-keep') && roller.canKeep) {
+      if (button.classList.contains('fh-roller-keep') && roller.canKeep) {
         const keptRolls = selectedRolls.map((roll) => parseRoll(roll));
         const result = roller.formatKeptRolls(keptRolls);
         renderNewRoll(result);
