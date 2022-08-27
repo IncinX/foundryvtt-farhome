@@ -1,5 +1,9 @@
 import { proficiencyRollFormula, proficiencyRoll } from './roll';
 
+/* -------------------------------------------- */
+/*  Template evaluation functions               */
+/* -------------------------------------------- */
+
 export function evaluateTemplate(templateString, actorContext, itemContext) {
   let evaluatedString = templateString;
 
@@ -22,16 +26,11 @@ export function evaluateTemplate(templateString, actorContext, itemContext) {
   return evaluatedString;
 }
 
-function templateRoller(formula) {
-  return game.farhome.roller.rollFormula(formula, "", false, false);
-}
-
 export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) {
-  let evaluatorRollerContext = templateRoller;
-
   let evaluatorSystemContext = {
-    skill: proficiencyRoll.bind(null, evaluatorRollerContext),
-    getRollFormula: proficiencyRollFormula,
+    // #todo skill and getRollFormula are deprecated here and should be removed when the macro fixes everything and it is communicated to players.
+    skill: skill,
+    getRollFormula: formula,
 
     targetCount: game.user.targets.size,
   };
@@ -134,6 +133,8 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
   let help = '<b>global context:</b><br/>';
   help += '<ul>';
   help += '<li>fh(formulaString) -- Performs a roll given the formula.</li><br/>';
+  help += '<li>skill(proficiency, attribute) -- Performs a skill roll with the given proficiency and attribute.</li><br/>';
+  help += '<li>getRollFormula(proficiency, attribute) -- Gets the roll formula with the given proficiency and attribute.</li><br/>';
   help += '<li>s -- System helper function context (see below).</li><br/>';
   help += '<li>a -- Actor data context (see below).</li><br/>';
   help += '<li>i -- Item data context (see below).</li><br/>';
@@ -142,10 +143,7 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
 
   help += '<b>s (system context):</b><br/>';
   help += '<ul>';
-  help +=
-    '<li>skill(proficiency, attribute) -- Performs a skill roll with the given proficiency and attribute.</li><br/>';
-  help +=
-    '<li>getRollFormula(proficiency, attribute) -- Gets the roll formula with the given proficiency and attribute.</li><br/>';
+  help += '<li>targetCount -- Returns the number of targets selected in game.</li><br/>';
   help += '</ul>';
 
   help += '<b>a (actor context):</b><br/>';
@@ -163,9 +161,28 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
   help += '</ul>';
 
   // Evaluate the template chunk
-  let evaluationFunction = Function('fh', 's', 'a', 'i', 'help', 'return ' + templateChunk + ';');
+  let evaluationFunction = Function(
+    'fh',
+    'skill',
+    'formula',
+    'success',
+    'crit',
+    'hex',
+    'poison',
+    's',
+    'a',
+    'i',
+    'help',
+    'return ' + templateChunk + ';'
+  );
   let evaluatedOutput = evaluationFunction(
-    evaluatorRollerContext,
+    fh.bind(game.farhome.roller),
+    skill.bind(game.farhome.roller),
+    formula,
+    success,
+    crit,
+    hex,
+    poison,
     evaluatorSystemContext,
     evaluatorActorContext,
     evaluatorItemContext,
@@ -173,4 +190,38 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
   );
 
   return evaluatedOutput;
+}
+
+/* -------------------------------------------- */
+/*  Template helper functions                   */
+/* -------------------------------------------- */
+
+// #todo Need to bind the farhome roller state object here
+function fh(formula) {
+  return this.rollFormula(formula, "", false, false);
+}
+
+function skill(proficiency, attribute) {
+  console.log(this);
+  return proficiencyRoll(fh.bind(this), proficiency, attribute);
+}
+
+function formula(proficiency, attribute) {
+  return proficiencyRollFormula(proficiency, attribute);
+}
+
+function success(successCount) {
+  return `<div class="fh-success">${successCount}</div>`;
+}
+
+function crit(critCount) {
+  return `<div class="fh-crit">${critCount}</div>`;
+}
+
+function hex(hexCount) {
+  return `<div class="fh-hex">${hexCount}</div>`;
+}
+
+function poison(poisonCount) {
+  return `<div class="fh-poison">${poisonCount}</div>`;
 }

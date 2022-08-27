@@ -117,18 +117,24 @@ export class FarhomeItem extends Item {
       ...extraItemContext,
     };
 
+    // #todo Some handlebars or Mustache would make all of this cleaner.
+
+    let rollHtmlString = '';
+
     // Evaluate the template text with the given actor and item context.
     let evaluatedTemplate = evaluateTemplate(itemContext.data.rollTemplate.value, actorContext, superItemContext);
 
-    // #todo Can this function just return an HTMLDocument and I can work directly off of that?
+    rollHtmlString = `<div class='fh-evaluated-template'>${evaluatedTemplate}</div>`;
 
-    // Hide the default reroll buttons.
-    // #todo Do this via an API to the integrated roller
+    // Process the roll sumamry
+    let rollSummary = ``;
+    
+    // #todo Fill out the roll summary area. (rendered through Mustache for now)
+
+    rollHtmlString += `<div class='fh-roll-summary'>${rollSummary}</div>`;
 
     // Add the custom reroll button.
-    evaluatedTemplate += ChatRoller._getButtonHtml();
-
-    // #todo Need to have a roll summary at the bottom (such as Successes, Wounds, etc). This needs the ability to hide it with the fh-roller. Do that later.
+    rollHtmlString += ChatRoller._getButtonHtml();
 
     // Create a mana spend button if the item is a spell.
     if (itemContext.type === 'spell' && actorContext !== null) {
@@ -139,11 +145,11 @@ export class FarhomeItem extends Item {
             ${game.i18n.localize('farhome.spendMana')} (${manaCost}/${actorContext.data.features.mana.value})
           </button>
         </form>`;
-      evaluatedTemplate += manaSpendHtml;
+        rollHtmlString += manaSpendHtml;
     }
 
     // Send the evaluatedTemplate to chat.
-    sendActorMessage(evaluatedTemplate);
+    sendActorMessage(rollHtmlString);
   }
 
   /**
