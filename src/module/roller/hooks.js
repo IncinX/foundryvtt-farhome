@@ -2,7 +2,7 @@
 // #todo Add function/class documentation for all the code in farhome
 // #todo Clean up all the code
 
-function parseRoll(input) {
+export function parseRoll(input) {
   const die = parseInt(input.dataset.die ?? '0', 10);
   const face = parseInt(input.dataset.face ?? '0', 10);
   return [die, face];

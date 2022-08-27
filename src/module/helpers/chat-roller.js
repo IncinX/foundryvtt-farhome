@@ -58,6 +58,8 @@ export class ChatRoller {
 
     sendActorMessage(message.innerHTML);
 
+    // #todo Old rolls should be disabled to get the desired effect in css and for parsing.
+
     // #todo DEBUG AND GET THIS WORKING NEXT!
     const parsedRolls = rolls
       .map((rollInput) => {

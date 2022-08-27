@@ -1,4 +1,5 @@
 .fh-roller form input[type=checkbox] {
+
   border: 1px solid transparent;
   background-repeat: no-repeat;
   background-position: center;
@@ -14,23 +15,12 @@
 
 .fh-roller form input[type=checkbox]:disabled {
   cursor: default;
+  filter: opacity(25%);
 }
 
 .fh-roller form input[type=checkbox]:checked {
   outline: none;
   border: 1px solid #ac0f1a;
-}
-
-.fh-roller-succeeded {
-  color: darkgreen;
-}
-
-.fh-roller-failed {
-  color: darkred;
-}
-
-.fh-roller-v5-messy-critical {
-  color: darkred;
 }
 
 .fh-roller form input[type=checkbox].fh-roller-was-re-roll {
