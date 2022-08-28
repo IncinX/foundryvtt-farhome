@@ -3,11 +3,15 @@
 // #todo Clean up all the code
 // #todo Cleanup the import dependencies, avoid ciruclar dependencies
 import { ReRoll } from './roller';
+import { Roll } from './roller';
+import { rollValuesMonoid } from './fh/dice';
+
+// #todo Consider putting all this stuff inside the FHSystem class
 
 export function parseRoll(input) {
   const die = parseInt(input.dataset.die ?? '0', 10);
   const face = parseInt(input.dataset.face ?? '0', 10);
-  return { die, face };
+  return new Roll(die, face);
 }
 
 function renderNewRoll(rolls) {
@@ -19,50 +23,68 @@ function renderNewRoll(rolls) {
 }
 
 export function getRollSummaryData(rollHtml) {
-  // BEGIN DEBUG! (Roll parsing)
-  console.log(rollHtml);
+  const fhRollQuery = $(rollHtml);
 
-  let fhRoll = $(rollHtml);
+  let rolls = [];
 
-  fhRoll.find('input').each((_index, element) => {
+  fhRollQuery.find('input').each((_index, element) => {
     if (!element.disabled) {
       const rollData = parseRoll(element);
+      rolls.push(rollData);
     }
   });
 
+  console.log(rolls);
+
+  const initialRollSummaryData = game.farhome.roller.combineRolls(rolls);
+
+  console.log(initialRollSummaryData);
+
   // Compute the roll modifiers
-  let rollModifiers = {
-    success: 0,
-    crit: 0,
+  let rollModifiersData = {
+    successes: 0,
+    crits: 0,
+    wounds: 0,
     hex: 0,
     poison: 0,
   };
 
-  fhRoll.find('.fh-success').each((_index, element) => {
-    rollModifiers.success += parseInt(element.dataset.success);
-  });
-  fhRoll.find('.fh-crit').each((_index, element) => {
-    rollModifiers.crit += parseInt(element.dataset.crit);
-  });
-  fhRoll.find('.fh-hex').each((_index, element) => {
-    rollModifiers.hex += parseInt(element.dataset.hex);
-  });
-  fhRoll.find('.fh-poison').each((_index, element) => {
-    rollModifiers.poison += parseInt(element.dataset.poison);
+  fhRollQuery.find('.fh-successes').each((_index, element) => {
+    rollModifiersData.successes += parseInt(element.dataset.successes);
   });
 
-  console.log(rollModifiers);
+  fhRollQuery.find('.fh-crits').each((_index, element) => {
+    rollModifiersData.crits += parseInt(element.dataset.crits);
+  });
 
-  // #todo Apply the roll modifiers to the rollValuesMonoid
+  fhRollQuery.find('.fh-wounds').each((_index, element) => {
+    rollModifiersData.wounds += parseInt(element.dataset.wounds);
+  });
 
-  // #todo Need to end up with rollValuesMonoid and then pipe that into a Mustache render of tpl
-  // END DEBUG
+  fhRollQuery.find('.fh-hex').each((_index, element) => {
+    rollModifiersData.hex += parseInt(element.dataset.hex);
+  });
+
+  fhRollQuery.find('.fh-poison').each((_index, element) => {
+    rollModifiersData.poison += parseInt(element.dataset.poison);
+  });
+
+  console.log(`modifiers: ${rollModifiersData}`);
+
+  const combinedRollSummary = rollValuesMonoid.combine(initialRollSummaryData, rollModifiersData);
+
+  // #todo Do hex and poison later when active effects are in.
+  // #todo Apply hex modifiers
+  // #todo Roll and apply poison modifiers... Where to make those rolls? At the end?
+
+  return combinedRollSummary;
 }
 
-export function getRollSummaryContent(rollSummaryData) {
+export function getRollSummary(rollSummaryData) {
   // #todo Fill out the roll summary area. (rendered through Mustache for now)
   console.log(rollSummaryData);
-  return ``;
+  const rollSummaryContent = ``;
+  return `<div class='fh-roll-summary'>${rollSummaryContent}</div>`;
 }
 
 export class FHRollSystem {

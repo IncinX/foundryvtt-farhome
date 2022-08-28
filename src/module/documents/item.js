@@ -2,7 +2,7 @@ import { evaluateTemplate } from '../helpers/template-evaluator';
 import { convertSpellLevelToManaCost } from '../helpers/mana';
 import { sendActorMessage } from '../helpers/chat';
 import { ChatRoller } from '../helpers/chat-roller';
-import { getRollSummaryData, getRollSummaryHtml } from './roller/system';
+import { getRollSummaryData, getRollSummary } from '../roller/system';
 
 const MAX_SPELL_LEVEL = 10;
 
@@ -127,21 +127,21 @@ export class FarhomeItem extends Item {
     // #todo Fill out active effects area
     let activeEffects = ``;
 
-    let rollHtmlString = `
+    let messageHtmlString = `
       <div class='fh-roll'>
         <div class='fh-evaluated-template'>${evaluatedTemplate}</div>
         <div class='fh-active-effects'>${activeEffects}</div>
       </div>`;
 
-    const rollHtml = new DOMParser().parseFromString(rollHtmlString, 'text/html').body.firstChild;
+    const rollHtml = new DOMParser().parseFromString(messageHtmlString, 'text/html').body.firstChild;
 
     // Process the roll sumamry
-    const rollSummaryHtmlContent = getRollSummaryHtml(getRollSummaryData(evaluatedTemplate));
+    const rollSummary = getRollSummary(getRollSummaryData(evaluatedTemplate));
 
-    rollHtmlString += rollSummaryHtmlContent;
+    messageHtmlString += rollSummary;
 
     // Add the custom reroll button.
-    rollHtmlString += ChatRoller.getButtonHtml();
+    messageHtmlString += ChatRoller.getButtonHtml();
 
     // Create a mana spend button if the item is a spell.
     if (itemContext.type === 'spell' && actorContext !== null) {
@@ -152,11 +152,11 @@ export class FarhomeItem extends Item {
             ${game.i18n.localize('farhome.spendMana')} (${manaCost}/${actorContext.data.features.mana.value})
           </button>
         </form>`;
-      rollHtmlString += manaSpendHtml;
+      messageHtmlString += manaSpendHtml;
     }
 
     // Send the evaluatedTemplate to chat.
-    sendActorMessage(rollHtmlString);
+    sendActorMessage(messageHtmlString);
   }
 
   /**

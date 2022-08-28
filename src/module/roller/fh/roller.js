@@ -22,12 +22,12 @@ import {
   WOUND_ROLL_TABLE,
   GUARANTEED_WOUND_ROLL_TABLE,
 } from './dice';
-import { SimpleParser } from './parser';
+import { FHParser } from './parser';
 import tpl from './template';
 
 export class FHRoller extends Roller {
   constructor(rng, command) {
-    super(command, [new SimpleParser()], false);
+    super(command, [new FHParser()], false);
 
     this.rng = rng;
   }

@@ -1,5 +1,5 @@
 import { sendActorMessage } from './chat';
-import { getRollSummaryData, getRollSummaryHtml } from './roller/system';
+import { getRollSummaryData, getRollSummary } from '../roller/system';
 
 export class ChatRoller {
   static chatRerollClass = 'fh-reroll';
