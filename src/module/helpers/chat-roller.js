@@ -1,4 +1,5 @@
 import { sendActorMessage } from './chat';
+import { getRollSummaryData, getRollSummaryHtml } from './roller/system';
 
 export class ChatRoller {
   static chatRerollClass = 'fh-reroll';
@@ -61,16 +62,15 @@ export class ChatRoller {
     // #todo Old rolls should be disabled to get the desired effect in css and for parsing.
 
     // #todo DEBUG AND GET THIS WORKING NEXT!
-    const parsedRolls = rolls
-      .map((rollInput) => {
-        const roll = parseRoll(rollInput);
-        return new ReRoll(roll, rollInput.checked);
-      });
+    const parsedRolls = rolls.map((rollInput) => {
+      const roll = parseRoll(rollInput);
+      return new ReRoll(roll, rollInput.checked);
+    });
 
     const result = game.farhome.roller.formatReRolls(parsedRolls);
     renderNewRoll(result);
-    selectedRolls.forEach((elem) => elem.checked = false);
-    
+    selectedRolls.forEach((elem) => (elem.checked = false));
+
     // #todo Need to replace the summary text (successes, wounds, etc) and maybe add some stuff for hex/poison later
   }
 }

@@ -2,7 +2,7 @@ import { evaluateTemplate } from '../helpers/template-evaluator';
 import { convertSpellLevelToManaCost } from '../helpers/mana';
 import { sendActorMessage } from '../helpers/chat';
 import { ChatRoller } from '../helpers/chat-roller';
-import { parseRoll } from '../roller/hooks'; // #todo Move this to a better location when the roller parse logic is relocated
+import { getRollSummaryData, getRollSummaryHtml } from './roller/system';
 
 const MAX_SPELL_LEVEL = 10;
 
@@ -133,45 +133,12 @@ export class FarhomeItem extends Item {
         <div class='fh-active-effects'>${activeEffects}</div>
       </div>`;
 
-    let rollHtml = new DOMParser().parseFromString(rollHtmlString, 'text/html').body.firstChild;
-
-    // BEGIN DEBUG! (Roll parsing)
-    console.log(rollHtml);
-
-    let fhRoll = $(rollHtml);
-
-    fhRoll.find('input').each((_index, element) => {
-      if (!element.disabled) {
-        const blah = parseRoll(element);
-        console.log(blah);
-      }
-    });
-
-    // Compute the roll modifiers
-    let rollModifiers = {
-      success: 0,
-      crit: 0,
-      hex: 0,
-      poison: 0,
-    }
-
-    fhRoll.find('.fh-success').each((_index, element) => { rollModifiers.success += parseInt(element.dataset.success); });
-    fhRoll.find('.fh-crit').each((_index, element) => { rollModifiers.crit += parseInt(element.dataset.crit); });
-    fhRoll.find('.fh-hex').each((_index, element) => { rollModifiers.hex += parseInt(element.dataset.hex); });
-    fhRoll.find('.fh-poison').each((_index, element) => { rollModifiers.poison += parseInt(element.dataset.poison); });
-
-    console.log(rollModifiers);
-
-    // #todo Apply the roll modifiers to the rollValuesMonoid
-
-    // #todo Need to end up with rollValuesMonoid and then pipe that into a Mustache render of tpl
-    // END DEBUG
+    const rollHtml = new DOMParser().parseFromString(rollHtmlString, 'text/html').body.firstChild;
 
     // Process the roll sumamry
-    // #todo Fill out the roll summary area. (rendered through Mustache for now)
-    let rollSummary = ``;
+    const rollSummaryHtmlContent = getRollSummaryHtml(getRollSummaryData(evaluatedTemplate));
 
-    rollHtmlString += `<div class='fh-roll-summary'>${rollSummary}</div>`;
+    rollHtmlString += rollSummaryHtmlContent;
 
     // Add the custom reroll button.
     rollHtmlString += ChatRoller.getButtonHtml();
@@ -185,7 +152,7 @@ export class FarhomeItem extends Item {
             ${game.i18n.localize('farhome.spendMana')} (${manaCost}/${actorContext.data.features.mana.value})
           </button>
         </form>`;
-        rollHtmlString += manaSpendHtml;
+      rollHtmlString += manaSpendHtml;
     }
 
     // Send the evaluatedTemplate to chat.

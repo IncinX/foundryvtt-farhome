@@ -65,9 +65,7 @@ export class Roller {
   formatReRolls(rolls) {
     //shim(); // #todo Not sure what this is for, remove it when it is confirmed unnecessary
     const reRolls = rolls.flatMap((roll) => {
-      const die = roll.indexedRoll[0];
-      const face = roll.indexedRoll[1];
-      const typedRoll = this.toRoll(die, face);
+      const typedRoll = this.toRoll(roll.die, roll.face);
       if (roll.shouldReRoll) {
         const pool = this.toDicePool([typedRoll.die]);
         return this.roll(pool).map((reRoll) => {

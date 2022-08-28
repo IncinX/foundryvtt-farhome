@@ -48,7 +48,7 @@ export class DefaultSimpleParser {
     this.numbers.add('8');
     this.numbers.add('9');
   }
-  
+
   canParse(formula) {
     return this.formulaRegex.test(formula);
   }

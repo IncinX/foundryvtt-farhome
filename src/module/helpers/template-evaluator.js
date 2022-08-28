@@ -136,8 +136,10 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
   let help = '<b>global context:</b><br/>';
   help += '<ul>';
   help += '<li>fh(formulaString) -- Performs a roll given the formula.</li><br/>';
-  help += '<li>skill(proficiency, attribute) -- Performs a skill roll with the given proficiency and attribute.</li><br/>';
-  help += '<li>getRollFormula(proficiency, attribute) -- Gets the roll formula with the given proficiency and attribute.</li><br/>';
+  help +=
+    '<li>skill(proficiency, attribute) -- Performs a skill roll with the given proficiency and attribute.</li><br/>';
+  help +=
+    '<li>getRollFormula(proficiency, attribute) -- Gets the roll formula with the given proficiency and attribute.</li><br/>';
   help += '<li>s -- System helper function context (see below).</li><br/>';
   help += '<li>a -- Actor data context (see below).</li><br/>';
   help += '<li>i -- Item data context (see below).</li><br/>';
@@ -176,7 +178,7 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
     'a',
     'i',
     'help',
-    'return ' + templateChunk + ';'
+    'return ' + templateChunk + ';',
   );
   let evaluatedOutput = evaluationFunction(
     fh.bind(game.farhome.roller),
@@ -201,7 +203,7 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
 
 // #todo Need to bind the farhome roller state object here
 function fh(formula) {
-  return this.rollFormula(formula, "", false, false);
+  return this.rollFormula(formula, '', false, false);
 }
 
 function skill(proficiency, attribute) {
