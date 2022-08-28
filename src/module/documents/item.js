@@ -136,8 +136,9 @@ export class FarhomeItem extends Item {
     const rollHtml = new DOMParser().parseFromString(messageHtmlString, 'text/html').body.firstChild;
 
     // Process the roll sumamry
-    const rollSummary = getRollSummary(getRollSummaryData(evaluatedTemplate));
+    const rollSummary = getRollSummary(getRollSummaryData(rollHtml));
 
+    messageHtmlString += '<hr><h2>Roll Summary</h2>';
     messageHtmlString += rollSummary;
 
     // Add the custom reroll button.

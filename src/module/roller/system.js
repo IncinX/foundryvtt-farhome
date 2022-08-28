@@ -2,9 +2,11 @@
 // #todo Add function/class documentation for all the code in farhome
 // #todo Clean up all the code
 // #todo Cleanup the import dependencies, avoid ciruclar dependencies
+import Mustache from 'mustache';
 import { ReRoll } from './roller';
 import { Roll } from './roller';
 import { rollValuesMonoid } from './fh/dice';
+import tpl from './fh/template';
 
 // #todo Consider putting all this stuff inside the FHSystem class
 
@@ -49,6 +51,8 @@ export function getRollSummaryData(rollHtml) {
     poison: 0,
   };
 
+  // #todo These hard-coded class strings should be communicated through const static exports (possibly from a class)
+
   fhRollQuery.find('.fh-successes').each((_index, element) => {
     rollModifiersData.successes += parseInt(element.dataset.successes);
   });
@@ -69,8 +73,6 @@ export function getRollSummaryData(rollHtml) {
     rollModifiersData.poison += parseInt(element.dataset.poison);
   });
 
-  console.log(`modifiers: ${rollModifiersData}`);
-
   const combinedRollSummary = rollValuesMonoid.combine(initialRollSummaryData, rollModifiersData);
 
   // #todo Do hex and poison later when active effects are in.
@@ -81,9 +83,9 @@ export function getRollSummaryData(rollHtml) {
 }
 
 export function getRollSummary(rollSummaryData) {
-  // #todo Fill out the roll summary area. (rendered through Mustache for now)
-  console.log(rollSummaryData);
-  const rollSummaryContent = ``;
+  const rollSummaryContent = Mustache.render(tpl, {
+    results: rollSummaryData,
+  });
   return `<div class='fh-roll-summary'>${rollSummaryContent}</div>`;
 }
 
