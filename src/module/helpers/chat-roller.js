@@ -36,11 +36,6 @@ export class ChatRoller {
   static async _handleReroll(event) {
     event.preventDefault();
 
-    // Disable the button
-    event.currentTarget.disabled = true;
-
-    console.log('Re-roll requested');
-
     // #todo Find out how the heck re-rolls were working before with the fully templated message... was it just pre-amble?
 
     // #todo Try to avoid code duplication with roller's diceRollerButtonHandler() function
@@ -67,11 +62,9 @@ export class ChatRoller {
     // Do the re-roll after the parsing so it doesn't interfere with the parsing.
     pendingReRollElements.forEach((pendingReRollElement) => {
       const rollData = parseRoll(pendingReRollElement);
-
-      // #todo Re-roll the die and add the new roll after the current element
-      //       Pay close attention to how the roll template does this with Mustache.
-      // DEBUG!
-      pendingReRollElement.parentNode.insertBefore(document.createElement('br'), pendingReRollElement.nextSibling);
+      const newRoll = game.farhome.roller.reRoll([], [rollData])[0];
+      const rollHtml = game.farhome.roller.formatRoll(newRoll);
+      pendingReRollElement.insertAdjacentHTML('afterend', rollHtml);
     });
 
     // #todo Need to re-compute the summary (from fh-roll class) and re-post under (fh-roll-summary class)

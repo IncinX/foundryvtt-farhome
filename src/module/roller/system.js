@@ -6,7 +6,7 @@ import Mustache from 'mustache';
 import { ReRoll } from './roller';
 import { Roll } from './roller';
 import { rollValuesMonoid } from './fh/dice';
-import tpl from './fh/template';
+import { summaryTemplate } from './templates';
 
 // #todo Consider putting all this stuff inside the FHSystem class
 
@@ -35,12 +35,8 @@ export function getRollSummaryData(rollHtml) {
       rolls.push(rollData);
     }
   });
-
-  console.log(rolls);
-
+  
   const initialRollSummaryData = game.farhome.roller.combineRolls(rolls);
-
-  console.log(initialRollSummaryData);
 
   // Compute the roll modifiers
   let rollModifiersData = {
@@ -83,7 +79,7 @@ export function getRollSummaryData(rollHtml) {
 }
 
 export function getRollSummary(rollSummaryData) {
-  const rollSummaryContent = Mustache.render(tpl, {
+  const rollSummaryContent = Mustache.render(summaryTemplate, {
     results: rollSummaryData,
   });
   return `<div class='fh-roll-summary'>${rollSummaryContent}</div>`;
@@ -92,12 +88,6 @@ export function getRollSummary(rollSummaryData) {
 export class FHRollSystem {
   static subscribeToChatLog(html) {
     html.on('click', '.fh-roller-reroll', this.diceRollerButtonHandler);
-    /*
-    html.on('click', '.fh-roller-reroll', (event) => {
-      console.log("hello");
-      event.preventDefault();
-    });
-    */
   }
 
   static diceRollerChatMessageHandler(_chatLog, messageText, data) {
