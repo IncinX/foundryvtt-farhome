@@ -1,6 +1,8 @@
 import { evaluateTemplate } from '../helpers/template-evaluator';
 import { convertSpellLevelToManaCost } from '../helpers/mana';
 import { sendActorMessage } from '../helpers/chat';
+import { ChatRoller } from '../helpers/chat-roller';
+import { getRollSummaryData, getRollSummary } from '../roller/system';
 
 const MAX_SPELL_LEVEL = 10;
 
@@ -57,22 +59,28 @@ export class FarhomeItem extends Item {
    */
   async _spellLevelDialog() {
     const itemContext = this.data;
+    const actorContext = this.actor ? this.actor.data : null;
+    const currentMana = actorContext ? actorContext.data.features.mana.value : 0;
 
     let selectorUniqueId = `spell-level-selector-${Math.random().toString(16).substring(2)}`;
 
-    let dialogContent = `<b>Select the level with which to cast the ${itemContext.name} spell.</b><br>`;
-    dialogContent += `<select id="${selectorUniqueId}">`;
+    let dialogContent = `<p>${itemContext.data.description.value}</p>`;
+
+    dialogContent += `<p><b>Select the level with which to cast the spell</b></p>`;
+
+    dialogContent += `<p><select id="${selectorUniqueId}" style="width: 100%">`;
     for (let level = itemContext.data.spellLevel.value; level <= MAX_SPELL_LEVEL; level++) {
       if (level === 0) {
-        dialogContent += '<option value="' + level + '">Cantrip</option>';
+        dialogContent += `<option value="${level}">Cantrip</option>`;
       } else {
-        dialogContent += '<option value="' + level + '">Level ' + level + '</option>';
+        const manaCost = convertSpellLevelToManaCost(level);
+        dialogContent += `<option value="${level}">Level ${level} (Mana Cost = ${manaCost}/${currentMana})</option>`;
       }
     }
-    dialogContent += '</select>';
+    dialogContent += '</select></p>';
 
     let d = new Dialog({
-      title: 'Select Spell Level',
+      title: ` ${itemContext.name}: Select Spell Level`,
       content: dialogContent,
       buttons: {
         cast: {
@@ -110,21 +118,52 @@ export class FarhomeItem extends Item {
       ...extraItemContext,
     };
 
+    // #todo Some handlebars or Mustache would make all of this cleaner.
+
     // Evaluate the template text with the given actor and item context.
     let evaluatedTemplate = evaluateTemplate(itemContext.data.rollTemplate.value, actorContext, superItemContext);
+
+    // Evaluate the active effects for the character (ie/ hex, poison, etc)
+    // #todo Fill out active effects area
+    let activeEffects = ``;
+
+    let messageHtmlString = `
+      <div class='fh-roll'>
+        <div class='fh-evaluated-template'>${evaluatedTemplate}</div>
+        <div class='fh-active-effects'>${activeEffects}</div>
+      </div>`;
+
+    const rollHtml = new DOMParser().parseFromString(messageHtmlString, 'text/html').body.firstChild;
+
+    // Process the roll sumamry
+    const rollSummary = getRollSummary(getRollSummaryData(rollHtml));
+
+    // #todo Count the poison and roll extra poison dice with an Active Effects Dice here (since the fh-active-effects are just hidden div's for data).
+    //       The actual poison roll will go here. Need to consider how to incorporate this into saves/abilities as well and reduce duplication with helper functions somewhere (system?).
+
+    // #todo Process the roll summary based on hex/poison
+
+    // Print the roll summary
+    messageHtmlString += '<hr><h2>Roll Summary</h2>';
+    messageHtmlString += rollSummary;
+
+    // Add the custom reroll button.
+    messageHtmlString += ChatRoller.getButtonHtml();
 
     // Create a mana spend button if the item is a spell.
     if (itemContext.type === 'spell' && actorContext !== null) {
       let manaCost = convertSpellLevelToManaCost(extraItemContext.castedSpellLevel);
       let manaSpendHtml = `
         <form>
-          <button class="spend-mana" data-mana="${manaCost}" data-actor-id="${actorContext._id}">Spend Mana (${manaCost}/${actorContext.data.features.mana.max})</button>
+          <button class="spend-mana" data-mana="${manaCost}" data-actor-id="${actorContext._id}">
+            ${game.i18n.localize('farhome.spendMana')} (${manaCost}/${actorContext.data.features.mana.value})
+          </button>
         </form>`;
-      evaluatedTemplate += manaSpendHtml;
+      messageHtmlString += manaSpendHtml;
     }
 
     // Send the evaluatedTemplate to chat.
-    sendActorMessage(this.actor, evaluatedTemplate);
+    sendActorMessage(messageHtmlString);
   }
 
   /**
@@ -132,7 +171,7 @@ export class FarhomeItem extends Item {
    * @param {Document} html   The html document for the chat log.
    * @private
    */
-  static _subscribeToChatLog(html) {
+  static subscribeToRenderChatLog(html) {
     html.on('click', '.spend-mana', this._handleManaSpend.bind(this));
   }
 
@@ -144,18 +183,27 @@ export class FarhomeItem extends Item {
   static async _handleManaSpend(event) {
     event.preventDefault();
 
+    // Disable the button
+    event.currentTarget.disabled = true;
+
     // Get the data from the button
     let manaCost = parseInt(event.currentTarget.dataset.mana);
     let actorId = event.currentTarget.dataset.actorId;
+
+    // Check for ownership
     let actor = game.actors.get(actorId);
+    if (!actor.isOwner) {
+      sendActorMessage(
+        'You do not own this actor, so stop trying to spend their mana. ' +
+          'They are <i>probably</i> competant enough to do that themselves.',
+      );
+      return;
+    }
 
     // Dedudct the mana off of the character's sheet
     actor.update({ 'data.features.mana.value': actor.data.data.features.mana.value - manaCost });
 
-    // Disable the button
-    event.currentTarget.disabled = true;
-
     // Send the confirmation message to the chat
-    sendActorMessage(actor, `<b>${actor.name}</b> spent ${manaCost} mana.`);
+    sendActorMessage(`<b>${actor.name}</b> spent ${manaCost} mana.`);
   }
 }

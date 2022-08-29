@@ -1,5 +1,9 @@
 import { proficiencyRollFormula, proficiencyRoll } from './roll';
 
+/* -------------------------------------------- */
+/*  Template evaluation functions               */
+/* -------------------------------------------- */
+
 export function evaluateTemplate(templateString, actorContext, itemContext) {
   let evaluatedString = templateString;
 
@@ -23,16 +27,17 @@ export function evaluateTemplate(templateString, actorContext, itemContext) {
 }
 
 export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) {
-  let evaluatorRollerContext = game.specialDiceRoller.fh.rollFormula.bind(game.specialDiceRoller.fh);
+  // #todo This should be made into an object that pre-evaluates the help text and system function binds, etc.
 
   let evaluatorSystemContext = {
-    skill: proficiencyRoll.bind(null, evaluatorRollerContext),
-    getRollFormula: proficiencyRollFormula,
+    // #todo skill and getRollFormula are deprecated here and should be removed when the macro fixes everything and it is communicated to players.
+    skill: skill.bind(game.farhome.roller),
+    getRollFormula: formula,
 
     targetCount: game.user.targets.size,
   };
 
-  // TODO Try to automate this with some loops but still keep the concise syntax?
+  // #todo Try to automate this with some loops but still keep the concise syntax?
   let evaluatorActorContext = actorContext
     ? {
         name: actorContext.name,
@@ -95,26 +100,31 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
       }
     : {};
 
+  // #todo A helper function could make a lot of this simpler
   let evaluatorItemContext = {
     name: itemContext.name,
     description: itemContext.data.description.value,
-    rarity: itemContext.data.rarity ? itemContext.data.rarity.value : '',
+    rarity: itemContext.data.rarity ? game.i18n.localize(`farhome.${itemContext.data.rarity.value}`) : '',
     apCost: itemContext.data.apCost ? itemContext.data.apCost.value : '',
     range: itemContext.data.range ? itemContext.data.range.value : '',
-    damageType: itemContext.data.damageType ? itemContext.data.damageType.value : '',
+    damageType: itemContext.data.damageType ? game.i18n.localize(`farhome.${itemContext.data.damageType.value}`) : '',
     quantity: itemContext.data.quantity ? itemContext.data.quantity.value : '',
     weight: itemContext.data.weight ? itemContext.data.weight : '',
-    weaponType: itemContext.data.weaponType ? itemContext.data.weaponType.value : '',
+    weaponType: itemContext.data.weaponType ? game.i18n.localize(`farhome.${itemContext.data.weaponType.value}`) : '',
     armorBonus: itemContext.data.armorBonus ? itemContext.data.armorBonus.value : '',
     armorPenalty: itemContext.data.armorPenalty ? itemContext.data.armorPenalty.value : '',
-    armorType: itemContext.data.armorType ? itemContext.data.armorType.value : '',
+    armorType: itemContext.data.armorType ? game.i18n.localize(`farhome.${itemContext.data.armorType.value}`) : '',
     levelRequirements: itemContext.data.levelRequirements ? itemContext.data.levelRequirements.value : '',
     apCosts: itemContext.data.apCosts ? itemContext.data.apCosts.value : '',
     spellLevel: itemContext.data.spellLevel ? itemContext.data.spellLevel.value : '',
-    spellSchool: itemContext.data.spellSchool ? itemContext.data.spellSchool.value : '',
+    spellSchool: itemContext.data.spellSchool
+      ? game.i18n.localize(`farhome.${itemContext.data.spellSchool.value}`)
+      : '',
     spellDuration: itemContext.data.duration ? itemContext.data.duration.value : '',
     castingTime: itemContext.data.castingTime ? itemContext.data.castingTime.value : '',
-    areaOfEffect: itemContext.data.areaOfEffect ? itemContext.data.areaOfEffect.value : '',
+    areaOfEffect: itemContext.data.areaOfEffect
+      ? game.i18n.localize(`farhome.${itemContext.data.areaOfEffect.value}`)
+      : '',
 
     // These items are derived or queried from the user
     castedSpellLevel: itemContext.castedSpellLevel ?? '',
@@ -122,9 +132,14 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
   };
 
   // Build the help text
+  // #todo- A lot of this should really be localized, but it's not that important for now
   let help = '<b>global context:</b><br/>';
   help += '<ul>';
   help += '<li>fh(formulaString) -- Performs a roll given the formula.</li><br/>';
+  help +=
+    '<li>skill(proficiency, attribute) -- Performs a skill roll with the given proficiency and attribute.</li><br/>';
+  help +=
+    '<li>getRollFormula(proficiency, attribute) -- Gets the roll formula with the given proficiency and attribute.</li><br/>';
   help += '<li>s -- System helper function context (see below).</li><br/>';
   help += '<li>a -- Actor data context (see below).</li><br/>';
   help += '<li>i -- Item data context (see below).</li><br/>';
@@ -133,10 +148,7 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
 
   help += '<b>s (system context):</b><br/>';
   help += '<ul>';
-  help +=
-    '<li>skill(proficiency, attribute) -- Performs a skill roll with the given proficiency and attribute.</li><br/>';
-  help +=
-    '<li>getRollFormula(proficiency, attribute) -- Gets the roll formula with the given proficiency and attribute.</li><br/>';
+  help += '<li>targetCount -- Returns the number of targets selected in game.</li><br/>';
   help += '</ul>';
 
   help += '<b>a (actor context):</b><br/>';
@@ -154,9 +166,30 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
   help += '</ul>';
 
   // Evaluate the template chunk
-  let evaluationFunction = Function('fh', 's', 'a', 'i', 'help', 'return ' + templateChunk + ';');
+  let evaluationFunction = Function(
+    'fh',
+    'skill',
+    'formula',
+    'success',
+    'crit',
+    'wound',
+    'hex',
+    'poison',
+    's',
+    'a',
+    'i',
+    'help',
+    'return ' + templateChunk + ';',
+  );
   let evaluatedOutput = evaluationFunction(
-    evaluatorRollerContext,
+    fh.bind(game.farhome.roller),
+    skill.bind(game.farhome.roller),
+    formula,
+    success,
+    crit,
+    wound,
+    hex,
+    poison,
     evaluatorSystemContext,
     evaluatorActorContext,
     evaluatorItemContext,
@@ -164,4 +197,42 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
   );
 
   return evaluatedOutput;
+}
+
+/* -------------------------------------------- */
+/*  Template helper functions                   */
+/* -------------------------------------------- */
+
+// #todo Need to bind the farhome roller state object here
+function fh(formula) {
+  return this.rollFormula(formula, '', false, false);
+}
+
+function skill(proficiency, attribute) {
+  return proficiencyRoll(fh.bind(this), proficiency, attribute);
+}
+
+function formula(proficiency, attribute) {
+  return proficiencyRollFormula(proficiency, attribute);
+}
+
+function success(successCount) {
+  return `<div class='fh-successes' data-successes='${successCount}'></div>`;
+}
+
+function crit(critCount) {
+  return `<div class='fh-crits' data-crits='${critCount}'></div>`;
+}
+
+function wound(woundCount) {
+  return `<div class='fh-wounds' data-wounds='${woundCount}'></div>`;
+}
+
+// #todo Perhaps disallow hex and poison later
+function hex(hexCount) {
+  return `<div class='fh-hex' data-hex='${hexCount}'></div>`;
+}
+
+function poison(poisonCount) {
+  return `<div class='fh-poison' data-poison='${poisonCount}'></div>`;
 }

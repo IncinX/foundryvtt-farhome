@@ -1,9 +1,16 @@
 import { sendActorMessage } from '../helpers/chat.js';
 import { onManageActiveEffect, prepareActiveEffectCategories } from '../helpers/effects.js';
 import { localizeObject } from '../helpers/localization.js';
-import { _getDefaultRollTemplate } from '../helpers/roll-templates.js';
+import {
+  getStrongestKey,
+  getDefaultRollTemplate,
+  getWeaponRollTemplate,
+  getArmorRollTemplate,
+  getSpellRollTemplate,
+  getManeuverRollTemplate,
+} from '../helpers/roll-templates.js';
 
-// TODO Add Poison/Hex icons later
+// #todo Add Poison/Hex icons later
 
 /**
  * Extend the basic ActorSheet to implement Farhome specifics.
@@ -203,7 +210,7 @@ export default class FarhomeActorSheet extends ActorSheet {
     html.find('.item-quantity-input').change(this._onItemQuantityChanged.bind(this));
 
     // Active Effect management
-    // TODO Add support for effects
+    // #todo Add support for effects
     html.find('.effect-control').click((ev) => onManageActiveEffect(ev, this.actor));
 
     // Rollable abilities.
@@ -233,7 +240,7 @@ export default class FarhomeActorSheet extends ActorSheet {
     const type = header.dataset.type;
 
     // Grab any data associated with this control.
-    const data = duplicate(header.dataset);
+    const controlData = duplicate(header.dataset);
 
     // Initialize a default name.
     const name = `New ${type.capitalize()}`;
@@ -245,17 +252,56 @@ export default class FarhomeActorSheet extends ActorSheet {
       data: {},
     };
 
+    // Populate the spell item
     if (type === 'spell') {
       itemData.data.spellLevel = {
-        value: parseInt(data.spellLevel),
+        value: parseInt(controlData.spellLevel),
       };
     }
 
-    // TODO When a new item of a type is created, it should fill the rollTemplate field with an appropriate template for it's type.
-    //      This roll template should vary depending on type.
-    itemData.data.rollTemplate = {
-      value: _getDefaultRollTemplate(),
-    };
+    // Setup a custom template depending on the item type.
+    const actorData = this.actor.data.data;
+
+    if (type === 'armor') {
+      itemData.data.rollTemplate = {
+        value: getArmorRollTemplate(),
+      };
+    } else if (type === 'weapon' || type === 'maneuver') {
+      const relevantWeaponAttributes = {
+        str: actorData.attributes.str,
+        dex: actorData.attributes.dex,
+      };
+
+      const strongestWeaponProficiency = getStrongestKey(actorData.proficiencies.weapons);
+      const strongestAttribute = getStrongestKey(relevantWeaponAttributes);
+
+      if (type === 'weapon') {
+        itemData.data.rollTemplate = {
+          value: getWeaponRollTemplate(`a.${strongestWeaponProficiency}`, `a.${strongestAttribute}`),
+        };
+      } else {
+        itemData.data.rollTemplate = {
+          value: getManeuverRollTemplate(`a.${strongestWeaponProficiency}`, `a.${strongestAttribute}`),
+        };
+      }
+    } else if (type === 'spell') {
+      const relevantSpellAttributes = {
+        sta: actorData.attributes.sta,
+        int: actorData.attributes.int,
+        will: actorData.attributes.will,
+        cha: actorData.attributes.cha,
+      };
+
+      const strongestSpellProficiency = getStrongestKey(actorData.proficiencies.spells);
+      const strongestAttribute = getStrongestKey(relevantSpellAttributes);
+      itemData.data.rollTemplate = {
+        value: getSpellRollTemplate(`a.${strongestSpellProficiency}`, `a.${strongestAttribute}`),
+      };
+    } else {
+      itemData.data.rollTemplate = {
+        value: getDefaultRollTemplate(),
+      };
+    }
 
     // Finally, create the item!
     return await Item.create(itemData, { parent: this.actor });
@@ -282,7 +328,7 @@ export default class FarhomeActorSheet extends ActorSheet {
     const item = this.actor.items.get(li.data('itemId'));
     item.delete();
 
-    // TODO I don't think this sliding motion actually works, add it later.
+    // #todo I don't think this sliding motion actually works, add it later.
     li.slideUp(200, () => this.render(false));
   }
 
@@ -303,7 +349,7 @@ export default class FarhomeActorSheet extends ActorSheet {
    * @private
    */
   async _onItemEquippedChanged(event) {
-    // TODO Code duplication between all this and attuned/prepared can probably be reduced by binding a string parameter for the data path.
+    // #todo Code duplication between all this and attuned/prepared can probably be reduced by binding a string parameter for the data path.
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
     await item.update({ 'data.equipped.value': event.target.checked });
@@ -364,9 +410,9 @@ export default class FarhomeActorSheet extends ActorSheet {
     // Handle rolls that supply the formula directly.
     if (dataset.roll) {
       let label = dataset.label ?? '';
-      let roll = game.specialDiceRoller.fh.rollFormula(dataset.roll);
+      let roll = game.farhome.roller.rollFormula(dataset.roll);
 
-      return sendActorMessage(this.actor, `<h1>${label}</h1>${roll}`);
+      return sendActorMessage(`<h1>${label}</h1>${roll}`);
     }
   }
 }
