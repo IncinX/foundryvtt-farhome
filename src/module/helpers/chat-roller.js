@@ -41,11 +41,17 @@ export class ChatRoller {
 
     console.log('Re-roll requested');
 
+    // #todo Find out how the heck re-rolls were working before with the fully templated message... was it just pre-amble?
+
     // #todo Try to avoid code duplication with roller's diceRollerButtonHandler() function
     //       Try to do this by creating common functionality and tags between the legacy roll system and the new one.
 
+    // #todo It may be insufficient to just use button.parentElement.parentElement... I think I need to traverse up the DOM tree until I find the main content element
+
     const button = event.target;
-    const messageQuery = $(button.parentElement.parentElement);
+    const originalMessageElement = button.parentElement.parentElement;
+    const messageElementClone = originalMessageElement.cloneNode(true);
+    const messageQuery = $(messageElementClone);
     const rollElements = messageQuery.find('input');
 
     // Iterate through the inputs to find the dice to re-roll.
@@ -54,16 +60,18 @@ export class ChatRoller {
     rollElements.each((index, element) => {
       if (element.checked) {
         element.disabled = true;
-        pendingReRollElements.push(rollData);
+        pendingReRollElements.push(element);
       }
     });
 
     // Do the re-roll after the parsing so it doesn't interfere with the parsing.
     pendingReRollElements.forEach((pendingReRollElement) => {
-      const rollData = parseRoll(element);
+      const rollData = parseRoll(pendingReRollElement);
 
       // #todo Re-roll the die and add the new roll after the current element
       //       Pay close attention to how the roll template does this with Mustache.
+      // DEBUG!
+      pendingReRollElement.parentNode.insertBefore(document.createElement('br'), pendingReRollElement.nextSibling);
     });
 
     // #todo Need to re-compute the summary (from fh-roll class) and re-post under (fh-roll-summary class)
