@@ -35,7 +35,7 @@ export function getRollSummaryData(rollHtml) {
       rolls.push(rollData);
     }
   });
-  
+
   const initialRollSummaryData = game.farhome.roller.combineRolls(rolls);
 
   // Compute the roll modifiers

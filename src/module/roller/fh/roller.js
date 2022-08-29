@@ -57,12 +57,9 @@ export class FHRoller extends Roller {
   }
 
   formatRoll(roll) {
-    return Mustache.render(
-      rollTemplate,
-      {
-        rolls: [new DieRollView(roll, dieRollImages)],
-      },
-    );
+    return Mustache.render(rollTemplate, {
+      rolls: [new DieRollView(roll, dieRollImages)],
+    });
   }
 
   formatRolls(rolls, flavorText, canReRoll = true, showInterpretation = true) {
