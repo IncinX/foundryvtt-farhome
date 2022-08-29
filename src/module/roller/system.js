@@ -86,7 +86,7 @@ export function getRollSummary(rollSummaryData) {
 }
 
 export class FHRollSystem {
-  static subscribeToChatLog(html) {
+  static subscribeToRenderChatLog(html) {
     html.on('click', '.fh-roller-reroll', this.diceRollerButtonHandler);
   }
 

@@ -228,6 +228,7 @@ function wound(woundCount) {
   return `<div class='fh-wounds' data-wounds='${woundCount}'></div>`;
 }
 
+// #todo Perhaps disallow hex and poison later
 function hex(hexCount) {
   return `<div class='fh-hex' data-hex='${hexCount}'></div>`;
 }

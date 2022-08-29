@@ -103,6 +103,7 @@ Hooks.once('ready', async () => {
 
 Hooks.on('renderChatLog', (_app, html, _data) => {
   // #todo ChatRoller should probably be renamed to TemplateRoller
-  ChatRoller.subscribeToChatLog(html);
-  FHRollSystem.subscribeToChatLog(html);
+  FarhomeItem.subscribeToRenderChatLog(html);
+  ChatRoller.subscribeToRenderChatLog(html);
+  FHRollSystem.subscribeToRenderChatLog(html);
 });

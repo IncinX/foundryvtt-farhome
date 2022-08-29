@@ -24,7 +24,7 @@ export class ChatRoller {
    * @param {Document} html   The html document for the chat log.
    * @private
    */
-  static subscribeToChatLog(html) {
+  static subscribeToRenderChatLog(html) {
     html.on('click', `.${this.chatRerollClass}`, this._handleReroll.bind(this));
   }
 
@@ -35,11 +35,6 @@ export class ChatRoller {
    */
   static async _handleReroll(event) {
     event.preventDefault();
-
-    // #todo Find out how the heck re-rolls were working before with the fully templated message... was it just pre-amble?
-
-    // #todo Try to avoid code duplication with roller's diceRollerButtonHandler() function
-    //       Try to do this by creating common functionality and tags between the legacy roll system and the new one.
 
     // #todo It may be insufficient to just use button.parentElement.parentElement... I think I need to traverse up the DOM tree until I find the main content element
 
@@ -52,7 +47,7 @@ export class ChatRoller {
     // Iterate through the inputs to find the dice to re-roll.
     let pendingReRollElements = [];
 
-    rollElements.each((index, element) => {
+    rollElements.each((_index, element) => {
       if (element.checked) {
         element.disabled = true;
         pendingReRollElements.push(element);
@@ -67,7 +62,12 @@ export class ChatRoller {
       pendingReRollElement.insertAdjacentHTML('afterend', rollHtml);
     });
 
-    // #todo Need to re-compute the summary (from fh-roll class) and re-post under (fh-roll-summary class)
+    // Need to re-compute the summary and re-post under the fh-roll-summary class
+    const newRollSummaryData = getRollSummaryData(messageQuery);
+    const newRollSummary = getRollSummary(newRollSummaryData);
+    let rollSummaryElement = $(messageQuery).find('.fh-roll-summary');
+    rollSummaryElement.empty();
+    rollSummaryElement.append(newRollSummary);
 
     // #todo This will definitely need to be integrated with the main rolling system so only one function with the up-to-date functionality
     //       for both templated and non-templated rolls.
