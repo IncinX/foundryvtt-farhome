@@ -15,8 +15,8 @@ export class Roll {
 }
 
 export class ReRoll {
-  constructor(indexedRoll, shouldReRoll) {
-    this.indexedRoll = indexedRoll;
+  constructor(roll, shouldReRoll) {
+    this.roll = roll;
     this.shouldReRoll = shouldReRoll;
   }
 }
@@ -63,20 +63,17 @@ export class Roller {
   }
 
   formatReRolls(rolls) {
+    // #todo This method is a mess and should be re-worked.
     //shim(); // #todo Not sure what this is for, remove it when it is confirmed unnecessary
-    const reRolls = rolls.flatMap((roll) => {
-      const typedRoll = this.toRoll(roll.die, roll.face);
-      if (roll.shouldReRoll) {
-        const pool = this.toDicePool([typedRoll.die]);
-        return this.roll(pool).map((reRoll) => {
-          reRoll.wasReRoll = true;
-          return reRoll;
-        });
+    const reRolls = rolls.flatMap((reRoll) => {
+      if (reRoll.shouldReRoll) {
+        const pool = this.toDicePool([reRoll.roll.die]);
+        return this.roll(pool).map((roll) => new ReRoll(roll, true));
       } else {
-        return [typedRoll];
+        return reRoll;
       }
     });
-    return this.formatRolls(reRolls);
+    return this.formatRolls(reRolls.map((reRoll) => reRoll.roll));
   }
 
   /**
