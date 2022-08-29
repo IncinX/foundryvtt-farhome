@@ -2,7 +2,7 @@ import Mustache from 'mustache';
 import { countMatches } from '../arrays';
 import { combineAll } from '../lang';
 import { combineRolls, Roll, rollDie, Roller } from '../roller';
-import base from '../template';
+import { rollTemplate, baseTemplate } from '../templates';
 import { DieRollView } from '../view';
 import {
   Dice,
@@ -22,12 +22,12 @@ import {
   WOUND_ROLL_TABLE,
   GUARANTEED_WOUND_ROLL_TABLE,
 } from './dice';
-import { SimpleParser } from './parser';
-import tpl from './template';
+import { FHParser } from './parser';
+import { summaryTemplate } from '../templates';
 
 export class FHRoller extends Roller {
   constructor(rng, command) {
-    super(command, [new SimpleParser()], true, false);
+    super(command, [new FHParser()], false);
 
     this.rng = rng;
   }
@@ -56,22 +56,24 @@ export class FHRoller extends Roller {
     return new Roll(die, face);
   }
 
-  formatRolls(rolls, flavorText) {
+  formatRoll(roll) {
+    return Mustache.render(rollTemplate, {
+      rolls: [new DieRollView(roll, dieRollImages)],
+    });
+  }
+
+  formatRolls(rolls, flavorText, canReRoll = true, showInterpretation = true) {
     const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
     return Mustache.render(
-      base,
+      baseTemplate,
       {
-        system: this.command,
-        canReRoll: this.canReRoll,
-        canKeep: this.canKeep,
+        canReRoll: canReRoll,
+        showInterpretation: showInterpretation,
         flavorText,
         rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
         results: interpretResult(combinedRolls),
-        rollIndex() {
-          return rolls.indexOf(this);
-        },
       },
-      { interpretation: tpl },
+      { interpretation: summaryTemplate },
     );
   }
 

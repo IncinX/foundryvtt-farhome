@@ -1,5 +1,9 @@
 import { proficiencyRollFormula, proficiencyRoll } from './roll';
 
+/* -------------------------------------------- */
+/*  Template evaluation functions               */
+/* -------------------------------------------- */
+
 export function evaluateTemplate(templateString, actorContext, itemContext) {
   let evaluatedString = templateString;
 
@@ -23,16 +27,17 @@ export function evaluateTemplate(templateString, actorContext, itemContext) {
 }
 
 export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) {
-  let evaluatorRollerContext = game.specialDiceRoller.fh.rollFormula.bind(game.specialDiceRoller.fh);
+  // #todo This should be made into an object that pre-evaluates the help text and system function binds, etc.
 
   let evaluatorSystemContext = {
-    skill: proficiencyRoll.bind(null, evaluatorRollerContext),
-    getRollFormula: proficiencyRollFormula,
+    // #todo skill and getRollFormula are deprecated here and should be removed when the macro fixes everything and it is communicated to players.
+    skill: skill.bind(game.farhome.roller),
+    getRollFormula: formula,
 
     targetCount: game.user.targets.size,
   };
 
-  // TODO Try to automate this with some loops but still keep the concise syntax?
+  // #todo Try to automate this with some loops but still keep the concise syntax?
   let evaluatorActorContext = actorContext
     ? {
         name: actorContext.name,
@@ -95,7 +100,7 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
       }
     : {};
 
-  // TODO A helper function could make a lot of this simpler
+  // #todo A helper function could make a lot of this simpler
   let evaluatorItemContext = {
     name: itemContext.name,
     description: itemContext.data.description.value,
@@ -127,9 +132,14 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
   };
 
   // Build the help text
+  // #todo- A lot of this should really be localized, but it's not that important for now
   let help = '<b>global context:</b><br/>';
   help += '<ul>';
   help += '<li>fh(formulaString) -- Performs a roll given the formula.</li><br/>';
+  help +=
+    '<li>skill(proficiency, attribute) -- Performs a skill roll with the given proficiency and attribute.</li><br/>';
+  help +=
+    '<li>getRollFormula(proficiency, attribute) -- Gets the roll formula with the given proficiency and attribute.</li><br/>';
   help += '<li>s -- System helper function context (see below).</li><br/>';
   help += '<li>a -- Actor data context (see below).</li><br/>';
   help += '<li>i -- Item data context (see below).</li><br/>';
@@ -138,10 +148,7 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
 
   help += '<b>s (system context):</b><br/>';
   help += '<ul>';
-  help +=
-    '<li>skill(proficiency, attribute) -- Performs a skill roll with the given proficiency and attribute.</li><br/>';
-  help +=
-    '<li>getRollFormula(proficiency, attribute) -- Gets the roll formula with the given proficiency and attribute.</li><br/>';
+  help += '<li>targetCount -- Returns the number of targets selected in game.</li><br/>';
   help += '</ul>';
 
   help += '<b>a (actor context):</b><br/>';
@@ -159,9 +166,30 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
   help += '</ul>';
 
   // Evaluate the template chunk
-  let evaluationFunction = Function('fh', 's', 'a', 'i', 'help', 'return ' + templateChunk + ';');
+  let evaluationFunction = Function(
+    'fh',
+    'skill',
+    'formula',
+    'success',
+    'crit',
+    'wound',
+    'hex',
+    'poison',
+    's',
+    'a',
+    'i',
+    'help',
+    'return ' + templateChunk + ';',
+  );
   let evaluatedOutput = evaluationFunction(
-    evaluatorRollerContext,
+    fh.bind(game.farhome.roller),
+    skill.bind(game.farhome.roller),
+    formula,
+    success,
+    crit,
+    wound,
+    hex,
+    poison,
     evaluatorSystemContext,
     evaluatorActorContext,
     evaluatorItemContext,
@@ -169,4 +197,42 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
   );
 
   return evaluatedOutput;
+}
+
+/* -------------------------------------------- */
+/*  Template helper functions                   */
+/* -------------------------------------------- */
+
+// #todo Need to bind the farhome roller state object here
+function fh(formula) {
+  return this.rollFormula(formula, '', false, false);
+}
+
+function skill(proficiency, attribute) {
+  return proficiencyRoll(fh.bind(this), proficiency, attribute);
+}
+
+function formula(proficiency, attribute) {
+  return proficiencyRollFormula(proficiency, attribute);
+}
+
+function success(successCount) {
+  return `<div class='fh-successes' data-successes='${successCount}'></div>`;
+}
+
+function crit(critCount) {
+  return `<div class='fh-crits' data-crits='${critCount}'></div>`;
+}
+
+function wound(woundCount) {
+  return `<div class='fh-wounds' data-wounds='${woundCount}'></div>`;
+}
+
+// #todo Perhaps disallow hex and poison later
+function hex(hexCount) {
+  return `<div class='fh-hex' data-hex='${hexCount}'></div>`;
+}
+
+function poison(poisonCount) {
+  return `<div class='fh-poison' data-poison='${poisonCount}'></div>`;
 }

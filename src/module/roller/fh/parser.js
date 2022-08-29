@@ -29,7 +29,8 @@ function letterToRolls(letter, occurrences) {
   }
 }
 
-export class SimpleParser extends DefaultSimpleParser {
+export class FHParser extends DefaultSimpleParser {
+  // #todo Add support for capital letters (such as capital D for superior defense)
   constructor() {
     super('hsenbt+dgw', letterToRolls, dicePoolMonoid, [
       'hero',

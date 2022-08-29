@@ -15,17 +15,17 @@ export class Roll {
 }
 
 export class ReRoll {
-  constructor(indexedRoll, shouldReRoll) {
-    this.indexedRoll = indexedRoll;
+  constructor(roll, shouldReRoll) {
+    this.roll = roll;
     this.shouldReRoll = shouldReRoll;
   }
 }
 
 export class Roller {
-  constructor(command, parsers, canReRoll, canKeep) {
+  constructor(command, parsers, canKeep) {
     this.command = command;
+    // #todo Some of this stuff can be greatly simplified if I remove the generic aspect of it like propagating the parsers
     this.parsers = parsers;
-    this.canReRoll = canReRoll;
     this.canKeep = canKeep;
   }
 
@@ -39,12 +39,12 @@ export class Roller {
     return this.rollFormula(matches[1] || '', matches[2]);
   }
 
-  rollFormula(formula, flavorText) {
+  rollFormula(formula, flavorText, canReRoll = true, showInterpretation = true) {
     try {
       const parsedFormula = parseFormula(formula, this.parsers);
       const rolls = this.roll(parsedFormula);
       console.log(`Rolled ${rolls} with formula ${parsedFormula}`);
-      return this.formatRolls(rolls, flavorText);
+      return this.formatRolls(rolls, flavorText, canReRoll, showInterpretation);
     } catch (e) {
       return escapeHtml(e.message);
     }
@@ -63,22 +63,17 @@ export class Roller {
   }
 
   formatReRolls(rolls) {
+    // #todo This method is a mess and should be re-worked.
     //shim(); // #todo Not sure what this is for, remove it when it is confirmed unnecessary
-    const reRolls = rolls.flatMap((roll) => {
-      const die = roll.indexedRoll[0];
-      const face = roll.indexedRoll[1];
-      const typedRoll = this.toRoll(die, face);
-      if (roll.shouldReRoll) {
-        const pool = this.toDicePool([typedRoll.die]);
-        return this.roll(pool).map((reRoll) => {
-          reRoll.wasReRoll = true;
-          return reRoll;
-        });
+    const reRolls = rolls.flatMap((reRoll) => {
+      if (reRoll.shouldReRoll) {
+        const pool = this.toDicePool([reRoll.roll.die]);
+        return this.roll(pool).map((roll) => new ReRoll(roll, true));
       } else {
-        return [typedRoll];
+        return reRoll;
       }
     });
-    return this.formatRolls(reRolls);
+    return this.formatRolls(reRolls.map((reRoll) => reRoll.roll));
   }
 
   /**

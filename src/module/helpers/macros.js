@@ -10,7 +10,7 @@ export async function createItemMacro(data, slot) {
   if (!('data' in data)) return ui.notifications.warn('You can only create macro buttons for owned Items');
   const item = data.data;
 
-  // TODO Should probably change the reference from name to id if possible.
+  // #todo Should probably change the reference from name to id if possible.
 
   // Create the macro command
   const command = `game.farhome.rollItemMacro('${item.name}');`;
@@ -42,7 +42,7 @@ export function rollItemMacro(itemName) {
   const item = actor ? actor.items.find((i) => i.name === itemName) : null;
   if (!item) return ui.notifications.warn(`Your controlled Actor does not have an item named ${itemName}`);
 
-  // TODO Possibly pass in actor here as a parameter or modify the roll function to also query the owning actor (ideally based on _id)
+  // #todo Possibly pass in actor here as a parameter or modify the roll function to also query the owning actor (ideally based on _id)
 
   // Trigger the item roll
   return item.roll();

@@ -1,19 +1,5 @@
 import { combineAll } from './lang';
 
-export class Parser {
-  constructor(formulaRegex) {
-    this.formulaRegex = formulaRegex;
-  }
-
-  canParse(formula) {
-    return this.formulaRegex.test(formula);
-  }
-
-  help() {}
-
-  parse(formula) {}
-}
-
 export function parseFormula(formula, parsers) {
   const trimmedFormula = formula.replace(/\s+/g, '').toLowerCase();
   const helpMessages = [];
@@ -38,12 +24,12 @@ function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
 
-export class DefaultSimpleParser extends Parser {
+export class DefaultSimpleParser {
   letters = '';
   numbers = new Set();
 
   constructor(alphabet, letterToRolls, rollValuesMonoid, letterExplanation) {
-    super(new RegExp(`^(?:(?:[0-9]*)?[${escapeRegExp(alphabet)}])+$`));
+    this.formulaRegex = new RegExp(`^(?:(?:[0-9]*)?[${escapeRegExp(alphabet)}])+$`);
 
     this.alphabet = alphabet;
     this.letterToRolls = letterToRolls;
@@ -61,6 +47,10 @@ export class DefaultSimpleParser extends Parser {
     this.numbers.add('7');
     this.numbers.add('8');
     this.numbers.add('9');
+  }
+
+  canParse(formula) {
+    return this.formulaRegex.test(formula);
   }
 
   parse(formula) {
