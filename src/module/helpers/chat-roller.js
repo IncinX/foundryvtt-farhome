@@ -1,5 +1,6 @@
 import { sendActorMessage } from './chat';
 import { getRollSummaryData, getRollSummary } from '../roller/system';
+import { parseRoll } from '../roller/system';
 
 export class ChatRoller {
   static chatRerollClass = 'fh-reroll';
@@ -41,36 +42,35 @@ export class ChatRoller {
     console.log('Re-roll requested');
 
     // #todo Try to avoid code duplication with roller's diceRollerButtonHandler() function
-
-    // #todo Construct a new message based on the existing message (but with the rolls replaced).
-
-    // #todo Base this functionality off of what is available in the fh-roller
-
-    // #todo Construct the new message with the old images greyed out (likely through a CSS class) and no images should be allowed for another re-roll.
-    //      Disabling the input to prevent more re-roll selection can be done by adding a disabled attribute on the input control.
+    //       Try to do this by creating common functionality and tags between the legacy roll system and the new one.
 
     const button = event.target;
-    const message = button.parentElement.parentElement;
-    const rolls = Array.from(message.querySelectorAll('input'));
-    const selectedRolls = rolls.filter((roll) => roll.checked);
+    const messageQuery = $(button.parentElement.parentElement);
+    const rollElements = messageQuery.find('input');
 
-    // DEBUG message
-    console.log('Selected rolls:', selectedRolls);
+    // Iterate through the inputs to find the dice to re-roll.
+    let pendingReRollElements = [];
 
-    sendActorMessage(message.innerHTML);
-
-    // #todo Old rolls should be disabled to get the desired effect in css and for parsing.
-
-    // #todo DEBUG AND GET THIS WORKING NEXT!
-    const parsedRolls = rolls.map((rollInput) => {
-      const roll = parseRoll(rollInput);
-      return new ReRoll(roll, rollInput.checked);
+    rollElements.each((index, element) => {
+      if (element.checked) {
+        element.disabled = true;
+        pendingReRollElements.push(rollData);
+      }
     });
 
-    const result = game.farhome.roller.formatReRolls(parsedRolls);
-    renderNewRoll(result);
-    selectedRolls.forEach((elem) => (elem.checked = false));
+    // Do the re-roll after the parsing so it doesn't interfere with the parsing.
+    pendingReRollElements.forEach((pendingReRollElement) => {
+      const rollData = parseRoll(element);
 
-    // #todo Need to replace the summary text (successes, wounds, etc) and maybe add some stuff for hex/poison later
+      // #todo Re-roll the die and add the new roll after the current element
+      //       Pay close attention to how the roll template does this with Mustache.
+    });
+
+    // #todo Need to re-compute the summary (from fh-roll class) and re-post under (fh-roll-summary class)
+
+    // #todo This will definitely need to be integrated with the main rolling system so only one function with the up-to-date functionality
+    //       for both templated and non-templated rolls.
+
+    sendActorMessage(messageQuery.html());
   }
 }
