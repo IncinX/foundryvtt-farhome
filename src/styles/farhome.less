@@ -21,20 +21,48 @@
 
 
 // BEGIN DEBUG -- Move this to somewhere generic for actors/items
-// TODO Consider a more medievely type of font
+// #todo Consider a more medievely type of font
+// #todo Need to set the tab content background to be a different color than the main content
+// #todo Remove the highlight shadow
+@c-sheet: rgba(122, 168, 255, 0.76);
+@c-content: rgb(220, 232, 255);
+@c-input: #eef3ff;
+@c-tab-border: rgb(86, 145, 255);
+
 .farhome.sheet {
-  background-color: rgba(122, 168, 255, 0.76);
+  background-color: @c-sheet;
   font-family: 'Cardo-Regular';
   font-size: 1.2em;
 
   .window-content {
     background: none;
-    background-color: rgb(220, 232, 255);
+    background-color: @c-content;
   }
 
   input {
-    background-color: rgb(246, 249, 255);
+    background-color: @c-input;
     border: 0;
+  }
+
+  .sheet-tabs {
+    .item.active {
+      background-color: @c-input;
+      border-color: @c-tab-border @c-tab-border @c-content;
+      text-shadow: none;
+    }
+
+    .item {
+      &:hover {
+        text-shadow: none;
+      }
+
+      background-color: @c-content;
+      display: block;
+      padding: .5rem 1rem;
+      border: 1px solid transparent;
+      border-top-left-radius: .25rem;
+      border-top-right-radius: .25rem;
+    }
   }
 
   .under-label {
