@@ -1,7 +1,7 @@
 import { parseFormula } from '../parser';
-import { SimpleParser } from './parser';
+import { FHParser } from './parser';
 
-const parsers = [new SimpleParser()];
+const parsers = [new FHParser()];
 
 test('it should fail to parse a roll formula', () => {
   const msg =
