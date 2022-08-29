@@ -140,7 +140,7 @@ export class FarhomeItem extends Item {
 
     // #todo Count the poison and roll extra poison dice with an Active Effects Dice here (since the fh-active-effects are just hidden div's for data).
     //       The actual poison roll will go here. Need to consider how to incorporate this into saves/abilities as well and reduce duplication with helper functions somewhere (system?).
-    
+
     // #todo Process the roll summary based on hex/poison
 
     // Print the roll summary
