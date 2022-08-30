@@ -1,5 +1,5 @@
-<div class="tab attributes-tab flexrow" data-group="primary" data-tab="attributes">
-  <div class="attribute-list flexcol">
+<div class="tab attributes-tab" data-group="primary" data-tab="attributes">
+  <div class="attribute-list">
     {{>
     "systems/farhome/templates/partials/attribute-partial.hbs"
     data.attributes.str
@@ -25,8 +25,8 @@
     data.attributes.cha
     objectString="data.attributes.cha"}}
   </div>
-  <div class="saves-proficiency-group flexcol">
-    <div class="saves-list flex-group-center proficiency-group-box">
+  <div class="saves-proficiency-group">
+    <div class="saves-list proficiency-group-box">
       <h2>{{localize 'farhome.saves'}}</h2>
       <table class="proficiency-table">
         <colgroup>
@@ -59,7 +59,7 @@
         objectString="data.proficiencies.saves.cha"}}
       </table>
     </div>
-    <div class="attribute-proficiency-group flex-group-center proficiency-group-box">
+    <div class="attribute-proficiency-group proficiency-group-box">
       <h2>{{localize 'farhome.skills'}}</h2>
       <div class="proficiency-group">
         <h4>{{localize 'farhome.str'}}</h4>
@@ -197,8 +197,8 @@
       </div>
     </div>
   </div>
-  <div class="weapon-spells-equipment-tool-group flexcol">
-    <div class="weapons-proficiency-group flex-group-center proficiency-group-box">
+  <div class="weapon-spells-equipment-tool-group">
+    <div class="weapons-proficiency-group proficiency-group-box">
       <h2>{{localize 'farhome.weapons'}}</h2>
       <table class="proficiency-table">
         <colgroup>
