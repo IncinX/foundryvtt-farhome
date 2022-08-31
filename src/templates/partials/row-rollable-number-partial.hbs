@@ -1,6 +1,9 @@
 <tr>
   <td>
-    <label class="resource-label rollable" for="{{objectString}}.value" data-roll="{{roll}}" data-label="{{label}}">{{label}}</label>
+    <label class="rollable" for="{{objectString}}.value" data-roll="{{roll}}" data-label="{{label}}">
+      <span class="resource-label">{{label}}</span>
+      <span class="associated-attribute">{{attribute}}</span>
+    </label>
   </td>
   <td>
     {{!-- TODO Add support for negative numbers? --}}
