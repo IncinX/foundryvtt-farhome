@@ -199,31 +199,6 @@
           objectString="data.proficiencies.saves.cha"}}
         </table>
       </div>
-      <div class="weapons-proficiency-group proficiency-group-box">
-        <h2>{{localize 'farhome.weapons'}}</h2>
-        <table class="proficiency-table">
-          <colgroup>
-            <col class="proficiency-label" />
-            <col class="proficiency-data" />
-          </colgroup>
-          {{>
-          "systems/farhome/templates/partials/row-number-partial.hbs"
-          data.proficiencies.weapons.oneHand
-          objectString="data.proficiencies.weapons.oneHand"}}
-          {{>
-          "systems/farhome/templates/partials/row-number-partial.hbs"
-          data.proficiencies.weapons.twoHand
-          objectString="data.proficiencies.weapons.twoHand"}}
-          {{>
-          "systems/farhome/templates/partials/row-number-partial.hbs"
-          data.proficiencies.weapons.ranged
-          objectString="data.proficiencies.weapons.ranged"}}
-          {{>
-          "systems/farhome/templates/partials/row-number-partial.hbs"
-          data.proficiencies.weapons.unarmed
-          objectString="data.proficiencies.weapons.unarmed"}}
-        </table>
-      </div>
       <div class="equipment-proficiency-group proficiency-group-box">
         <h2>{{localize 'farhome.equipment'}}</h2>
         <table class="proficiency-table">
@@ -253,6 +228,58 @@
           objectString="data.proficiencies.equipment.shield"}}
         </table>
       </div>
+      <div class="tools-proficiency-group proficiency-group-box">
+        <h2>{{localize 'farhome.tools'}}</h2>
+        <table class="proficiency-table">
+          <colgroup>
+            <col class="proficiency-label" />
+            <col class="proficiency-data" />
+          </colgroup>
+          {{>
+          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+          data.proficiencies.tools.repairKit
+          objectString="data.proficiencies.tools.repairKit"}}
+          {{>
+          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+          data.proficiencies.tools.enchantersTools
+          objectString="data.proficiencies.tools.enchantersTools"}}
+          {{>
+          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+          data.proficiencies.tools.apothecarySet
+          objectString="data.proficiencies.tools.apothecarySet"}}
+          {{>
+          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+          data.proficiencies.tools.scribingTools
+          objectString="data.proficiencies.tools.scribingTools"}}
+        </table>
+      </div>
+    </div>
+    <div class="attributes-group-3">
+      <div class="weapons-proficiency-group proficiency-group-box">
+        <h2>{{localize 'farhome.weapons'}}</h2>
+        <table class="proficiency-table">
+          <colgroup>
+            <col class="proficiency-label" />
+            <col class="proficiency-data" />
+          </colgroup>
+          {{>
+          "systems/farhome/templates/partials/row-number-partial.hbs"
+          data.proficiencies.weapons.oneHand
+          objectString="data.proficiencies.weapons.oneHand"}}
+          {{>
+          "systems/farhome/templates/partials/row-number-partial.hbs"
+          data.proficiencies.weapons.twoHand
+          objectString="data.proficiencies.weapons.twoHand"}}
+          {{>
+          "systems/farhome/templates/partials/row-number-partial.hbs"
+          data.proficiencies.weapons.ranged
+          objectString="data.proficiencies.weapons.ranged"}}
+          {{>
+          "systems/farhome/templates/partials/row-number-partial.hbs"
+          data.proficiencies.weapons.unarmed
+          objectString="data.proficiencies.weapons.unarmed"}}
+        </table>
+      </div>
       <div class="spells-proficiency-group proficiency-group-box">
         <h2>{{localize 'farhome.spells'}}</h2>
         <table class="proficiency-table">
@@ -280,31 +307,6 @@
           "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
           data.proficiencies.spells.occult
           objectString="data.proficiencies.spells.occult"}}
-        </table>
-      </div>
-      <div class="tools-proficiency-group proficiency-group-box">
-        <h2>{{localize 'farhome.tools'}}</h2>
-        <table class="proficiency-table">
-          <colgroup>
-            <col class="proficiency-label" />
-            <col class="proficiency-data" />
-          </colgroup>
-          {{>
-          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-          data.proficiencies.tools.repairKit
-          objectString="data.proficiencies.tools.repairKit"}}
-          {{>
-          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-          data.proficiencies.tools.enchantersTools
-          objectString="data.proficiencies.tools.enchantersTools"}}
-          {{>
-          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-          data.proficiencies.tools.apothecarySet
-          objectString="data.proficiencies.tools.apothecarySet"}}
-          {{>
-          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-          data.proficiencies.tools.scribingTools
-          objectString="data.proficiencies.tools.scribingTools"}}
         </table>
       </div>
     </div>
