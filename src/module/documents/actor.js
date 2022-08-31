@@ -68,6 +68,8 @@ export class FarhomeActor extends Actor {
     let spellPowerToManaTable = getSpellPowerToMaxManaTable();
     data.features.mana.max = spellPowerToManaTable[data.features.spellPower.value];
 
+    // #todo Add the attribute modifier to the attributes so that I can use it for row-rollable-number-partial.
+
     // Loop through attribute scores, and add their roll string as derived data.
     for (let [_, attributeObject] of Object.entries(data.attributes)) {
       attributeObject.roll = proficiencyRollFormula(0, attributeObject.value);

@@ -245,6 +245,7 @@ export default class FarhomeActorSheet extends ActorSheet {
     const controlData = duplicate(header.dataset);
 
     // Initialize a default name.
+    // #todo Add localization
     const name = `New ${type.capitalize()}`;
 
     // Prepare the item object.
