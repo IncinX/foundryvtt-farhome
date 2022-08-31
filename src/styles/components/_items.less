@@ -30,7 +30,7 @@
   padding: 0;
   overflow-y: auto;
   scrollbar-width: thin;
-  color: @c-tan;
+  color: @c-text-color;
 
   // Child lists
   .item-list {
@@ -71,10 +71,10 @@
   .item {
     align-items: center;
     padding: 0 2px; // to align with the header border
-    border-bottom: 1px solid @c-faint;
+    border-bottom: @standard-border-width solid @c-standard-border;
     &:last-child { border-bottom: none; }
     .item-name {
-      color: @c-dark;
+      color: @c-text-color;
       .item-image {
         flex: 0 0 30px;
         height: 30px;
@@ -87,19 +87,20 @@
 
   .item-prop {
     text-align: center;
-    border-left: 1px solid #c9c7b8;
-    border-right: 1px solid #c9c7b8;
+    border-left: @standard-border-width solid @c-standard-border;
+    border-right: @standard-border-width solid @c-standard-border;
     font-size: 12px;
   }
 
   // Section Header
   .items-header {
+    font-size: 1.5em;
     height: 28px;
     margin: 2px 0;
     padding: 0;
     align-items: center;
     background: rgba(0, 0, 0, 0.05);
-    border: @border-groove;
+    border: @c-standard-border;
     font-weight: bold;
     > * {
       font-size: 14px;

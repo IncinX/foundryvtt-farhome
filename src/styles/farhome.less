@@ -1,5 +1,10 @@
 // #todo Make sure to prune unused CSS later
 
+@import './utils/_colors.less';
+@import './utils/_mixins.less';
+@import './utils/_typography.less';
+@import './utils/_variables.less';
+
 @import './components/_effects.less';
 @import './components/_forms.less';
 @import './components/_items.less';
@@ -11,11 +16,6 @@
 @import './global/_rollable.less';
 @import './global/_roller.less';
 
-@import './utils/_colors.less';
-@import './utils/_mixins.less';
-@import './utils/_typography.less';
-@import './utils/_variables.less';
-
 @import './sheets/actor-sheet.less';
 @import './sheets/item-sheet.less';
 
@@ -26,12 +26,8 @@
 // #todo How to only allow scroll on the tabbed content section?
 // #todo Play with the colors
 // #todo Make a standard border color for all the boxes so I can play with it easily
-@c-standard-border: rgb(86, 145, 255);
-@c-sheet: rgba(122, 168, 255, 0.76);
-@c-content: rgb(220, 232, 255);
-@c-input: #eef3ff;
-@c-tab-bar: #a8c3d7;
-@c-tab-border: @c-standard-border;
+// #todo Consider re-arranging such that the parent properties show first and then the nested children
+
 
 .farhome.sheet {
   background-color: @c-sheet;
@@ -41,8 +37,16 @@
   min-height: 700px;
 
   .window-content {
+    .top-bar {
+      background-color: @c-background-darken;
+      border-radius: @standard-border-radius; // @todo Standarize these as variables somewhere
+      padding: 5px;
+    }
+
+    color: @c-text-color;
     background: none;
-    background-color: @c-content;
+    //background-color: @c-content;
+    background-image: url('../images/farhome-cover.jpg');
   }
 
   input {
@@ -52,7 +56,7 @@
 
   .sheet-tabs {
     .item.active {
-      background-color: @c-content;
+      background-color: @c-background-darken;
       //border-color: @c-tab-border @c-tab-border @c-content @c-tab-border;
       /*
       box-shadow: 0 0 5px rgba(0,0,0,0.3);;
@@ -67,14 +71,15 @@
         text-shadow: none;
       }
 
-      background-color: @c-tab-bar;
+      background-color: transparent;
       display: block;
       padding: .5rem 1rem;
       border: 0px; //1px solid transparent;
-      border-top-left-radius: .25rem;
-      border-top-right-radius: .25rem;
+      border-top-left-radius: @standard-border-radius;
+      border-top-right-radius: @standard-border-radius;
     }
 
+    margin: 0;
     border: none;
     padding: 5px 0px 0px 0px;
     background-color: @c-tab-bar;
@@ -125,12 +130,8 @@
     width: 8rem;
   }
 
-  // TODO Try to get this centered
-  .resource-label {
-  }
-
   .attribute-tag {
-    color: @c-faded-dark;
+    color: @c-faded-white;
   }
 }
 

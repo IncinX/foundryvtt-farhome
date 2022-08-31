@@ -46,19 +46,19 @@
   }
 
   .resource-box {
-    border: 1px solid #000;
+    border: @standard-border-width solid @c-standard-border;
     border-radius: 5px;
     padding: @padding-sm;
   }
 
   .attribute-box {
-    border: 1px solid #000;
+    border: @standard-border-width solid @c-standard-border;
     border-radius: 5px;
     padding: @padding-sm;
   }
 
   .proficiency-group-box {
-    border: 1px solid #000;
+    border: @standard-border-width solid @c-standard-border;
     border-radius: 5px;
     padding: @padding-sm;
     margin: @margin-sm;
@@ -81,6 +81,8 @@
 .sheet-body,
 .sheet-body .tab {
   height: 100%;
+  background-color: @c-background-darken-half; // #todo Weird, if I use the full color, it looks like it applies twice! That is a bug
+  border-radius: @standard-border-radius;
 }
 
 .tox {

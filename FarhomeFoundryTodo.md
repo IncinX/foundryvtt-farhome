@@ -2,6 +2,14 @@
 
 ## P0
 
+- [ ] For the roll summary (add text saying +1 from template or something)
+- [ ] Center the proficiency labels and input boxes
+- [ ] Cleanup tab look
+- [ ] Cleanup tables
+- [ ] Cleanup spacing around labels
+- [ ] Clenup combo boxes to have a background or white text
+- [ ] Try removing the bold from the text labels everywhere
+- [ ] Consider applying a blur and darkening effect to the farhome background
 - [ ] Spend some time considering a newer and better font
 - [ ] Add blurred farhome background
 - [ ] Tryout Farhome font, install a couple fonts and play with them later (and delete the unused ones later)
@@ -26,6 +34,7 @@
   - [ ] This is to support things that need a user response beyond just spell level
 - [ ] Make sure that Overswing is supported
 - [ ] Move todo list out to GitHub issues
+- [ ] Let the farhome players know that I can setup developer accounts for them that will run on a different port and allow open development
 
 ## P1
 
