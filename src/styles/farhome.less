@@ -32,7 +32,9 @@
 .farhome.sheet {
   background-color: @c-sheet;
   font-family: 'Cardo-Regular';
-  font-size: 1.2em;
+  font-size: 1.0em;
+  min-width: 850px;
+  min-height: 700px;
 
   .window-content {
     background: none;
@@ -101,6 +103,9 @@
       }
       margin: 5px 0px 5px 0px;
     }
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     text-align: center;
     width: 8rem;
   }
