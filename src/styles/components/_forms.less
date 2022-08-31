@@ -70,11 +70,17 @@
 }
 
 // #todo This is messing with other tabs and generally all the tabs are messing with the height of each other. Find a way to clean this up and have each tab have it's own height.
-.sheet-body,
+//       Part of the reason it might be goofed is that it is applying the height to so many different things.
+// #todo Calibrate this and/or fix the underlying problem in the future.
+
 .sheet-body .editor,
-.sheet-body .tab,
 .sheet-body .tab .editor {
-  height: 100%; // This is necessary for biography/notes but flex: 1 is better for filling up the rest of the space.  Is there a better way to get both to work?
+  height: 67%;  // This is necessary for biography/notes but flex: 1 is better for filling up the rest of the space.  Is there a better way to get both to work?
+}
+
+.sheet-body,
+.sheet-body .tab {
+  height: 100%;
 }
 
 .tox {
