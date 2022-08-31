@@ -3,21 +3,22 @@
 ## P0
 
 - [ ] For the roll summary (add text saying +1 from template or something)
+- [ ] Figure out how to do new fonts
+- [ ] Cleanup the css code and PR it
 - [ ] Center the proficiency labels and input boxes
 - [ ] Cleanup spacing around labels
+- [ ] Fix red underlines for skills and notes since it doesn't quite fit the theme.
 - [ ] Clenup combo boxes to have a background or white text
 - [ ] Try removing the bold from the text labels everywhere
 - [ ] Consider applying a blur and darkening effect to the farhome background
 - [ ] Spend some time considering a newer and better font
+- [ ] Add some padding to Biography and Notes
 - [ ] Add blurred farhome background
 - [ ] Center checkboxes on the inventory type pages
 - [ ] Tryout Farhome font, install a couple fonts and play with them later (and delete the unused ones later)
 - [ ] Widen column 2 so that it grows to content or is a bit bigger than the others
 - [x] Streamline the skills (add str/dex/con/etc to the skills and spells)
 - [ ] Cleanup the css code and segment into separate files
-- [ ] Cleanup table headers for Feats/Maneuvers/Spells/Inventory
-- [ ] Cleanup the tabbed interface and background color
-- [ ] Add nice background image to the character sheet based on Andrew's art
 - [ ] Convert the skill roller to use a unified roll function that can support the new template roll features(use Mustache for now maybe).
 - [ ] Adjust padding/borders in the proficiency boxes and around the tables
 - [ ] Adjust the font size across the board but especially the character name, etc.
