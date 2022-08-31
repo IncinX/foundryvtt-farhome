@@ -25,11 +25,13 @@
 // #todo Need to set the tab content background to be a different color than the main content
 // #todo How to only allow scroll on the tabbed content section?
 // #todo Play with the colors
+// #todo Make a standard border color for all the boxes so I can play with it easily
+@c-standard-border: rgb(86, 145, 255);
 @c-sheet: rgba(122, 168, 255, 0.76);
 @c-content: rgb(220, 232, 255);
 @c-input: #eef3ff;
 @c-tab-bar: #a8c3d7;
-@c-tab-border: rgb(86, 145, 255);
+@c-tab-border: @c-standard-border;
 
 .farhome.sheet {
   background-color: @c-sheet;
@@ -51,7 +53,12 @@
   .sheet-tabs {
     .item.active {
       background-color: @c-content;
-      border-color: @c-tab-border @c-tab-border @c-content;
+      //border-color: @c-tab-border @c-tab-border @c-content @c-tab-border;
+      /*
+      box-shadow: 0 0 5px rgba(0,0,0,0.3);;
+      -webkit-box-shadow: 0 0 5px rgba(0,0,0,0.3);
+      -moz-box-shadow: 0 0 5px rgba(0,0,0,0.3);
+      */
       text-shadow: none;
     }
 
@@ -63,12 +70,12 @@
       background-color: @c-tab-bar;
       display: block;
       padding: .5rem 1rem;
-      border: 1px solid transparent;
+      border: 0px; //1px solid transparent;
       border-top-left-radius: .25rem;
       border-top-right-radius: .25rem;
     }
 
-    border-top: none;
+    border: none;
     padding: 5px 0px 0px 0px;
     background-color: @c-tab-bar;
   }
