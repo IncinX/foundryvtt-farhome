@@ -2,71 +2,74 @@
   font-family: @font-primary;
 }
 
-.sheet-header {
-  flex: 0 auto;
-  overflow: hidden;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  margin-bottom: 10px;
+.sheet {
+  .sheet-header {
+    flex: 0 auto;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-bottom: 10px;
 
-  .profile-img {
-    flex: 0 0 150px;
-    height: 150px;
-    margin-right: 10px;
-  }
+    img.profile-img {
+      flex: 0 0 128px;
+      height: 128px;
+      margin-right: 10px;
+    }
 
-  .header-fields {
-    flex: 1;
-  }
+    .header-fields {
+      flex: 1;
+    }
 
-  h1.charname {
-    height: 50px;
-    padding: 0px;
-    margin: 5px 0;
-    border-bottom: 0;
-    input {
-      width: 100%;
-      height: 100%;
-      margin: 0;
+    h1.charname {
+      height: 50px;
+      padding: 0px;
+      margin: 5px 0;
+      border-bottom: 0;
+      input {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+      }
     }
   }
+
+  .name-input {
+    width: 80%;
+  }
+
+  .under-label {
+    justify-content: left;
+    align-items: left;
+    text-align: left;
+  }
+
+  .resource-box {
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: @padding-sm;
+  }
+
+  .attribute-box {
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: @padding-sm;
+  }
+
+  .proficiency-group-box {
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: @padding-sm;
+    margin: @margin-sm;
+  }
+
+  .sheet-tabs {
+    flex: 0;
+  }
 }
 
-.name-input {
-  width: 80%;
-}
-
-.under-label {
-  justify-content: left;
-  align-items: left;
-  text-align: left;
-}
-
-.resource-box {
-  border: 1px solid #000;
-  border-radius: 5px;
-  padding: @padding-sm;
-}
-
-.attribute-box {
-  border: 1px solid #000;
-  border-radius: 5px;
-  padding: @padding-sm;
-}
-
-.proficiency-group-box {
-  border: 1px solid #000;
-  border-radius: 5px;
-  padding: @padding-sm;
-  margin: @margin-sm;
-}
-
-.sheet-tabs {
-  flex: 0;
-}
-
+// #todo This is messing with other tabs and generally all the tabs are messing with the height of each other. Find a way to clean this up and have each tab have it's own height.
 .sheet-body,
 .sheet-body .editor,
 .sheet-body .tab,

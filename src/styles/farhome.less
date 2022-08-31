@@ -23,7 +23,7 @@
 // BEGIN DEBUG -- Move this to somewhere generic for actors/items
 // #todo Consider a more medievely type of font
 // #todo Need to set the tab content background to be a different color than the main content
-// #todo Remove the highlight shadow
+// #todo How to only allow scroll on the tabbed content section?
 @c-sheet: rgba(122, 168, 255, 0.76);
 @c-content: rgb(220, 232, 255);
 @c-input: #eef3ff;
@@ -65,6 +65,9 @@
       border-top-left-radius: .25rem;
       border-top-right-radius: .25rem;
     }
+
+    border-top: none;
+    padding: 5px 0px 0px 0px;
   }
 
   .under-label {
@@ -92,6 +95,9 @@
   }
 
   .attribute-list {
+    .proficiency-group-box {
+      text-align: center;
+    }
     .attribute-box {
       .attribute-label {
         display: block;
@@ -105,7 +111,6 @@
     }
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     text-align: center;
     width: 8rem;
   }
