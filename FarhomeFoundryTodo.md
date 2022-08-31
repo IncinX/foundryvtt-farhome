@@ -4,14 +4,13 @@
 
 - [ ] For the roll summary (add text saying +1 from template or something)
 - [ ] Center the proficiency labels and input boxes
-- [ ] Cleanup tab look
-- [ ] Cleanup tables
 - [ ] Cleanup spacing around labels
 - [ ] Clenup combo boxes to have a background or white text
 - [ ] Try removing the bold from the text labels everywhere
 - [ ] Consider applying a blur and darkening effect to the farhome background
 - [ ] Spend some time considering a newer and better font
 - [ ] Add blurred farhome background
+- [ ] Center checkboxes on the inventory type pages
 - [ ] Tryout Farhome font, install a couple fonts and play with them later (and delete the unused ones later)
 - [ ] Widen column 2 so that it grows to content or is a bit bigger than the others
 - [x] Streamline the skills (add str/dex/con/etc to the skills and spells)
