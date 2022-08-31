@@ -1,4 +1,6 @@
-# foundryvtt-farhome P0 todo
+# foundryvtt-farhome todo
+
+## P0
 
 - [ ] Spend some time considering a newer and better font
 - [ ] Add blurred farhome background
@@ -25,7 +27,7 @@
 - [ ] Make sure that Overswing is supported
 - [ ] Move todo list out to GitHub issues
 
-# foundryvtt-farhome P1 todo
+## P1
 
 - [ ] Add indicators in the summary for how much was added by bonus modifiers)
 - [ ] Cleanup integrated roller code (flatten and rename)
@@ -35,7 +37,7 @@
 - [ ] Change Mustache renderer to handlebars renderer
 - [ ] Upgrade FoundryVTT to the latest version (and verify that my system keeps working) - Do this on test server first after the new updates are out.
 
-# foundryvtt-farhome P2 todo
+## P2
 
 - [ ] Add support for private members according to this (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_class_fields)
 - [ ] Automated tests for template evaluator
@@ -43,6 +45,8 @@
 - [ ] Add jsdoc comments to get all the documentation up to par
 - [ ] Add a derp-speak language to test out localization (and allow the players to choose it)
 
-# Games todo
+# Useful links and tools
 
-- [ ] Finish Sekiro
+- Codepen.io for quick prototyping(https://codepen.io/pen/)
+- Bootstrap for solid production-grade css styles
+- Complete guide to flexbox (with exampels) - https://css-tricks.com/snippets/css/a-guide-to-flexbox/
