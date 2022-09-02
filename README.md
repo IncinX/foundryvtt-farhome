@@ -86,7 +86,7 @@ instructions given there.
 This project is being developed under the terms of the
 [LIMITED LICENSE AGREEMENT FOR MODULE DEVELOPMENT] for Foundry Virtual Tabletop.
 
-See [LICENSE](/LICENSE) for licensing terms.
+See [LICENSE](/LICENSE.md) for source code licensing terms.
 
 [League Basic JS Module Template]: https://github.com/League-of-Foundry-Developers/FoundryVTT-Module-Template
 [LIMITED LICENSE AGREEMENT FOR MODULE DEVELOPMENT]: https://foundryvtt.com/article/license/
