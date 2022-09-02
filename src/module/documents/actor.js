@@ -128,19 +128,19 @@ export class FarhomeActor extends Actor {
       data.proficiencies.tools.repairKit.value,
       data.attributes.str.value,
     );
-    
+
     data.proficiencies.tools.enchantersTools.attribute = game.i18n.localize('farhome.intTag');
     data.proficiencies.tools.enchantersTools.roll = proficiencyRollFormula(
       data.proficiencies.tools.enchantersTools.value,
       data.attributes.int.value,
     );
-    
+
     data.proficiencies.tools.apothecarySet.attribute = game.i18n.localize('farhome.willTag');
     data.proficiencies.tools.apothecarySet.roll = proficiencyRollFormula(
       data.proficiencies.tools.apothecarySet.value,
       data.attributes.will.value,
     );
-    
+
     data.proficiencies.tools.scribingTools.attribute = game.i18n.localize('farhome.intTag');
     data.proficiencies.tools.scribingTools.roll = proficiencyRollFormula(
       data.proficiencies.tools.scribingTools.value,
