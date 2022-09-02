@@ -3,25 +3,7 @@
 ## P0
 
 - [ ] For the roll summary (add text saying +1 from template or something)
-- [ ] Clenup combo boxes to have a background or white text
-- [ ] Try removing the bold from the text labels everywhere
-- [ ] Consider applying a blur and darkening effect to the farhome background
-- [ ] Spend some time considering a newer and better font
-- [ ] Add some padding to Biography and Notes
-- [ ] Add blurred farhome background
-- [ ] Center checkboxes on the inventory type pages
-- [ ] Tryout Farhome font, install a couple fonts and play with them later (and delete the unused ones later)
-- [ ] Widen column 2 so that it grows to content or is a bit bigger than the others
-- [x] Streamline the skills (add str/dex/con/etc to the skills and spells)
-- [ ] Cleanup the css code and segment into separate files
 - [ ] Convert the skill roller to use a unified roll function that can support the new template roll features(use Mustache for now maybe).
-- [ ] Adjust padding/borders in the proficiency boxes and around the tables
-- [ ] Adjust the font size across the board but especially the character name, etc.
-- [ ] Adjust alignment on text appropriately.
-- [ ] Setup background of the selected tab and tabbed content to match
-  - [ ] Setup the bottom of the tab to hide the border like bootstrap does
-- [ ] Add separate box for Temporary Wounds
-- [ ] Rename Healing Surges to Surges
 - [ ] Tweak coloring of messages to match the character sheets
 - [ ] Tweak size of icon on character sheets (but not on actor sheet)
 - [ ] Add support for poison/hex effects (and apply it to proficiency and template rolls)
@@ -33,6 +15,8 @@
 
 ## P1
 
+- [ ] Try removing the bold from the text labels everywhere
+- [ ] Consider applying a blur and darkening effect to the farhome background
 - [ ] Add indicators in the summary for how much was added by bonus modifiers)
 - [ ] Cleanup integrated roller code (flatten and rename)
 - [ ] Create clean infrastructure for creating new roll templates, re-rolling from templates, re-posting rolls from re-rolled templates. Document it in code.
