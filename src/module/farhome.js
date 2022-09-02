@@ -58,6 +58,9 @@ Hooks.on('init', () => {
   // Register chat handler
   // #todo Clean this up a bit later (moving to separate files that specifically handle the roll logic)
   Hooks.on('chatMessage', FHRollSystem.diceRollerChatMessageHandler);
+
+  // Register font here
+  $('head').append('<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fondamento">');
 });
 
 /* -------------------------------------------- */

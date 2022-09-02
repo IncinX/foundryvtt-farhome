@@ -1,19 +1,18 @@
-<div class="resource-fields grid grid-7col">
+<div class="resource-fields grid grid-8col">
   {{>
   "systems/farhome/templates/partials/max-resource-partial.hbs"
   data.features.hero
   objectString="data.features.hero"
   separatorString=" / "}}
-  <div class="resource-box flex-group-center">
-    <div class="resource-content flexrow flex-center flex-between">
-      <input type="text" name="data.features.wounds.value" value="{{data.features.wounds.value}}" data-dtype="Number"/>
-      <span>/</span>
-      <input type="text" name="data.features.wounds.max" value="{{data.features.wounds.max}}" data-dtype="Number"/>
-      <span>+</span>
-      <input type="text" name="data.features.tempWounds.value" value="{{data.features.tempWounds.value}}" data-dtype="Number"/>
-    </div>
-    <label for="data.features.wounds.value" class="resource-label">{{data.features.wounds.label}}</label>
-  </div>
+  {{>
+  "systems/farhome/templates/partials/max-resource-partial.hbs"
+  data.features.wounds
+  objectString="data.features.wounds"
+  separatorString=" / "}}
+  {{>
+  "systems/farhome/templates/partials/resource-partial.hbs"
+  data.features.tempWounds
+  objectString="data.features.tempWounds"}}
   {{>
   "systems/farhome/templates/partials/max-resource-partial.hbs"
   data.features.healingSurges

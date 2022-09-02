@@ -69,6 +69,7 @@ export class FarhomeActor extends Actor {
     data.features.mana.max = spellPowerToManaTable[data.features.spellPower.value];
 
     // Loop through attribute scores, and add their roll string as derived data.
+    // #todo This is not rollable today but may be in the future. Either remove this code or allow it to be rolled.
     for (let [_, attributeObject] of Object.entries(data.attributes)) {
       attributeObject.roll = proficiencyRollFormula(0, attributeObject.value);
     }
@@ -85,45 +86,62 @@ export class FarhomeActor extends Actor {
     // Loop through the attribute proficiencies, and add their roll string as derived data.
     for (let [attributeKey, attributeObject] of Object.entries(data.proficiencies.attributes)) {
       for (let [_, proficiencyObject] of Object.entries(attributeObject)) {
+        proficiencyObject.attribute = game.i18n.localize(`farhome.${attributeKey}Tag`);
         proficiencyObject.roll = proficiencyRollFormula(proficiencyObject.value, data.attributes[attributeKey].value);
       }
     }
 
     // Setup rolls for spells
+    data.proficiencies.spells.arcane.attribute = game.i18n.localize('farhome.intTag');
     data.proficiencies.spells.arcane.roll = proficiencyRollFormula(
       data.proficiencies.spells.arcane.value,
       data.attributes.int.value,
     );
+
+    data.proficiencies.spells.divine.attribute = game.i18n.localize('farhome.chaTag');
     data.proficiencies.spells.divine.roll = proficiencyRollFormula(
       data.proficiencies.spells.divine.value,
       data.attributes.cha.value,
     );
+
+    data.proficiencies.spells.druidic.attribute = game.i18n.localize('farhome.willTag');
     data.proficiencies.spells.druidic.roll = proficiencyRollFormula(
       data.proficiencies.spells.druidic.value,
       data.attributes.will.value,
     );
+
+    data.proficiencies.spells.elder.attribute = game.i18n.localize('farhome.staTag');
     data.proficiencies.spells.elder.roll = proficiencyRollFormula(
       data.proficiencies.spells.elder.value,
       data.attributes.sta.value,
     );
+
+    data.proficiencies.spells.occult.attribute = game.i18n.localize('farhome.willTag');
     data.proficiencies.spells.occult.roll = proficiencyRollFormula(
       data.proficiencies.spells.occult.value,
       data.attributes.will.value,
     );
 
     // Setup rolls for tools
+    data.proficiencies.tools.repairKit.attribute = game.i18n.localize('farhome.strTag');
     data.proficiencies.tools.repairKit.roll = proficiencyRollFormula(
       data.proficiencies.tools.repairKit.value,
       data.attributes.str.value,
     );
+
+    data.proficiencies.tools.enchantersTools.attribute = game.i18n.localize('farhome.intTag');
     data.proficiencies.tools.enchantersTools.roll = proficiencyRollFormula(
       data.proficiencies.tools.enchantersTools.value,
       data.attributes.int.value,
     );
+
+    data.proficiencies.tools.apothecarySet.attribute = game.i18n.localize('farhome.willTag');
     data.proficiencies.tools.apothecarySet.roll = proficiencyRollFormula(
       data.proficiencies.tools.apothecarySet.value,
       data.attributes.will.value,
     );
+
+    data.proficiencies.tools.scribingTools.attribute = game.i18n.localize('farhome.intTag');
     data.proficiencies.tools.scribingTools.roll = proficiencyRollFormula(
       data.proficiencies.tools.scribingTools.value,
       data.attributes.int.value,

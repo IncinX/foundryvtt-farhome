@@ -1,310 +1,264 @@
-<div class="tab attributes-tab flexrow" data-group="primary" data-tab="attributes">
-  <div class="attribute-list flexcol">
-    {{>
-    "systems/farhome/templates/partials/attribute-partial.hbs"
-    data.attributes.str
-    objectString="data.attributes.str"}}
-    {{>
-    "systems/farhome/templates/partials/attribute-partial.hbs"
-    data.attributes.dex
-    objectString="data.attributes.dex"}}
-    {{>
-    "systems/farhome/templates/partials/attribute-partial.hbs"
-    data.attributes.sta
-    objectString="data.attributes.sta"}}
-    {{>
-    "systems/farhome/templates/partials/attribute-partial.hbs"
-    data.attributes.int
-    objectString="data.attributes.int"}}
-    {{>
-    "systems/farhome/templates/partials/attribute-partial.hbs"
-    data.attributes.will
-    objectString="data.attributes.will"}}
-    {{>
-    "systems/farhome/templates/partials/attribute-partial.hbs"
-    data.attributes.cha
-    objectString="data.attributes.cha"}}
-  </div>
-  <div class="saves-proficiency-group flexcol">
-    <div class="saves-list flex-group-center proficiency-group-box">
-      <h2>{{localize 'farhome.saves'}}</h2>
-      <table class="proficiency-table">
-        <colgroup>
-          <col class="proficiency-label" />
-          <col class="proficiency-data" />
-        </colgroup>
-        {{>
-        "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-        data.proficiencies.saves.str
-        objectString="data.proficiencies.saves.str"}}
-        {{>
-        "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-        data.proficiencies.saves.dex
-        objectString="data.proficiencies.saves.dex"}}
-        {{>
-        "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-        data.proficiencies.saves.sta
-        objectString="data.proficiencies.saves.sta"}}
-        {{>
-        "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-        data.proficiencies.saves.int
-        objectString="data.proficiencies.saves.int"}}
-        {{>
-        "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-        data.proficiencies.saves.will
-        objectString="data.proficiencies.saves.will"}}
-        {{>
-        "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-        data.proficiencies.saves.cha
-        objectString="data.proficiencies.saves.cha"}}
-      </table>
+<div class="tab attributes-tab" data-group="primary" data-tab="attributes">
+  <div class="attributes-content">
+    <div class="attribute-list">
+      {{>
+      "systems/farhome/templates/partials/attribute-partial.hbs"
+      data.attributes.str
+      objectString="data.attributes.str"}}
+      {{>
+      "systems/farhome/templates/partials/attribute-partial.hbs"
+      data.attributes.dex
+      objectString="data.attributes.dex"}}
+      {{>
+      "systems/farhome/templates/partials/attribute-partial.hbs"
+      data.attributes.sta
+      objectString="data.attributes.sta"}}
+      {{>
+      "systems/farhome/templates/partials/attribute-partial.hbs"
+      data.attributes.int
+      objectString="data.attributes.int"}}
+      {{>
+      "systems/farhome/templates/partials/attribute-partial.hbs"
+      data.attributes.will
+      objectString="data.attributes.will"}}
+      {{>
+      "systems/farhome/templates/partials/attribute-partial.hbs"
+      data.attributes.cha
+      objectString="data.attributes.cha"}}
     </div>
-    <div class="attribute-proficiency-group flex-group-center proficiency-group-box">
-      <h2>{{localize 'farhome.skills'}}</h2>
-      <div class="proficiency-group">
-        <h4>{{localize 'farhome.str'}}</h4>
-        <table class="proficiency-table">
-          <colgroup>
-            <col class="proficiency-label" />
-            <col class="proficiency-data" />
-          </colgroup>
-          {{>
-          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-          data.proficiencies.attributes.str.athletics
-          objectString="data.proficiencies.attributes.str.athletics"}}
-          {{>
-          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-          data.proficiencies.attributes.str.intimidation
-          objectString="data.proficiencies.attributes.str.intimidation"}}
-        </table>
-      </div>
-      <div class="proficiency-group">
-        <h4>{{localize 'farhome.dex'}}</h4>
-        <table class="proficiency-table">
-          <colgroup>
-            <col class="proficiency-label" />
-            <col class="proficiency-data" />
-          </colgroup>
-          {{>
-          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-          data.proficiencies.attributes.dex.acrobatics
-          objectString="data.proficiencies.attributes.dex.acrobatics"}}
-          {{>
-          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-          data.proficiencies.attributes.dex.lockpicking
-          objectString="data.proficiencies.attributes.dex.lockpicking"}}
-          {{>
-          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-          data.proficiencies.attributes.dex.stealth
-          objectString="data.proficiencies.attributes.dex.stealth"}}
-          {{>
-          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-          data.proficiencies.attributes.dex.sleightOfHand
-          objectString="data.proficiencies.attributes.dex.sleightOfHand"}}
-        </table>
-      </div>
-      <div class="proficiency-group">
-        <h4>{{localize 'farhome.sta'}}</h4>
-        <table class="proficiency-table">
-          <colgroup>
-            <col class="proficiency-label" />
-            <col class="proficiency-data" />
-          </colgroup>
-          {{>
-          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-          data.proficiencies.attributes.sta.exhaustion
-          objectString="data.proficiencies.attributes.sta.exhaustion"}}
-          {{>
-          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-          data.proficiencies.attributes.sta.survival
-          objectString="data.proficiencies.attributes.sta.survival"}}
-        </table>
-      </div>
-      <div class="proficiency-group">
-        <h4>{{localize 'farhome.int'}}</h4>
-        <table class="proficiency-table">
-          <colgroup>
-            <col class="proficiency-label" />
-            <col class="proficiency-data" />
-          </colgroup>
-          {{>
-          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-          data.proficiencies.attributes.int.arcana
-          objectString="data.proficiencies.attributes.int.arcana"}}
-          {{>
-          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-          data.proficiencies.attributes.int.investigation
-          objectString="data.proficiencies.attributes.int.investigation"}}
-          {{>
-          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-          data.proficiencies.attributes.int.lore
-          objectString="data.proficiencies.attributes.int.lore"}}
-          {{>
-          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-          data.proficiencies.attributes.int.medicine
-          objectString="data.proficiencies.attributes.int.medicine"}}
-        </table>
-      </div>
-      <div class="proficiency-group">
-        <h4>{{localize 'farhome.will'}}</h4>
-        <table class="proficiency-table">
-          <colgroup>
-            <col class="proficiency-label" />
-            <col class="proficiency-data" />
-          </colgroup>
-          {{>
-          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-          data.proficiencies.attributes.will.animalHandling
-          objectString="data.proficiencies.attributes.will.animalHandling"}}
-          {{>
-          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-          data.proficiencies.attributes.will.insight
-          objectString="data.proficiencies.attributes.will.insight"}}
-          {{>
-          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-          data.proficiencies.attributes.will.nature
-          objectString="data.proficiencies.attributes.will.nature"}}
-          {{>
-          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-          data.proficiencies.attributes.will.perception
-          objectString="data.proficiencies.attributes.will.perception"}}
-        </table>
-      </div>
-      <div class="proficiency-group">
-        <h4>{{localize 'farhome.cha'}}</h4>
-        <table class="proficiency-table">
-          <colgroup>
-            <col class="proficiency-label" />
-            <col class="proficiency-data" />
-          </colgroup>
-          {{>
-          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-          data.proficiencies.attributes.cha.conversation
-          objectString="data.proficiencies.attributes.cha.conversation"}}
-          {{>
-          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-          data.proficiencies.attributes.cha.diplomacy
-          objectString="data.proficiencies.attributes.cha.diplomacy"}}
-          {{>
-          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-          data.proficiencies.attributes.cha.performance
-          objectString="data.proficiencies.attributes.cha.performance"}}
-          {{>
-          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-          data.proficiencies.attributes.cha.religion
-          objectString="data.proficiencies.attributes.cha.religion"}}
-        </table>
+    <div class="attributes-group-1">
+      <div class="attribute-proficiency-group proficiency-group-box">
+        <h2>{{localize 'farhome.skills'}}</h2>
+        <div class="proficiency-group">
+          <table class="proficiency-table">
+            {{>
+            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+            data.proficiencies.attributes.dex.acrobatics
+            objectString="data.proficiencies.attributes.dex.acrobatics"}}
+            {{>
+            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+            data.proficiencies.attributes.will.animalHandling
+            objectString="data.proficiencies.attributes.will.animalHandling"}}
+            {{>
+            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+            data.proficiencies.attributes.int.arcana
+            objectString="data.proficiencies.attributes.int.arcana"}}
+            {{>
+            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+            data.proficiencies.attributes.str.athletics
+            objectString="data.proficiencies.attributes.str.athletics"}}
+            {{>
+            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+            data.proficiencies.attributes.cha.conversation
+            objectString="data.proficiencies.attributes.cha.conversation"}}
+            {{>
+            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+            data.proficiencies.attributes.cha.diplomacy
+            objectString="data.proficiencies.attributes.cha.diplomacy"}}
+            {{>
+            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+            data.proficiencies.attributes.sta.exhaustion
+            objectString="data.proficiencies.attributes.sta.exhaustion"}}
+            {{>
+            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+            data.proficiencies.attributes.will.insight
+            objectString="data.proficiencies.attributes.will.insight"}}
+            {{>
+            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+            data.proficiencies.attributes.str.intimidation
+            objectString="data.proficiencies.attributes.str.intimidation"}}
+            {{>
+            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+            data.proficiencies.attributes.int.investigation
+            objectString="data.proficiencies.attributes.int.investigation"}}
+            {{>
+            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+            data.proficiencies.attributes.dex.lockpicking
+            objectString="data.proficiencies.attributes.dex.lockpicking"}}
+            {{>
+            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+            data.proficiencies.attributes.int.lore
+            objectString="data.proficiencies.attributes.int.lore"}}
+            {{>
+            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+            data.proficiencies.attributes.int.medicine
+            objectString="data.proficiencies.attributes.int.medicine"}}
+            {{>
+            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+            data.proficiencies.attributes.will.nature
+            objectString="data.proficiencies.attributes.will.nature"}}
+            {{>
+            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+            data.proficiencies.attributes.will.perception
+            objectString="data.proficiencies.attributes.will.perception"}}
+            {{>
+            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+            data.proficiencies.attributes.cha.performance
+            objectString="data.proficiencies.attributes.cha.performance"}}
+            {{>
+            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+            data.proficiencies.attributes.cha.religion
+            objectString="data.proficiencies.attributes.cha.religion"}}
+            {{>
+            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+            data.proficiencies.attributes.dex.sleightOfHand
+            objectString="data.proficiencies.attributes.dex.sleightOfHand"}}
+            {{>
+            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+            data.proficiencies.attributes.dex.stealth
+            objectString="data.proficiencies.attributes.dex.stealth"}}
+            {{>
+            "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+            data.proficiencies.attributes.sta.survival
+            objectString="data.proficiencies.attributes.sta.survival"}}
+          </table>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="weapon-spells-equipment-tool-group flexcol">
-    <div class="weapons-proficiency-group flex-group-center proficiency-group-box">
-      <h2>{{localize 'farhome.weapons'}}</h2>
-      <table class="proficiency-table">
-        <colgroup>
-          <col class="proficiency-label" />
-          <col class="proficiency-data" />
-        </colgroup>
-        {{>
-        "systems/farhome/templates/partials/row-number-partial.hbs"
-        data.proficiencies.weapons.oneHand
-        objectString="data.proficiencies.weapons.oneHand"}}
-        {{>
-        "systems/farhome/templates/partials/row-number-partial.hbs"
-        data.proficiencies.weapons.twoHand
-        objectString="data.proficiencies.weapons.twoHand"}}
-        {{>
-        "systems/farhome/templates/partials/row-number-partial.hbs"
-        data.proficiencies.weapons.ranged
-        objectString="data.proficiencies.weapons.ranged"}}
-        {{>
-        "systems/farhome/templates/partials/row-number-partial.hbs"
-        data.proficiencies.weapons.unarmed
-        objectString="data.proficiencies.weapons.unarmed"}}
-      </table>
+    <div class="attributes-group-2">
+      <div class="saves-list proficiency-group-box">
+        <h2>{{localize 'farhome.saves'}}</h2>
+        <table class="proficiency-table">
+          <colgroup>
+            <col class="proficiency-label" />
+            <col class="proficiency-data" />
+          </colgroup>
+          {{>
+          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+          data.proficiencies.saves.str
+          objectString="data.proficiencies.saves.str"}}
+          {{>
+          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+          data.proficiencies.saves.dex
+          objectString="data.proficiencies.saves.dex"}}
+          {{>
+          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+          data.proficiencies.saves.sta
+          objectString="data.proficiencies.saves.sta"}}
+          {{>
+          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+          data.proficiencies.saves.int
+          objectString="data.proficiencies.saves.int"}}
+          {{>
+          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+          data.proficiencies.saves.will
+          objectString="data.proficiencies.saves.will"}}
+          {{>
+          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+          data.proficiencies.saves.cha
+          objectString="data.proficiencies.saves.cha"}}
+        </table>
+      </div>
+      <div class="tools-proficiency-group proficiency-group-box">
+        <h2>{{localize 'farhome.tools'}}</h2>
+        <table class="proficiency-table">
+          <colgroup>
+            <col class="proficiency-label" />
+            <col class="proficiency-data" />
+          </colgroup>
+          {{>
+          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+          data.proficiencies.tools.repairKit
+          objectString="data.proficiencies.tools.repairKit"}}
+          {{>
+          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+          data.proficiencies.tools.enchantersTools
+          objectString="data.proficiencies.tools.enchantersTools"}}
+          {{>
+          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+          data.proficiencies.tools.apothecarySet
+          objectString="data.proficiencies.tools.apothecarySet"}}
+          {{>
+          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+          data.proficiencies.tools.scribingTools
+          objectString="data.proficiencies.tools.scribingTools"}}
+        </table>
+      </div>
+      <div class="equipment-proficiency-group proficiency-group-box">
+        <h2>{{localize 'farhome.equipment'}}</h2>
+        <table class="proficiency-table">
+          <colgroup>
+            <col class="proficiency-label" />
+            <col class="proficiency-data" />
+          </colgroup>
+          {{>
+          "systems/farhome/templates/partials/row-bool-partial.hbs"
+          data.proficiencies.equipment.lightArmor
+          objectString="data.proficiencies.equipment.lightArmor"}}
+          {{>
+          "systems/farhome/templates/partials/row-bool-partial.hbs"
+          data.proficiencies.equipment.mediumArmor
+          objectString="data.proficiencies.equipment.mediumArmor"}}
+          {{>
+          "systems/farhome/templates/partials/row-bool-partial.hbs"
+          data.proficiencies.equipment.heavyArmor
+          objectString="data.proficiencies.equipment.heavyArmor"}}
+          {{>
+          "systems/farhome/templates/partials/row-bool-partial.hbs"
+          data.proficiencies.equipment.buckler
+          objectString="data.proficiencies.equipment.buckler"}}
+          {{>
+          "systems/farhome/templates/partials/row-bool-partial.hbs"
+          data.proficiencies.equipment.shield
+          objectString="data.proficiencies.equipment.shield"}}
+        </table>
+      </div>
     </div>
-    <div class="equipment-proficiency-group flex-group-center proficiency-group-box">
-      <h2>{{localize 'farhome.equipment'}}</h2>
-      <table class="proficiency-table">
-        <colgroup>
-          <col class="proficiency-label" />
-          <col class="proficiency-data" />
-        </colgroup>
-        {{>
-        "systems/farhome/templates/partials/row-bool-partial.hbs"
-        data.proficiencies.equipment.lightArmor
-        objectString="data.proficiencies.equipment.lightArmor"}}
-        {{>
-        "systems/farhome/templates/partials/row-bool-partial.hbs"
-        data.proficiencies.equipment.mediumArmor
-        objectString="data.proficiencies.equipment.mediumArmor"}}
-        {{>
-        "systems/farhome/templates/partials/row-bool-partial.hbs"
-        data.proficiencies.equipment.heavyArmor
-        objectString="data.proficiencies.equipment.heavyArmor"}}
-        {{>
-        "systems/farhome/templates/partials/row-bool-partial.hbs"
-        data.proficiencies.equipment.buckler
-        objectString="data.proficiencies.equipment.buckler"}}
-        {{>
-        "systems/farhome/templates/partials/row-bool-partial.hbs"
-        data.proficiencies.equipment.shield
-        objectString="data.proficiencies.equipment.shield"}}
-      </table>
-    </div>
-    <div class="spells-proficiency-group flex-group-center proficiency-group-box">
-      <h2>{{localize 'farhome.spells'}}</h2>
-      <table class="proficiency-table">
-        <colgroup>
-          <col class="proficiency-label" />
-          <col class="proficiency-data" />
-        </colgroup>
-        {{>
-        "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-        data.proficiencies.spells.arcane
-        objectString="data.proficiencies.spells.arcane"}}
-        {{>
-        "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-        data.proficiencies.spells.divine
-        objectString="data.proficiencies.spells.divine"}}
-        {{>
-        "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-        data.proficiencies.spells.druidic
-        objectString="data.proficiencies.spells.druidic"}}
-        {{>
-        "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-        data.proficiencies.spells.elder
-        objectString="data.proficiencies.spells.elder"}}
-        {{>
-        "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-        data.proficiencies.spells.occult
-        objectString="data.proficiencies.spells.occult"}}
-      </table>
-    </div>
-    <div class="tools-proficiency-group flex-group-center proficiency-group-box">
-      <h2>{{localize 'farhome.tools'}}</h2>
-      <table class="proficiency-table">
-        <colgroup>
-          <col class="proficiency-label" />
-          <col class="proficiency-data" />
-        </colgroup>
-        {{>
-        "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-        data.proficiencies.tools.repairKit
-        objectString="data.proficiencies.tools.repairKit"}}
-        {{>
-        "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-        data.proficiencies.tools.enchantersTools
-        objectString="data.proficiencies.tools.enchantersTools"}}
-        {{>
-        "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-        data.proficiencies.tools.apothecarySet
-        objectString="data.proficiencies.tools.apothecarySet"}}
-        {{>
-        "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
-        data.proficiencies.tools.scribingTools
-        objectString="data.proficiencies.tools.scribingTools"}}
-      </table>
+    <div class="attributes-group-3">
+      <div class="spells-proficiency-group proficiency-group-box">
+        <h2>{{localize 'farhome.spells'}}</h2>
+        <table class="proficiency-table">
+          <colgroup>
+            <col class="proficiency-label" />
+            <col class="proficiency-data" />
+          </colgroup>
+          {{>
+          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+          data.proficiencies.spells.arcane
+          objectString="data.proficiencies.spells.arcane"}}
+          {{>
+          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+          data.proficiencies.spells.divine
+          objectString="data.proficiencies.spells.divine"}}
+          {{>
+          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+          data.proficiencies.spells.druidic
+          objectString="data.proficiencies.spells.druidic"}}
+          {{>
+          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+          data.proficiencies.spells.elder
+          objectString="data.proficiencies.spells.elder"}}
+          {{>
+          "systems/farhome/templates/partials/row-rollable-number-partial.hbs"
+          data.proficiencies.spells.occult
+          objectString="data.proficiencies.spells.occult"}}
+        </table>
+      </div>
+      <div class="weapons-proficiency-group proficiency-group-box">
+        <h2>{{localize 'farhome.weapons'}}</h2>
+        <table class="proficiency-table">
+          <colgroup>
+            <col class="proficiency-label" />
+            <col class="proficiency-data" />
+          </colgroup>
+          {{>
+          "systems/farhome/templates/partials/row-number-partial.hbs"
+          data.proficiencies.weapons.oneHand
+          objectString="data.proficiencies.weapons.oneHand"}}
+          {{>
+          "systems/farhome/templates/partials/row-number-partial.hbs"
+          data.proficiencies.weapons.twoHand
+          objectString="data.proficiencies.weapons.twoHand"}}
+          {{>
+          "systems/farhome/templates/partials/row-number-partial.hbs"
+          data.proficiencies.weapons.ranged
+          objectString="data.proficiencies.weapons.ranged"}}
+          {{>
+          "systems/farhome/templates/partials/row-number-partial.hbs"
+          data.proficiencies.weapons.unarmed
+          objectString="data.proficiencies.weapons.unarmed"}}
+        </table>
+      </div>
     </div>
   </div>
 </div>

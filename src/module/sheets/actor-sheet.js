@@ -22,6 +22,8 @@ export default class FarhomeActorSheet extends ActorSheet {
       classes: ['farhome', 'sheet', 'actor'],
       width: 850,
       height: 800,
+      minWidth: 850,
+      minHeight: 800,
       tabs: [{ navSelector: '.sheet-tabs', contentSelector: '.sheet-body', initial: 'attributes' }],
     });
   }
@@ -243,6 +245,7 @@ export default class FarhomeActorSheet extends ActorSheet {
     const controlData = duplicate(header.dataset);
 
     // Initialize a default name.
+    // #todo Add localization
     const name = `New ${type.capitalize()}`;
 
     // Prepare the item object.
