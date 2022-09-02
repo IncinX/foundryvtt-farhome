@@ -3,11 +3,6 @@
 ## P0
 
 - [ ] For the roll summary (add text saying +1 from template or something)
-- [ ] Fix up and center the prepared/equipped/etc checkboxes and inputs (or left-justify the heading for now)
-- [ ] Cleanup the css code and PR it
-- [ ] Center the proficiency labels and input boxes
-- [ ] Cleanup spacing around labels
-- [ ] Fix red underlines for skills and notes since it doesn't quite fit the theme.
 - [ ] Clenup combo boxes to have a background or white text
 - [ ] Try removing the bold from the text labels everywhere
 - [ ] Consider applying a blur and darkening effect to the farhome background
