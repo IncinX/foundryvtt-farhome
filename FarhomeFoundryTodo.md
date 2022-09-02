@@ -3,7 +3,7 @@
 ## P0
 
 - [ ] For the roll summary (add text saying +1 from template or something)
-- [ ] Figure out how to do new fonts
+- [ ] Fix up and center the prepared/equipped/etc checkboxes and inputs (or left-justify the heading for now)
 - [ ] Cleanup the css code and PR it
 - [ ] Center the proficiency labels and input boxes
 - [ ] Cleanup spacing around labels

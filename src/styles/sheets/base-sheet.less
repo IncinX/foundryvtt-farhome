@@ -1,0 +1,123 @@
+// #todo Consider migrating this to more general areas in the future.
+//       Particularly if something should be going in _resource.less, _table.less, _forms.less, etc.
+
+.farhome.sheet {
+  background-color: @c-sheet;
+  font-family: @font-primary;
+  font-size: 1.0em;
+  min-width: 850px;
+  min-height: 700px;
+
+  .window-content {
+    .top-bar {
+      background-color: @c-background-darken;
+      border-radius: @standard-border-radius;
+      padding: 5px;
+    }
+
+    display: block;
+    color: @c-text-color;
+    background: none;
+    background-image: url('../images/farhome-cover.jpg');
+  }
+
+  input {
+    background-color: @c-input;
+    border: 0;
+
+    &:disabled {
+      background-color: @c-input-disabled;
+    }
+  }
+
+  .sheet-tabs {
+    .item.active {
+      background-color: @c-background-darken;
+      text-shadow: none;
+    }
+
+    .item {
+      &:hover {
+        text-shadow: none;
+      }
+
+      background-color: transparent;
+      display: block;
+      padding: .5rem 1rem;
+      border: 0px;
+      border-top-left-radius: @standard-border-radius;
+      border-top-right-radius: @standard-border-radius;
+    }
+
+    margin: 0;
+    border: none;
+    padding: 5px 0px 0px 0px;
+    background-color: @c-tab-bar;
+  }
+
+  .under-label {
+    font-weight: bold;
+    margin: 3px 0 3px 3px;
+  }
+
+  .name-input {
+    font-size: 3em;
+    height: 3em;
+  }
+
+  .level-input {
+    font-size: 3em;
+    height: 3em;
+  }
+
+  .header-input {
+    padding: 5px;
+  }
+
+  .attributes-content {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .attribute-list {
+    .proficiency-group-box {
+      text-align: center;
+    }
+    .attribute-box {
+      .attribute-label {
+        display: block;
+        font-weight: bold;
+      }
+      .attribute-input {
+        width: 2rem;
+        height: 2rem;
+      }
+      margin: 5px;
+    }
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    width: 8rem;
+  }
+
+  .attribute-tag {
+    color: @c-faded-white;
+  }
+
+  .proficiency-table {
+    background-color: transparent;
+    border: 0px;
+    
+    tr:nth-child(odd) {
+      background-color: @c-background-darken-half;
+    }
+
+    tr:nth-child(even) {
+      background-color: transparent;
+    }
+  }
+
+  h2 {
+    border-color: @c-standard-border;
+  }
+}
