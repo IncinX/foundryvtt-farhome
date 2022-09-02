@@ -25,7 +25,7 @@ export function getWeaponRollTemplate(strongestProf, strongestAttr) {
   <blockquote>
   <p>5AP, [[i.weaponType]], [[i.range]], [[i.damageType]]</p>
   </blockquote>
-  <p>[[s.skill(${strongestProf}, ${strongestAttr})]]</p>
+  <p>[[skill(${strongestProf}, ${strongestAttr})]]</p>
   <p>[[fh('gw')]]</p>
   <p>[[i.description]]</p>`;
 }
@@ -36,7 +36,7 @@ export function getManeuverRollTemplate(strongestProf, strongestAttr) {
   <blockquote>
   <p>6AP, Sword, [[i.range]], Slashing</p>
   </blockquote>
-  <p>[[s.skill(${strongestProf}, ${strongestAttr})]]</p>
+  <p>[[skill(${strongestProf}, ${strongestAttr})]]</p>
   <p>[[fh('gw')]]</p>
   <p>[[i.description]]</p>`;
 }
@@ -54,7 +54,7 @@ export function getSpellRollTemplate(strongestProf, strongestAttr) {
   <blockquote>
   <p>Lv[[i.castedSpellLevel]], [[i.castingTime]], [[i.range]], [[i.spellDuration]], [[i.damageType]]</p>
   </blockquote>
-  <p>[[s.skill(${strongestProf}, ${strongestAttr})]]</p>
+  <p>[[skill(${strongestProf}, ${strongestAttr})]]</p>
   <p>[[fh('gw')]]</p>
   <p>[[i.description]]</p>`;
 }
