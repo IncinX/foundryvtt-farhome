@@ -25,16 +25,16 @@ describe('Proficiency Roll Formula', () => {
     expect(proficiencyRollFormula(3, 5)).toBe('3s2e');
   });
 
-  it('(0, 6) will be "5e1n"', () => {
-    expect(proficiencyRollFormula(0, 6)).toBe('5e1n');
+  it('(0, 6) will be "6e"', () => {
+    expect(proficiencyRollFormula(0, 6)).toBe('6e');
   });
 
-  it('(3, 6) will be "3s2e1n"', () => {
-    expect(proficiencyRollFormula(3, 6)).toBe('3s2e1n');
+  it('(3, 6) will be "3s3e"', () => {
+    expect(proficiencyRollFormula(3, 6)).toBe('3s3e');
   });
 
-  it('(6, 6) will be "5s1e"', () => {
-    expect(proficiencyRollFormula(6, 6)).toBe('5s1e');
+  it('(5, 6) will be "5s1e"', () => {
+    expect(proficiencyRollFormula(5, 6)).toBe('5s1e');
   });
 
   it('(0, -1) will be "4n1b"', () => {
