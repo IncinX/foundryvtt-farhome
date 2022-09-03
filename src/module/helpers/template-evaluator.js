@@ -30,10 +30,6 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
   // #todo This should be made into an object that pre-evaluates the help text and system function binds, etc.
 
   let evaluatorSystemContext = {
-    // #todo skill and getRollFormula are deprecated here and should be removed when the macro fixes everything and it is communicated to players.
-    skill: skill.bind(game.farhome.roller),
-    getRollFormula: formula,
-
     targetCount: game.user.targets.size,
   };
 
@@ -139,7 +135,7 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
   help +=
     '<li>skill(proficiency, attribute) -- Performs a skill roll with the given proficiency and attribute.</li><br/>';
   help +=
-    '<li>getRollFormula(proficiency, attribute) -- Gets the roll formula with the given proficiency and attribute.</li><br/>';
+    '<li>formula(proficiency, attribute) -- Gets the roll formula with the given proficiency and attribute.</li><br/>';
   help += '<li>s -- System helper function context (see below).</li><br/>';
   help += '<li>a -- Actor data context (see below).</li><br/>';
   help += '<li>i -- Item data context (see below).</li><br/>';

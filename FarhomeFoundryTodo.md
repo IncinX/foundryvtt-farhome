@@ -13,6 +13,16 @@
 - [ ] Move todo list out to GitHub issues
 - [ ] Let the farhome players know that I can setup developer accounts for them that will run on a different port and allow open development
 
+- [ ] MAJOR: Effects Update
+- [ ] MAJOR: Update farhome to Foundry version 10.0
+  - [ ] Fix farhome compatibility warnings for the latest Foundry update
+  - [ ] There are package updates and data model warnings all over the place
+- [ ] MAJOR: Wizard update
+  - [ ] Buttons for spend healing surge, and mana restore
+  - [ ] Create a wizard that can do level ups (with continuation to keep doing level ups... this will help for NPC creation)
+  - [ ] Create a wizard that can do monster creation
+- [ ] MAJOR: Magic Compendium Update
+
 ## P1
 
 - [ ] Try removing the bold from the text labels everywhere
