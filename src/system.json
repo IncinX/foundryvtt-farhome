@@ -9,7 +9,36 @@
   "scripts": [],
   "esmodules": ["module/farhome.js"],
   "styles": ["styles/farhome.css"],
-  "packs": [],
+  "packs": [
+    {
+      "name": "farhome-feats",
+      "path": "packs/farhome_feats.db",
+      "label": "Farhome Feats",
+      "entity": "Item",
+      "system": "farhome"
+    },
+    {
+      "name": "farhome-maneuvers",
+      "path": "packs/farhome_maneuvers.db",
+      "label": "Farhome Maneuvers",
+      "entity": "Item",
+      "system": "farhome"
+    },
+    {
+      "name": "farhome-spells",
+      "path": "packs/farhome_spells.db",
+      "label": "Farhome Spells",
+      "entity": "Item",
+      "system": "farhome"
+    },
+    {
+      "name": "farhome-items",
+      "path": "packs/farhome_items.db",
+      "label": "Farhome Items",
+      "entity": "Item",
+      "system": "farhome"
+    }
+  ],
   "dependencies": [],
   "languages": [
     {
