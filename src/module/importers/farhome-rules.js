@@ -5,8 +5,9 @@ export function parseRules(markdownString) {
   const markdownHtmlQuery = $(markdownHtml);
 
   // Parse non-background feats first
-  markdownHtmlQuery.find(':header').find('Feats').each((index, element) => {
-    console.log(element);
+  // #todo These aren't working, figure out how to get it to find the #basic tag
+  markdownHtmlQuery.find('a[href$="Basic"]').each((index, element) => {
+    console.log(element.innerHTML);
   });
 
   // #todo Add background feats as distinct set of feats
