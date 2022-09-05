@@ -1,5 +1,4 @@
-describe('Parse Kobold Press Bestiary', () => {
-  it('Verify that the bestiary were loaded.', () => {
-    // #todo Stuff here
-  });
+test('Parse Kobold Press Bestiary', () => {
+  // DEBUG! Just pass for now
+  expect(true).toBe(true);
 });

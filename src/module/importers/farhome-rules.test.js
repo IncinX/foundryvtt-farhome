@@ -7,6 +7,12 @@ test('Parse Farhome Original Rules', async () => {
   const data = await fetch(rulesUri);
   const markdownText = await data.text();
   parseRules(markdownText);
+
+  // DEBUG! Just pass for now
+  expect(true).toBe(true);
 });
 
-test('Parse Farhome Eberron Rules', async () => {});
+test('Parse Farhome Eberron Rules', async () => {
+  // DEBUG! Just pass for now
+  expect(true).toBe(true);
+});
