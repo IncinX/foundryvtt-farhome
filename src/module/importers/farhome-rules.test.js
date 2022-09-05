@@ -1,4 +1,3 @@
-import 'isomorphic-fetch';
 import { parseRules } from './farhome-rules';
 
 test('Parse Farhome Original Rules', async () => {

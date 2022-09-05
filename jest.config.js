@@ -1,5 +1,6 @@
 export default {
   preset: 'rollup-jest',
-  testEnvironment: 'node',
+  testEnvironment: 'jsdom',
+  setupFilesAfterEnv: ['./jest.setup.js'],
   roots: ['src'],
 };
