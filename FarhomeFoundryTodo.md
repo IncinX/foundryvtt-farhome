@@ -12,6 +12,7 @@
 - [ ] Make sure that Overswing is supported
 - [ ] Move todo list out to GitHub issues
 - [ ] Let the farhome players know that I can setup developer accounts for them that will run on a different port and allow open development
+- [ ] Add new templates for NPC's that do not add the description to the template by default.
 
 - [ ] MAJOR: Effects Update
 - [ ] MAJOR: Update farhome to Foundry version 10.0
