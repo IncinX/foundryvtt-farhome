@@ -1,4 +1,20 @@
-export function createCompendiumFromRules(rulesUrl) {
+import { marked } from 'marked';
+
+// #todo Add support for DOMPurify later
+//import DOMPurify from 'isomorphic-dompurify';
+
+export async function createCompendiumFromRules(rulesUrl) {
+  const rulesFetch = await fetch(rulesUrl);
+  const rulesBlob = await rulesFetch.blob();
+  const rulesText = await rulesBlob.text();
+
+  const parsedRules = parseRules(rulesText);
+
+  console.log(parsedRules);
+
+  // DEBUG! Skip the rest for now
+  return;
+
   CompendiumCollection.createCompendium({
     name: 'feats-compendium',
     label: 'Feats Compendium',
@@ -21,7 +37,7 @@ export function createCompendiumFromRules(rulesUrl) {
 }
 
 export function parseRules(markdownString) {
-  const markdownHtml = require('markdown').markdown.toHTML(markdownString);
+  const markdownHtml = marked.parse(markdownString);
   const markdownHtmlQuery = $(markdownHtml);
 
   // Parse non-background feats first
