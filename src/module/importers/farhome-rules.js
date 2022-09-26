@@ -8,7 +8,8 @@ export async function createCompendiumFromRules(rulesUrl) {
   const rulesBlob = await rulesFetch.blob();
   const rulesText = await rulesBlob.text();
 
-  const parsedRules = parseRules(rulesText);
+  const ruleParser = new FarhomeRuleParser();
+  const parsedRules = ruleParser.parse(rulesText);
 
   console.log(parsedRules);
 
@@ -36,54 +37,88 @@ export async function createCompendiumFromRules(rulesUrl) {
   );
 }
 
-export function parseRules(markdownString) {
-  const markdownHtml = marked.parse(markdownString);
-  const markdownHtmlQuery = $(markdownHtml);
+class FarhomeRuleParser {
+  constructor() {
+    this.feats = [];
+    this.backgrounds = [];
+    this.maneuvers = [];
+    this.spells = [];
 
-  // Parse non-background feats first
-  // #todo These aren't working, figure out how to get it to find the #basic tag
-  // #todo Add a check to only get #basic under a parent #feats tag
-  // #todo This is definitely not working... it should also be more resilient so that Basic will go until it finds the next header of the same level
+    // There are 6 heading levels
+    this.headingStack = Array(6).fill('');
+    this.currentHeadingLevel = 1;
+  }
 
-  // DEBUG!
-  markdownHtmlQuery
-    .filter('a[href$="Basic"]')
-    .siblings()
-    .each((i, el) => {
-      console.log(el.innerHTML);
+  parse(markdownString) {
+    const markdownHtml = marked.parse(markdownString);
+    const markdownHtmlQuery = $(markdownHtml);
+
+    markdownHtmlQuery.each((_index, element) => {
+      this._processElement(_index, element);
     });
 
-  const feats = markdownHtmlQuery
-    .find('a[href$="Basic"]')
-    //.filter('a[href$="Basic"]')
-    .nextUntil('a[href$="Journeyman"]')
-    .map((_index, element) => {
-      const level = 'Basic';
-      const name = element.innerHTML;
-      const description = ''; //element.nextSibling.innerHTML;
-      console.log(name);
+    const rulesData = {
+      feats: this.feats,
+      backgrounds: this.backgrounds,
+      maneuvers: this.maneuvers,
+      spells: this.spells,
+    };
 
-      return { name, level, description };
-    })
-    .get();
+    return rulesData;
+  }
 
-  console.log(feats);
+  _processElement(_index, element) {
+    // Process headings and track the heading stack and current level
+    if (this._isHeading(element.nodeName)) {
+      this.currentHeadingLevel = this._getHeadingLevel(element.nodeName);
+      this.headingStack[this.currentHeadingLevel - 1] = element.innerText;
+    }
 
-  // #todo Add background feats as distinct set of feats
-  const backgrounds = [];
+    if (element.nodeName === 'P') {
+      // Process basic feats
+      // #todo Almost working, it needs to handle requirements and appending text if it exists.
+      if (this._headingsInStack(['Basic', 'Journeyman', 'Advanced', 'Legendary'])) {
+        this._addFeat(this._recentHeading(), element.outerHtml);
+      }
+    }
+  }
 
-  // #todo Parse maneuvers
-  const maneuvers = [];
+  _isHeading(nodeName) {
+    return nodeName.toUpperCase()[0] === 'H';
+  }
 
-  // #todo Parse all spells for each school of magic separately
-  const spells = [];
+  _getHeadingLevel(nodeName) {
+    const headingLevel = parseInt(nodeName[1]);
+    if (Number.isInteger(headingLevel) && (headingLevel >= 1) && (headingLevel <= 6)) {
+      return headingLevel;
+    } else {
+      console.error(nodeName + ' does not a valid heading level');
+    }
+  }
 
-  const rulesData = {
-    feats,
-    backgrounds,
-    maneuvers,
-    spells,
-  };
+  _headingsInStack(headingList) {
+    for (let headingIndex = this.currentHeadingLevel - 1; headingIndex >= 0; headingIndex--) {
+      if (headingList.includes(this.headingStack[headingIndex])) {
+        return true;
+      }
+    }
 
-  return rulesData;
+    return false;
+  }
+
+  _recentHeading() {
+    return this.headingStack[this.currentHeadingLevel - 1];
+  }
+
+  _addFeat(name, description) {
+    this.feats.push({
+      name: name,
+      type: 'feat',
+      data: {
+        description: {
+          value: description,
+        },
+      },
+    });
+  }
 }
