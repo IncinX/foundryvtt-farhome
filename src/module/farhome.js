@@ -10,7 +10,7 @@ import { secureRandomNumber } from './roller/rng';
 import { FHRoller } from './roller/fh/roller';
 import { FHRollSystem } from './roller/system';
 import { createCompendiumFromRules } from './importers/farhome-rules';
-import { createCompendiumFrom5etoolsBeastiary } from './importers/5etools-monsters';
+import { createCompendiumFromVetoolsBeastiary } from './importers/vetools-monsters';
 import FarhomeItemSheet from './sheets/item-sheet';
 import FarhomeActorSheet from './sheets/actor-sheet';
 
@@ -30,7 +30,7 @@ Hooks.once('init', async () => {
     rollItemMacro,
     roller,
     createCompendiumFromRules,
-    createCompendiumFrom5etoolsBeastiary,
+    createCompendiumFromVetoolsBeastiary,
   };
 
   // Assign custom classes and constants here

@@ -10,8 +10,6 @@ export async function createCompendiumFromRules(compendiumLabel, rulesUrl, delet
 
   console.log(parsedRules);
 
-  // #todo Add parameter specifying whether to destroy existing compendium and receive the compendium label
-
   const compendiumName = compendiumLabel.toLowerCase().replace(/ /g, '-');
   const worldCompendiumName = `world.${compendiumName}`;
 
@@ -29,9 +27,7 @@ export async function createCompendiumFromRules(compendiumLabel, rulesUrl, delet
     package: 'system',
   });
 
-  game.farhome.FarhomeItem.createDocuments(parsedRules.feats, {
-    pack: worldCompendiumName,
-  });
+  await game.farhome.FarhomeItem.createDocuments(parsedRules.feats, { pack: worldCompendiumName });
 }
 
 class FarhomeRuleParser {

@@ -15,6 +15,7 @@
 
 ## P1
 
+- [ ] Default values for token lighting
 - [ ] Try removing the bold from the text labels everywhere
 - [ ] Consider applying a blur and darkening effect to the farhome background
 - [ ] Add indicators in the summary for how much was added by bonus modifiers)
