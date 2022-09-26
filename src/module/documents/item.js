@@ -199,7 +199,7 @@ export class FarhomeItem extends Item {
     if (!actor.isOwner) {
       sendActorMessage(
         'You do not own this actor, so stop trying to spend their mana. ' +
-        'They are <i>probably</i> competant enough to do that themselves.',
+          'They are <i>probably</i> competant enough to do that themselves.',
       );
       return;
     }

@@ -21,7 +21,7 @@ export async function createCompendiumFromRules(rulesUrl) {
 
   if (game.packs.has(worldCompendiumName)) {
     await game.packs.get(worldCompendiumName).deleteCompendium();
-  };
+  }
 
   await CompendiumCollection.createCompendium({
     name: compendiumName,
@@ -31,12 +31,9 @@ export async function createCompendiumFromRules(rulesUrl) {
     package: 'system',
   });
 
-  game.farhome.FarhomeItem.createDocuments(
-    parsedRules.feats,
-    {
-      pack: worldCompendiumName,
-    },
-  );
+  game.farhome.FarhomeItem.createDocuments(parsedRules.feats, {
+    pack: worldCompendiumName,
+  });
 }
 
 class FarhomeRuleParser {
@@ -47,6 +44,9 @@ class FarhomeRuleParser {
     this.spells = [];
 
     this.featsLookup = {};
+    this.backgroundsLookup = {};
+    this.maneuversLookup = {};
+    this.spellsLookup = {};
 
     // There are 6 heading levels
     this.headingStack = Array(6).fill('');
@@ -83,6 +83,12 @@ class FarhomeRuleParser {
       if (this._headingsInStack(['Basic', 'Journeyman', 'Advanced', 'Legendary'])) {
         this._addFeatInfo(this._recentHeading(), element.outerHTML);
       }
+
+      // #todo Add backgrounds
+
+      // #todo Add maneuvers
+
+      // #todo Add spells
     }
   }
 
@@ -92,7 +98,7 @@ class FarhomeRuleParser {
 
   _getHeadingLevel(nodeName) {
     const headingLevel = parseInt(nodeName[1]);
-    if (Number.isInteger(headingLevel) && (headingLevel >= 1) && (headingLevel <= 6)) {
+    if (Number.isInteger(headingLevel) && headingLevel >= 1 && headingLevel <= 6) {
       return headingLevel;
     } else {
       console.error(nodeName + ' does not a valid heading level');
