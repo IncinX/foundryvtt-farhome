@@ -136,23 +136,23 @@ export class FarhomeItem extends Item {
     const rollHtml = new DOMParser().parseFromString(messageHtmlString, 'text/html').body.firstChild;
 
     // Process the roll sumamry
-    const rollSummary = getRollSummary(getRollSummaryData(rollHtml));
+    const rollSummaryData = getRollSummaryData(rollHtml);
 
     // #todo Count the poison and roll extra poison dice with an Active Effects Dice here (since the fh-active-effects are just hidden div's for data).
     //       The actual poison roll will go here. Need to consider how to incorporate this into saves/abilities as well and reduce duplication with helper functions somewhere (system?).
 
     // #todo Process the roll summary based on hex/poison
 
-    // #todo Don't print the roll summary if there are no rolls to show
+    if (rollSummaryData.containsRollData) {
+      const rollSummary = getRollSummary(rollSummaryData);
 
-    // #todo Also, localize the 'Roll Summary' text
+      // Print the roll summary
+      messageHtmlString += `<hr><h2>${game.i18n.localize('farhome.rollSummary')}</h2>`;
+      messageHtmlString += rollSummary;
 
-    // Print the roll summary
-    messageHtmlString += '<hr><h2>Roll Summary</h2>';
-    messageHtmlString += rollSummary;
-
-    // Add the custom reroll button.
-    messageHtmlString += ChatRoller.getButtonHtml();
+      // Add the custom reroll button.
+      messageHtmlString += ChatRoller.getButtonHtml();
+    }
 
     // Create a mana spend button if the item is a spell.
     if (itemContext.type === 'spell' && actorContext !== null) {
@@ -199,7 +199,7 @@ export class FarhomeItem extends Item {
     if (!actor.isOwner) {
       sendActorMessage(
         'You do not own this actor, so stop trying to spend their mana. ' +
-          'They are <i>probably</i> competant enough to do that themselves.',
+        'They are <i>probably</i> competant enough to do that themselves.',
       );
       return;
     }

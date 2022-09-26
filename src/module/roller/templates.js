@@ -40,12 +40,8 @@ export const summaryTemplate = `
 <div class="fh-roll-summary">
   <ul>
   {{#results}}
-      {{#successes}}
       <li>Successes: {{successes}}</li>
-      {{/successes}}
-      {{#crits}}
       <li>Criticals: {{crits}}</li>
-      {{/crits}}
       {{#wounds}}
       <li>Wounds: {{wounds}}</li>
       {{/wounds}}

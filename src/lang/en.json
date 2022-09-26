@@ -169,6 +169,7 @@
     "armors": "Armors",
     "items": "Items",
     "spendMana": "Spend Mana",
-    "reroll": "Re-Roll Selected"
+    "reroll": "Re-Roll Selected",
+    "rollSummary": "Roll Summary"
   }
 }

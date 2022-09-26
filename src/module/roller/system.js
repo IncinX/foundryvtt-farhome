@@ -28,8 +28,11 @@ export function getRollSummaryData(rollHtml) {
   const fhRollQuery = $(rollHtml);
 
   let rolls = [];
+  let containsRollData = false;
 
   fhRollQuery.find('input').each((_index, element) => {
+    containsRollData = true;
+
     if (!element.disabled) {
       const rollData = parseRoll(element);
       rolls.push(rollData);
@@ -40,9 +43,10 @@ export function getRollSummaryData(rollHtml) {
 
   // Compute the roll modifiers
   let rollModifiersData = {
-    successes: 0,
-    crits: 0,
-    wounds: 0,
+    containsRollData: containsRollData,
+    successes: initialRollSummaryData.successes,
+    crits: initialRollSummaryData.crits,
+    wounds: initialRollSummaryData.wounds,
     hex: 0,
     poison: 0,
   };
@@ -69,13 +73,11 @@ export function getRollSummaryData(rollHtml) {
     rollModifiersData.poison += parseInt(element.dataset.poison);
   });
 
-  const combinedRollSummary = rollValuesMonoid.combine(initialRollSummaryData, rollModifiersData);
-
   // #todo Do hex and poison later when active effects are in.
   // #todo Apply hex modifiers
   // #todo Roll and apply poison modifiers... Where to make those rolls? At the end?
 
-  return combinedRollSummary;
+  return rollModifiersData;
 }
 
 export function getRollSummary(rollSummaryData) {
