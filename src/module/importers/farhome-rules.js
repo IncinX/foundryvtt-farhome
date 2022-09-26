@@ -1,9 +1,6 @@
 import { marked } from 'marked';
 
-// #todo Add support for DOMPurify later
-//import DOMPurify from 'isomorphic-dompurify';
-
-export async function createCompendiumFromRules(rulesUrl) {
+export async function createCompendiumFromRules(compendiumLabel, rulesUrl, deleteExisting = true) {
   const rulesFetch = await fetch(rulesUrl);
   const rulesBlob = await rulesFetch.blob();
   const rulesText = await rulesBlob.text();
@@ -13,19 +10,20 @@ export async function createCompendiumFromRules(rulesUrl) {
 
   console.log(parsedRules);
 
-  // #todo Probably want to destroy existing compendiums in the future or just replace existing elements
+  // #todo Add parameter specifying whether to destroy existing compendium and receive the compendium label
 
-  const compendiumLabel = 'Feats Compendium';
   const compendiumName = compendiumLabel.toLowerCase().replace(/ /g, '-');
   const worldCompendiumName = `world.${compendiumName}`;
 
-  if (game.packs.has(worldCompendiumName)) {
-    await game.packs.get(worldCompendiumName).deleteCompendium();
+  if (deleteExisting) {
+    if (game.packs.has(worldCompendiumName)) {
+      await game.packs.get(worldCompendiumName).deleteCompendium();
+    }
   }
 
   await CompendiumCollection.createCompendium({
     name: compendiumName,
-    label: 'Feats Compendium',
+    label: compendiumLabel,
     type: 'Item',
     system: 'farhome',
     package: 'system',

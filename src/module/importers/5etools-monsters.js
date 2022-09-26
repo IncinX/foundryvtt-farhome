@@ -1,11 +1,35 @@
-export function createCompendiumFrom5etoolsBeastiary(rulesUrl) {
+export async function createCompendiumFrom5etoolsBeastiary(compendiumLabel, beastiaryUrl, deleteExisting = true) {
   // #note This creates a world compendium. System compendiums are automatically created if they are defined in their system.json
 
-  // #todo Need to check if the compendium exists already
+  
+  const beastiaryFetch = await fetch(beastiaryUrl);
+  const beastiaryBlob = await beastiaryFetch.blob();
+  const beastiaryText = await beastiaryBlob.text();
+  const beastiaryJson = JSON.parse(beastiaryText);
+
+  console.log(beastiaryJson);
+
+  // #todo Also need to configure the token size for the creature later
+  for (const beast of beastiaryJson) {
+    console.log(beast.name);
+  }
+
+  return;
+
+  // #todo Add parameter specifying whether to destroy existing compendium and receive the compendium label
+
+  const compendiumName = compendiumLabel.toLowerCase().replace(/ /g, '-');
+  const worldCompendiumName = `world.${compendiumName}`;
+  
+  if (deleteExisting) {
+    if (game.packs.has(worldCompendiumName)) {
+      await game.packs.get(worldCompendiumName).deleteCompendium();
+    }
+  }
 
   CompendiumCollection.createCompendium({
-    name: 'monster-compendium',
-    label: 'Monster Compendium',
+    name: compendiumName,
+    label: compendiumLabel,
     type: 'Actor',
     system: 'farhome',
     package: 'system',
@@ -30,7 +54,7 @@ export function createCompendiumFrom5etoolsBeastiary(rulesUrl) {
       },
     ],
     {
-      pack: 'world.monster-compendium',
+      pack: worldCompendiumName,
     },
   );
 }
