@@ -1,7 +1,6 @@
 export async function createCompendiumFrom5etoolsBeastiary(compendiumLabel, beastiaryUrl, deleteExisting = true) {
   // #note This creates a world compendium. System compendiums are automatically created if they are defined in their system.json
 
-  
   const beastiaryFetch = await fetch(beastiaryUrl);
   const beastiaryBlob = await beastiaryFetch.blob();
   const beastiaryText = await beastiaryBlob.text();
@@ -10,8 +9,8 @@ export async function createCompendiumFrom5etoolsBeastiary(compendiumLabel, beas
   console.log(beastiaryJson);
 
   // #todo Also need to configure the token size for the creature later
-  for (const beast of beastiaryJson) {
-    console.log(beast.name);
+  for (const monster of beastiaryJson.monster) {
+    console.log(monster.name);
   }
 
   return;
@@ -20,7 +19,7 @@ export async function createCompendiumFrom5etoolsBeastiary(compendiumLabel, beas
 
   const compendiumName = compendiumLabel.toLowerCase().replace(/ /g, '-');
   const worldCompendiumName = `world.${compendiumName}`;
-  
+
   if (deleteExisting) {
     if (game.packs.has(worldCompendiumName)) {
       await game.packs.get(worldCompendiumName).deleteCompendium();
@@ -42,6 +41,10 @@ export async function createCompendiumFrom5etoolsBeastiary(compendiumLabel, beas
       {
         name: 'TestActor',
         type: 'npc',
+        token: {
+          width: 2,
+          height: 2,
+        },
         data: {
           race: {
             value: 'Human',
