@@ -13,11 +13,18 @@ export async function createCompendiumFromRules(rulesUrl) {
 
   console.log(parsedRules);
 
-  // DEBUG! Skip the rest for now
-  return;
+  // #todo Probably want to destroy existing compendiums in the future or just replace existing elements
 
-  CompendiumCollection.createCompendium({
-    name: 'feats-compendium',
+  const compendiumLabel = 'Feats Compendium';
+  const compendiumName = compendiumLabel.toLowerCase().replace(/ /g, '-');
+  const worldCompendiumName = `world.${compendiumName}`;
+
+  if (game.packs.has(worldCompendiumName)) {
+    await game.packs.get(worldCompendiumName).deleteCompendium();
+  };
+
+  await CompendiumCollection.createCompendium({
+    name: compendiumName,
     label: 'Feats Compendium',
     type: 'Item',
     system: 'farhome',
@@ -25,14 +32,9 @@ export async function createCompendiumFromRules(rulesUrl) {
   });
 
   game.farhome.FarhomeItem.createDocuments(
-    [
-      {
-        name: 'TestFeat',
-        type: 'feat',
-      },
-    ],
+    parsedRules.feats,
     {
-      pack: 'world.feats-compendium',
+      pack: worldCompendiumName,
     },
   );
 }
@@ -43,6 +45,8 @@ class FarhomeRuleParser {
     this.backgrounds = [];
     this.maneuvers = [];
     this.spells = [];
+
+    this.featsLookup = {};
 
     // There are 6 heading levels
     this.headingStack = Array(6).fill('');
@@ -75,10 +79,9 @@ class FarhomeRuleParser {
     }
 
     if (element.nodeName === 'P') {
-      // Process basic feats
-      // #todo Almost working, it needs to handle requirements and appending text if it exists.
+      // Process non-background related feats
       if (this._headingsInStack(['Basic', 'Journeyman', 'Advanced', 'Legendary'])) {
-        this._addFeat(this._recentHeading(), element.outerHtml);
+        this._addFeatInfo(this._recentHeading(), element.outerHTML);
       }
     }
   }
@@ -110,15 +113,33 @@ class FarhomeRuleParser {
     return this.headingStack[this.currentHeadingLevel - 1];
   }
 
-  _addFeat(name, description) {
-    this.feats.push({
-      name: name,
-      type: 'feat',
-      data: {
-        description: {
-          value: description,
+  _addFeatInfo(name, description) {
+    const existingFeat = this.featsLookup[name];
+
+    if (existingFeat) {
+      // Append the description to the existing feat
+      existingFeat.data.description.value += description;
+    } else {
+      const featRollTemplate = `
+        <h1>[[i.name]]</h1>
+        <p>[[i.description]]</p>`;
+
+      // Add a new feat object to the list
+      const featObject = {
+        name: name,
+        type: 'feat',
+        data: {
+          description: {
+            value: description,
+          },
+          rollTemplate: {
+            value: featRollTemplate,
+          },
         },
-      },
-    });
+      };
+
+      this.feats.push(featObject);
+      this.featsLookup[name] = featObject;
+    }
   }
 }

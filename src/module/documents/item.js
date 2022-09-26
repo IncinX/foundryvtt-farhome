@@ -143,6 +143,10 @@ export class FarhomeItem extends Item {
 
     // #todo Process the roll summary based on hex/poison
 
+    // #todo Don't print the roll summary if there are no rolls to show
+
+    // #todo Also, localize the 'Roll Summary' text
+
     // Print the roll summary
     messageHtmlString += '<hr><h2>Roll Summary</h2>';
     messageHtmlString += rollSummary;
