@@ -12,6 +12,8 @@ export async function createCompendiumFromRules(compendiumLabel, rulesUrl, delet
 
   console.log(parsedRules);
 
+  // #todo Add helper function to allow splitting compendiums between Feats, Spells, etc.
+
   const compendiumName = compendiumLabel.toLowerCase().replace(/ /g, '-');
   const worldCompendiumName = `world.${compendiumName}`;
 
@@ -61,6 +63,9 @@ class FarhomeRuleParser {
     const domParser = new DOMParser();
     const htmlDoc = domParser.parseFromString(markdownHtml, 'text/html');
 
+    // Initiailze iterative variables
+    let spellSchool = '';
+
     // Iterate through the document line by line
     const selectAll = htmlDoc.querySelectorAll('*');
     for (let nodeIndex = 0; nodeIndex < selectAll.length; nodeIndex++) {
@@ -90,12 +95,12 @@ class FarhomeRuleParser {
       //
       // Process non-background related feats
       //
-      const featHeadingPosition = this._getHeadingPositionInStack(['Basic', 'Journeyman', 'Advanced', 'Legendary']);
+      const featHeadingIndex = this._getHeadingIndexInStack(['Basic', 'Journeyman', 'Advanced', 'Legendary']);
       if (
         this._currentHeadingLevel > 0 &&
         FarhomeRuleParser._isHeading(element.nodeName) &&
-        featHeadingPosition !== -1 &&
-        featHeadingPosition < this._getCurrentHeadingLevelIndex()
+        featHeadingIndex !== -1 &&
+        featHeadingIndex < this._getCurrentHeadingLevelIndex()
       ) {
         // Get the node name
         const featName = element.innerText;
@@ -143,11 +148,9 @@ class FarhomeRuleParser {
       // #todo Look into reducing code duplication in some way after the spell stuff is working.
       const spellHeadings = ['Arcane', 'Divine', 'Druidic', 'Elder', 'Occult'];
 
-      let spellSchool = '';
-
       if (spellHeadings.includes(this._recentHeading())) {
         // Make a deep copy of the spell school since the recent heading is subject to change and erasure.
-        spellSchool = `${this._recentHeading()}`;
+        spellSchool = this._recentHeading();
       }
 
       const spellLevelHeadings = [
@@ -176,18 +179,19 @@ class FarhomeRuleParser {
         'Ninth Level': 9,
       };
 
-      const spellHeadingPosition = this._getHeadingPositionInStack(spellLevelHeadings);
+      const spellHeadingIndex = this._getHeadingIndexInStack(spellLevelHeadings);
       if (
         this._currentHeadingLevel > 0 &&
         FarhomeRuleParser._isHeading(element.nodeName) &&
-        spellHeadingPosition !== -1 &&
-        spellHeadingPosition < this._getCurrentHeadingLevelIndex()
+        spellHeadingIndex !== -1 &&
+        spellHeadingIndex < this._getCurrentHeadingLevelIndex()
       ) {
         // Get the node name
         const spellName = element.innerText;
         const spellNameHeaderLevel = this._currentHeadingLevel;
 
-        const spellLevel = spellHeadingToLevel[this._recentHeading()];
+        // Get the spell level
+        const spellLevel = spellHeadingToLevel[this._headingStack[spellHeadingIndex]];
 
         // Skip past the header to consume the content
         nodeIndex++;
@@ -210,13 +214,23 @@ class FarhomeRuleParser {
         ) {
           // #todo Currently there is a bug where the spell level is duplicated (probably because it is parsing the outer and inner html)
 
-          this._parseAttribute((val) => (spellCastingTime = val), 'Casting Time:', selectAll[nodeIndex].innerText);
-          this._parseAttribute((val) => (spellRange = val), 'Range:', selectAll[nodeIndex].innerText);
-          this._parseAttribute((val) => (spellDuration = val), 'Duration:', selectAll[nodeIndex].innerText);
-          this._parseAttribute((val) => (spellConcentration = val), 'Concentration:', selectAll[nodeIndex].innerText);
-          this._parseAttribute((val) => (spellDamageType = val), 'Damage Type:', selectAll[nodeIndex].innerText);
+          // Parse an attribute if it is there, setting the value when found, and skipping the line if it is parsed.
+          if (
+            this._parseAttribute((val) => (spellCastingTime = val), 'Casting Time:', selectAll[nodeIndex].innerText) ||
+            this._parseAttribute((val) => (spellRange = val), 'Range:', selectAll[nodeIndex].innerText) ||
+            this._parseAttribute((val) => (spellDuration = val), 'Duration:', selectAll[nodeIndex].innerText) ||
+            this._parseAttribute(
+              (val) => (spellConcentration = val),
+              'Concentration:',
+              selectAll[nodeIndex].innerText,
+            ) ||
+            this._parseAttribute((val) => (spellDamageType = val), 'Damage Type:', selectAll[nodeIndex].innerText)
+          ) {
+            // Skip this line since it was parsed as an attribute
+          } else {
+            contentHtml += selectAll[nodeIndex].outerHTML;
+          }
 
-          contentHtml += selectAll[nodeIndex].outerHTML;
           nodeIndex++;
         }
 
@@ -265,7 +279,10 @@ class FarhomeRuleParser {
 
     if (match) {
       setValueFunction(match[2].trim());
+      return true;
     }
+
+    return false;
   }
 
   /**
@@ -309,7 +326,7 @@ class FarhomeRuleParser {
    * @returns {number} The position of the heading in the heading stack that matches one of the headings in the list. -1 if none match.
    * @private
    */
-  _getHeadingPositionInStack(headingList) {
+  _getHeadingIndexInStack(headingList) {
     for (let headingIndex = this._getCurrentHeadingLevelIndex(); headingIndex >= 0; headingIndex--) {
       if (headingList.includes(this._headingStack[headingIndex])) {
         return headingIndex;
@@ -326,7 +343,7 @@ class FarhomeRuleParser {
    * @private
    */
   _isHeadingInStack(headingList) {
-    return this._getHeadingPositionInStack(headingList) !== -1;
+    return this._getHeadingIndexInStack(headingList) !== -1;
   }
 
   /**
