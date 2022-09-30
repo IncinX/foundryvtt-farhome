@@ -1,5 +1,7 @@
 import { marked } from 'marked';
 
+const maxHeadingLevel = 6;
+
 export async function createCompendiumFromRules(compendiumLabel, rulesUrl, deleteExisting = true) {
   const rulesFetch = await fetch(rulesUrl);
   const rulesBlob = await rulesFetch.blob();
@@ -30,7 +32,13 @@ export async function createCompendiumFromRules(compendiumLabel, rulesUrl, delet
   await game.farhome.FarhomeItem.createDocuments(parsedRules.feats, { pack: worldCompendiumName });
 }
 
+/**
+ * A parser for Farhome rules.
+ */
 class FarhomeRuleParser {
+  /**
+   * Constructor to setup class variables.
+   */
   constructor() {
     this.feats = [];
     this.backgrounds = [];
@@ -38,10 +46,15 @@ class FarhomeRuleParser {
     this.spells = [];
 
     // There are 6 heading levels
-    this._headingStack = Array(6).fill('');
+    this._headingStack = Array(maxHeadingLevel).fill('');
     this._currentHeadingLevel = 1;
   }
 
+  /**
+   * Parse a string of Farhome rules represented as markdown text.
+   * @param {string} markdownString A string of markdown with the full ruleset to parse.
+   * @returns {object} An object containing the parsed rules.
+   */
   parse(markdownString) {
     // Convert the markdown to an HTML document
     const markdownHtml = marked.parse(markdownString);
@@ -53,17 +66,34 @@ class FarhomeRuleParser {
     for (let nodeIndex = 0; nodeIndex < selectAll.length; nodeIndex++) {
       let element = selectAll[nodeIndex];
 
+      //
       // Process headings and track the heading stack and current level
-      if (this._isHeading(element.nodeName)) {
-        this._currentHeadingLevel = this._getHeadingLevel(element.nodeName);
+      //
+      if (FarhomeRuleParser._isHeading(element.nodeName)) {
+        this._currentHeadingLevel = FarhomeRuleParser._getHeadingLevel(element.nodeName);
         this._headingStack[this._getCurrentHeadingLevelIndex()] = element.innerText;
+
+        // Clear the heading stack above the current level
+        for (
+          let headingIndex = this._getCurrentHeadingLevelIndex() + 1;
+          headingIndex < maxHeadingLevel;
+          headingIndex++
+        ) {
+          this._headingStack[headingIndex] = '';
+        }
       }
 
+      //
+      // #todo Add conditions
+      //
+
+      //
       // Process non-background related feats
+      //
       const featHeadingPosition = this._getHeadingPositionInStack(['Basic', 'Journeyman', 'Advanced', 'Legendary']);
       if (
         this._currentHeadingLevel > 0 &&
-        this._isHeading(element.nodeName) &&
+        FarhomeRuleParser._isHeading(element.nodeName) &&
         featHeadingPosition !== -1 &&
         featHeadingPosition < this._getCurrentHeadingLevelIndex()
       ) {
@@ -81,14 +111,14 @@ class FarhomeRuleParser {
         while (
           nodeIndex < selectAll.length &&
           selectAll[nodeIndex] &&
-          !this._isHeading(selectAll[nodeIndex].nodeName)
+          !FarhomeRuleParser._isHeading(selectAll[nodeIndex].nodeName)
         ) {
           contentHtml += selectAll[nodeIndex].outerHTML;
           nodeIndex++;
         }
 
-        // Add feat directly without any special lookup non-sense
-        this._addFeat(this._recentHeading(), contentHtml);
+        // Add feat to the list
+        this._addFeat(featName, contentHtml);
 
         // Re-wind since it stopped at the next heading to know the block was done and that next heading may be required for processing.
         if (nodeIndex < selectAll.length) {
@@ -99,17 +129,25 @@ class FarhomeRuleParser {
         continue;
       }
 
+      //
       // #todo Add backgrounds
+      //
 
+      //
       // #todo Add maneuvers
+      //
 
+      //
       // #todo Add spells
+      //
+      // #todo Look into reducing code duplication in some way after the spell stuff is working.
       const spellHeadings = ['Arcane', 'Divine', 'Druidic', 'Elder', 'Occult'];
 
       let spellSchool = '';
 
       if (spellHeadings.includes(this._recentHeading())) {
-        spellSchool = this._recentHeading();
+        // Make a deep copy of the spell school since the recent heading is subject to change and erasure.
+        spellSchool = `${this._recentHeading()}`;
       }
 
       const spellLevelHeadings = [
@@ -125,12 +163,83 @@ class FarhomeRuleParser {
         'Ninth Level',
       ];
 
-      if (this._isHeadingInStack(spellLevelHeadings)) {
-        // #todo _recentHeading() is going to throw off the spell name if there is a sub-heading in the spell description
-        //       Need to take this out of a P check and instead just add everything for a spell name that is at the top level.
-        //       and treat new headings as content.
-        //       Maybe modify it to find spell headings and then create an inner loop to pull content. We can do this for feats and maneuvers too and make it simpler.
-        //this._addSpell(this._recentHeading(), spellSchool, element.outerHTML);
+      const spellHeadingToLevel = {
+        Cantrips: 0,
+        'First Level': 1,
+        'Second Level': 2,
+        'Third Level': 3,
+        'Fourth Level': 4,
+        'Fifth Level': 5,
+        'Sixth Level': 6,
+        'Seventh Level': 7,
+        'Eighth Level': 8,
+        'Ninth Level': 9,
+      };
+
+      const spellHeadingPosition = this._getHeadingPositionInStack(spellLevelHeadings);
+      if (
+        this._currentHeadingLevel > 0 &&
+        FarhomeRuleParser._isHeading(element.nodeName) &&
+        spellHeadingPosition !== -1 &&
+        spellHeadingPosition < this._getCurrentHeadingLevelIndex()
+      ) {
+        // Get the node name
+        const spellName = element.innerText;
+        const spellNameHeaderLevel = this._currentHeadingLevel;
+
+        const spellLevel = spellHeadingToLevel[this._recentHeading()];
+
+        // Skip past the header to consume the content
+        nodeIndex++;
+
+        // Do a fast forward loop to get all the content
+        let contentHtml = '';
+        let spellCastingTime = '';
+        let spellRange = '';
+        let spellDuration = '';
+        let spellConcentration = '';
+        let spellDamageType = '';
+
+        while (
+          nodeIndex < selectAll.length &&
+          selectAll[nodeIndex] &&
+          !(
+            FarhomeRuleParser._isHeading(selectAll[nodeIndex].nodeName) &&
+            FarhomeRuleParser._getHeadingLevel(selectAll[nodeIndex].nodeName) <= spellNameHeaderLevel
+          )
+        ) {
+          // #todo Currently there is a bug where the spell level is duplicated (probably because it is parsing the outer and inner html)
+
+          this._parseAttribute((val) => (spellCastingTime = val), 'Casting Time:', selectAll[nodeIndex].innerText);
+          this._parseAttribute((val) => (spellRange = val), 'Range:', selectAll[nodeIndex].innerText);
+          this._parseAttribute((val) => (spellDuration = val), 'Duration:', selectAll[nodeIndex].innerText);
+          this._parseAttribute((val) => (spellConcentration = val), 'Concentration:', selectAll[nodeIndex].innerText);
+          this._parseAttribute((val) => (spellDamageType = val), 'Damage Type:', selectAll[nodeIndex].innerText);
+
+          contentHtml += selectAll[nodeIndex].outerHTML;
+          nodeIndex++;
+        }
+
+        // Add spell to the list
+        this._addSpell(
+          spellName,
+          contentHtml,
+          spellLevel,
+          spellSchool,
+          spellCastingTime,
+          spellRange,
+          spellDuration,
+          spellConcentration,
+          spellDamageType,
+        );
+
+        // Re-wind since it stopped at the next heading to know the block was done and that next heading may be required for processing.
+        if (nodeIndex < selectAll.length) {
+          nodeIndex--;
+        }
+
+        // Continue processing at the next line
+        continue;
       }
     }
 
@@ -144,17 +253,39 @@ class FarhomeRuleParser {
     return rulesData;
   }
 
-  _processElement(_index, element) {}
+  /**
+   * Parses an attribute out of string and sets the value if found.
+   * @param {string} setValueFunction Callback function to set the value for the found capture.
+   * @param {string} searchString The string to search for.
+   * @param {string} lineText The text to search in.
+   */
+  _parseAttribute(setValueFunction, searchString, lineText) {
+    const regex = new RegExp(`(${searchString})\s*([^\\n]+)`, 'g');
+    const match = regex.exec(lineText);
 
-  _isHeading(nodeName) {
+    if (match) {
+      setValueFunction(match[2].trim());
+    }
+  }
+
+  /**
+   * Checks if the nodeName is an HTML heading.
+   * @param {string} nodeName The name of the node to check.
+   * @returns {boolean} True if the nodeName is an HTML heading.
+   * @private
+   */
+  static _isHeading(nodeName) {
     return nodeName.toUpperCase()[0] === 'H' && nodeName[1] >= '0' && nodeName[1] <= '6';
   }
 
-  _getCurrentHeadingLevelIndex() {
-    return this._currentHeadingLevel - 1;
-  }
-
-  _getHeadingLevel(nodeName) {
+  /**
+   * Gets the heading level from the nodeName.
+   * @param {string} nodeName The name of the node to check. It is expected that this is an HTML H# heading already.
+   * @returns {number} The heading level.
+   * @private
+   * @throws {Error} If the nodeName is not an HTML heading.
+   */
+  static _getHeadingLevel(nodeName) {
     const headingLevel = parseInt(nodeName[1]);
     if (Number.isInteger(headingLevel) && headingLevel >= 1 && headingLevel <= 6) {
       return headingLevel;
@@ -163,6 +294,21 @@ class FarhomeRuleParser {
     }
   }
 
+  /**
+   * Gets the current array index for the current heading level from the heading stack.
+   * @returns {number} The current array index for the current heading level from the heading stack.
+   * @private
+   */
+  _getCurrentHeadingLevelIndex() {
+    return this._currentHeadingLevel - 1;
+  }
+
+  /**
+   * Gets the position of the heading in the heading stack that matches one of the headings in the list.
+   * @param {string[]} headingList The list of headings to check. It returns the first match.
+   * @returns {number} The position of the heading in the heading stack that matches one of the headings in the list. -1 if none match.
+   * @private
+   */
   _getHeadingPositionInStack(headingList) {
     for (let headingIndex = this._getCurrentHeadingLevelIndex(); headingIndex >= 0; headingIndex--) {
       if (headingList.includes(this._headingStack[headingIndex])) {
@@ -173,14 +319,31 @@ class FarhomeRuleParser {
     return -1;
   }
 
+  /**
+   * Checks if a heading is in the current heading stack.
+   * @param {string} headingList List of headings to check if they are in the stack. If any of them are in the stack, it returns true.
+   * @returns {boolean} True if any of the headings are in the stack.
+   * @private
+   */
   _isHeadingInStack(headingList) {
     return this._getHeadingPositionInStack(headingList) !== -1;
   }
 
+  /**
+   * Gets the most recent heading in the heading stack.
+   * @returns {string} The most recent heading in the heading stack.
+   * @private
+   */
   _recentHeading() {
     return this._headingStack[this._getCurrentHeadingLevelIndex()];
   }
 
+  /**
+   * Adds a feat to the list of feats.
+   * @param {string} name The name of the feat.
+   * @param {string} description The description of the feat.
+   * @private
+   */
   _addFeat(name, description) {
     const featRollTemplate = `
       <h1>[[i.name]]</h1>
@@ -203,7 +366,19 @@ class FarhomeRuleParser {
     this.feats.push(featObject);
   }
 
-  _addSpell(name, spellSchool, description) {
+  /**
+   * Adds a spell to the list of spells.
+   * @param {string} name The name of the spell.
+   * @param {string} level The level of the spell.
+   * @param {string} school The school of the spell.
+   * @param {string} castingTime The casting time of the spell.
+   * @param {string} range The range of the spell.
+   * @param {string} duration The duration of the spell.
+   * @param {string} concentration The concentration of the spell.
+   * @param {string} damageType The damage type of the spell.
+   * @param {string} description The description of the spell.
+   */
+  _addSpell(name, description, level, school, castingTime, range, duration, concentration, damageType) {
     // #todo Need to set the attributes of the spell as well
 
     // #todo Enhance the spell roll template here (need a complex parser but a simple fh(formula()) should be fine for now)
@@ -217,7 +392,7 @@ class FarhomeRuleParser {
       type: 'spell',
       data: {
         spellSchool: {
-          value: spellSchool,
+          value: school,
         },
         description: {
           value: description,
