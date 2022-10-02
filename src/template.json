@@ -352,6 +352,9 @@
     },
     "maneuver": {
       "templates": ["base", "range"],
+      "weaponRequirements": {
+        "value": "any melee weapon"
+      },
       "levelRequirements": {
         "value": "1/5/11"
       },

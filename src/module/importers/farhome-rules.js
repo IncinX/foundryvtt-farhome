@@ -132,7 +132,7 @@ class FarhomeRuleParser {
         }
 
         // Add feat to the list
-        this._addBaseItem(this.conditions, conditionName, contentHtml);
+        this._addBaseItem(this.conditions, conditionName, 'condition', contentHtml);
 
         // Re-wind since it stopped at the next heading to know the block was done and that next heading may be required for processing.
         if (nodeIndex < htmlList.length) {
@@ -173,7 +173,7 @@ class FarhomeRuleParser {
         }
 
         // Add feat to the list
-        this._addBaseItem(this.feats, featName, contentHtml);
+        this._addBaseItem(this.feats, featName, 'feat', contentHtml);
 
         // Re-wind since it stopped at the next heading to know the block was done and that next heading may be required for processing.
         if (nodeIndex < htmlList.length) {
@@ -214,7 +214,7 @@ class FarhomeRuleParser {
         }
 
         // Add feat to the list
-        this._addBaseItem(this.backgrounds, backgroundName, contentHtml);
+        this._addBaseItem(this.backgrounds, backgroundName, 'feat', contentHtml);
 
         // Re-wind since it stopped at the next heading to know the block was done and that next heading may be required for processing.
         if (nodeIndex < htmlList.length) {
@@ -228,13 +228,88 @@ class FarhomeRuleParser {
       //
       // #todo Add maneuvers
       //
+      const maneuverHeadings = ['Maneuvers'];
+
+      const maneuverLevelHeadings = [];
+      const lowestManeuverLevel = 1;
+      const highestManeuverLevel = 12;
+      for (
+        let currentManeuverLevel = lowestManeuverLevel;
+        currentManeuverLevel <= highestManeuverLevel;
+        currentManeuverLevel++
+      ) {
+        maneuverLevelHeadings.push(`Level ${currentManeuverLevel}`);
+      }
+
+      const maneuverHeadingIndex = this._getHeadingIndexInStack(maneuverLevelHeadings);
+      if (
+        this._currentHeadingLevel > 0 &&
+        FarhomeRuleParser._isHeading(element.nodeName) &&
+        maneuverHeadingIndex !== -1 &&
+        maneuverHeadingIndex < this._getCurrentHeadingLevelIndex()
+      ) {
+        // Get the node name
+        const maneuverName = element.innerText;
+        const maneuverNameHeaderLevel = this._currentHeadingLevel;
+
+        // Skip past the header to consume the content
+        nodeIndex++;
+
+        // Do a fast forward loop to get all the content
+        let contentHtml = '';
+        let maneuverApCost = '';
+        let maneuverWeaponRequirement = '';
+        let maneuverRange = '';
+        let maneuverLevelRequirement = '';
+
+        while (
+          nodeIndex < htmlList.length &&
+          htmlList[nodeIndex] &&
+          !(
+            FarhomeRuleParser._isHeading(htmlList[nodeIndex].nodeName) &&
+            FarhomeRuleParser._getHeadingLevel(htmlList[nodeIndex].nodeName) <= maneuverNameHeaderLevel
+          )
+        ) {
+          // Parse an attribute if it is there, setting the value when found, and skipping the line if it is parsed.
+          this._parseAttribute((val) => (maneuverApCost = val), 'AP Cost:', htmlList[nodeIndex].innerText);
+          this._parseAttribute((val) => (maneuverWeaponRequirement = val), 'Weapon:', htmlList[nodeIndex].innerText);
+          this._parseAttribute((val) => (maneuverRange = val), 'Range:', htmlList[nodeIndex].innerText);
+          this._parseAttribute(
+            (val) => (maneuverLevelRequirement = val),
+            'Level Required:',
+            htmlList[nodeIndex].innerText,
+          );
+
+          contentHtml += htmlList[nodeIndex].outerHTML;
+
+          nodeIndex++;
+        }
+
+        // Add spell to the list
+        this._addManeuver(
+          maneuverName,
+          contentHtml,
+          maneuverApCost,
+          maneuverWeaponRequirement,
+          maneuverRange,
+          maneuverLevelRequirement,
+        );
+
+        // Re-wind since it stopped at the next heading to know the block was done and that next heading may be required for processing.
+        if (nodeIndex < htmlList.length) {
+          nodeIndex--;
+        }
+
+        // Continue processing at the next line
+        continue;
+      }
 
       //
       // Add spells
       //
       const spellHeadings = ['Arcane', 'Divine', 'Druidic', 'Elder', 'Occult'];
 
-      if (spellHeadings.includes(this._recentHeading())) {
+      if (maneuverHeadings.includes(this._recentHeading())) {
         // Make a deep copy of the spell school since the recent heading is subject to change and erasure.
         spellSchool = this._recentHeading();
       }
@@ -329,7 +404,7 @@ class FarhomeRuleParser {
         continue;
       }
     }
-    
+
     // Sort the lists
     this.backgrounds.sort((backgroundA, backgroundB) => backgroundA.name.localeCompare(backgroundB.name));
     this.conditions.sort((conditionA, conditionB) => conditionA.name.localeCompare(conditionB.name));
@@ -444,7 +519,7 @@ class FarhomeRuleParser {
    * @param {string} description The description of the base item.
    * @private
    */
-  _addBaseItem(list, name, description) {
+  _addBaseItem(list, name, type, description) {
     const baseItemRollTemplate = `
       <h1>[[i.name]]</h1>
       <p>[[i.description]]</p>`;
@@ -452,7 +527,7 @@ class FarhomeRuleParser {
     // Add a new feat object to the list
     const baseItemObject = {
       name: name,
-      type: 'feat',
+      type: type,
       data: {
         description: {
           value: description,
@@ -464,6 +539,52 @@ class FarhomeRuleParser {
     };
 
     list.push(baseItemObject);
+  }
+
+  /**
+   * Adds a maneuver to the list of maneuvers.
+   * @param {string} name The name of the maneuver.
+   * @param {string} description The description of the maneuver.
+   * @param {string} apCosts The AP costs for the maneuver.
+   * @param {string} weaponRequirements The weapon requirements of the maneuver.
+   * @param {string} range The range of the maneuver.
+   * @param {string} levelRequirements The level requirements for the maneuver.
+   */
+  _addManeuver(name, description, apCosts, weaponRequirements, range, lavelRequirements) {
+    // #todo Enhance the spell roll template here (need a complex parser but a simple fh(formula()) should be fine for now)
+    //       Create an spell description parser function that breaks things down into an object with targetScaling, woundScaling, guaranteedWoundScaling, levelScaling, etc.
+    //       Use all that information to build a more powerful roll template.
+    const maneuverRollTemplate = `
+      <h1>[[i.name]]</h1>
+      <p>[[i.description]]</p>`;
+
+    // Add a new spell object to the list
+    const spellObject = {
+      name: name,
+      type: 'maneuver',
+      data: {
+        description: {
+          value: description,
+        },
+        rollTemplate: {
+          value: maneuverRollTemplate,
+        },
+        apCosts: {
+          value: apCosts,
+        },
+        weaponRequirements: {
+          value: weaponRequirements,
+        },
+        range: {
+          value: range,
+        },
+        levelRequirements: {
+          value: lavelRequirements,
+        },
+      },
+    };
+
+    this.maneuvers.push(spellObject);
   }
 
   /**
@@ -484,8 +605,6 @@ class FarhomeRuleParser {
     const spellRollTemplate = `
       <h1>[[i.name]]</h1>
       <p>[[i.description]]</p>`;
-
-    // #todo Need to set the attributes of the spell as well (and add everything to a compendium)
 
     // Add a new spell object to the list
     const spellObject = {

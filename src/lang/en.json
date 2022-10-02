@@ -40,6 +40,7 @@
     "properties": "Properties",
     "levelRequirements": "Level Requirements",
     "apCosts": "AP Costs",
+    "weaponRequirements": "Weapon Requirements",
     "armorBonus": "Armor Bonus",
     "armorPenalty": "Dex/Spell Penalty",
     "weaponBonus": "Weapon Bonus",
