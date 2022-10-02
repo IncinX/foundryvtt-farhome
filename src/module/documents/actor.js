@@ -91,6 +91,41 @@ export class FarhomeActor extends Actor {
       }
     }
 
+    // Setup rolls for weapons
+    // It uses the maximum of strength of dexterity for everything but ranged.
+    data.proficiencies.weapons.oneHand.attribute =
+      data.attributes.str.value > data.attributes.dex.value
+        ? game.i18n.localize('farhome.strTag')
+        : game.i18n.localize('farhome.dexTag');
+    data.proficiencies.weapons.oneHand.roll = proficiencyRollFormula(
+      data.proficiencies.weapons.oneHand.value,
+      Math.max(data.attributes.str.value, data.attributes.dex.value),
+    );
+
+    data.proficiencies.weapons.twoHand.attribute =
+      data.attributes.str.value > data.attributes.dex.value
+        ? game.i18n.localize('farhome.strTag')
+        : game.i18n.localize('farhome.dexTag');
+    data.proficiencies.weapons.twoHand.roll = proficiencyRollFormula(
+      data.proficiencies.weapons.twoHand.value,
+      Math.max(data.attributes.str.value, data.attributes.dex.value),
+    );
+
+    data.proficiencies.weapons.unarmed.attribute =
+      data.attributes.str.value > data.attributes.dex.value
+        ? game.i18n.localize('farhome.strTag')
+        : game.i18n.localize('farhome.dexTag');
+    data.proficiencies.weapons.unarmed.roll = proficiencyRollFormula(
+      data.proficiencies.weapons.unarmed.value,
+      Math.max(data.attributes.str.value, data.attributes.dex.value),
+    );
+
+    data.proficiencies.weapons.ranged.attribute = game.i18n.localize('farhome.dexTag');
+    data.proficiencies.weapons.ranged.roll = proficiencyRollFormula(
+      data.proficiencies.weapons.ranged.value,
+      data.attributes.dex.value,
+    );
+
     // Setup rolls for spells
     data.proficiencies.spells.arcane.attribute = game.i18n.localize('farhome.intTag');
     data.proficiencies.spells.arcane.roll = proficiencyRollFormula(

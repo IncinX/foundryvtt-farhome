@@ -49,6 +49,8 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
         will: actorContext.data.attributes.will.value,
         cha: actorContext.data.attributes.cha.value,
 
+        maxStrDex: Math.max(actorContext.data.attributes.str.value, actorContext.data.attributes.dex.value),
+
         strSave: actorContext.data.proficiencies.saves.str.value,
         dexSave: actorContext.data.proficiencies.saves.dex.value,
         staSave: actorContext.data.proficiencies.saves.sta.value,
