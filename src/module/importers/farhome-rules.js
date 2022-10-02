@@ -309,7 +309,7 @@ class FarhomeRuleParser {
       //
       const spellHeadings = ['Arcane', 'Divine', 'Druidic', 'Elder', 'Occult'];
 
-      if (maneuverHeadings.includes(this._recentHeading())) {
+      if (spellHeadings.includes(this._recentHeading())) {
         // Make a deep copy of the spell school since the recent heading is subject to change and erasure.
         spellSchool = this._recentHeading();
       }
@@ -648,10 +648,7 @@ class FarhomeRuleParser {
 
     // Construct the spell roll template
     const spellRollTemplate = `
-      <h1>[[i.name]]</h1>
-      <blockquote>
-      <p>Casted at Level [[i.castedSpellLevel]]</p>
-      </blockquote>
+      <h1>[[i.name]] (Lv [[i.castedSpellLevel]])</h1>
       <p>[[i.description]]</p>
       ${spellRoll}`;
 
