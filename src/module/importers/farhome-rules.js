@@ -225,19 +225,13 @@ class FarhomeRuleParser {
             FarhomeRuleParser._getHeadingLevel(htmlList[nodeIndex].nodeName) <= spellNameHeaderLevel
           )
         ) {
-          // #todo Currently there is a bug where the spell level is duplicated (probably because it is parsing the outer and inner html)
-
           // Parse an attribute if it is there, setting the value when found, and skipping the line if it is parsed.
-          if (
-            this._parseAttribute((val) => (spellCastingTime = val), 'Casting Time:', htmlList[nodeIndex].innerText) ||
-            this._parseAttribute((val) => (spellRange = val), 'Range:', htmlList[nodeIndex].innerText) ||
-            this._parseAttribute((val) => (spellDuration = val), 'Duration:', htmlList[nodeIndex].innerText) ||
-            this._parseAttribute((val) => (spellDamageType = val), 'Damage Type:', htmlList[nodeIndex].innerText)
-          ) {
-            // Skip this line since it was parsed as an attribute
-          } else {
-            contentHtml += htmlList[nodeIndex].outerHTML;
-          }
+          this._parseAttribute((val) => (spellCastingTime = val), 'Casting Time:', htmlList[nodeIndex].innerText);
+          this._parseAttribute((val) => (spellRange = val), 'Range:', htmlList[nodeIndex].innerText);
+          this._parseAttribute((val) => (spellDuration = val), 'Duration:', htmlList[nodeIndex].innerText);
+          this._parseAttribute((val) => (spellDamageType = val), 'Damage Type:', htmlList[nodeIndex].innerText);
+
+          contentHtml += htmlList[nodeIndex].outerHTML;
 
           nodeIndex++;
         }
@@ -263,10 +257,19 @@ class FarhomeRuleParser {
         continue;
       }
     }
+    
+    // Sort the lists
+    this.backgrounds.sort((backgroundA, backgroundB) => backgroundA.name.localeCompare(backgroundB.name));
+    this.conditions.sort((conditionA, conditionB) => conditionA.name.localeCompare(conditionB.name));
+    this.feats.sort((featA, featB) => featA.name.localeCompare(featB.name));
+    this.maneuvers.sort((maneuverA, maneuverB) => maneuverA.name.localeCompare(maneuverB.name));
+    this.spells.sort((spellA, spellB) => spellA.name.localeCompare(spellB.name));
 
+    // Return the rules data
     const rulesData = {
-      feats: this.feats,
       backgrounds: this.backgrounds,
+      conditions: this.conditions,
+      feats: this.feats,
       maneuvers: this.maneuvers,
       spells: this.spells,
     };
