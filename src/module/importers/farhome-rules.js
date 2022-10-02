@@ -79,9 +79,11 @@ class FarhomeRuleParser {
     let spellSchool = '';
 
     // Iterate through the document line by line
-    const selectAll = htmlDoc.querySelectorAll('*');
-    for (let nodeIndex = 0; nodeIndex < selectAll.length; nodeIndex++) {
-      let element = selectAll[nodeIndex];
+    // #todo Consider using htmlDoc.body and then using nextElementSibling
+    const htmlList = htmlDoc.body.children;
+    //const selectAll = htmlDoc.querySelectorAll('*');
+    for (let nodeIndex = 0; nodeIndex < htmlList.length; nodeIndex++) {
+      let element = htmlList[nodeIndex];
 
       //
       // Process headings and track the heading stack and current level
@@ -123,14 +125,14 @@ class FarhomeRuleParser {
         // Do a fast forward loop to get all the content
         let contentHtml = '';
 
-        // #todo Is it possible to just change selectAll[i] to be an enumerator that can go to next or previous?
+        // #todo Is it possible to just change htmlList[i] to be an enumerator that can go to next or previous?
         // #bug This isn't grabbing all the content HTML
         while (
-          nodeIndex < selectAll.length &&
-          selectAll[nodeIndex] &&
-          !FarhomeRuleParser._isHeading(selectAll[nodeIndex].nodeName)
+          nodeIndex < htmlList.length &&
+          htmlList[nodeIndex] &&
+          !FarhomeRuleParser._isHeading(htmlList[nodeIndex].nodeName)
         ) {
-          contentHtml += selectAll[nodeIndex].outerHTML;
+          contentHtml += htmlList[nodeIndex].outerHTML;
           nodeIndex++;
         }
 
@@ -138,7 +140,7 @@ class FarhomeRuleParser {
         this._addFeat(featName, contentHtml);
 
         // Re-wind since it stopped at the next heading to know the block was done and that next heading may be required for processing.
-        if (nodeIndex < selectAll.length) {
+        if (nodeIndex < htmlList.length) {
           nodeIndex--;
         }
 
@@ -213,34 +215,28 @@ class FarhomeRuleParser {
         let spellCastingTime = '';
         let spellRange = '';
         let spellDuration = '';
-        let spellConcentration = '';
         let spellDamageType = '';
 
         while (
-          nodeIndex < selectAll.length &&
-          selectAll[nodeIndex] &&
+          nodeIndex < htmlList.length &&
+          htmlList[nodeIndex] &&
           !(
-            FarhomeRuleParser._isHeading(selectAll[nodeIndex].nodeName) &&
-            FarhomeRuleParser._getHeadingLevel(selectAll[nodeIndex].nodeName) <= spellNameHeaderLevel
+            FarhomeRuleParser._isHeading(htmlList[nodeIndex].nodeName) &&
+            FarhomeRuleParser._getHeadingLevel(htmlList[nodeIndex].nodeName) <= spellNameHeaderLevel
           )
         ) {
           // #todo Currently there is a bug where the spell level is duplicated (probably because it is parsing the outer and inner html)
 
           // Parse an attribute if it is there, setting the value when found, and skipping the line if it is parsed.
           if (
-            this._parseAttribute((val) => (spellCastingTime = val), 'Casting Time:', selectAll[nodeIndex].innerText) ||
-            this._parseAttribute((val) => (spellRange = val), 'Range:', selectAll[nodeIndex].innerText) ||
-            this._parseAttribute((val) => (spellDuration = val), 'Duration:', selectAll[nodeIndex].innerText) ||
-            this._parseAttribute(
-              (val) => (spellConcentration = val),
-              'Concentration:',
-              selectAll[nodeIndex].innerText,
-            ) ||
-            this._parseAttribute((val) => (spellDamageType = val), 'Damage Type:', selectAll[nodeIndex].innerText)
+            this._parseAttribute((val) => (spellCastingTime = val), 'Casting Time:', htmlList[nodeIndex].innerText) ||
+            this._parseAttribute((val) => (spellRange = val), 'Range:', htmlList[nodeIndex].innerText) ||
+            this._parseAttribute((val) => (spellDuration = val), 'Duration:', htmlList[nodeIndex].innerText) ||
+            this._parseAttribute((val) => (spellDamageType = val), 'Damage Type:', htmlList[nodeIndex].innerText)
           ) {
             // Skip this line since it was parsed as an attribute
           } else {
-            contentHtml += selectAll[nodeIndex].outerHTML;
+            contentHtml += htmlList[nodeIndex].outerHTML;
           }
 
           nodeIndex++;
@@ -255,12 +251,11 @@ class FarhomeRuleParser {
           spellCastingTime,
           spellRange,
           spellDuration,
-          spellConcentration,
           spellDamageType,
         );
 
         // Re-wind since it stopped at the next heading to know the block was done and that next heading may be required for processing.
-        if (nodeIndex < selectAll.length) {
+        if (nodeIndex < htmlList.length) {
           nodeIndex--;
         }
 
@@ -403,12 +398,13 @@ class FarhomeRuleParser {
    * @param {string} castingTime The casting time of the spell.
    * @param {string} range The range of the spell.
    * @param {string} duration The duration of the spell.
-   * @param {string} concentration The concentration of the spell.
    * @param {string} damageType The damage type of the spell.
    * @param {string} description The description of the spell.
    */
-  _addSpell(name, description, level, school, castingTime, range, duration, concentration, damageType) {
+  _addSpell(name, description, level, school, castingTime, range, duration, damageType) {
     // #todo Enhance the spell roll template here (need a complex parser but a simple fh(formula()) should be fine for now)
+    //       Create an spell description parser function that breaks things down into an object with targetScaling, woundScaling, guaranteedWoundScaling, levelScaling, etc.
+    //       Use all that information to build a more powerful roll template.
     const spellRollTemplate = `
       <h1>[[i.name]]</h1>
       <p>[[i.description]]</p>`;
@@ -426,6 +422,9 @@ class FarhomeRuleParser {
         rollTemplate: {
           value: spellRollTemplate,
         },
+        spellLevel: {
+          value: level,
+        },
         spellSchool: {
           value: school,
         },
@@ -437,9 +436,6 @@ class FarhomeRuleParser {
         },
         duration: {
           value: duration,
-        },
-        concentration: {
-          value: concentration,
         },
         damageType: {
           value: damageType,
