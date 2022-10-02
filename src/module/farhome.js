@@ -11,6 +11,8 @@ import { FHRoller } from './roller/fh/roller';
 import { FHRollSystem } from './roller/system';
 import { createCompendiumFromRules } from './importers/farhome-rules';
 import { createCompendiumFromVetoolsBeastiary } from './importers/vetools-monsters';
+import { connectRulesImporterApp } from './apps/rulesImporterApp';
+import { connectVetoolsMonsterImporterApp } from './apps/vetoolsMonsterImporterApp';
 import FarhomeItemSheet from './sheets/item-sheet';
 import FarhomeActorSheet from './sheets/actor-sheet';
 
@@ -25,10 +27,17 @@ Hooks.once('init', async () => {
   const roller = new FHRoller(secureRandomNumber, 'fh');
 
   game.farhome = {
+    // Centralized roller for global use
+    roller,
+
+    // Actor and Item Documents for global use
     FarhomeActor,
     FarhomeItem,
+
+    // Item roller macro helper for macro use
     rollItemMacro,
-    roller,
+
+    // Importer methods for macro use
     createCompendiumFromRules,
     createCompendiumFromVetoolsBeastiary,
   };
@@ -114,3 +123,10 @@ Hooks.on('renderChatLog', (_app, html, _data) => {
   ChatRoller.subscribeToRenderChatLog(html);
   FHRollSystem.subscribeToRenderChatLog(html);
 });
+
+/* -------------------------------------------- */
+/*  Connect Sub-Applications                    */
+/* -------------------------------------------- */
+
+connectRulesImporterApp();
+connectVetoolsMonsterImporterApp();

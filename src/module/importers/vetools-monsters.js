@@ -12,6 +12,9 @@ export async function createCompendiumFromVetoolsBeastiary(compendiumLabel, beas
   const beastiaryText = await beastiaryBlob.text();
   const beastiaryJson = JSON.parse(beastiaryText);
 
+  // #todo Add a configuration class with default options. These config options can control the import and allow re-balancing.
+  // #todo Create a GUI FormApplication to customize the import process.
+
   // #debug
   console.log(beastiaryJson);
 
