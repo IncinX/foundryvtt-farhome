@@ -103,8 +103,45 @@ class FarhomeRuleParser {
       }
 
       //
-      // #todo Add conditions
+      // Add conditions
       //
+      const conditionHeadingIndex = this._getHeadingIndexInStack(['Conditions']);
+      if (
+        this._currentHeadingLevel > 0 &&
+        FarhomeRuleParser._isHeading(element.nodeName) &&
+        conditionHeadingIndex !== -1 &&
+        conditionHeadingIndex < this._getCurrentHeadingLevelIndex()
+      ) {
+        // Get the node name
+        const conditionName = element.innerText;
+
+        // Skip past the header to consume the content
+        nodeIndex++;
+
+        // Do a fast forward loop to get all the content
+        let contentHtml = '';
+
+        // Iterate and add all the content
+        while (
+          nodeIndex < htmlList.length &&
+          htmlList[nodeIndex] &&
+          !FarhomeRuleParser._isHeading(htmlList[nodeIndex].nodeName)
+        ) {
+          contentHtml += htmlList[nodeIndex].outerHTML;
+          nodeIndex++;
+        }
+
+        // Add feat to the list
+        this._addBaseItem(this.conditions, conditionName, contentHtml);
+
+        // Re-wind since it stopped at the next heading to know the block was done and that next heading may be required for processing.
+        if (nodeIndex < htmlList.length) {
+          nodeIndex--;
+        }
+
+        // Continue processing at the next line
+        continue;
+      }
 
       //
       // Process non-background related feats
@@ -125,8 +162,7 @@ class FarhomeRuleParser {
         // Do a fast forward loop to get all the content
         let contentHtml = '';
 
-        // #todo Is it possible to just change htmlList[i] to be an enumerator that can go to next or previous?
-        // #bug This isn't grabbing all the content HTML
+        // Iterate and add all the content
         while (
           nodeIndex < htmlList.length &&
           htmlList[nodeIndex] &&
@@ -137,7 +173,7 @@ class FarhomeRuleParser {
         }
 
         // Add feat to the list
-        this._addFeat(featName, contentHtml);
+        this._addBaseItem(this.feats, featName, contentHtml);
 
         // Re-wind since it stopped at the next heading to know the block was done and that next heading may be required for processing.
         if (nodeIndex < htmlList.length) {
@@ -149,17 +185,53 @@ class FarhomeRuleParser {
       }
 
       //
-      // #todo Add backgrounds
+      // Add background related feats
       //
+      const backgroundHeadingIndex = this._getHeadingIndexInStack(['Backgrounds']);
+      if (
+        this._currentHeadingLevel > 0 &&
+        FarhomeRuleParser._isHeading(element.nodeName) &&
+        backgroundHeadingIndex !== -1 &&
+        backgroundHeadingIndex < this._getCurrentHeadingLevelIndex()
+      ) {
+        // Get the node name
+        const backgroundName = element.innerText;
+
+        // Skip past the header to consume the content
+        nodeIndex++;
+
+        // Do a fast forward loop to get all the content
+        let contentHtml = '';
+
+        // Iterate and add all the content
+        while (
+          nodeIndex < htmlList.length &&
+          htmlList[nodeIndex] &&
+          !FarhomeRuleParser._isHeading(htmlList[nodeIndex].nodeName)
+        ) {
+          contentHtml += htmlList[nodeIndex].outerHTML;
+          nodeIndex++;
+        }
+
+        // Add feat to the list
+        this._addBaseItem(this.backgrounds, backgroundName, contentHtml);
+
+        // Re-wind since it stopped at the next heading to know the block was done and that next heading may be required for processing.
+        if (nodeIndex < htmlList.length) {
+          nodeIndex--;
+        }
+
+        // Continue processing at the next line
+        continue;
+      }
 
       //
       // #todo Add maneuvers
       //
 
       //
-      // #todo Add spells
+      // Add spells
       //
-      // #todo Look into reducing code duplication in some way after the spell stuff is working.
       const spellHeadings = ['Arcane', 'Divine', 'Druidic', 'Elder', 'Occult'];
 
       if (spellHeadings.includes(this._recentHeading())) {
@@ -366,18 +438,19 @@ class FarhomeRuleParser {
   }
 
   /**
-   * Adds a feat to the list of feats.
-   * @param {string} name The name of the feat.
-   * @param {string} description The description of the feat.
+   * Adds a base item to the given list of base items.
+   * @param {string} list The list of base items to add to.
+   * @param {string} name The name of the base item.
+   * @param {string} description The description of the base item.
    * @private
    */
-  _addFeat(name, description) {
-    const featRollTemplate = `
+  _addBaseItem(list, name, description) {
+    const baseItemRollTemplate = `
       <h1>[[i.name]]</h1>
       <p>[[i.description]]</p>`;
 
     // Add a new feat object to the list
-    const featObject = {
+    const baseItemObject = {
       name: name,
       type: 'feat',
       data: {
@@ -385,12 +458,12 @@ class FarhomeRuleParser {
           value: description,
         },
         rollTemplate: {
-          value: featRollTemplate,
+          value: baseItemRollTemplate,
         },
       },
     };
 
-    this.feats.push(featObject);
+    list.push(baseItemObject);
   }
 
   /**

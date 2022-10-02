@@ -251,7 +251,7 @@
     }
   },
   "Item": {
-    "types": ["money", "item", "weapon", "armor", "feat", "maneuver", "spell"],
+    "types": ["money", "item", "weapon", "armor", "feat", "maneuver", "spell", "condition"],
     "templates": {
       "base": {
         "description": {
@@ -379,6 +379,9 @@
       "areaOfEffect": {
         "value": "touch"
       }
+    },
+    "condition": {
+      "templates": ["base"]
     }
   }
 }
