@@ -551,12 +551,37 @@ class FarhomeRuleParser {
    * @param {string} levelRequirements The level requirements for the maneuver.
    */
   _addManeuver(name, description, apCosts, weaponRequirements, range, lavelRequirements) {
-    // #todo Enhance the spell roll template here (need a complex parser but a simple fh(formula()) should be fine for now)
-    //       Create an spell description parser function that breaks things down into an object with targetScaling, woundScaling, guaranteedWoundScaling, levelScaling, etc.
+    // #todo Enhance the maneuver roll template here (need a complex parser but a simple fh(formula()) should be fine for now)
+    //       Create an maneuver description parser function that breaks things down into an object with targetScaling, woundScaling, guaranteedWoundScaling, levelScaling, etc.
     //       Use all that information to build a more powerful roll template.
+
+    // Do some parsing to determine what type of roll this maneuver may use.
+    let maneuverRoll = '';
+
+    // Parse the weapon type requirements to determine a roll template.
+    const weaponRequirementsLower = weaponRequirements.toLowerCase();
+    if (weaponRequirementsLower.includes('ranged')) {
+      maneuverRoll = `<p>[[fh(formula(a.ranged, a.dex))]]</p>`;
+    } else if (weaponRequirementsLower.includes('unarmed')) {
+      maneuverRoll = `<p>[[fh(formula(a.unarmed, a.maxStrDex))]]</p>`;
+    } else if (weaponRequirementsLower.includes('one') && weaponRequirementsLower.includes('hand')) {
+      maneuverRoll = `<p>[[fh(formula(a.oneHand, a.maxStrDex))]]</p>`;
+    } else if (weaponRequirementsLower.includes('two') && weaponRequirementsLower.includes('hand')) {
+      maneuverRoll = `<p>[[fh(formula(a.twoHand, a.maxStrDex))]]</p>`;
+    } else if (weaponRequirementsLower.includes('shield')) {
+      // Shield needs special parsing logic and could be an attack, defense, or a save.
+      // For now, just return nothing
+      maneuverRoll = ``;
+    } else if (weaponRequirementsLower.includes('any')) {
+      // The remainder of rolls should just use something generic for any melee weapon.
+      maneuverRoll = `<p>[[fh(formula(a.maxOneTwoHand, a.maxStrDex))]]</p>`;
+    }
+
+    // Construct the maneuver roll template
     const maneuverRollTemplate = `
       <h1>[[i.name]]</h1>
-      <p>[[i.description]]</p>`;
+      <p>[[i.description]]</p>
+      ${maneuverRoll}`;
 
     // Add a new spell object to the list
     const spellObject = {
@@ -602,9 +627,33 @@ class FarhomeRuleParser {
     // #todo Enhance the spell roll template here (need a complex parser but a simple fh(formula()) should be fine for now)
     //       Create an spell description parser function that breaks things down into an object with targetScaling, woundScaling, guaranteedWoundScaling, levelScaling, etc.
     //       Use all that information to build a more powerful roll template.
+
+    // Do some parsing to determine what type of roll this maneuver may use.
+    let spellRoll = '';
+
+    // Parse the spell school to determine a roll template.
+    // This can be made more advanced later by also parsing the description.
+    const schoolLower = school.toLowerCase();
+    if (schoolLower.includes('arcane')) {
+      spellRoll = `<p>[[fh(formula(a.arcane, a.int))]]</p>`;
+    } else if (schoolLower.includes('divine')) {
+      spellRoll = `<p>[[fh(formula(a.divine, a.cha))]]</p>`;
+    } else if (schoolLower.includes('druidic')) {
+      spellRoll = `<p>[[fh(formula(a.druidic, a.will))]]</p>`;
+    } else if (schoolLower.includes('elder')) {
+      spellRoll = `<p>[[fh(formula(a.elder, a.sta))]]</p>`;
+    } else if (schoolLower.includes('occult')) {
+      spellRoll = `<p>[[fh(formula(a.occult, a.will))]]</p>`;
+    }
+
+    // Construct the spell roll template
     const spellRollTemplate = `
       <h1>[[i.name]]</h1>
-      <p>[[i.description]]</p>`;
+      <blockquote>
+      <p>Casted at Level [[i.castedSpellLevel]]</p>
+      </blockquote>
+      <p>[[i.description]]</p>
+      ${spellRoll}`;
 
     // Add a new spell object to the list
     const spellObject = {

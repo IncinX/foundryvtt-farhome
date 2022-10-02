@@ -25,9 +25,9 @@ export function getWeaponRollTemplate(strongestProf, strongestAttr) {
   <blockquote>
   <p>5AP, [[i.weaponType]], [[i.range]], [[i.damageType]]</p>
   </blockquote>
+  <p>[[i.description]]</p>
   <p>[[skill(${strongestProf}, ${strongestAttr})]]</p>
-  <p>[[fh('gw')]]</p>
-  <p>[[i.description]]</p>`;
+  <p>[[fh('gw')]]</p>`;
 }
 
 export function getManeuverRollTemplate(strongestProf, strongestAttr) {
@@ -36,16 +36,16 @@ export function getManeuverRollTemplate(strongestProf, strongestAttr) {
   <blockquote>
   <p>6AP, Sword, [[i.range]], Slashing</p>
   </blockquote>
+  <p>[[i.description]]</p>
   <p>[[skill(${strongestProf}, ${strongestAttr})]]</p>
-  <p>[[fh('gw')]]</p>
-  <p>[[i.description]]</p>`;
+  <p>[[fh('gw')]]</p>`;
 }
 
 export function getArmorRollTemplate() {
   return `
   <h1>[[i.name]]</h1>
-  <p>[[fh('+d')]]</p>
-  <p>[[i.description]]</p>`;
+  <p>[[i.description]]</p>
+  <p>[[fh('+d')]]</p>`;
 }
 
 export function getSpellRollTemplate(strongestProf, strongestAttr) {
@@ -54,7 +54,7 @@ export function getSpellRollTemplate(strongestProf, strongestAttr) {
   <blockquote>
   <p>Lv[[i.castedSpellLevel]], [[i.castingTime]], [[i.range]], [[i.spellDuration]], [[i.damageType]]</p>
   </blockquote>
+  <p>[[i.description]]</p>
   <p>[[skill(${strongestProf}, ${strongestAttr})]]</p>
-  <p>[[fh('gw')]]</p>
-  <p>[[i.description]]</p>`;
+  <p>[[fh('gw')]]</p>`;
 }
