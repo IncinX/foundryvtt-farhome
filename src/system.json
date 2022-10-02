@@ -11,30 +11,37 @@
   "styles": ["styles/farhome.css"],
   "packs": [
     {
+      "name": "farhome-backgrounds",
+      "path": "packs/farhome-backgrounds.db",
+      "label": "Farhome Backgrounds",
+      "entity": "Item",
+      "system": "farhome"
+    },
+    {
+      "name": "farhome-conditions",
+      "path": "packs/farhome-conditions.db",
+      "label": "Farhome Conditions",
+      "entity": "Item",
+      "system": "farhome"
+    },
+    {
       "name": "farhome-feats",
-      "path": "packs/farhome_feats.db",
+      "path": "packs/farhome-feats.db",
       "label": "Farhome Feats",
       "entity": "Item",
       "system": "farhome"
     },
     {
       "name": "farhome-maneuvers",
-      "path": "packs/farhome_maneuvers.db",
+      "path": "packs/farhome-maneuvers.db",
       "label": "Farhome Maneuvers",
       "entity": "Item",
       "system": "farhome"
     },
     {
       "name": "farhome-spells",
-      "path": "packs/farhome_spells.db",
+      "path": "packs/farhome-spells.db",
       "label": "Farhome Spells",
-      "entity": "Item",
-      "system": "farhome"
-    },
-    {
-      "name": "farhome-items",
-      "path": "packs/farhome_items.db",
-      "label": "Farhome Items",
       "entity": "Item",
       "system": "farhome"
     }
