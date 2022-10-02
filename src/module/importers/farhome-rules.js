@@ -2,7 +2,13 @@ import { marked } from 'marked';
 
 const maxHeadingLevel = 6;
 
-export async function createCompendiumFromRules(compendiumLabel, rulesUrl, deleteExisting = true) {
+/**
+ * Creates new compendiums based on input Farhome rulesets.
+ * @param {Map<String, String>} compendiumLabels Map to translate compendium names to labels. Expected keys: "feats", "backgrounds", "conditions", "maneuvers", "spells"
+ * @param {string} rulesUrl String to the URL containing the raw markdown for the rules to parse.
+ * @param {boolean} deleteExisting Whether to delete existing compendium entries before importing.
+ */
+export async function createCompendiumFromRules(compendiumLabels, rulesUrl, deleteExisting = true) {
   const rulesFetch = await fetch(rulesUrl);
   const rulesBlob = await rulesFetch.blob();
   const rulesText = await rulesBlob.text();
@@ -12,26 +18,31 @@ export async function createCompendiumFromRules(compendiumLabel, rulesUrl, delet
 
   console.log(parsedRules);
 
-  // #todo Add helper function to allow splitting compendiums between Feats, Spells, etc.
-
-  const compendiumName = compendiumLabel.toLowerCase().replace(/ /g, '-');
-  const worldCompendiumName = `world.${compendiumName}`;
-
-  if (deleteExisting) {
-    if (game.packs.has(worldCompendiumName)) {
-      await game.packs.get(worldCompendiumName).deleteCompendium();
+  for (const [key, value] of Object.entries(parsedRules)) {
+    const compendiumLabel = compendiumLabels.get(key);
+    if (!compendiumLabel) {
+      throw new Error(`Compendium label not found for key ${key}`);
     }
+
+    const compendiumName = compendiumLabel.toLowerCase().replace(/ /g, '-');
+    const worldCompendiumName = `world.${compendiumName}`;
+
+    if (deleteExisting) {
+      if (game.packs.has(worldCompendiumName)) {
+        await game.packs.get(worldCompendiumName).deleteCompendium();
+      }
+    }
+
+    await CompendiumCollection.createCompendium({
+      name: compendiumName,
+      label: compendiumLabel,
+      type: 'Item',
+      system: 'farhome',
+      package: 'system',
+    });
+
+    await game.farhome.FarhomeItem.createDocuments(value, { pack: worldCompendiumName });
   }
-
-  await CompendiumCollection.createCompendium({
-    name: compendiumName,
-    label: compendiumLabel,
-    type: 'Item',
-    system: 'farhome',
-    package: 'system',
-  });
-
-  await game.farhome.FarhomeItem.createDocuments(parsedRules.feats, { pack: worldCompendiumName });
 }
 
 /**
@@ -42,6 +53,7 @@ class FarhomeRuleParser {
    * Constructor to setup class variables.
    */
   constructor() {
+    this.conditions = [];
     this.feats = [];
     this.backgrounds = [];
     this.maneuvers = [];
@@ -307,7 +319,7 @@ class FarhomeRuleParser {
     if (Number.isInteger(headingLevel) && headingLevel >= 1 && headingLevel <= 6) {
       return headingLevel;
     } else {
-      console.error(nodeName + ' does not have a valid heading level');
+      throw new Error(`${nodeName} does not have a valid heading level`);
     }
   }
 
@@ -396,26 +408,41 @@ class FarhomeRuleParser {
    * @param {string} description The description of the spell.
    */
   _addSpell(name, description, level, school, castingTime, range, duration, concentration, damageType) {
-    // #todo Need to set the attributes of the spell as well
-
     // #todo Enhance the spell roll template here (need a complex parser but a simple fh(formula()) should be fine for now)
     const spellRollTemplate = `
       <h1>[[i.name]]</h1>
       <p>[[i.description]]</p>`;
+
+    // #todo Need to set the attributes of the spell as well (and add everything to a compendium)
 
     // Add a new spell object to the list
     const spellObject = {
       name: name,
       type: 'spell',
       data: {
-        spellSchool: {
-          value: school,
-        },
         description: {
           value: description,
         },
         rollTemplate: {
           value: spellRollTemplate,
+        },
+        spellSchool: {
+          value: school,
+        },
+        castingTime: {
+          value: castingTime,
+        },
+        range: {
+          value: range,
+        },
+        duration: {
+          value: duration,
+        },
+        concentration: {
+          value: concentration,
+        },
+        damageType: {
+          value: damageType,
         },
       },
     };
