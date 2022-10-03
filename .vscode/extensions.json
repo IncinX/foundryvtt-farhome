@@ -3,6 +3,7 @@
     "sz-p.dependencygraph",
     "eg2.vscode-npm-script",
     "andrejunges.handlebars",
-    "Orta.vscode-jest"
+    "orta.vscode-jest",
+    "esbenp.prettier-vscode"
   ]
 }

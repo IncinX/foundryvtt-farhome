@@ -10,9 +10,9 @@ import { secureRandomNumber } from './roller/rng';
 import { FHRoller } from './roller/fh/roller';
 import { FHRollSystem } from './roller/system';
 import { createCompendiumFromRules } from './importers/farhome-rules';
-import { createCompendiumFromVetoolsBeastiary } from './importers/vetools-monsters';
-import { connectRulesImporterApp } from './apps/rulesImporterApp';
-import { connectVetoolsMonsterImporterApp } from './apps/vetoolsMonsterImporterApp';
+import { createCompendiumFromVetoolsBeastiary, VetoolsMonsterImportConfig } from './importers/vetools-monsters';
+import { connectRulesImporterApp } from './apps/rules-importer-app';
+import { connectVetoolsMonsterImporterApp } from './apps/vetools-monster-importer-app';
 import FarhomeItemSheet from './sheets/item-sheet';
 import FarhomeActorSheet from './sheets/actor-sheet';
 
@@ -40,6 +40,7 @@ Hooks.once('init', async () => {
     // Importer methods for macro use
     createCompendiumFromRules,
     createCompendiumFromVetoolsBeastiary,
+    VetoolsMonsterImportConfig,
   };
 
   // Assign custom classes and constants here

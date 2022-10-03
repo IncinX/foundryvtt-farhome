@@ -8,7 +8,7 @@ const maxHeadingLevel = 6;
  * @param {string} rulesUrl String to the URL containing the raw markdown for the rules to parse.
  * @param {boolean} deleteExisting Whether to delete existing compendium entries before importing.
  */
-export async function createCompendiumFromRules(compendiumLabels, rulesUrl, deleteExisting = true) {
+export async function createCompendiumFromRules(rulesUrl, compendiumLabels, deleteExisting = true) {
   const rulesFetch = await fetch(rulesUrl);
   const rulesBlob = await rulesFetch.blob();
   const rulesText = await rulesBlob.text();

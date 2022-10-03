@@ -3,8 +3,20 @@
 // #todo Read this and tune the CR and HP calculations accordingly
 //       https://github.com/IncinX/farhome-rules/blob/master/monstermanual.md
 
+export class VetoolsMonsterImportConfig {
+  constructor() {
+    this.hpScale = 0.3;
+    this.crScale = 1.0;
+  }
+}
+
 // #note Ve refers to 5th-edition with V as a roman numeral since numerical prefixes cause issues in programming.
-export async function createCompendiumFromVetoolsBeastiary(compendiumLabel, beastiaryUrl, deleteExisting = true) {
+export async function createCompendiumFromVetoolsBeastiary(
+  beastiaryUrl,
+  compendiumLabel,
+  vetoolsMonsterImportConfig = new VetoolsMonsterImportConfig(),
+  deleteExisting = true,
+) {
   // #note This creates a world compendium. System compendiums are automatically created if they are defined in their system.json
 
   const beastiaryFetch = await fetch(beastiaryUrl);
@@ -42,7 +54,7 @@ export async function createCompendiumFromVetoolsBeastiary(compendiumLabel, beas
   //       Test it out by creating just a simple feat with a random key id
   for (const monster of beastiaryJson.monster) {
     const monsterImgUri = _getImageLink(monster.source, monster.name);
-    const monsterWounds = _convertHp(monster.hp.average);
+    const monsterWounds = _convertHp(vetoolsMonsterImportConfig, monster.hp.average);
 
     // Construct the monster document
     const newMonsterDocument = {
@@ -55,7 +67,7 @@ export async function createCompendiumFromVetoolsBeastiary(compendiumLabel, beas
       },
       data: {
         cr: {
-          value: _convertCr(monster.cr),
+          value: _convertCr(vetoolsMonsterImportConfig, monster.cr),
         },
         race: {
           value: _toTitleCase(monster.type),
@@ -138,15 +150,17 @@ function _convertAttribute(veAttribute) {
   return Math.floor((veAttribute - 10) / 2);
 }
 
-function _convertHp(veHp) {
-  return Math.ceil(veHp / 3.0);
+function _convertHp(vetoolsMonsterImportConfig, veHp) {
+  return Math.ceil(veHp * vetoolsMonsterImportConfig.hpScale);
 }
 
-function _convertCr(veCr) {
+function _convertCr(vetoolsMonsterImportConfig, veCr) {
   const veAveragePartySize = 4.0;
   const veToFhMultiplier = 30.0 / 20.0; // Calculated based on max level differences
   const numericalVeCr = Function(`return ${veCr}`)();
   const farhomeCr =
-    numericalVeCr < 1 ? numericalVeCr : Math.floor(numericalVeCr * veToFhMultiplier * veAveragePartySize);
+    numericalVeCr < 1
+      ? numericalVeCr
+      : Math.floor(numericalVeCr * veToFhMultiplier * veAveragePartySize * vetoolsMonsterImportConfig.crScale);
   return farhomeCr;
 }
