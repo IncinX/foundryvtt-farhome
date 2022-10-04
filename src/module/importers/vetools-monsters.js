@@ -25,12 +25,6 @@ export async function createCompendiumFromVetoolsBeastiary(
   const beastiaryText = await beastiaryBlob.text();
   const beastiaryJson = JSON.parse(beastiaryText);
 
-  // #todo Add a configuration class with default options. These config options can control the import and allow re-balancing.
-  // #todo Create a GUI FormApplication to customize the import process.
-
-  // #debug
-  console.log(beastiaryJson);
-
   // Create the compendium
   const compendiumName = compendiumLabel.toLowerCase().replace(/ /g, '-');
   const worldCompendiumName = `world.${compendiumName}`;

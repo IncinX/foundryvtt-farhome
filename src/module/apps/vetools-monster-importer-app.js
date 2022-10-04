@@ -57,8 +57,6 @@ class VetoolsMonsterImporterApplication extends FormApplication {
   }
 
   async _updateObject(_event, formData) {
-    console.log(formData);
-
     let vetoolsMonsterImportConfig = new VetoolsMonsterImportConfig();
     vetoolsMonsterImportConfig.hpScale = formData.hpScale;
 

@@ -1,3 +1,79 @@
+import { createCompendiumFromRules } from '../importers/farhome-rules';
+
+/**
+ * 5etools monster importer form application.
+ * @extends {FormApplication}
+ */
+ class FarhomeRulesImporterApplication extends FormApplication {
+  constructor() {
+    let data = {
+      rulesUrl: '',
+      backgroundsCompendiumName: 'Farhome Backgrounds',
+      conditionsCompendiumName: 'Farhome Conditions',
+      featsCompendiumName: 'Farhome Feats',
+      maneuversCompendiumName: 'Farhome Maneuvers',
+      spellsCompendiumName: 'Farhome Spells',
+    };
+
+    super(data, {});
+  }
+
+  static get defaultOptions() {
+    return mergeObject(super.defaultOptions, {
+      classes: ['form'],
+      popOut: true,
+      template: `systems/farhome/templates/apps/farhome-rules-importer-app.hbs`,
+      id: 'farhome-rules-importer',
+      title: 'Farhome Rules Importer',
+      closeOnSubmit: false,
+      width: 400,
+    });
+  }
+
+  getData() {
+    return super.getData().object;
+  }
+
+  activateListeners(html) {
+    super.activateListeners(html);
+  }
+
+  _progressCallback(progressValue, progressMax) {
+    let importButton = $(this.form).find('#import');
+    let progress = $(this.form).find('#progress');
+
+    // Update the progress
+    progress[0].value = progressValue;
+    progress[0].max = progressMax;
+
+    if (progressValue === progressMax) {
+      // Hide the progress bar and enable the import button if it is done importing.
+      progress[0].style.opacity = 0;
+      importButton[0].disabled = false;
+    } else {
+      // Show the progress bar and disable the import button if it is not done importing.
+      progress[0].style.opacity = 1;
+      importButton[0].disabled = true;
+    }
+  }
+
+  async _updateObject(_event, formData) {
+    const compendiumLabels = new Map([
+      ['feats', formData.featsCompendiumName],
+      ['conditions', formData.conditionsCompendiumName],
+      ['backgrounds', formData.backgroundsCompendiumName],
+      ['maneuvers', formData.maneuversCompendiumName],
+      ['spells', formData.spellsCompendiumName],
+    ]);
+
+    await createCompendiumFromRules(
+      formData.rulesUrl,
+      compendiumLabels,
+      this._progressCallback.bind(this),
+    );
+  }
+}
+
 export function connectRulesImporterApp() {
   Hooks.on('renderSidebarTab', async (app, html) => {
     if (app.options.id == 'compendium') {
@@ -11,19 +87,9 @@ export function connectRulesImporterApp() {
           </button>
         </div>`);
 
-      button.on('click', () => console.log('Launch Farhome Rules Importer Application'));
+      button.on('click', () => new FarhomeRulesImporterApplication().render(true));
 
       html.find('.directory-header').append(button);
-
-      /* Old code to reference
-      let button = $('<button class='import-dd'><i class='fas fa-file-import'></i> Universal Battlemap Import</button>')
-  
-      button.click(function () {
-        new DDImporter().render(true);
-      });
-  
-      html.find('.directory-header').append(button);
-      */
     }
   });
 }

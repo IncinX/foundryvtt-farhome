@@ -8,7 +8,12 @@ const maxHeadingLevel = 6;
  * @param {string} rulesUrl String to the URL containing the raw markdown for the rules to parse.
  * @param {boolean} deleteExisting Whether to delete existing compendium entries before importing.
  */
-export async function createCompendiumFromRules(rulesUrl, compendiumLabels, deleteExisting = true) {
+export async function createCompendiumFromRules(
+  rulesUrl,
+  compendiumLabels,
+  progressCallback = undefined,
+  deleteExisting = true,
+) {
   const rulesFetch = await fetch(rulesUrl);
   const rulesBlob = await rulesFetch.blob();
   const rulesText = await rulesBlob.text();
@@ -18,7 +23,16 @@ export async function createCompendiumFromRules(rulesUrl, compendiumLabels, dele
 
   console.log(parsedRules);
 
-  for (const [key, value] of Object.entries(parsedRules)) {
+  const parsedRulesEntries = Object.entries(parsedRules);
+
+  for (let ruleEntryIndex = 0; ruleEntryIndex < parsedRulesEntries.length; ruleEntryIndex++) {
+    if (typeof progressCallback === 'function') {
+      progressCallback(ruleEntryIndex, parsedRulesEntries.length);
+    }
+
+    const key = parsedRulesEntries[ruleEntryIndex][0];
+    const value = parsedRulesEntries[ruleEntryIndex][1];
+
     const compendiumLabel = compendiumLabels.get(key);
     if (!compendiumLabel) {
       throw new Error(`Compendium label not found for key ${key}`);
@@ -42,6 +56,11 @@ export async function createCompendiumFromRules(rulesUrl, compendiumLabels, dele
     });
 
     await game.farhome.FarhomeItem.createDocuments(value, { pack: worldCompendiumName });
+  }
+
+  // Send the progress state to the callback
+  if (typeof progressCallback === 'function') {
+    progressCallback(parsedRulesEntries.length, parsedRulesEntries.length);
   }
 }
 
