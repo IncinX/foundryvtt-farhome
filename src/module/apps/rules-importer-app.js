@@ -4,7 +4,7 @@ import { createCompendiumFromRules } from '../importers/farhome-rules';
  * 5etools monster importer form application.
  * @extends {FormApplication}
  */
- class FarhomeRulesImporterApplication extends FormApplication {
+class FarhomeRulesImporterApplication extends FormApplication {
   constructor() {
     let data = {
       rulesUrl: '',
@@ -66,11 +66,7 @@ import { createCompendiumFromRules } from '../importers/farhome-rules';
       ['spells', formData.spellsCompendiumName],
     ]);
 
-    await createCompendiumFromRules(
-      formData.rulesUrl,
-      compendiumLabels,
-      this._progressCallback.bind(this),
-    );
+    await createCompendiumFromRules(formData.rulesUrl, compendiumLabels, this._progressCallback.bind(this));
   }
 }
 
