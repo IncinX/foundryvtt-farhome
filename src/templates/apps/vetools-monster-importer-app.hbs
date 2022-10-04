@@ -1,14 +1,16 @@
-<form class="{{cssClass}}" autocomplete="off">
+<form class='{{cssClass}}' autocomplete='off'>
   <div>
-    <label for="compendium-name">Compendium Name</label>
-    <input type="text" id="compendium-name" name='compendiumName' value='{{compendiumName}}'/>
+    <label for='compendium-name'>Compendium Name</label>
+    <input id='compendium-name' name='compendiumName' type='text' value='{{compendiumName}}'/>
 
-    <label for="monster-url">5etools Monster Data URL (Raw Text)</label>
-    <input type="text" id="monster-url" name='vetoolsMonsterUrl' value='{{vetoolsMonsterUrl}}'/>
+    <label for='monster-url'>5etools Monster Data URL (Raw Text)</label>
+    <input id='monster-url' name='vetoolsMonsterUrl' type='text' value='{{vetoolsMonsterUrl}}'/>
 
-    <label for="hp-scaling">HP Scaling</label>
-    <input type="number" id="hp-scaling" name='hpScale' value='{{hpScale}}'/>
+    <label for='hp-scaling'>HP Scaling</label>
+    <input id='hp-scaling' name='hpScale' type='number' step='0.01' value='{{hpScale}}'/>
 
-    <button type="button" id="import">Import</button>
+    <button id='import' type='submit'>Import</button>
+
+    <progress id='progress' value='0' max='100' style='width:100%' hidden></progress>
   </div>
 </form>

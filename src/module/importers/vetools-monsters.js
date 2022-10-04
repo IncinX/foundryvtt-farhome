@@ -15,6 +15,7 @@ export async function createCompendiumFromVetoolsBeastiary(
   beastiaryUrl,
   compendiumLabel,
   vetoolsMonsterImportConfig = new VetoolsMonsterImportConfig(),
+  progressCallback = undefined,
   deleteExisting = true,
 ) {
   // #note This creates a world compendium. System compendiums are automatically created if they are defined in their system.json
@@ -52,7 +53,13 @@ export async function createCompendiumFromVetoolsBeastiary(
 
   // #todo Might be better to create the monster document first, then run an update() to add it's data, and then create item documents and add it to the actor document since I am sure if this will create the item documents properly.
   //       Test it out by creating just a simple feat with a random key id
-  for (const monster of beastiaryJson.monster) {
+  for (let monsterIndex = 0; monsterIndex < beastiaryJson.monster.length; monsterIndex++) {
+    // Send the progress state to the callback
+    if (typeof progressCallback === 'function') {
+      progressCallback(monsterIndex, beastiaryJson.monster.length);
+    }
+
+    const monster = beastiaryJson.monster[monsterIndex];
     const monsterImgUri = _getImageLink(monster.source, monster.name);
     const monsterWounds = _convertHp(vetoolsMonsterImportConfig, monster.hp.average);
 
@@ -100,6 +107,11 @@ export async function createCompendiumFromVetoolsBeastiary(
     console.log(monsterDocument);
 
     // #todo Add items
+  }
+
+  // Send the final progress completion state
+  if (typeof progressCallback === 'function') {
+    progressCallback(beastiaryJson.monster.length, beastiaryJson.monster.length);
   }
 
   // #todo If I can add a bunch of data to this on document creation, it will make it much more unit-testable if I have a parsing function that returns the data in a json layout, ready for document creation.

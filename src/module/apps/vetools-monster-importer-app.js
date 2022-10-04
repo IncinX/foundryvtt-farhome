@@ -7,13 +7,14 @@ import { createCompendiumFromVetoolsBeastiary, VetoolsMonsterImportConfig } from
  * @extends {FormApplication}
  */
 class VetoolsMonsterImporterApplication extends FormApplication {
-  constructor(object, options) {
-    super(object, options);
+  constructor() {
+    let data = {
+      compendiumName: '',
+      vetoolsMonsterUrl: '',
+      hpScale: 0.3,
+    };
 
-    this.data = {};
-    this.data.compendiumName = '';
-    this.data.vetoolsMonsterUrl = '';
-    this.data.hpScale = 0.3;
+    super(data, {});
   }
 
   static get defaultOptions() {
@@ -23,26 +24,50 @@ class VetoolsMonsterImporterApplication extends FormApplication {
       template: `systems/farhome/templates/apps/vetools-monster-importer-app.hbs`,
       id: 'vetools-monster-importer',
       title: '5etools Monster Importer',
+      closeOnSubmit: false,
+      width: 400,
     });
   }
 
   getData() {
-    // Send data to the template
-    return this.data;
+    return super.getData().object;
   }
 
   activateListeners(html) {
     super.activateListeners(html);
-
-    $(html).find('button[id="import"]').on('click', this._onImport.bind(this));
   }
 
-  _onImport(event) {
-    console.log(this.data);
+  _progressCallback(progressValue, progressMax) {
+    let importButton = $(this.form).find('#import');
+    let progress = $(this.form).find('#progress');
+
+    // Update the progress
+    progress[0].value = progressValue;
+    progress[0].max = progressMax;
+
+    if (progressValue === progressMax) {
+      // Hide the progress bar and enable the import button if it is done importing.
+      progress[0].style.display = 'none';
+      importButton[0].disabled = false;
+    } else {
+      // Show the progress bar and disable the import button if it is not done importing.
+      progress[0].style.display = 'block';
+      importButton[0].disabled = true;
+    }
   }
 
-  async _updateObject(_event, _formData) {
-    console.log(_formData);
+  async _updateObject(_event, formData) {
+    console.log(formData);
+
+    let vetoolsMonsterImportConfig = new VetoolsMonsterImportConfig();
+    vetoolsMonsterImportConfig.hpScale = formData.hpScale;
+
+    await createCompendiumFromVetoolsBeastiary(
+      formData.vetoolsMonsterUrl,
+      formData.compendiumName,
+      vetoolsMonsterImportConfig,
+      this._progressCallback.bind(this),
+    );
   }
 }
 
