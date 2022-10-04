@@ -1,4 +1,4 @@
-import { createCompendiumFromVetoolsBeastiary, VetoolsMonsterImportConfig } from '../importers/vetools-monsters';
+import { createCompendiumFromVetoolsBeastiary, VetoolsMonsterImportConfig } from '../importers/vetools-monsters-importer';
 
 // #todo Add code documentation everywhere here and in vetools-monsters.js
 

@@ -9,10 +9,13 @@ import { _getInitiativeFormula } from './helpers/initiative';
 import { secureRandomNumber } from './roller/rng';
 import { FHRoller } from './roller/fh/roller';
 import { FHRollSystem } from './roller/system';
-import { createCompendiumFromRules } from './importers/farhome-rules';
-import { createCompendiumFromVetoolsBeastiary, VetoolsMonsterImportConfig } from './importers/vetools-monsters';
-import { connectRulesImporterApp } from './apps/rules-importer-app';
-import { connectVetoolsMonsterImporterApp } from './apps/vetools-monster-importer-app';
+import { createCompendiumFromRules } from './importers/farhome-rules-importer';
+import {
+  createCompendiumFromVetoolsBeastiary,
+  VetoolsMonsterImportConfig,
+} from './importers/vetools-monsters-importer';
+import { connectRulesImporterApp } from './apps/farhome-rules-importer-app';
+import { connectVetoolsMonsterImporterApp } from './apps/vetools-monsters-importer-app';
 import FarhomeItemSheet from './sheets/item-sheet';
 import FarhomeActorSheet from './sheets/actor-sheet';
 

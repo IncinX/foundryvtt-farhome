@@ -1,4 +1,4 @@
-import { createCompendiumFromRules } from '../importers/farhome-rules';
+import { createCompendiumFromRules } from '../importers/farhome-rules-importer';
 
 /**
  * 5etools monster importer form application.
