@@ -47,11 +47,11 @@ class VetoolsMonsterImporterApplication extends FormApplication {
 
     if (progressValue === progressMax) {
       // Hide the progress bar and enable the import button if it is done importing.
-      progress[0].style.display = 'none';
+      progress[0].style.opacity = 0;
       importButton[0].disabled = false;
     } else {
       // Show the progress bar and disable the import button if it is not done importing.
-      progress[0].style.display = 'block';
+      progress[0].style.opacity = 1;
       importButton[0].disabled = true;
     }
   }
