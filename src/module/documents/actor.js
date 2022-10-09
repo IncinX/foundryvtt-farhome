@@ -1,4 +1,3 @@
-import { clamp } from '../core/math';
 import { proficiencyRollFormula } from '../core/roll';
 import { getSpellPowerToMaxManaTable } from '../core/mana';
 

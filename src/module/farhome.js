@@ -1,14 +1,16 @@
+import { registerSettings } from './settings';
+import { preloadTemplates } from './preload-templates';
+
 import { FARHOME } from './core/config';
 import { createItemMacro, rollItemMacro } from './core/macros';
 import { ChatRoller } from './core/chat-roller';
-import { registerSettings } from './settings';
-import { preloadTemplates } from './preload-templates';
+import { _getInitiativeFormula } from './core/initiative';
+
 import { FarhomeActor } from './documents/actor';
 import { FarhomeItem } from './documents/item';
-import { _getInitiativeFormula } from './core/initiative';
-import { secureRandomNumber } from './roller/rng';
-import { FHRoller } from './roller/fh/roller';
-import { FHRollSystem } from './roller/system';
+import FarhomeItemSheet from './sheets/item-sheet';
+import FarhomeActorSheet from './sheets/actor-sheet';
+
 import { createCompendiumFromRules } from './importers/farhome-rules-importer';
 import {
   createCompendiumFromVetoolsBeastiary,
@@ -16,8 +18,10 @@ import {
 } from './importers/vetools-monsters-importer';
 import { connectRulesImporterApp } from './apps/farhome-rules-importer-app';
 import { connectVetoolsMonsterImporterApp } from './apps/vetools-monsters-importer-app';
-import FarhomeItemSheet from './sheets/item-sheet';
-import FarhomeActorSheet from './sheets/actor-sheet';
+
+import { secureRandomNumber } from './roller/roller-util';
+import { FHRoller } from './roller/roller-roll';
+import { FHRollSystem } from './roller/roller-system';
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
