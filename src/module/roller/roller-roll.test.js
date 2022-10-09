@@ -1,7 +1,6 @@
-import { makeRng } from '../rng';
-import { Roll } from '../roller';
-import { Dice, DicePool, Faces, interpretResult } from './dice';
-import { FHRoller } from './roller';
+import { makeRng } from './roller-util';
+import { Roll, FHRoller } from './roller-roll';
+import { Dice, DicePool, Faces, interpretResult } from './roller-dice';
 
 // #todo Come up with a way to just roll all dice and test the distributions
 

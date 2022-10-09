@@ -1,6 +1,6 @@
-import { sendActorMessage } from '../helpers/chat.js';
-import { onManageActiveEffect, prepareActiveEffectCategories } from '../helpers/effects.js';
-import { localizeObject } from '../helpers/localization.js';
+import { sendActorMessage } from '../core/chat.js';
+import { onManageActiveEffect, prepareActiveEffectCategories } from '../core/effects.js';
+import { localizeObject } from '../core/localization.js';
 import {
   getStrongestKey,
   getDefaultRollTemplate,
@@ -8,7 +8,7 @@ import {
   getArmorRollTemplate,
   getSpellRollTemplate,
   getManeuverRollTemplate,
-} from '../helpers/roll-templates.js';
+} from '../core/roll-templates.js';
 
 // #todo Add Poison/Hex icons later
 

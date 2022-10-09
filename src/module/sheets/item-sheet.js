@@ -1,4 +1,4 @@
-import { localizeObject } from '../helpers/localization';
+import { localizeObject } from '../core/localization';
 
 export default class FarhomeItemSheet extends ItemSheet {
   /** @override */

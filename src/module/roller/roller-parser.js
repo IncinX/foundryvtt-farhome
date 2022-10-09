@@ -1,7 +1,36 @@
-import { combineAll } from './lang';
+import { DicePool, dicePoolMonoid } from './roller-dice';
+import { combineAll } from './roller-util';
+
+function letterToRolls(letter, occurrences) {
+  if (letter === 'h') {
+    return new DicePool(occurrences, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+  } else if (letter === 's') {
+    return new DicePool(0, occurrences, 0, 0, 0, 0, 0, 0, 0, 0);
+  } else if (letter === 'e') {
+    return new DicePool(0, 0, occurrences, 0, 0, 0, 0, 0, 0, 0);
+  } else if (letter === 'n') {
+    return new DicePool(0, 0, 0, occurrences, 0, 0, 0, 0, 0, 0);
+  } else if (letter === 'b') {
+    return new DicePool(0, 0, 0, 0, occurrences, 0, 0, 0, 0, 0);
+  } else if (letter === 't') {
+    return new DicePool(0, 0, 0, 0, 0, occurrences, 0, 0, 0, 0);
+  } else if (letter === '+') {
+    return new DicePool(0, 0, 0, 0, 0, 0, occurrences, 0, 0, 0);
+  } else if (letter === 'D') {
+    return new DicePool(0, 0, 0, 0, 0, 0, occurrences, 0, 0, 0);
+  } else if (letter === 'd') {
+    return new DicePool(0, 0, 0, 0, 0, 0, 0, occurrences, 0, 0);
+  } else if (letter === 'g') {
+    return new DicePool(0, 0, 0, 0, 0, 0, 0, 0, occurrences, 0);
+  } else if (letter === 'w') {
+    return new DicePool(0, 0, 0, 0, 0, 0, 0, 0, 0, occurrences);
+  } else {
+    throw new Error(`Unknown letter ${letter}`);
+  }
+}
 
 export function parseFormula(formula, parsers) {
-  const trimmedFormula = formula.replace(/\s+/g, '').toLowerCase();
+  const trimmedFormula = formula.replace(/\s+/g, '');
   const helpMessages = [];
   for (const parser of parsers) {
     if (parser.canParse(trimmedFormula)) {
@@ -80,5 +109,23 @@ export class DefaultSimpleParser {
     return `Any combination of the following letters: ${this.letters.join(
       ', ',
     )} (${mappings}). To roll multiple dice simply add multiple letters or prepend a number, e.g.: c3ba`;
+  }
+}
+
+export class FHParser extends DefaultSimpleParser {
+  // #todo Add support for capital letters (such as capital D for superior defense)
+  constructor() {
+    super('hsenbt+Ddgw', letterToRolls, dicePoolMonoid, [
+      'hero',
+      'superior',
+      'enhanced',
+      'normal',
+      'bad',
+      'terrible',
+      'superior defense',
+      'defense',
+      'guaranteed wound',
+      'wound',
+    ]);
   }
 }

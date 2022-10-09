@@ -1,5 +1,4 @@
-import { getDieImage } from './images';
-import { Roll } from './roller';
+import { getDieImage } from './roller-util';
 
 export class DieRollView {
   die;

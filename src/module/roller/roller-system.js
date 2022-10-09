@@ -3,10 +3,9 @@
 // #todo Clean up all the code
 // #todo Cleanup the import dependencies, avoid ciruclar dependencies
 import Mustache from 'mustache';
-import { ReRoll } from './roller';
-import { Roll } from './roller';
-import { rollValuesMonoid } from './fh/dice';
-import { summaryTemplate } from './templates';
+import { ReRoll } from './roller-roll';
+import { Roll } from './roller-roll';
+import { summaryTemplate } from './roller-templates';
 
 // #todo Consider putting all this stuff inside the FHSystem class
 

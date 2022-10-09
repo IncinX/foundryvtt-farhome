@@ -1,5 +1,4 @@
-import { parseFormula } from '../parser';
-import { FHParser } from './parser';
+import { parseFormula, FHParser } from './farhome-parser';
 
 const parsers = [new FHParser()];
 
