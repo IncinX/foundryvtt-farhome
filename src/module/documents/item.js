@@ -118,6 +118,7 @@ export class FarhomeItem extends Item {
       ...extraItemContext,
     };
 
+    // #todo #important Centralize the base roll system, the actor skill rolls and item template rolls
     // #todo Some handlebars or Mustache would make all of this cleaner.
 
     // Evaluate the template text with the given actor and item context.
