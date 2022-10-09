@@ -123,6 +123,7 @@ export class FHParser extends DefaultSimpleParser {
       'bad',
       'terrible',
       'superior defense',
+      'superior defense',
       'defense',
       'guaranteed wound',
       'wound',
