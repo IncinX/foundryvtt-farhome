@@ -93,7 +93,7 @@ export class Roller {
     try {
       const parsedFormula = parseFormula(formula, this.parsers);
       const rolls = this.roll(parsedFormula);
-      console.log(`Rolled ${rolls} with formula ${parsedFormula}`);
+      console.log(`Farhome | Rolled ${rolls} with formula ${parsedFormula}`);
       return this.formatRolls(rolls, flavorText, canReRoll, showInterpretation);
     } catch (e) {
       return escapeHtml(e.message);

@@ -29,7 +29,7 @@ import { FHRollSystem } from './roller/roller-system';
 
 // Initialize system
 Hooks.once('init', async () => {
-  console.log('farhome | Initializing farhome');
+  console.log('Farhome | Initializing farhome');
 
   const roller = new FHRoller(secureRandomNumber, 'fh');
 
