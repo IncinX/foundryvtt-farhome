@@ -1,11 +1,11 @@
-import { FARHOME } from './helpers/config';
-import { createItemMacro, rollItemMacro } from './helpers/macros';
-import { ChatRoller } from './helpers/chat-roller';
+import { FARHOME } from './core/config';
+import { createItemMacro, rollItemMacro } from './core/macros';
+import { ChatRoller } from './core/chat-roller';
 import { registerSettings } from './settings';
 import { preloadTemplates } from './preload-templates';
 import { FarhomeActor } from './documents/actor';
 import { FarhomeItem } from './documents/item';
-import { _getInitiativeFormula } from './helpers/initiative';
+import { _getInitiativeFormula } from './core/initiative';
 import { secureRandomNumber } from './roller/rng';
 import { FHRoller } from './roller/fh/roller';
 import { FHRollSystem } from './roller/system';

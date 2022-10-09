@@ -1,7 +1,7 @@
-import { evaluateTemplate } from '../helpers/template-evaluator';
-import { convertSpellLevelToManaCost } from '../helpers/mana';
-import { sendActorMessage } from '../helpers/chat';
-import { ChatRoller } from '../helpers/chat-roller';
+import { evaluateTemplate } from '../core/template-evaluator';
+import { convertSpellLevelToManaCost } from '../core/mana';
+import { sendActorMessage } from '../core/chat';
+import { ChatRoller } from '../core/chat-roller';
 import { getRollSummaryData, getRollSummary } from '../roller/system';
 
 const MAX_SPELL_LEVEL = 10;

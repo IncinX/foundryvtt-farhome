@@ -1,6 +1,6 @@
-import { clamp } from '../helpers/math';
-import { proficiencyRollFormula } from '../helpers/roll';
-import { getSpellPowerToMaxManaTable } from '../helpers/mana';
+import { clamp } from '../core/math';
+import { proficiencyRollFormula } from '../core/roll';
+import { getSpellPowerToMaxManaTable } from '../core/mana';
 
 /**
  * Extend the base Actor document by defining a custom roll data structure which is ideal for the Simple system.
