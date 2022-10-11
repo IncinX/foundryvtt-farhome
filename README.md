@@ -4,7 +4,7 @@
 
 ## Installation
 
-In the FoundryVTT Configuration and Setup screen, click *Install System*, enter ```https://github.com/IncinX/foundryvtt-farhome/releases/latest/download/system.json``` in the Manifest URL field, and click *Install*.
+In the FoundryVTT Configuration and Setup screen, select the *Game Systems* tab, click *Install System*, enter ```https://github.com/IncinX/foundryvtt-farhome/releases/latest/download/system.json``` in the Manifest URL field, and click *Install*.
 
 Create a game world by picking the *Game Worlds* tab and clicking *Create World*, then select the *Farhome* from the *Game System* drop down menu. You can now start your game!
 
