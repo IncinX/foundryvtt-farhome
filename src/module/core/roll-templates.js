@@ -1,3 +1,5 @@
+// #todo Consider putting all of these into handlebar templates for consistentcy with all other templates (and because we are removing mustache anyway).
+
 export function getStrongestKey(obj) {
   let strongestKey = null;
   let strongestValue = -Infinity;

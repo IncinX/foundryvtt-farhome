@@ -2,6 +2,7 @@
 // #todo Add function/class documentation for all the code in farhome
 // #todo Clean up all the code
 // #todo Cleanup the import dependencies, avoid ciruclar dependencies
+// #todo Consider cleaning up the interaction of the FHRoller object and the system code here. Maybe merge them or create a central API?
 import Mustache from 'mustache';
 import { ReRoll } from './roller-roll';
 import { Roll } from './roller-roll';
