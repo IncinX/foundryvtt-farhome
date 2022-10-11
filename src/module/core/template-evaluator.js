@@ -4,6 +4,13 @@ import { proficiencyRollFormula, proficiencyRoll } from './roll';
 /*  Template evaluation functions               */
 /* -------------------------------------------- */
 
+/**
+ * Evaluates an HTML string with embedded tempalte expressions denoted by [[templateExpression]].
+ * @param {String} templateString A string containing HTML with embedded template expressions.
+ * @param {Object} actorContext Reference to a FarhomeActor embedded data object.
+ * @param {Object} itemContext Reference to a FarhomeItem embedded data object.
+ * @returns String of HTML with the template expressions evaluates from the original templateString.
+ */
 export function evaluateTemplate(templateString, actorContext, itemContext) {
   let evaluatedString = templateString;
 
@@ -26,6 +33,13 @@ export function evaluateTemplate(templateString, actorContext, itemContext) {
   return evaluatedString;
 }
 
+/**
+ * Evaluates the template expression and returns the replacement string. The template expression is a small javascript expression.
+ * @param {String} templateChunk Embedded template expression that should be evaluated as a javascript function.
+ * @param {Object} actorContext Reference to a FarhomeActor embedded data object.
+ * @param {Object} itemContext Reference to a FarhomeItem embedded data object.
+ * @returns String of HTML with the evaluated template expression.
+ */
 export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) {
   // #todo This should be made into an object that pre-evaluates the help text and system function binds, etc.
 
@@ -205,36 +219,78 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
 /*  Template helper functions                   */
 /* -------------------------------------------- */
 
-// #todo Need to bind the farhome roller state object here
+/**
+ * Evaluates a farhome formula string to an HTML roll and is provided as a helper function to the template evaluator.
+ * This function requires binding to a FHRoller object.
+ * @param {string} formula Farhome roll formula which has characters that represent dice to roll. Type '/fh x' in game to see the help text for more information.
+ * @returns HTML containing the roll result.
+ */
 function fh(formula) {
   return this.rollFormula(formula, '', false, false);
 }
 
+/**
+ * Evaluates a farhome skill to an HTML roll and is provided as a helper function to the template evaluator.
+ * This function requires binding to a FHRoller object.
+ * @param {number} proficiency Proficiency value to use for the roll.
+ * @param {number} attribute Attribute value to use for the roll.
+ * @returns HTML containing the roll result.
+ */
 function skill(proficiency, attribute) {
   return proficiencyRoll(fh.bind(this), proficiency, attribute);
 }
 
+/**
+ * Evaluates a farhome skill to a farhome roll formula and is provided as a helper function to the template evaluator.
+ * @param {number} proficiency Proficiency value to use for the roll.
+ * @param {number} attribute Attribute value to use for the roll.
+ * @returns Farhome roll formula that can be used for generating rolls.
+ */
 function formula(proficiency, attribute) {
   return proficiencyRollFormula(proficiency, attribute);
 }
 
+/**
+ * Creates an embedded HTML string to indicate a given number of successes.
+ * @param {number} successCount The number of succeses to embed.
+ * @returns Embedded HTML string with the given number of successes.
+ */
 function success(successCount) {
   return `<div class='fh-successes' data-successes='${successCount}'></div>`;
 }
 
+/**
+ * Creates an embedded HTML string to indicate a given number of crits.
+ * @param {number} critCount The number of crits to embed.
+ * @returns Embedded HTML string with the given number of crits.
+ */
 function crit(critCount) {
   return `<div class='fh-crits' data-crits='${critCount}'></div>`;
 }
 
+/**
+ * Creates an embedded HTML string to indicate a given number of wounds.
+ * @param {number} woundCount The number of wounds to embed.
+ * @returns Embedded HTML string with the given number of wounds.
+ */
 function wound(woundCount) {
   return `<div class='fh-wounds' data-wounds='${woundCount}'></div>`;
 }
 
-// #todo Perhaps disallow hex and poison later
+/**
+ * Creates an embedded HTML string to indicate a given number of hexes.
+ * @param {number} hexCount The number of hexes to embed.
+ * @returns Embedded HTML string with the given number of hexes.
+ */
 function hex(hexCount) {
   return `<div class='fh-hex' data-hex='${hexCount}'></div>`;
 }
 
+/**
+ * Creates an embedded HTML string to indicate a given number of poisons.
+ * @param {number} poisonCount The number of poisons to embed.
+ * @returns Embedded HTML string with the given number of poisons.
+ */
 function poison(poisonCount) {
   return `<div class='fh-poison' data-poison='${poisonCount}'></div>`;
 }
