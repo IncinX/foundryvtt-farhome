@@ -1,34 +1,6 @@
 import { DicePool, dicePoolMonoid } from './roller-dice';
 import { combineAll } from './roller-util';
 
-function letterToRolls(letter, occurrences) {
-  if (letter === 'h') {
-    return new DicePool(occurrences, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-  } else if (letter === 's') {
-    return new DicePool(0, occurrences, 0, 0, 0, 0, 0, 0, 0, 0);
-  } else if (letter === 'e') {
-    return new DicePool(0, 0, occurrences, 0, 0, 0, 0, 0, 0, 0);
-  } else if (letter === 'n') {
-    return new DicePool(0, 0, 0, occurrences, 0, 0, 0, 0, 0, 0);
-  } else if (letter === 'b') {
-    return new DicePool(0, 0, 0, 0, occurrences, 0, 0, 0, 0, 0);
-  } else if (letter === 't') {
-    return new DicePool(0, 0, 0, 0, 0, occurrences, 0, 0, 0, 0);
-  } else if (letter === '+') {
-    return new DicePool(0, 0, 0, 0, 0, 0, occurrences, 0, 0, 0);
-  } else if (letter === 'D') {
-    return new DicePool(0, 0, 0, 0, 0, 0, occurrences, 0, 0, 0);
-  } else if (letter === 'd') {
-    return new DicePool(0, 0, 0, 0, 0, 0, 0, occurrences, 0, 0);
-  } else if (letter === 'g') {
-    return new DicePool(0, 0, 0, 0, 0, 0, 0, 0, occurrences, 0);
-  } else if (letter === 'w') {
-    return new DicePool(0, 0, 0, 0, 0, 0, 0, 0, 0, occurrences);
-  } else {
-    throw new Error(`Unknown letter ${letter}`);
-  }
-}
-
 export function parseFormula(formula, parsers) {
   const trimmedFormula = formula.replace(/\s+/g, '');
   const helpMessages = [];
@@ -53,29 +25,62 @@ function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
 
-export class DefaultSimpleParser {
+export class FHParser {
   letters = '';
   numbers = new Set();
 
-  constructor(alphabet, letterToRolls, rollValuesMonoid, letterExplanation) {
-    this.formulaRegex = new RegExp(`^(?:(?:[0-9]*)?[${escapeRegExp(alphabet)}])+$`);
+  constructor() {
+    this.alphabet = 'hsenbt+Ddgw';
+    this.formulaRegex = new RegExp(`^(?:(?:[0-9]*)?[${escapeRegExp(this.alphabet)}])+$`);
+    this.rollValuesMonoid = dicePoolMonoid;
+    this.letterExplanation = [
+      'hero',
+      'superior',
+      'enhanced',
+      'normal',
+      'bad',
+      'terrible',
+      'superior defense',
+      'superior defense',
+      'defense',
+      'guaranteed wound',
+      'wound',
+    ];
 
-    this.alphabet = alphabet;
-    this.letterToRolls = letterToRolls;
-    this.rollValuesMonoid = rollValuesMonoid;
-    this.letterExplanation = letterExplanation;
+    this.letters = this.alphabet.split('');
 
-    this.letters = alphabet.split('');
-    this.numbers.add('0');
-    this.numbers.add('1');
-    this.numbers.add('2');
-    this.numbers.add('3');
-    this.numbers.add('4');
-    this.numbers.add('5');
-    this.numbers.add('6');
-    this.numbers.add('7');
-    this.numbers.add('8');
-    this.numbers.add('9');
+    // Add the numbers 0-9 for multiplying dice
+    for (let i = 0; i < 10; i++) {
+      this.numbers.add(i.toString());
+    }
+  }
+
+  letterToRolls(letter, occurrences) {
+    if (letter === 'h') {
+      return new DicePool(occurrences, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    } else if (letter === 's') {
+      return new DicePool(0, occurrences, 0, 0, 0, 0, 0, 0, 0, 0);
+    } else if (letter === 'e') {
+      return new DicePool(0, 0, occurrences, 0, 0, 0, 0, 0, 0, 0);
+    } else if (letter === 'n') {
+      return new DicePool(0, 0, 0, occurrences, 0, 0, 0, 0, 0, 0);
+    } else if (letter === 'b') {
+      return new DicePool(0, 0, 0, 0, occurrences, 0, 0, 0, 0, 0);
+    } else if (letter === 't') {
+      return new DicePool(0, 0, 0, 0, 0, occurrences, 0, 0, 0, 0);
+    } else if (letter === '+') {
+      return new DicePool(0, 0, 0, 0, 0, 0, occurrences, 0, 0, 0);
+    } else if (letter === 'D') {
+      return new DicePool(0, 0, 0, 0, 0, 0, occurrences, 0, 0, 0);
+    } else if (letter === 'd') {
+      return new DicePool(0, 0, 0, 0, 0, 0, 0, occurrences, 0, 0);
+    } else if (letter === 'g') {
+      return new DicePool(0, 0, 0, 0, 0, 0, 0, 0, occurrences, 0);
+    } else if (letter === 'w') {
+      return new DicePool(0, 0, 0, 0, 0, 0, 0, 0, 0, occurrences);
+    } else {
+      throw new Error(`Unknown letter ${letter}`);
+    }
   }
 
   canParse(formula) {
@@ -109,24 +114,5 @@ export class DefaultSimpleParser {
     return `Any combination of the following letters: ${this.letters.join(
       ', ',
     )} (${mappings}). To roll multiple dice simply add multiple letters or prepend a number, e.g.: c3ba`;
-  }
-}
-
-export class FHParser extends DefaultSimpleParser {
-  // #todo Add support for capital letters (such as capital D for superior defense)
-  constructor() {
-    super('hsenbt+Ddgw', letterToRolls, dicePoolMonoid, [
-      'hero',
-      'superior',
-      'enhanced',
-      'normal',
-      'bad',
-      'terrible',
-      'superior defense',
-      'superior defense',
-      'defense',
-      'guaranteed wound',
-      'wound',
-    ]);
   }
 }
