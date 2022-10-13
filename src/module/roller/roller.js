@@ -5,6 +5,8 @@
 // #todo Rename file to just roller.js
 // #todo Remove mustache dependency here and in roll-templates.js
 // #todo Cleanup the import dependencies, avoid ciruclar dependencies
+// #todo Remove dice explosion below and anything else that deserves removal.
+// #todo Remove unncecessary classes and functions
 
 import Mustache from 'mustache';
 import { countMatches, combineAll, escapeHtml } from './roller-util';
@@ -198,12 +200,15 @@ export class ReRoll {
   }
 }
 
-export class Roller {
-  constructor(command, parsers, canKeep) {
+export class FHRoller {
+  constructor(rng, command) {
     this.command = command;
-    // #todo Some of this stuff can be greatly simplified if I remove the generic aspect of it like propagating the parsers
-    this.parsers = parsers;
-    this.canKeep = canKeep;
+
+    // #todo Parsers and canKeep are probably unnecessary now, remove.
+    this.parsers = [new FHParser()];
+    this.canKeep = true;
+
+    this.rng = rng;
   }
 
   handlesCommand(command) {
@@ -250,40 +255,6 @@ export class Roller {
       }
     });
     return this.formatRolls(reRolls.map((reRoll) => reRoll.roll));
-  }
-
-  /**
-   * Take the enum indices of a die and face and turn it into a roll
-   * @param die
-   * @param face
-   */
-  toRoll(die, face) {}
-
-  /**
-   * Roll a dice pool and return the result rolls
-   * @param dicePool
-   */
-  roll(dicePool) {}
-
-  /**
-   * Return a template that displays and explains the roll
-   * @param rolls
-   * @param flavorText an option description of the roll
-   */
-  formatRolls(rolls, flavorText) {}
-
-  /**
-   * Create a dice pool from an array of different dice
-   * @param dice
-   */
-  toDicePool(dice) {}
-}
-
-export class FHRoller extends Roller {
-  constructor(rng, command) {
-    super(command, [new FHParser()], false);
-
-    this.rng = rng;
   }
 
   roll(pool) {
