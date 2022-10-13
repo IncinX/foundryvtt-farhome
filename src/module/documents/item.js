@@ -2,7 +2,7 @@ import { evaluateTemplate } from '../core/template-evaluator';
 import { convertSpellLevelToManaCost } from '../core/mana';
 import { sendActorMessage } from '../core/chat';
 import { ChatRoller } from '../core/chat-roller';
-import { getRollSummaryData, getRollSummary } from '../roller/roller-system';
+import { getRollSummaryData, getRollSummary } from '../roller/roller';
 
 const MAX_SPELL_LEVEL = 10;
 

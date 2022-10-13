@@ -20,8 +20,7 @@ import { connectRulesImporterApp } from './apps/farhome-rules-importer-app';
 import { connectVetoolsMonsterImporterApp } from './apps/vetools-monsters-importer-app';
 
 import { secureRandomNumber } from './roller/roller-util';
-import { FHRoller } from './roller/roller-roll';
-import { FHRollSystem } from './roller/roller-system';
+import { FHRoller, connectRoller } from './roller/roller';
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
@@ -76,10 +75,6 @@ Hooks.once('init', async () => {
 });
 
 Hooks.on('init', () => {
-  // Register chat handler
-  // #todo Clean this up a bit later (moving to separate files that specifically handle the roll logic)
-  Hooks.on('chatMessage', FHRollSystem.diceRollerChatMessageHandler);
-
   // Register font here
   $('head').append('<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fondamento">');
 });
@@ -118,6 +113,7 @@ Hooks.once('setup', async () => {
 
 Hooks.once('ready', async () => {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
+  // #todo Move these to connect functions similar to below.
   Hooks.on('hotbarDrop', (_bar, data, slot) => createItemMacro(data, slot));
 });
 
@@ -127,10 +123,15 @@ Hooks.once('ready', async () => {
 
 Hooks.on('renderChatLog', (_app, html, _data) => {
   // #todo ChatRoller should probably be renamed to TemplateRoller
+  // #todo Move these to connect functions similar to below.
   FarhomeItem.subscribeToRenderChatLog(html);
   ChatRoller.subscribeToRenderChatLog(html);
-  FHRollSystem.subscribeToRenderChatLog(html);
 });
+
+/* -------------------------------------------- */
+/*  Connect Hooks to various sub-systems        */
+/* -------------------------------------------- */
+connectRoller();
 
 /* -------------------------------------------- */
 /*  Connect Sub-Applications                    */
