@@ -3,16 +3,14 @@
 ## P0
 
 - [ ] Use the renderTemplate command (as seen in [this article](https://foundryvtt.wiki/en/development/guides/creating-custom-dialog-windows)) to replace mustache rendering
-- [ ] For the roll summary (add text saying +1 from template or something)
 - [ ] Convert the skill roller to use a unified roll function that can support the new template roll features(use Mustache for now maybe).
+- [ ] For the roll summary (add text saying +1 from template or something)
 - [ ] Tweak coloring of messages to match the character sheets
 - [ ] Tweak size of icon on character sheets (but not on actor sheet)
 - [ ] Add support for poison/hex effects (and apply it to proficiency and template rolls)
 - [ ] Add support for new user query syntax {{}} in templates or allow a user input tab to items that allow for a customized query syntax, applying to a variable, response type, etc.
   - [ ] This is to support things that need a user response beyond just spell level
-- [ ] Make sure that Overswing is supported
 - [ ] Move todo list out to GitHub issues
-- [ ] Let the farhome players know that I can setup developer accounts for them that will run on a different port and allow open development
 - [ ] Add new templates for NPC's that do not add the description to the template by default.
 
 - [ ] MAJOR: Effects Update
@@ -30,12 +28,8 @@
 - [ ] Default values for token lighting
 - [ ] Try removing the bold from the text labels everywhere
 - [ ] Consider applying a blur and darkening effect to the farhome background
-- [ ] Add indicators in the summary for how much was added by bonus modifiers)
-- [ ] Cleanup integrated roller code (flatten and rename)
+- [ ] Add indicators in the summary for how much was added by bonus modifiers
 - [ ] Create clean infrastructure for creating new roll templates, re-rolling from templates, re-posting rolls from re-rolled templates. Document it in code.
-- [ ] Make system context obsolete. Add all current system functions to the local context.
-- [ ] Create macro to search/replace all character item templates to make deprecation of template stuff easier.
-- [ ] Change Mustache renderer to handlebars renderer
 - [ ] Upgrade FoundryVTT to the latest version (and verify that my system keeps working) - Do this on test server first after the new updates are out.
 
 ## P2

@@ -1,14 +1,6 @@
 import { sendActorMessage } from '../core/chat.js';
 import { onManageActiveEffect, prepareActiveEffectCategories } from '../core/effects.js';
 import { localizeObject } from '../core/localization.js';
-import {
-  getStrongestKey,
-  getDefaultRollTemplate,
-  getWeaponRollTemplate,
-  getArmorRollTemplate,
-  getSpellRollTemplate,
-  getManeuverRollTemplate,
-} from '../core/roll-templates.js';
 
 // #todo Add Poison/Hex icons later
 
@@ -266,8 +258,9 @@ export default class FarhomeActorSheet extends ActorSheet {
     const actorData = this.actor.data.data;
 
     if (type === 'armor') {
+      const rollTemplateHtml = await renderTemplate('systems/farhome/templates/roll-templates/armor-roll-template.hbs');
       itemData.data.rollTemplate = {
-        value: getArmorRollTemplate(),
+        value: rollTemplateHtml,
       };
     } else if (type === 'weapon' || type === 'maneuver') {
       const relevantWeaponAttributes = {
@@ -275,16 +268,24 @@ export default class FarhomeActorSheet extends ActorSheet {
         dex: actorData.attributes.dex,
       };
 
-      const strongestWeaponProficiency = getStrongestKey(actorData.proficiencies.weapons);
-      const strongestAttribute = getStrongestKey(relevantWeaponAttributes);
+      const strongestWeaponProficiency = FarhomeActorSheet._getStrongestKey(actorData.proficiencies.weapons);
+      const strongestAttribute = FarhomeActorSheet._getStrongestKey(relevantWeaponAttributes);
 
       if (type === 'weapon') {
+        const rollTemplateHtml = await renderTemplate('systems/farhome/templates/roll-templates/weapon-roll-template.hbs', {
+          strongestProf: `a.${strongestWeaponProficiency}`,
+          strongestAttr: `a.${strongestAttribute}`,
+        });
         itemData.data.rollTemplate = {
-          value: getWeaponRollTemplate(`a.${strongestWeaponProficiency}`, `a.${strongestAttribute}`),
+          value: rollTemplateHtml,
         };
       } else {
+        const rollTemplateHtml = await renderTemplate('systems/farhome/templates/roll-templates/maneuver-roll-template.hbs', {
+          strongestProf: `a.${strongestWeaponProficiency}`,
+          strongestAttr: `a.${strongestAttribute}`,
+        });
         itemData.data.rollTemplate = {
-          value: getManeuverRollTemplate(`a.${strongestWeaponProficiency}`, `a.${strongestAttribute}`),
+          value: rollTemplateHtml,
         };
       }
     } else if (type === 'spell') {
@@ -295,14 +296,22 @@ export default class FarhomeActorSheet extends ActorSheet {
         cha: actorData.attributes.cha,
       };
 
-      const strongestSpellProficiency = getStrongestKey(actorData.proficiencies.spells);
-      const strongestAttribute = getStrongestKey(relevantSpellAttributes);
+      const strongestSpellProficiency = FarhomeActorSheet._getStrongestKey(actorData.proficiencies.spells);
+      const strongestAttribute = FarhomeActorSheet._getStrongestKey(relevantSpellAttributes);
+
+      const rollTemplateHtml = await renderTemplate('systems/farhome/templates/roll-templates/spell-roll-template.hbs', {
+        strongestProf: `a.${strongestSpellProficiency}`,
+        strongestAttr: `a.${strongestAttribute}`,
+      });
+
       itemData.data.rollTemplate = {
-        value: getSpellRollTemplate(`a.${strongestSpellProficiency}`, `a.${strongestAttribute}`),
+        value: rollTemplateHtml,
       };
     } else {
+      const rollTemplateHtml = await renderTemplate('systems/farhome/templates/roll-templates/default-roll-template.hbs');
+
       itemData.data.rollTemplate = {
-        value: getDefaultRollTemplate(),
+        value: rollTemplateHtml,
       };
     }
 
@@ -417,5 +426,26 @@ export default class FarhomeActorSheet extends ActorSheet {
 
       return sendActorMessage(`<h1>${label}</h1>${roll}`);
     }
+  }
+
+  /**
+   * Gets the name of the key in an object that has the highest value.
+   * @param {Object} obj The object to search.
+   * @returns {string} The name of the key with the highest value.
+   * @private
+   */
+  static _getStrongestKey(obj) {
+    let strongestKey = null;
+    let strongestValue = -Infinity;
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        const value = obj[key].value;
+        if (value > strongestValue) {
+          strongestKey = key;
+          strongestValue = value;
+        }
+      }
+    }
+    return strongestKey;
   }
 }
