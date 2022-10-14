@@ -272,18 +272,24 @@ export default class FarhomeActorSheet extends ActorSheet {
       const strongestAttribute = FarhomeActorSheet._getStrongestKey(relevantWeaponAttributes);
 
       if (type === 'weapon') {
-        const rollTemplateHtml = await renderTemplate('systems/farhome/templates/roll-templates/weapon-roll-template.hbs', {
-          strongestProf: `a.${strongestWeaponProficiency}`,
-          strongestAttr: `a.${strongestAttribute}`,
-        });
+        const rollTemplateHtml = await renderTemplate(
+          'systems/farhome/templates/roll-templates/weapon-roll-template.hbs',
+          {
+            strongestProf: `a.${strongestWeaponProficiency}`,
+            strongestAttr: `a.${strongestAttribute}`,
+          },
+        );
         itemData.data.rollTemplate = {
           value: rollTemplateHtml,
         };
       } else {
-        const rollTemplateHtml = await renderTemplate('systems/farhome/templates/roll-templates/maneuver-roll-template.hbs', {
-          strongestProf: `a.${strongestWeaponProficiency}`,
-          strongestAttr: `a.${strongestAttribute}`,
-        });
+        const rollTemplateHtml = await renderTemplate(
+          'systems/farhome/templates/roll-templates/maneuver-roll-template.hbs',
+          {
+            strongestProf: `a.${strongestWeaponProficiency}`,
+            strongestAttr: `a.${strongestAttribute}`,
+          },
+        );
         itemData.data.rollTemplate = {
           value: rollTemplateHtml,
         };
@@ -299,16 +305,21 @@ export default class FarhomeActorSheet extends ActorSheet {
       const strongestSpellProficiency = FarhomeActorSheet._getStrongestKey(actorData.proficiencies.spells);
       const strongestAttribute = FarhomeActorSheet._getStrongestKey(relevantSpellAttributes);
 
-      const rollTemplateHtml = await renderTemplate('systems/farhome/templates/roll-templates/spell-roll-template.hbs', {
-        strongestProf: `a.${strongestSpellProficiency}`,
-        strongestAttr: `a.${strongestAttribute}`,
-      });
+      const rollTemplateHtml = await renderTemplate(
+        'systems/farhome/templates/roll-templates/spell-roll-template.hbs',
+        {
+          strongestProf: `a.${strongestSpellProficiency}`,
+          strongestAttr: `a.${strongestAttribute}`,
+        },
+      );
 
       itemData.data.rollTemplate = {
         value: rollTemplateHtml,
       };
     } else {
-      const rollTemplateHtml = await renderTemplate('systems/farhome/templates/roll-templates/default-roll-template.hbs');
+      const rollTemplateHtml = await renderTemplate(
+        'systems/farhome/templates/roll-templates/default-roll-template.hbs',
+      );
 
       itemData.data.rollTemplate = {
         value: rollTemplateHtml,

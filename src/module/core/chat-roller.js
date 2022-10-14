@@ -2,7 +2,7 @@ import { sendActorMessage } from './chat';
 import { getRollSummaryData, getRollSummary, parseRoll } from '../roller/roller';
 
 // #todo Have connection and private callbacks similar to roller.js, that should simplify things since some things can be a classless module.
-// #todo Also consider moving a lot of this logic into roller-chat or something.
+// #todo Also consider moving a lot of this logic into roller.js or roller-chat.js or something.
 
 export class ChatRoller {
   static chatRerollClass = 'fh-reroll';

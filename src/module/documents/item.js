@@ -58,6 +58,7 @@ export class FarhomeItem extends Item {
    * @private
    */
   async _spellLevelDialog() {
+    // #todo Consider using renderTemplate instead of embedded HTML here and everywhere else that does so.
     const itemContext = this.data;
     const actorContext = this.actor ? this.actor.data : null;
     const currentMana = actorContext ? actorContext.data.features.mana.value : 0;
@@ -127,6 +128,8 @@ export class FarhomeItem extends Item {
     // Evaluate the active effects for the character (ie/ hex, poison, etc)
     // #todo Fill out active effects area
     let activeEffects = ``;
+
+    // #todo Consider using renderTemplate chat templates and partials instead of embedded HTML here and everywhere else that does so.
 
     let messageHtmlString = `
       <div class='fh-roll'>
