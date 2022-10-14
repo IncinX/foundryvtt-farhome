@@ -1,7 +1,7 @@
 import { evaluateTemplate as evaluateRollTemplate } from '../core/template-evaluator';
 import { convertSpellLevelToManaCost } from '../core/mana';
 import { sendActorMessage } from '../core/chat';
-import { getRollSummaryData, getRollSummary } from '../roller/roller';
+import { sendChatRoll } from '../roller/roller';
 
 const MAX_SPELL_LEVEL = 10;
 
@@ -118,19 +118,12 @@ export class FarhomeItem extends Item {
       ...extraItemContext,
     };
 
-    // #todo #important Centralize the base roll system, the actor skill rolls and item template rolls
-    // #todo Some handlebars or Mustache would make all of this cleaner.
-
     // Evaluate the farhome template text with the given actor and item context.
     const evaluatedRollHtml = evaluateRollTemplate(itemContext.data.rollTemplate.value, actorContext, superItemContext);
 
     // Evaluate the active effects for the character (ie/ hex, poison, etc)
     // #todo Fill out active effects area
     const activeEffectsHtml = ``;
-
-    // Evaluate the roll summary if it is present.
-    const rollSummaryData = getRollSummaryData(evaluatedRollHtml);
-    const rollSummaryHtml = rollSummaryData.containsRollData ? getRollSummary(rollSummaryData) : undefined;
 
     // Evaluate mana data if it is a spell
     let manaData = undefined;
@@ -143,16 +136,8 @@ export class FarhomeItem extends Item {
       };
     }
 
-    // Render the roll handlebar template
-    const messageHtmlString = renderTemplate('systems/farhome/templates/chat/chat-roll.hbs', {
-      evaluatedRollHtml: evaluatedRollHtml,
-      activeEffectsHtml: activeEffectsHtml,
-      rollSummaryHtml: rollSummaryHtml,
-      manaData: manaData,
-    });
-
-    // Send the evaluatedTemplate to chat.
-    sendActorMessage(messageHtmlString);
+    // Send the chat roll with the appropriate data
+    sendChatRoll(evaluateRollHtml, activeEffectsHtml, manaData);
   }
 }
 
