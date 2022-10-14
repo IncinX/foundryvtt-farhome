@@ -3,11 +3,10 @@ import { preloadTemplates } from './preload-templates';
 
 import { FARHOME } from './core/config';
 import { createItemMacro, rollItemMacro } from './core/macros';
-import { ChatRoller } from './core/chat-roller';
 import { _getInitiativeFormula } from './core/initiative';
 
 import { FarhomeActor } from './documents/actor';
-import { FarhomeItem } from './documents/item';
+import { FarhomeItem, connectItemHooks } from './documents/item';
 import FarhomeItemSheet from './sheets/item-sheet';
 import FarhomeActorSheet from './sheets/actor-sheet';
 
@@ -16,11 +15,10 @@ import {
   createCompendiumFromVetoolsBeastiary,
   VetoolsMonsterImportConfig,
 } from './importers/vetools-monsters-importer';
-import { connectRulesImporterApp } from './apps/farhome-rules-importer-app';
-import { connectVetoolsMonsterImporterApp } from './apps/vetools-monsters-importer-app';
+import { connectRulesImporterApp as connectRulesImporterAppHooks } from './apps/farhome-rules-importer-app';
+import { connectVetoolsMonsterImporterApp as connectVetoolsMonsterImporterAppHooks } from './apps/vetools-monsters-importer-app';
 
-import { secureRandomNumber } from './roller/roller-util';
-import { FHRoller, connectRoller } from './roller/roller';
+import { FHRoller, connectRoller as connectRollerHooks } from './roller/roller';
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
@@ -30,7 +28,7 @@ import { FHRoller, connectRoller } from './roller/roller';
 Hooks.once('init', async () => {
   console.log('Farhome | Initializing farhome');
 
-  const roller = new FHRoller(secureRandomNumber, 'fh');
+  const roller = new FHRoller();
 
   game.farhome = {
     // Centralized roller for global use
@@ -118,24 +116,9 @@ Hooks.once('ready', async () => {
 });
 
 /* -------------------------------------------- */
-/*  Render Chat Log Hook                        */
+/*  Connect Hooks to sub-systems                */
 /* -------------------------------------------- */
-
-Hooks.on('renderChatLog', (_app, html, _data) => {
-  // #todo ChatRoller should probably be renamed to TemplateRoller
-  // #todo Move these to connect functions similar to below.
-  FarhomeItem.subscribeToRenderChatLog(html);
-  ChatRoller.subscribeToRenderChatLog(html);
-});
-
-/* -------------------------------------------- */
-/*  Connect Hooks to various sub-systems        */
-/* -------------------------------------------- */
-connectRoller();
-
-/* -------------------------------------------- */
-/*  Connect Sub-Applications                    */
-/* -------------------------------------------- */
-
-connectRulesImporterApp();
-connectVetoolsMonsterImporterApp();
+connectRollerHooks();
+connectItemHooks();
+connectRulesImporterAppHooks();
+connectVetoolsMonsterImporterAppHooks();

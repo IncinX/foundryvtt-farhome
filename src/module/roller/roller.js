@@ -5,7 +5,7 @@
 // #todo Remove unncecessary classes and functions
 
 import Mustache from 'mustache';
-import { countMatches, combineAll, escapeHtml } from './roller-util';
+import { secureRandomNumber, countMatches, combineAll, escapeHtml } from './roller-util';
 import { rollTemplate, baseTemplate } from './roller-templates';
 import { DieRollView } from './roller-view';
 import {
@@ -28,19 +28,73 @@ import {
 } from './roller-dice';
 import { summaryTemplate } from './roller-templates';
 import { FHParser, parseFormula } from './roller-parser';
+import { sendActorMessage } from '../core/chat';
 
 /**
  * Establish hooks for the dice roller to interact with the chat.
  */
 export function connectRoller() {
-  // Register chat handlers
+  // Register /fh message handler
   Hooks.on('init', () => {
     Hooks.on('chatMessage', _diceRollerChatMessageHandler);
   });
 
+  // #todo This is the old re-roll functionality, remove it when the new one is fully integrated.
   Hooks.on('renderChatLog', (_app, html, _data) => {
     html.on('click', '.fh-roller-reroll', _diceRollerButtonHandler);
   });
+
+  // Handle re-roll button click
+  Hooks.on('renderChatMessage', (_message, html, _data) => {
+    html.on('click', `.fh-reroll`, _handleReroll);
+  });
+}
+
+/**
+ * Handle click message generated from the "Re-roll" button in chat.
+ * @param {Event} event   The originating click event
+ * @private
+ */
+async function _handleReroll(event) {
+  event.preventDefault();
+
+  // #todo It may be insufficient to just use button.parentElement.parentElement... I think I need to traverse up the DOM tree until I find the main content element
+
+  const button = event.target;
+  const originalMessageElement = button.parentElement.parentElement;
+  const messageElementClone = originalMessageElement.cloneNode(true);
+  const messageQuery = $(messageElementClone);
+  const rollElements = messageQuery.find('input');
+
+  // Iterate through the inputs to find the dice to re-roll.
+  let pendingReRollElements = [];
+
+  rollElements.each((_index, element) => {
+    if (element.checked) {
+      element.disabled = true;
+      pendingReRollElements.push(element);
+    }
+  });
+
+  // Do the re-roll after the parsing so it doesn't interfere with the parsing.
+  pendingReRollElements.forEach((pendingReRollElement) => {
+    const rollData = parseRoll(pendingReRollElement);
+    const newRoll = game.farhome.roller.reRoll([], [rollData])[0];
+    const rollHtml = game.farhome.roller.formatRoll(newRoll);
+    pendingReRollElement.insertAdjacentHTML('afterend', rollHtml);
+  });
+
+  // Need to re-compute the summary and re-post under the fh-roll-summary class
+  const newRollSummaryData = getRollSummaryData(messageQuery);
+  const newRollSummary = getRollSummary(newRollSummaryData);
+  let rollSummaryElement = $(messageQuery).find('.fh-roll-summary');
+  rollSummaryElement.empty();
+  rollSummaryElement.append(newRollSummary);
+
+  // #todo This will definitely need to be integrated with the main rolling system so only one function with the up-to-date functionality
+  //       for both templated and non-templated rolls.
+
+  sendActorMessage(messageQuery.html());
 }
 
 /**
@@ -76,13 +130,21 @@ function _diceRollerButtonHandler(event) {
   const selectedRolls = rolls.filter((roll) => roll.checked);
 
   if (selectedRolls.length > 0) {
+    // Re-roll the selected rolls
     const parsedRolls = rolls.map((rollInput) => {
       const roll = parseRoll(rollInput);
       return new ReRoll(roll, rollInput.checked);
     });
     const result = game.farhome.roller.formatReRolls(parsedRolls);
-    _renderNewRoll(result);
 
+    // Create a new chat messages with the rerolled dice
+    const chatData = {
+      user: game.user.id,
+      content: result,
+    };
+    ChatMessage.create(chatData, { displaySheet: false });
+
+    // Uncheck the original rolls
     selectedRolls.forEach((elem) => (elem.checked = false));
   }
 }
@@ -96,14 +158,6 @@ export function parseRoll(input) {
   const die = parseInt(input.dataset.die ?? '0', 10);
   const face = parseInt(input.dataset.face ?? '0', 10);
   return new Roll(die, face);
-}
-
-function _renderNewRoll(rolls) {
-  const chatData = {
-    user: game.user.id,
-    content: rolls,
-  };
-  ChatMessage.create(chatData, { displaySheet: false });
 }
 
 /**
@@ -198,14 +252,13 @@ export function combineRolls(rolls, rollToRollResult, rollValuesMonoid) {
 }
 
 export class Roll {
-  constructor(die, face, wasReRoll = false) {
+  constructor(die, face) {
     this.die = die;
     this.face = face;
-    this.wasReRoll = wasReRoll;
   }
 
   toString() {
-    return `die: ${this.die}, face: ${this.face}, wasReRoll: ${this.wasReRoll}`;
+    return `die: ${this.die}, face: ${this.face}`;
   }
 }
 
@@ -217,14 +270,14 @@ export class ReRoll {
 }
 
 export class FHRoller {
-  constructor(rng, command) {
-    this.command = command;
+  constructor(rng) {
+    this.command = 'fh';
 
     // #todo Parsers and canKeep are probably unnecessary now, remove.
     this.parsers = [new FHParser()];
     this.canKeep = true;
 
-    this.rng = rng;
+    this.rng = secureRandomNumber;
   }
 
   handlesCommand(command) {
