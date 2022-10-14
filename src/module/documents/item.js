@@ -137,7 +137,7 @@ export class FarhomeItem extends Item {
     }
 
     // Send the chat roll with the appropriate data
-    sendChatRoll(evaluateRollHtml, activeEffectsHtml, manaData);
+    sendChatRoll(evaluatedRollHtml, activeEffectsHtml, manaData);
   }
 }
 
