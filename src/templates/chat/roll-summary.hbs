@@ -1,11 +1,9 @@
 <div class="fh-roll-summary">
   <ul>
-  {{#results}}
       <li>Successes: {{successes}}</li>
       <li>Criticals: {{crits}}</li>
-      {{#wounds}}
+      {{#if wounds}}
       <li>Wounds: {{wounds}}</li>
-      {{/wounds}}
-  {{/results}}
+      {{/if}}
   </ul>
 </div>
