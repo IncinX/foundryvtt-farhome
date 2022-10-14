@@ -2,8 +2,6 @@
 
 ## P0
 
-- [ ] Use the renderTemplate command (as seen in [this article](https://foundryvtt.wiki/en/development/guides/creating-custom-dialog-windows)) to replace mustache rendering
-- [ ] Convert the skill roller to use a unified roll function that can support the new template roll features(use Mustache for now maybe).
 - [ ] For the roll summary (add text saying +1 from template or something)
 - [ ] Tweak coloring of messages to match the character sheets
 - [ ] Tweak size of icon on character sheets (but not on actor sheet)

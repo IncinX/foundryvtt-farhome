@@ -3,7 +3,7 @@ import { preloadTemplates } from './preload-templates';
 
 import { FARHOME } from './core/config';
 import { createItemMacro, rollItemMacro } from './core/macros';
-import { _getInitiativeFormula } from './core/initiative';
+import { getInitiativeFormula } from './core/initiative';
 
 import { FarhomeActor } from './documents/actor';
 import { FarhomeItem, connectItemHooks } from './documents/item';
@@ -53,7 +53,7 @@ Hooks.once('init', async () => {
 
   // Configure the initiative formula
   CONFIG.Combat.initiative.formula = '';
-  Combatant.prototype._getInitiativeFormula = _getInitiativeFormula;
+  Combatant.prototype._getInitiativeFormula = getInitiativeFormula;
 
   // Register custom system settings
   registerSettings();

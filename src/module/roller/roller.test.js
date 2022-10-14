@@ -1,6 +1,8 @@
+// #todo Come up with more tests for functions in roller since it has changed a lot from when this was written
+
 import { makeRng } from './roller-util';
-import { Dice, DicePool, Faces, interpretResult } from './roller-dice';
-import { Roll, FHRoller } from './roller';
+import { Dice, DicePool, Faces } from './roller-dice';
+import { FHRoller } from './roller';
 
 // #todo Come up with a way to just roll all dice and test the distributions
 
@@ -9,18 +11,18 @@ test('should react to fh command', () => {
   expect(fhRoller.handlesCommand('/fh ')).toBe(true);
 });
 
-test('should roll a hero success', () => {
+test('should roll a hero success', async () => {
   const fhRoller = new FHRoller(makeRng(0));
-  const result = fhRoller.roll(new DicePool(1, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+  const result = await fhRoller.evaluateRoll(new DicePool(1, 0, 0, 0, 0, 0, 0, 0, 0, 0));
 
   expect(result.length).toBe(1);
   expect(result[0].die).toBe(Dice.HERO);
   expect(result[0].face).toBe(Faces.SUCCESS);
 });
 
-test('should roll one of each dice with rng 0', () => {
+test('should roll one of each dice with rng 0', async () => {
   const fhRoller = new FHRoller(makeRng(...Array(10).fill(0)));
-  const result = fhRoller.roll(new DicePool(...Array(10).fill(1)));
+  const result = await fhRoller.evaluateRoll(new DicePool(...Array(10).fill(1)));
 
   expect(result.length).toBe(10);
 
@@ -55,9 +57,9 @@ test('should roll one of each dice with rng 0', () => {
   expect(result[9].face).toBe(Faces.WOUND);
 });
 
-test('should roll one of each dice with rng 1', () => {
+test('should roll one of each dice with rng 1', async () => {
   const fhRoller = new FHRoller(makeRng(...Array(10).fill(1)));
-  const result = fhRoller.roll(new DicePool(...Array(10).fill(1)));
+  const result = await fhRoller.evaluateRoll(new DicePool(...Array(10).fill(1)));
 
   expect(result.length).toBe(10);
 
@@ -92,9 +94,9 @@ test('should roll one of each dice with rng 1', () => {
   expect(result[9].face).toBe(Faces.WOUND);
 });
 
-test('should roll one of each dice with rng 2', () => {
+test('should roll one of each dice with rng 2', async () => {
   const fhRoller = new FHRoller(makeRng(...Array(10).fill(2)));
-  const result = fhRoller.roll(new DicePool(...Array(10).fill(1)));
+  const result = await fhRoller.evaluateRoll(new DicePool(...Array(10).fill(1)));
 
   expect(result.length).toBe(10);
 
@@ -129,9 +131,9 @@ test('should roll one of each dice with rng 2', () => {
   expect(result[9].face).toBe(Faces.WOUND);
 });
 
-test('should roll one of each dice with rng 3', () => {
+test('should roll one of each dice with rng 3', async () => {
   const fhRoller = new FHRoller(makeRng(...Array(10).fill(3)));
-  const result = fhRoller.roll(new DicePool(...Array(10).fill(1)));
+  const result = await fhRoller.evaluateRoll(new DicePool(...Array(10).fill(1)));
 
   expect(result.length).toBe(10);
 
@@ -166,9 +168,9 @@ test('should roll one of each dice with rng 3', () => {
   expect(result[9].face).toBe(Faces.BLANK);
 });
 
-test('should roll one of each dice with rng 4', () => {
+test('should roll one of each dice with rng 4', async () => {
   const fhRoller = new FHRoller(makeRng(...Array(10).fill(4)));
-  const result = fhRoller.roll(new DicePool(...Array(10).fill(1)));
+  const result = await fhRoller.evaluateRoll(new DicePool(...Array(10).fill(1)));
 
   expect(result.length).toBe(10);
 
@@ -203,9 +205,9 @@ test('should roll one of each dice with rng 4', () => {
   expect(result[9].face).toBe(Faces.BLANK);
 });
 
-test('should roll one of each dice with rng 5', () => {
+test('should roll one of each dice with rng 5', async () => {
   const fhRoller = new FHRoller(makeRng(...Array(10).fill(5)));
-  const result = fhRoller.roll(new DicePool(...Array(10).fill(1)));
+  const result = await fhRoller.evaluateRoll(new DicePool(...Array(10).fill(1)));
 
   expect(result.length).toBe(10);
 
@@ -238,30 +240,4 @@ test('should roll one of each dice with rng 5', () => {
 
   expect(result[9].die).toBe(Dice.WOUND);
   expect(result[9].face).toBe(Faces.BLANK);
-});
-
-// #todo Dupe the above for different rolls 3,4,5
-
-test('should count results', () => {
-  // Roll max on every die
-  const fhRoller = new FHRoller(makeRng(5, 5, 5, 5, 0, 0, 5, 5, 0, 0), '');
-  const result = fhRoller.roll(new DicePool(1, 1, 1, 1, 1, 1, 1, 1, 1, 1));
-  const count = interpretResult(fhRoller.combineRolls(result));
-
-  expect(count.successes).toBe(7);
-  expect(count.crits).toBe(3);
-  expect(count.wounds).toBe(2);
-});
-
-test('it should re-roll a result', () => {
-  const keptDice = [new Roll(Dice.SUPERIOR, Faces.DOUBLE_SUCCESS)];
-  const reRollDice = [new Roll(Dice.ENHANCED, Faces.BLANK)];
-  const fhRoller = new FHRoller(makeRng(5), '');
-  const result = fhRoller.reRoll(keptDice, reRollDice);
-
-  expect(result.length).toBe(2);
-  expect(result[0].die).toBe(Dice.SUPERIOR);
-  expect(result[0].face).toBe(Faces.DOUBLE_SUCCESS);
-  expect(result[1].die).toBe(Dice.ENHANCED);
-  expect(result[1].face).toBe(Faces.CRITICAL_SUCCESS);
 });

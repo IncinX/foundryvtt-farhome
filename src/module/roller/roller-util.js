@@ -1,3 +1,5 @@
+// #todo Should add some simple tests for this file
+
 export function secureRandomNumber(zeroUpToExclusive) {
   const randomValue = window.crypto.getRandomValues(new Uint32Array(1))[0];
   return Math.floor((randomValue / 2 ** 32) * zeroUpToExclusive);

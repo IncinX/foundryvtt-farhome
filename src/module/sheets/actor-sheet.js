@@ -1,4 +1,3 @@
-import { sendActorMessage } from '../core/chat.js';
 import { onManageActiveEffect, prepareActiveEffectCategories } from '../core/effects.js';
 import { localizeObject } from '../core/localization.js';
 import { sendChatRoll } from '../roller/roller.js';
@@ -437,13 +436,10 @@ export default class FarhomeActorSheet extends ActorSheet {
       const rollHtml = game.farhome.roller.rollFormula(dataset.roll);
 
       // Render the skill using the header-roll template
-      const evaluatedRollHtml = await renderTemplate(
-        'systems/farhome/templates/chat/header-roll.hbs',
-        {
-          label: label,
-          roll: rollHtml,
-        },
-      );
+      const evaluatedRollHtml = await renderTemplate('systems/farhome/templates/chat/header-roll.hbs', {
+        label: label,
+        roll: rollHtml,
+      });
 
       // Send the chat roll for display (along with summary calculation, etc.)
       return sendChatRoll(evaluatedRollHtml);

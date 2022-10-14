@@ -8,7 +8,7 @@ import { sendActorMessage } from './chat';
  * See Combat._getInitiativeFormula for more detail.
  * @returns {string}  Final initiative formula for the actor.
  */
-export const _getInitiativeFormula = function () {
+export async function getInitiativeFormula() {
   const actor = this.actor;
   if (!actor) return '0';
 
@@ -18,11 +18,11 @@ export const _getInitiativeFormula = function () {
   const parsedFormula = game.farhome.roller.parsers[0].parse(rollFormula);
   const rolls = game.farhome.roller.roll(parsedFormula);
   const rollValues = game.farhome.roller.combineRolls(rolls);
-  const formattedRoll = game.farhome.roller.formatRolls(rolls, null, false, false);
+  const formattedRoll = await game.farhome.roller.formatRolls(rolls, null, false, false);
 
   sendActorMessage(`<h1>Initiative</h1>${formattedRoll}`);
 
   let initiativeValue = rollValues.successes + data.attributes.dex.value / 10.0;
 
   return `${initiativeValue}`;
-};
+}
