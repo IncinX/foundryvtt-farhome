@@ -51,13 +51,7 @@ export function connectRoller() {
 function _rollerChatMessageHandler(_chatLog, messageText, _data) {
   if (messageText !== undefined) {
     if (game.farhome.roller.handlesCommand(messageText)) {
-      game.farhome.roller.processRollCommand(messageText).then((rollHtml) => {
-        const chatData = {
-          user: game.user.id,
-          content: rollHtml,
-        };
-        ChatMessage.create(chatData, {});
-      });
+      game.farhome.roller.processRollCommand(messageText).then(sendChatRoll);
       return false;
     }
   }
@@ -81,22 +75,22 @@ async function _handleReroll(event) {
   const rollElements = messageQuery.find('input');
 
   // Iterate through the inputs to find the dice to re-roll.
-  let pendingReRollElements = [];
+  let pendingRerollElements = [];
 
   rollElements.each((_index, element) => {
     if (element.checked) {
       element.disabled = true;
-      pendingReRollElements.push(element);
+      pendingRerollElements.push(element);
     }
   });
 
   // Do the re-roll after the parsing so it doesn't interfere with the parsing.
-  pendingReRollElements.forEach((pendingReRollElement) => {
-    const rollData = _parseRoll(pendingReRollElement);
-    const newRoll = game.farhome.roller.reRoll([], [rollData])[0];
-    const rollHtml = game.farhome.roller.formatRoll(newRoll);
-    pendingReRollElement.insertAdjacentHTML('afterend', rollHtml);
-  });
+  for (pendingRerollElement of pendingRerollElements) {
+    const rollData = _parseRoll(pendingRerollElement);
+    const newRoll = await game.farhome.roller.evaluateReroll([], [rollData])[0];
+    const rollHtml = await game.farhome.roller.formatRoll(newRoll);
+    pendingRerollElement.insertAdjacentHTML('afterend', rollHtml);
+  }
 
   // Need to re-compute the summary and re-post under the fh-roll-summary class
   const newRollSummaryData = _getRollSummaryData(messageQuery);
@@ -109,39 +103,6 @@ async function _handleReroll(event) {
   //       for both templated and non-templated rolls.
 
   sendActorMessage(messageQuery.html());
-}
-
-/**
- * Handle the reroll button click event.
- * @param {Event} event The originating click event
- * @private
- */
-async function _rollerButtonHandler(event) {
-  event.preventDefault();
-
-  const button = event.target;
-  const form = button.parentElement;
-  const rolls = Array.from(form.querySelectorAll('input'));
-  const selectedRolls = rolls.filter((roll) => roll.checked);
-
-  if (selectedRolls.length > 0) {
-    // Re-roll the selected rolls
-    const parsedRolls = rolls.map((rollInput) => {
-      const roll = _parseRoll(rollInput);
-      return new ReRoll(roll, rollInput.checked);
-    });
-    const result = await game.farhome.roller.formatReRolls(parsedRolls);
-
-    // Create a new chat messages with the rerolled dice
-    const chatData = {
-      user: game.user.id,
-      content: result,
-    };
-    ChatMessage.create(chatData, { displaySheet: false });
-
-    // Uncheck the original rolls
-    selectedRolls.forEach((elem) => (elem.checked = false));
-  }
 }
 
 /**

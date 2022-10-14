@@ -13,7 +13,7 @@ test('should react to fh command', () => {
 
 test('should roll a hero success', async () => {
   const fhRoller = new FHRoller(makeRng(0));
-  const result = await fhRoller.evaluateRoll(new DicePool(1, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+  const result = await fhRoller.evaluateRolls(new DicePool(1, 0, 0, 0, 0, 0, 0, 0, 0, 0));
 
   expect(result.length).toBe(1);
   expect(result[0].die).toBe(Dice.HERO);
@@ -22,7 +22,7 @@ test('should roll a hero success', async () => {
 
 test('should roll one of each dice with rng 0', async () => {
   const fhRoller = new FHRoller(makeRng(...Array(10).fill(0)));
-  const result = await fhRoller.evaluateRoll(new DicePool(...Array(10).fill(1)));
+  const result = await fhRoller.evaluateRolls(new DicePool(...Array(10).fill(1)));
 
   expect(result.length).toBe(10);
 
@@ -59,7 +59,7 @@ test('should roll one of each dice with rng 0', async () => {
 
 test('should roll one of each dice with rng 1', async () => {
   const fhRoller = new FHRoller(makeRng(...Array(10).fill(1)));
-  const result = await fhRoller.evaluateRoll(new DicePool(...Array(10).fill(1)));
+  const result = await fhRoller.evaluateRolls(new DicePool(...Array(10).fill(1)));
 
   expect(result.length).toBe(10);
 
@@ -96,7 +96,7 @@ test('should roll one of each dice with rng 1', async () => {
 
 test('should roll one of each dice with rng 2', async () => {
   const fhRoller = new FHRoller(makeRng(...Array(10).fill(2)));
-  const result = await fhRoller.evaluateRoll(new DicePool(...Array(10).fill(1)));
+  const result = await fhRoller.evaluateRolls(new DicePool(...Array(10).fill(1)));
 
   expect(result.length).toBe(10);
 
@@ -133,7 +133,7 @@ test('should roll one of each dice with rng 2', async () => {
 
 test('should roll one of each dice with rng 3', async () => {
   const fhRoller = new FHRoller(makeRng(...Array(10).fill(3)));
-  const result = await fhRoller.evaluateRoll(new DicePool(...Array(10).fill(1)));
+  const result = await fhRoller.evaluateRolls(new DicePool(...Array(10).fill(1)));
 
   expect(result.length).toBe(10);
 
@@ -170,7 +170,7 @@ test('should roll one of each dice with rng 3', async () => {
 
 test('should roll one of each dice with rng 4', async () => {
   const fhRoller = new FHRoller(makeRng(...Array(10).fill(4)));
-  const result = await fhRoller.evaluateRoll(new DicePool(...Array(10).fill(1)));
+  const result = await fhRoller.evaluateRolls(new DicePool(...Array(10).fill(1)));
 
   expect(result.length).toBe(10);
 
@@ -207,7 +207,7 @@ test('should roll one of each dice with rng 4', async () => {
 
 test('should roll one of each dice with rng 5', async () => {
   const fhRoller = new FHRoller(makeRng(...Array(10).fill(5)));
-  const result = await fhRoller.evaluateRoll(new DicePool(...Array(10).fill(1)));
+  const result = await fhRoller.evaluateRolls(new DicePool(...Array(10).fill(1)));
 
   expect(result.length).toBe(10);
 
