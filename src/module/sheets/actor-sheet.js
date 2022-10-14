@@ -1,6 +1,7 @@
 import { sendActorMessage } from '../core/chat.js';
 import { onManageActiveEffect, prepareActiveEffectCategories } from '../core/effects.js';
 import { localizeObject } from '../core/localization.js';
+import { sendChatRoll } from '../roller/roller.js';
 
 // #todo Add Poison/Hex icons later
 
@@ -416,7 +417,7 @@ export default class FarhomeActorSheet extends ActorSheet {
    * @param {Event} event   The originating click event
    * @private
    */
-  _onRoll(event) {
+  async _onRoll(event) {
     event.preventDefault();
     const element = event.currentTarget;
     const dataset = element.dataset;
@@ -432,10 +433,20 @@ export default class FarhomeActorSheet extends ActorSheet {
 
     // Handle rolls that supply the formula directly.
     if (dataset.roll) {
-      let label = dataset.label ?? '';
-      let roll = game.farhome.roller.rollFormula(dataset.roll);
+      const label = dataset.label ?? '';
+      const rollHtml = game.farhome.roller.rollFormula(dataset.roll);
 
-      return sendActorMessage(`<h1>${label}</h1>${roll}`);
+      // Render the skill using the header-roll template
+      const evaluatedRollHtml = await renderTemplate(
+        'systems/farhome/templates/chat/header-roll.hbs',
+        {
+          label: label,
+          roll: rollHtml,
+        },
+      );
+
+      // Send the chat roll for display (along with summary calculation, etc.)
+      return sendChatRoll(evaluatedRollHtml);
     }
   }
 

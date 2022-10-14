@@ -235,7 +235,7 @@ export function _getRollSummary(rollSummaryData) {
  * @param {String} activeEffectsHtml HTML string containing the effect elements like hex and poison.
  * @param {Object} manaData Object containing the required data to spend mana data.
  */
-export async function sendChatRoll(evaluatedRollHtml, activeEffectsHtml, manaData = undefined) {
+export async function sendChatRoll(evaluatedRollHtml, activeEffectsHtml = '', manaData = undefined) {
   // Evaluate the roll summary if it is present.
   const rollSummaryData = _getRollSummaryData(evaluatedRollHtml);
   const rollSummaryHtml = rollSummaryData.containsRollData ? _getRollSummary(rollSummaryData) : undefined;
