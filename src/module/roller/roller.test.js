@@ -2,7 +2,7 @@
 
 import { makeRng } from './roller-util';
 import { Dice, DicePool, Faces } from './roller-dice';
-import { FHRoller } from './roller';
+import { Roll, FHRoller } from './roller';
 
 // #todo Come up with a way to just roll all dice and test the distributions
 
@@ -240,4 +240,17 @@ test('should roll one of each dice with rng 5', async () => {
 
   expect(result[9].die).toBe(Dice.WOUND);
   expect(result[9].face).toBe(Faces.BLANK);
+});
+
+test('it should re-roll a result', async () => {
+  const keptDice = [new Roll(Dice.SUPERIOR, Faces.DOUBLE_SUCCESS)];
+  const reRollDice = [new Roll(Dice.ENHANCED, Faces.BLANK)];
+  const fhRoller = new FHRoller(makeRng(5), '');
+  const result = await fhRoller.evaluateRerolls(keptDice, reRollDice);
+
+  expect(result.length).toBe(2);
+  expect(result[0].die).toBe(Dice.SUPERIOR);
+  expect(result[0].face).toBe(Faces.DOUBLE_SUCCESS);
+  expect(result[1].die).toBe(Dice.ENHANCED);
+  expect(result[1].face).toBe(Faces.CRITICAL_SUCCESS);
 });

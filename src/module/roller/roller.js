@@ -85,10 +85,10 @@ async function _handleReroll(event) {
   });
 
   // Do the re-roll after the parsing so it doesn't interfere with the parsing.
-  for (pendingRerollElement of pendingRerollElements) {
+  for (let pendingRerollElement of pendingRerollElements) {
     const rollData = _parseRoll(pendingRerollElement);
-    const newRoll = await game.farhome.roller.evaluateReroll([], [rollData])[0];
-    const rollHtml = await game.farhome.roller.formatRoll(newRoll);
+    const newRolls = await game.farhome.roller.evaluateRerolls([], [rollData]);
+    const rollHtml = await game.farhome.roller.formatRolls(newRolls);
     pendingRerollElement.insertAdjacentHTML('afterend', rollHtml);
   }
 
@@ -295,6 +295,13 @@ export class FHRoller {
       ...rollDie(pool.guaranteedWound, Dice.GUARANTEED_WOUND, GUARANTEED_WOUND_ROLL_TABLE, this.rng),
       ...rollDie(pool.wound, Dice.WOUND, WOUND_ROLL_TABLE, this.rng),
     ];
+  }
+
+  async evaluateRerolls(keptResults, reRollResults) {
+    const reRolledDice = reRollResults.map((roll) => roll.die);
+    const pool = this.toDicePool(reRolledDice);
+    const reRolls = await this.evaluateRolls(pool);
+    return [...keptResults, ...reRolls];
   }
 
   // #todo There are two combineRolls functions, here and global, fix that.
