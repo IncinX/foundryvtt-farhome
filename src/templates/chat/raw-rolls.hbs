@@ -1,10 +1,11 @@
-{{#rolls}}
-<input
-  class="fh-roller-roll"
-  type="checkbox"
-  style="background-image: url('systems/farhome/images/{{imageName}}.png')"
-  data-die="{{die}}"
-  data-face="{{face}}"
-  {{#disableSelection}}disabled="disabled"{{/disableSelection}}
->
-{{/rolls}}
+<form>
+  {{#each rolls as |roll rollIndex|}}
+    <input
+      class="fh-roller-roll"
+      type="checkbox"
+      style="background-image: url('systems/farhome/images/{{roll.imageName}}.png')"
+      data-die="{{roll.die}}"
+      data-face="{{roll.face}}"
+    >
+  {{/each}}
+</form>

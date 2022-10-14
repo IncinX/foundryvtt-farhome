@@ -6,12 +6,10 @@ export class DieRollView {
   die;
   face;
   imageName;
-  disableSelection;
 
-  constructor(roll, images, disableSelection = false) {
+  constructor(roll, images) {
     this.die = roll.die;
     this.face = roll.face;
     this.imageName = getDieImage(images, this.die, this.face);
-    this.disableSelection = disableSelection;
   }
 }

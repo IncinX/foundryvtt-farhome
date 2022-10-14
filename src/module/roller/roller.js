@@ -1,6 +1,5 @@
 // #todo Add code documentation throughout roller.
 // #todo Remove export if a function isn't used elsewhere
-// #todo Remove dice explosion below and anything else that deserves removal.
 // #todo Remove unncecessary classes and functions
 // #todo Decide if functions should be in or out of any classes
 
@@ -32,18 +31,37 @@ import { sendActorMessage } from '../core/chat';
 export function connectRoller() {
   // Register /fh message handler
   Hooks.on('init', () => {
-    Hooks.on('chatMessage', _diceRollerChatMessageHandler);
-  });
-
-  // #todo This is the old re-roll functionality, remove it when the new one is fully integrated.
-  Hooks.on('renderChatLog', (_app, html, _data) => {
-    html.on('click', '.fh-roller-reroll', _diceRollerButtonHandler);
+    Hooks.on('chatMessage', _rollerChatMessageHandler);
   });
 
   // Handle re-roll button click
   Hooks.on('renderChatMessage', (_message, html, _data) => {
     html.on('click', `.fh-reroll`, _handleReroll);
   });
+}
+
+/**
+ * Handles the /fh custom chat message command.
+ * @param {ChatLog} _chatLog The ChatLog instance
+ * @param {string} messageText The trimmed message content
+ * @param {object} data Some basic chat data
+ * @returns {Boolean} Whether the hook processor should continue.
+ * @private
+ */
+function _rollerChatMessageHandler(_chatLog, messageText, _data) {
+  if (messageText !== undefined) {
+    if (game.farhome.roller.handlesCommand(messageText)) {
+      game.farhome.roller.processRollCommand(messageText).then((rollHtml) => {
+        const chatData = {
+          user: game.user.id,
+          content: rollHtml,
+        };
+        ChatMessage.create(chatData, {});
+      });
+      return false;
+    }
+  }
+  return true;
 }
 
 /**
@@ -74,7 +92,7 @@ async function _handleReroll(event) {
 
   // Do the re-roll after the parsing so it doesn't interfere with the parsing.
   pendingReRollElements.forEach((pendingReRollElement) => {
-    const rollData = parseRoll(pendingReRollElement);
+    const rollData = _parseRoll(pendingReRollElement);
     const newRoll = game.farhome.roller.reRoll([], [rollData])[0];
     const rollHtml = game.farhome.roller.formatRoll(newRoll);
     pendingReRollElement.insertAdjacentHTML('afterend', rollHtml);
@@ -94,30 +112,11 @@ async function _handleReroll(event) {
 }
 
 /**
- * Handles the /fh custom chat message command.
- * @param {ChatLog} _chatLog The ChatLog instance
- * @param {string} messageText The trimmed message content
- * @param {object} data Some basic chat data
- * @returns {Boolean} Whether the message was handled.
- * @private
- */
-function _diceRollerChatMessageHandler(_chatLog, messageText, data) {
-  if (messageText !== undefined) {
-    if (game.farhome.roller.handlesCommand(messageText)) {
-      data.content = game.farhome.roller.rollCommand(messageText);
-      ChatMessage.create(data, {});
-      return false;
-    }
-  }
-  return true;
-}
-
-/**
  * Handle the reroll button click event.
  * @param {Event} event The originating click event
  * @private
  */
-function _diceRollerButtonHandler(event) {
+async function _rollerButtonHandler(event) {
   event.preventDefault();
 
   const button = event.target;
@@ -128,10 +127,10 @@ function _diceRollerButtonHandler(event) {
   if (selectedRolls.length > 0) {
     // Re-roll the selected rolls
     const parsedRolls = rolls.map((rollInput) => {
-      const roll = parseRoll(rollInput);
+      const roll = _parseRoll(rollInput);
       return new ReRoll(roll, rollInput.checked);
     });
-    const result = game.farhome.roller.formatReRolls(parsedRolls);
+    const result = await game.farhome.roller.formatReRolls(parsedRolls);
 
     // Create a new chat messages with the rerolled dice
     const chatData = {
@@ -150,7 +149,7 @@ function _diceRollerButtonHandler(event) {
  * @param {HTMLElement} input The HTMLElement input that contains the roll.
  * @returns {Roll} A roll object containing the die and face values.
  */
-export function parseRoll(input) {
+function _parseRoll(input) {
   const die = parseInt(input.dataset.die ?? '0', 10);
   const face = parseInt(input.dataset.face ?? '0', 10);
   return new Roll(die, face);
@@ -171,7 +170,7 @@ export function _getRollSummaryData(rollHtml) {
     containsRollData = true;
 
     if (!element.disabled) {
-      const rollData = parseRoll(element);
+      const rollData = _parseRoll(element);
       rolls.push(rollData);
     }
   });
@@ -219,7 +218,7 @@ export function _getRollSummaryData(rollHtml) {
  * @returns {String} HTML string containing a formatted version of the summary data.
  */
 export async function _getRollSummary(rollSummaryData) {
-  const rollSummaryHtml = renderTemplate('systems/farhome/templates/chat/roll-summary.html', rollSummaryData);
+  const rollSummaryHtml = renderTemplate('systems/farhome/templates/chat/roll-summary.hbs', rollSummaryData);
 
   return rollSummaryHtml;
 }
@@ -312,7 +311,7 @@ export class FHRoller {
   async evaluateRollFormula(formula) {
     try {
       const parsedFormula = parseFormula(formula, this.parsers);
-      const rolls = this.evaluateRoll(parsedFormula);
+      const rolls = await this.evaluateRolls(parsedFormula);
 
       console.log(`Farhome | Rolled ${rolls} with formula ${parsedFormula}`);
 
@@ -322,7 +321,7 @@ export class FHRoller {
     }
   }
 
-  async evaluateRoll(pool) {
+  async evaluateRolls(pool) {
     return [
       ...rollDie(pool.hero, Dice.HERO, HERO_ROLL_TABLE, this.rng),
       ...rollDie(pool.superior, Dice.SUPERIOR, SUPERIOR_ROLL_TABLE, this.rng),
@@ -337,6 +336,7 @@ export class FHRoller {
     ];
   }
 
+  // #todo There are two combineRolls functions, here and global, fix that.
   combineRolls(rolls) {
     const results = rolls.map((roll) => parseRollValues(roll));
     return combineAll(results, rollValuesMonoid);
@@ -346,7 +346,9 @@ export class FHRoller {
     const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
     const rollHtml = await renderTemplate(
       'systems/farhome/templates/chat/raw-rolls.hbs',
-      rolls.map((roll) => new DieRollView(roll, dieRollImages)),
+      {
+        rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
+      },
     );
 
     return rollHtml;

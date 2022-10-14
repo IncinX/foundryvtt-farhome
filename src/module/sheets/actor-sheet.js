@@ -258,7 +258,7 @@ export default class FarhomeActorSheet extends ActorSheet {
     const actorData = this.actor.data.data;
 
     if (type === 'armor') {
-      const rollTemplateHtml = await renderTemplate('systems/farhome/templates/roll-templates/armor-roll-template.hbs');
+      const rollTemplateHtml = await renderTemplate('systems/farhome/templates/item-roll-templates/armor-item-roll-template.hbs');
       itemData.data.rollTemplate = {
         value: rollTemplateHtml,
       };
@@ -273,7 +273,7 @@ export default class FarhomeActorSheet extends ActorSheet {
 
       if (type === 'weapon') {
         const rollTemplateHtml = await renderTemplate(
-          'systems/farhome/templates/roll-templates/weapon-roll-template.hbs',
+          'systems/farhome/templates/item-roll-templates/weapon-item-roll-template.hbs',
           {
             strongestProf: `a.${strongestWeaponProficiency}`,
             strongestAttr: `a.${strongestAttribute}`,
@@ -284,7 +284,7 @@ export default class FarhomeActorSheet extends ActorSheet {
         };
       } else {
         const rollTemplateHtml = await renderTemplate(
-          'systems/farhome/templates/roll-templates/maneuver-roll-template.hbs',
+          'systems/farhome/templates/item-roll-templates/maneuver-item-roll-template.hbs',
           {
             strongestProf: `a.${strongestWeaponProficiency}`,
             strongestAttr: `a.${strongestAttribute}`,
@@ -306,7 +306,7 @@ export default class FarhomeActorSheet extends ActorSheet {
       const strongestAttribute = FarhomeActorSheet._getStrongestKey(relevantSpellAttributes);
 
       const rollTemplateHtml = await renderTemplate(
-        'systems/farhome/templates/roll-templates/spell-roll-template.hbs',
+        'systems/farhome/templates/item-roll-templates/spell-item-roll-template.hbs',
         {
           strongestProf: `a.${strongestSpellProficiency}`,
           strongestAttr: `a.${strongestAttribute}`,
@@ -318,7 +318,7 @@ export default class FarhomeActorSheet extends ActorSheet {
       };
     } else {
       const rollTemplateHtml = await renderTemplate(
-        'systems/farhome/templates/roll-templates/default-roll-template.hbs',
+        'systems/farhome/templates/item-roll-templates/default-item-roll-template.hbs',
       );
 
       itemData.data.rollTemplate = {
@@ -433,7 +433,7 @@ export default class FarhomeActorSheet extends ActorSheet {
     // Handle rolls that supply the formula directly.
     if (dataset.roll) {
       const label = dataset.label ?? '';
-      const rollHtml = game.farhome.roller.rollFormula(dataset.roll);
+      const rollHtml = await game.farhome.roller.evaluateRollFormula(dataset.roll);
 
       // Render the skill using the header-roll template
       const evaluatedRollHtml = await renderTemplate('systems/farhome/templates/chat/header-roll.hbs', {

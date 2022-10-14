@@ -11,7 +11,7 @@ import { proficiencyRollFormula, proficiencyRoll } from './roll';
  * @param {Object} itemContext Reference to a FarhomeItem embedded data object.
  * @returns String of HTML with the template expressions evaluates from the original templateString.
  */
-export function evaluateTemplate(templateString, actorContext, itemContext) {
+export async function evaluateTemplate(templateString, actorContext, itemContext) {
   let evaluatedString = templateString;
 
   // Get a list of matches
@@ -24,7 +24,7 @@ export function evaluateTemplate(templateString, actorContext, itemContext) {
       // Strip the first two and last two characters (which represent [[]] based on the regular expression.)
       let strippedRollChunk = templateChunk.substring(2, templateChunk.length - 2);
 
-      let rollChunkReplacement = evaluateTemplateChunk(strippedRollChunk, actorContext, itemContext);
+      let rollChunkReplacement = await evaluateTemplateChunk(strippedRollChunk, actorContext, itemContext);
 
       evaluatedString = evaluatedString.replace(templateChunk, rollChunkReplacement);
     }
@@ -40,7 +40,7 @@ export function evaluateTemplate(templateString, actorContext, itemContext) {
  * @param {Object} itemContext Reference to a FarhomeItem embedded data object.
  * @returns String of HTML with the evaluated template expression.
  */
-export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) {
+export async function evaluateTemplateChunk(templateChunk, actorContext, itemContext) {
   // #todo This should be made into an object that pre-evaluates the help text and system function binds, etc.
 
   let evaluatorSystemContext = {
@@ -182,6 +182,7 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
   help += '</ul>';
 
   // Evaluate the template chunk
+  // #todo How to define async function like this?
   let evaluationFunction = Function(
     'fh',
     'skill',
@@ -197,7 +198,7 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
     'help',
     'return ' + templateChunk + ';',
   );
-  let evaluatedOutput = evaluationFunction(
+  let evaluatedOutput = await evaluationFunction(
     fh.bind(game.farhome.roller),
     skill.bind(game.farhome.roller),
     formula,
@@ -225,8 +226,9 @@ export function evaluateTemplateChunk(templateChunk, actorContext, itemContext) 
  * @param {string} formula Farhome roll formula which has characters that represent dice to roll. Type '/fh x' in game to see the help text for more information.
  * @returns HTML containing the roll result.
  */
-function fh(formula) {
-  return this.rollFormula(formula, '', false, false);
+async function fh(formula) {
+  // #todo I think this needs to be async, this may cause a problem... Set all this stuff to async too
+  return await this.evaluateRollFormula(formula, '', false, false);
 }
 
 /**
@@ -236,8 +238,8 @@ function fh(formula) {
  * @param {number} attribute Attribute value to use for the roll.
  * @returns HTML containing the roll result.
  */
-function skill(proficiency, attribute) {
-  return proficiencyRoll(fh.bind(this), proficiency, attribute);
+async function skill(proficiency, attribute) {
+  return await proficiencyRoll(fh.bind(this), proficiency, attribute);
 }
 
 /**
