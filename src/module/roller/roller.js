@@ -277,7 +277,7 @@ export class FHRoller {
     this.parsers = [new FHParser()];
     this.canKeep = true;
 
-    this.rng = secureRandomNumber;
+    this.rng = rng;
   }
 
   handlesCommand(command) {

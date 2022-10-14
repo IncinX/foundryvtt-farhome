@@ -5,12 +5,12 @@ import { Roll, FHRoller } from './roller';
 // #todo Come up with a way to just roll all dice and test the distributions
 
 test('should react to fh command', () => {
-  const fhRoller = new FHRoller(makeRng(0), 'fh');
+  const fhRoller = new FHRoller(makeRng(0));
   expect(fhRoller.handlesCommand('/fh ')).toBe(true);
 });
 
 test('should roll a hero success', () => {
-  const fhRoller = new FHRoller(makeRng(0), '');
+  const fhRoller = new FHRoller(makeRng(0));
   const result = fhRoller.roll(new DicePool(1, 0, 0, 0, 0, 0, 0, 0, 0, 0));
 
   expect(result.length).toBe(1);
@@ -19,7 +19,7 @@ test('should roll a hero success', () => {
 });
 
 test('should roll one of each dice with rng 0', () => {
-  const fhRoller = new FHRoller(makeRng(...Array(10).fill(0)), '');
+  const fhRoller = new FHRoller(makeRng(...Array(10).fill(0)));
   const result = fhRoller.roll(new DicePool(...Array(10).fill(1)));
 
   expect(result.length).toBe(10);
@@ -56,7 +56,7 @@ test('should roll one of each dice with rng 0', () => {
 });
 
 test('should roll one of each dice with rng 1', () => {
-  const fhRoller = new FHRoller(makeRng(...Array(10).fill(1)), '');
+  const fhRoller = new FHRoller(makeRng(...Array(10).fill(1)));
   const result = fhRoller.roll(new DicePool(...Array(10).fill(1)));
 
   expect(result.length).toBe(10);
@@ -93,7 +93,7 @@ test('should roll one of each dice with rng 1', () => {
 });
 
 test('should roll one of each dice with rng 2', () => {
-  const fhRoller = new FHRoller(makeRng(...Array(10).fill(2)), '');
+  const fhRoller = new FHRoller(makeRng(...Array(10).fill(2)));
   const result = fhRoller.roll(new DicePool(...Array(10).fill(1)));
 
   expect(result.length).toBe(10);
@@ -130,7 +130,7 @@ test('should roll one of each dice with rng 2', () => {
 });
 
 test('should roll one of each dice with rng 3', () => {
-  const fhRoller = new FHRoller(makeRng(...Array(10).fill(3)), '');
+  const fhRoller = new FHRoller(makeRng(...Array(10).fill(3)));
   const result = fhRoller.roll(new DicePool(...Array(10).fill(1)));
 
   expect(result.length).toBe(10);
@@ -167,7 +167,7 @@ test('should roll one of each dice with rng 3', () => {
 });
 
 test('should roll one of each dice with rng 4', () => {
-  const fhRoller = new FHRoller(makeRng(...Array(10).fill(4)), '');
+  const fhRoller = new FHRoller(makeRng(...Array(10).fill(4)));
   const result = fhRoller.roll(new DicePool(...Array(10).fill(1)));
 
   expect(result.length).toBe(10);
@@ -204,7 +204,7 @@ test('should roll one of each dice with rng 4', () => {
 });
 
 test('should roll one of each dice with rng 5', () => {
-  const fhRoller = new FHRoller(makeRng(...Array(10).fill(5)), '');
+  const fhRoller = new FHRoller(makeRng(...Array(10).fill(5)));
   const result = fhRoller.roll(new DicePool(...Array(10).fill(1)));
 
   expect(result.length).toBe(10);

@@ -18,6 +18,7 @@ import {
 import { connectRulesImporterApp as connectRulesImporterAppHooks } from './apps/farhome-rules-importer-app';
 import { connectVetoolsMonsterImporterApp as connectVetoolsMonsterImporterAppHooks } from './apps/vetools-monsters-importer-app';
 
+import { secureRandomNumber } from './roller/roller-util';
 import { FHRoller, connectRoller as connectRollerHooks } from './roller/roller';
 
 /* -------------------------------------------- */
@@ -28,7 +29,7 @@ import { FHRoller, connectRoller as connectRollerHooks } from './roller/roller';
 Hooks.once('init', async () => {
   console.log('Farhome | Initializing farhome');
 
-  const roller = new FHRoller();
+  const roller = new FHRoller(secureRandomNumber);
 
   game.farhome = {
     // Centralized roller for global use
