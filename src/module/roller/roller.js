@@ -67,6 +67,7 @@ async function _handleReroll(event) {
   event.preventDefault();
 
   // #todo It may be insufficient to just use button.parentElement.parentElement... I think I need to traverse up the DOM tree until I find the main content element
+  // #todo This function can probably be cleaned up and stream-lined
 
   const button = event.target;
   const originalMessageElement = button.parentElement.parentElement;
@@ -87,8 +88,8 @@ async function _handleReroll(event) {
   // Do the re-roll after the parsing so it doesn't interfere with the parsing.
   for (let pendingRerollElement of pendingRerollElements) {
     const rollData = _parseRoll(pendingRerollElement);
-    const newRolls = await game.farhome.roller.evaluateRerolls([], [rollData]);
-    const rollHtml = await game.farhome.roller.formatRolls(newRolls);
+    const newRoll = await game.farhome.roller.evaluateRerolls([], [rollData]);
+    const rollHtml = await game.farhome.roller.formatRolls(newRoll, false);
     pendingRerollElement.insertAdjacentHTML('afterend', rollHtml);
   }
 
@@ -98,9 +99,6 @@ async function _handleReroll(event) {
   let rollSummaryElement = $(messageQuery).find('.fh-roll-summary');
   rollSummaryElement.empty();
   rollSummaryElement.append(newRollSummary);
-
-  // #todo This will definitely need to be integrated with the main rolling system so only one function with the up-to-date functionality
-  //       for both templated and non-templated rolls.
 
   sendActorMessage(messageQuery.html());
 }
@@ -310,10 +308,11 @@ export class FHRoller {
     return combineAll(results, rollValuesMonoid);
   }
 
-  async formatRolls(rolls) {
+  async formatRolls(rolls, wrapDiv = true) {
     const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
     const rollHtml = await renderTemplate('systems/farhome/templates/chat/raw-rolls.hbs', {
       rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
+      wrapDiv: wrapDiv,
     });
 
     return rollHtml;

@@ -1,5 +1,8 @@
+{{#if wrapDiv}}
 <div class="fh-roller">
   <form>
+{{/if}}
+
     {{#each rolls as |roll rollIndex|}}
       <input
         class="fh-roller-roll"
@@ -9,5 +12,8 @@
         data-face="{{roll.face}}"
       >
     {{/each}}
+
+{{#if wrapDiv}}
   </form>
 </div>
+{{/if}}
