@@ -12,7 +12,7 @@ export function parseFormula(formula, parsers) {
     }
   }
   const help = helpMessages.join('; ');
-  throw new FormulaParseError(`Incorrect roll formula ${formula}! Usage: ${help}`);
+  throw new FormulaParseError(`<p>Incorrect roll formula ${formula}!</p><p>Usage: ${help}</p>`);
 }
 
 export class FormulaParseError extends Error {

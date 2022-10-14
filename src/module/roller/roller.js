@@ -51,7 +51,7 @@ export function connectRoller() {
 function _rollerChatMessageHandler(_chatLog, messageText, _data) {
   if (messageText !== undefined) {
     if (game.farhome.roller.handlesCommand(messageText)) {
-      game.farhome.roller.processRollCommand(messageText).then(sendChatRoll);
+      game.farhome.roller.processRollCommand(messageText).then(sendChatRoll);    
       return false;
     }
   }
@@ -95,7 +95,7 @@ async function _handleReroll(event) {
 
   // Need to re-compute the summary and re-post under the fh-roll-summary class
   const newRollSummaryData = _getRollSummaryData(messageQuery);
-  const newRollSummary = _getRollSummary(newRollSummaryData);
+  const newRollSummary = await _getRollSummary(newRollSummaryData);
   let rollSummaryElement = $(messageQuery).find('.fh-roll-summary');
   rollSummaryElement.empty();
   rollSummaryElement.append(newRollSummary);
@@ -120,55 +120,64 @@ function _parseRoll(input) {
  * @return {Object} Roll unmodified summary data containing successes, crits, wounds, hexes and poisons.
  */
 export function _getRollSummaryData(rollHtml) {
-  const fhRollQuery = $(rollHtml);
+  try {
+    const fhRollQuery = $(rollHtml);
 
-  let rolls = [];
-  let containsRollData = false;
+    let rolls = [];
+    let containsRollData = false;
 
-  fhRollQuery.find('input').each((_index, element) => {
-    containsRollData = true;
+    fhRollQuery.find('input').each((_index, element) => {
+      containsRollData = true;
 
-    if (!element.disabled) {
-      const rollData = _parseRoll(element);
-      rolls.push(rollData);
-    }
-  });
+      if (!element.disabled) {
+        const rollData = _parseRoll(element);
+        rolls.push(rollData);
+      }
+    });
 
-  const initialRollSummaryData = game.farhome.roller.combineRolls(rolls);
+    const initialRollSummaryData = game.farhome.roller.combineRolls(rolls);
 
-  // Compute the roll modifiers
-  let rollModifiersData = {
-    containsRollData: containsRollData,
-    successes: initialRollSummaryData.successes,
-    crits: initialRollSummaryData.crits,
-    wounds: initialRollSummaryData.wounds,
-    hex: 0,
-    poison: 0,
-  };
+    // Compute the roll modifiers
+    let rollModifiersData = {
+      containsRollData: containsRollData,
+      successes: initialRollSummaryData.successes,
+      crits: initialRollSummaryData.crits,
+      wounds: initialRollSummaryData.wounds,
+      hex: 0,
+      poison: 0,
+    };
 
-  // #todo These hard-coded class strings should be communicated through const static exports (possibly from a class)
+    // #todo These hard-coded class strings should be communicated through const static exports (possibly from a class)
 
-  fhRollQuery.find('.fh-successes').each((_index, element) => {
-    rollModifiersData.successes += parseInt(element.dataset.successes);
-  });
+    fhRollQuery.find('.fh-successes').each((_index, element) => {
+      rollModifiersData.successes += parseInt(element.dataset.successes);
+    });
 
-  fhRollQuery.find('.fh-crits').each((_index, element) => {
-    rollModifiersData.crits += parseInt(element.dataset.crits);
-  });
+    fhRollQuery.find('.fh-crits').each((_index, element) => {
+      rollModifiersData.crits += parseInt(element.dataset.crits);
+    });
 
-  fhRollQuery.find('.fh-wounds').each((_index, element) => {
-    rollModifiersData.wounds += parseInt(element.dataset.wounds);
-  });
+    fhRollQuery.find('.fh-wounds').each((_index, element) => {
+      rollModifiersData.wounds += parseInt(element.dataset.wounds);
+    });
 
-  fhRollQuery.find('.fh-hex').each((_index, element) => {
-    rollModifiersData.hex += parseInt(element.dataset.hex);
-  });
+    fhRollQuery.find('.fh-hex').each((_index, element) => {
+      rollModifiersData.hex += parseInt(element.dataset.hex);
+    });
 
-  fhRollQuery.find('.fh-poison').each((_index, element) => {
-    rollModifiersData.poison += parseInt(element.dataset.poison);
-  });
+    fhRollQuery.find('.fh-poison').each((_index, element) => {
+      rollModifiersData.poison += parseInt(element.dataset.poison);
+    });
 
-  return rollModifiersData;
+    return rollModifiersData;
+  } catch (_error) {
+    // Do nothing since it is likely unparseable HTML which might happen in the case of error messages like
+    // incorrect /fh chat commands.
+    const rollModifiersData = {
+      containsRollData: false,
+    };
+    return rollModifiersData;
+  }
 }
 
 /**
@@ -276,7 +285,9 @@ export class FHRoller {
 
       return this.formatRolls(rolls);
     } catch (e) {
-      return escapeHtml(e.message);
+      // The successful case returns a promise, so the error should be returned as a promise
+      // to keep things simple for callers.
+      return new Promise((resolve) => resolve(escapeHtml(e.message)));
     }
   }
 
