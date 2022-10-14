@@ -344,12 +344,9 @@ export class FHRoller {
 
   async formatRolls(rolls) {
     const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
-    const rollHtml = await renderTemplate(
-      'systems/farhome/templates/chat/raw-rolls.hbs',
-      {
-        rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
-      },
-    );
+    const rollHtml = await renderTemplate('systems/farhome/templates/chat/raw-rolls.hbs', {
+      rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
+    });
 
     return rollHtml;
   }

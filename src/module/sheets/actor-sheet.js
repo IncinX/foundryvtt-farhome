@@ -258,7 +258,9 @@ export default class FarhomeActorSheet extends ActorSheet {
     const actorData = this.actor.data.data;
 
     if (type === 'armor') {
-      const rollTemplateHtml = await renderTemplate('systems/farhome/templates/item-roll-templates/armor-item-roll-template.hbs');
+      const rollTemplateHtml = await renderTemplate(
+        'systems/farhome/templates/item-roll-templates/armor-item-roll-template.hbs',
+      );
       itemData.data.rollTemplate = {
         value: rollTemplateHtml,
       };
