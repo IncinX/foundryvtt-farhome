@@ -21,6 +21,7 @@ import {
   DEFENSE_ROLL_TABLE,
   WOUND_ROLL_TABLE,
   GUARANTEED_WOUND_ROLL_TABLE,
+  Faces,
 } from './roller-dice';
 import { FHParser, parseFormula } from './roller-parser';
 import { sendActorMessage } from '../core/chat';
@@ -73,16 +74,14 @@ async function _handleReroll(event) {
   const originalMessageElement = button.parentElement.parentElement;
   const messageElementClone = originalMessageElement.cloneNode(true);
   const messageQuery = $(messageElementClone);
-  const rollElements = messageQuery.find('input');
+  const rollElements = messageQuery.find('input:checked');
 
   // Iterate through the inputs to find the dice to re-roll.
   let pendingRerollElements = [];
 
   rollElements.each((_index, element) => {
-    if (element.checked) {
-      element.disabled = true;
-      pendingRerollElements.push(element);
-    }
+    element.disabled = true;
+    pendingRerollElements.push(element);
   });
 
   // Do the re-roll after the parsing so it doesn't interfere with the parsing.
@@ -214,13 +213,24 @@ export async function _getRollSummary(rollSummaryData) {
  * @param {Object} manaData Object containing the required data to spend mana data.
  */
 export async function sendChatRoll(evaluatedRollHtml, activeEffectsHtml = '', manaData = undefined) {
-  // Evaluate the roll summary if it is present.
-  let rollSummaryData = _getRollSummaryData(evaluatedRollHtml);
+  // Get the active effects that apply to the roll
   const effectSummaryData = _getEffectSummaryData(activeEffectsHtml);
 
-  // #todo Need to analyze the activeEffectsHtml roll summary data, combine it, etc.
-  // #debug-begin
+  //
+  // Compute and apply hex if it is present
+  // Hex downgrades a crit to a single success for each level of hex.
+  //
+  const hexedRollHtml = await _applyHex(evaluatedRollHtml, effectSummaryData.hex);
+
+  //
+  // Evaluate the roll summary if it is present.
+  //
+  let rollSummaryData = _getRollSummaryData(hexedRollHtml);
+
+  //
   // Compute and apply the poison if it is present
+  // Poison adds terrible dice to the roll for each level of poison
+  //
   let poisonRollHtml = '';
   if (effectSummaryData.poison > 0) {
     // Roll terrible dice for each level of poison
@@ -230,16 +240,21 @@ export async function sendChatRoll(evaluatedRollHtml, activeEffectsHtml = '', ma
     // Apply the poison to the summary data
     const poisonRollSummaryData = _getRollSummaryData(poisonRollHtml);
 
+    // Adjust the roll summary based on poison
+    // #todo Ideally the rollSummaryData has a function to add another rollSummaryData to it
     rollSummaryData.successes += poisonRollSummaryData.successes;
     rollSummaryData.crits += poisonRollSummaryData.crits;
   }
-  // #debug-end
 
+  // #todo Add blinded effect which adds two terrible dice to the roll
+
+  //
   // Compute the final roll summary HTML
+  //
   const rollSummaryHtml = rollSummaryData.containsRollData ? await _getRollSummary(rollSummaryData) : undefined;
 
   const messageHtmlString = await renderTemplate('systems/farhome/templates/chat/chat-roll.hbs', {
-    evaluatedRollHtml: evaluatedRollHtml,
+    evaluatedRollHtml: hexedRollHtml,
     activeEffectsHtml: activeEffectsHtml,
     poisonRollHtml: poisonRollHtml,
     rollSummaryHtml: rollSummaryHtml,
@@ -248,6 +263,48 @@ export async function sendChatRoll(evaluatedRollHtml, activeEffectsHtml = '', ma
 
   // Send the evaluatedTemplate to chat.
   sendActorMessage(messageHtmlString);
+}
+
+/**
+ * Apply hexes to a given roll.
+ * Hex downgrades a crit to a single success for each level of hex.
+ * @param {String} evaluatedRollHtml HTML string containing all the roll data
+ * @param {Number} hexCount Number of hexes to apply to the roll.
+ */
+async function _applyHex(evaluatedRollHtml, hexCount) {
+  const messageQuery = $(evaluatedRollHtml);
+  const enableInputElements = messageQuery.find('input:enabled');
+
+  for (
+    let enabledInputsIndex = 0;
+    enabledInputsIndex < enableInputElements.length && hexCount > 0;
+    enabledInputsIndex++
+  ) {
+    let enabledInputElement = enableInputElements[enabledInputsIndex];
+
+    // Parse the die and face
+    const rollData = _parseRoll(enabledInputElement);
+
+    // If it is a critical, downgrade it to a success
+    if (rollData.face === Faces.CRITICAL_SUCCESS) {
+      rollData.face = Faces.SUCCESS;
+
+      // Replace with a formatted element (that also has a fh-hexed class)
+      const rollHtml = await game.farhome.roller.formatRolls([rollData], false);
+
+      // Add the new roll element
+      enabledInputElement.insertAdjacentHTML('afterend', rollHtml);
+
+      // Disable and hex the current roll
+      enabledInputElement.disabled = true;
+      enabledInputElement.class = 'fh-hexed-roll';
+
+      hexCount--;
+    }
+  }
+
+  //return messageQuery.html();
+  return evaluatedRollHtml;
 }
 
 /**
@@ -412,7 +469,6 @@ export class FHRoller {
    * @return {String} HTML string containing the roll results.
    */
   async formatRolls(rolls, wrapDiv = true) {
-    const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
     const rollHtml = await renderTemplate('systems/farhome/templates/chat/raw-rolls.hbs', {
       rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
       wrapDiv: wrapDiv,
