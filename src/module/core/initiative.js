@@ -1,5 +1,5 @@
 import { proficiencyRollFormula } from './roll';
-import { sendActorMessage } from './chat';
+import { sendChatRoll } from '../roller/roller';
 
 /**
  * Override the default Initiative formula to customize special behaviors of the system.
@@ -8,7 +8,7 @@ import { sendActorMessage } from './chat';
  * See Combat._getInitiativeFormula for more detail.
  * @returns {string}  Final initiative formula for the actor.
  */
-export async function getInitiativeFormula() {
+export function getInitiativeFormula() {
   const actor = this.actor;
   if (!actor) return '0';
 
@@ -18,10 +18,19 @@ export async function getInitiativeFormula() {
   const parsedFormula = game.farhome.roller.parsers[0].parse(rollFormula);
   const rolls = game.farhome.roller.evaluateRolls(parsedFormula);
   const rollValues = game.farhome.roller.combineRolls(rolls);
-  const formattedRoll = await game.farhome.roller.formatRolls(rolls, null, false, false);
 
-  // #todo This can be changed to use the header-roll.hbs template like skill rolls are
-  sendActorMessage(`<h1>Initiative</h1>${formattedRoll}`);
+  // Prepare a visual chat message for the roll to be done asynchronously
+  // It is important to note that the getInitiativeFormula must be synchronous for foundry.
+  game.farhome.roller.formatRolls(rolls).then(async (rollHtml) => {
+    // Render the skill using the header-roll template
+    const evaluatedRollHtml = await renderTemplate('systems/farhome/templates/chat/header-roll.hbs', {
+      label: 'Initiative',
+      roll: rollHtml,
+    });
+
+    // Send the chat roll for display (along with summary calculation, etc.)
+    sendChatRoll(evaluatedRollHtml);
+  });
 
   let initiativeValue = rollValues.successes + data.attributes.dex.value / 10.0;
 
