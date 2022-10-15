@@ -117,7 +117,7 @@ function _parseRoll(input) {
 /**
  * Parses HTML containing roll elements to get a summary of successes, crits, wounds, etc.
  * @param {String} rollHtml HTML text containing roll elements.
- * @return {Object} Roll unmodified summary data containing successes, crits, wounds, hexes and poisons.
+ * @return {Object} Roll unmodified summary data containing successes, crits, wounds, etc.
  */
 export function _getRollSummaryData(rollHtml) {
   try {
@@ -143,8 +143,6 @@ export function _getRollSummaryData(rollHtml) {
       successes: initialRollSummaryData.successes,
       crits: initialRollSummaryData.crits,
       wounds: initialRollSummaryData.wounds,
-      hex: 0,
-      poison: 0,
     };
 
     // #todo These hard-coded class strings should be communicated through const static exports (possibly from a class)
@@ -161,14 +159,6 @@ export function _getRollSummaryData(rollHtml) {
       rollModifiersData.wounds += parseInt(element.dataset.wounds);
     });
 
-    fhRollQuery.find('.fh-hex').each((_index, element) => {
-      rollModifiersData.hex += parseInt(element.dataset.hex);
-    });
-
-    fhRollQuery.find('.fh-poison').each((_index, element) => {
-      rollModifiersData.poison += parseInt(element.dataset.poison);
-    });
-
     return rollModifiersData;
   } catch (_error) {
     // Do nothing since it is likely unparseable HTML which might happen in the case of error messages like
@@ -178,6 +168,31 @@ export function _getRollSummaryData(rollHtml) {
     };
     return rollModifiersData;
   }
+}
+
+/**
+ * Parses HTML containing effect elements to get a summary of hexes, poisons, etc.
+ * @param {String} effectHtml HTML text containing roll elements.
+ * @return {Object} Effect summary data containing hexes, poisons, etc.
+ */
+export function _getEffectSummaryData(effectHtml) {
+  const fhEffectQuery = $(effectHtml);
+
+  // Compute the effect modifiers
+  let effectModifierData = {
+    hex: 0,
+    poison: 0,
+  };
+
+  fhEffectQuery.find('.fh-hex').each((_index, element) => {
+    effectModifierData.hex += parseInt(element.dataset.hex);
+  });
+
+  fhEffectQuery.find('.fh-poison').each((_index, element) => {
+    effectModifierData.poison += parseInt(element.dataset.poison);
+  });
+
+  return effectModifierData;
 }
 
 /**
@@ -199,14 +214,33 @@ export async function _getRollSummary(rollSummaryData) {
  */
 export async function sendChatRoll(evaluatedRollHtml, activeEffectsHtml = '', manaData = undefined) {
   // Evaluate the roll summary if it is present.
-  const rollSummaryData = _getRollSummaryData(evaluatedRollHtml);
-  const rollSummaryHtml = rollSummaryData.containsRollData ? await _getRollSummary(rollSummaryData) : undefined;
+  let rollSummaryData = _getRollSummaryData(evaluatedRollHtml);
+  const effectSummaryData = _getEffectSummaryData(activeEffectsHtml);
 
   // #todo Need to analyze the activeEffectsHtml roll summary data, combine it, etc.
+  // #debug-begin
+  // Compute and apply the poison if it is present
+  let poisonRollHtml = '';
+  if (effectSummaryData.poison > 0) {
+    // Roll terrible dice for each level of poison
+    const poisonRollFormula = `${effectSummaryData.poison}t`;
+    poisonRollHtml = await game.farhome.roller.evaluateRollFormula(poisonRollFormula);
+
+    // Apply the poison to the summary data
+    const poisonRollSummaryData = _getRollSummaryData(poisonRollHtml);
+
+    rollSummaryData.successes += poisonRollSummaryData.successes;
+    rollSummaryData.crits += poisonRollSummaryData.crits;
+  }
+  // #debug-end
+
+  // Compute the final roll summary HTML
+  const rollSummaryHtml = rollSummaryData.containsRollData ? await _getRollSummary(rollSummaryData) : undefined;
 
   const messageHtmlString = await renderTemplate('systems/farhome/templates/chat/chat-roll.hbs', {
     evaluatedRollHtml: evaluatedRollHtml,
     activeEffectsHtml: activeEffectsHtml,
+    poisongRollhtml: poisonRollHtml,
     rollSummaryHtml: rollSummaryHtml,
     manaData: manaData,
   });

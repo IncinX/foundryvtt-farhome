@@ -1,6 +1,12 @@
 <div class='fh-evaluated-roll'>{{{evaluatedRollHtml}}}</div>
 <div class='fh-active-effects'>{{{activeEffectsHtml}}}</div>
 
+{{#if poisonRollHtml}}
+  <hr>
+  <h2>{{localize 'farhome.poisonRoll'}}</h2>
+  <div class='fh-evaluated-roll'>{{{poisonRollHtml}}}</div>
+{{/if}}
+
 {{#if rollSummaryHtml}}
   <hr>
   <h2>{{localize 'farhome.rollSummary'}}</h2>
