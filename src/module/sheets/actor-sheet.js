@@ -115,6 +115,8 @@ export default class FarhomeActorSheet extends ActorSheet {
     const armors = [];
     const feats = [];
     const maneuvers = [];
+    const consumables = [];
+    const craftingItems = [];
     const spells = {
       0: [],
       1: [],
@@ -155,6 +157,14 @@ export default class FarhomeActorSheet extends ActorSheet {
       else if (i.type === 'maneuver') {
         maneuvers.push(i);
       }
+      // Append to consuambles.
+      else if (i.type === 'consumable') {
+        consumables.push(i);
+      }
+      // Append to crafting materials
+      else if (i.type === 'crafting') {
+        craftingItems.push(i);
+      }
       // Append to spells.
       else if (i.type === 'spell') {
         if (i.data.spellLevel.value !== null) {
@@ -170,6 +180,8 @@ export default class FarhomeActorSheet extends ActorSheet {
     context.armors = armors;
     context.feats = feats;
     context.maneuvers = maneuvers;
+    context.consumables = consumables;
+    context.craftingItems = craftingItems;
     context.spells = spells;
   }
 
