@@ -1,4 +1,3 @@
-// #todo Add code documentation throughout roller.
 // #todo Remove export if a function isn't used elsewhere
 // #todo Remove unncecessary classes and functions
 // #todo Decide if functions should be in or out of any classes
