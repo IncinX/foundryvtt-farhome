@@ -251,7 +251,7 @@
     }
   },
   "Item": {
-    "types": ["money", "item", "weapon", "armor", "feat", "maneuver", "spell", "condition"],
+    "types": ["money", "item", "weapon", "armor", "feat", "maneuver", "spell", "consumable", "crafting", "condition"],
     "templates": {
       "base": {
         "description": {
@@ -382,6 +382,12 @@
       "areaOfEffect": {
         "value": "touch"
       }
+    },
+    "consumable": {
+      "templates": ["base", "item"]
+    },
+    "crafting": {
+      "templates": ["base", "item"]
     },
     "condition": {
       "templates": ["base"]
