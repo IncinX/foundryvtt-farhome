@@ -184,11 +184,12 @@ export function _getEffectSummaryData(effectHtml) {
     poison: 0,
   };
 
-  fhEffectQuery.find('.fh-hex').each((_index, element) => {
+  // #todo This isn't finding sibling elements
+  fhEffectQuery.siblings('.fh-hex').each((_index, element) => {
     effectModifierData.hex += parseInt(element.dataset.hex);
   });
 
-  fhEffectQuery.find('.fh-poison').each((_index, element) => {
+  fhEffectQuery.siblings('.fh-poison').each((_index, element) => {
     effectModifierData.poison += parseInt(element.dataset.poison);
   });
 
@@ -240,7 +241,7 @@ export async function sendChatRoll(evaluatedRollHtml, activeEffectsHtml = '', ma
   const messageHtmlString = await renderTemplate('systems/farhome/templates/chat/chat-roll.hbs', {
     evaluatedRollHtml: evaluatedRollHtml,
     activeEffectsHtml: activeEffectsHtml,
-    poisongRollhtml: poisonRollHtml,
+    poisonRollHtml: poisonRollHtml,
     rollSummaryHtml: rollSummaryHtml,
     manaData: manaData,
   });
