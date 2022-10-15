@@ -288,7 +288,7 @@ export class FHRoller {
     } catch (e) {
       // The successful case returns a promise, so the error should be returned as a promise
       // to keep things simple for callers.
-      return new Promise((resolve) => resolve(escapeHtml(e.message)));
+      return new Promise((resolve) => resolve(e.message));
     }
   }
 
