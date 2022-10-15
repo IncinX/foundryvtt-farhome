@@ -1,10 +1,12 @@
-# farhome
+# Farhome Game System
 
-Please add your description here.
+[Farhome](https://farhomerpg.com/) is a tabletop role-playing game created by Andrew Solheim. This repository contains the source code for the Farhome game system, which is a [Foundry VTT](https://foundryvtt.com/) module.
 
 ## Installation
 
-Please add your installation instructions here.
+In the FoundryVTT Configuration and Setup screen, select the *Game Systems* tab, click *Install System*, enter ```https://github.com/IncinX/foundryvtt-farhome/releases/latest/download/system.json``` in the Manifest URL field, and click *Install*.
+
+Create a game world by picking the *Game Worlds* tab and clicking *Create World*, then select the *Farhome* from the *Game System* drop down menu. You can now start your game!
 
 ## Development
 
@@ -68,6 +70,16 @@ npm run link-project
 On Windows, creating symlinks requires administrator privileges, so unfortunately
 you need to run the above command in an administrator terminal for it to work.
 
+### Running lint
+
+Modifications to the repository require it to pass a lint check which uses [prettier](https://prettier.io/).
+
+```
+npm lint
+```
+
+It is recommended to also use [Prettier code formatter for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to automatically format your code.
+
 ### Running the tests
 
 You can run the tests with the following command:
@@ -78,16 +90,18 @@ npm test
 
 ### Creating a release
 
-The workflow works basically the same as the workflow of the [League Basic JS Module Template], please follow the
-instructions given there.
+In the GitHub project, create a new release. The release name should be the version number of the release. The release tag should be the same as the release name. The release description should be the changelog for the release.
+
+This can be done by selecting *Draft New Release* from the GitHub releases page. *Choose a tag*, and enter the release tag name. Choose *Generate release notes* to automatially generate a set of release notes and click *Publish release*.
+
+GitHub Actions will automatically package the release and upload it to the new release page after a few minutes. Any errors will be displayed in the GitHub *Actions* tab.
 
 ## Licensing
 
-This project is being developed under the terms of the
-[LIMITED LICENSE AGREEMENT FOR MODULE DEVELOPMENT] for Foundry Virtual Tabletop.
+This project is being developed under the terms of the [LIMITED LICENSE AGREEMENT FOR MODULE DEVELOPMENT](https://foundryvtt.com/article/license/) for [Foundry Virtual Tabletop](https://foundryvtt.com/).
 
-See [LICENSE](/LICENSE) for licensing terms.
+The source code for this project is MIT licensed. See [LICENSE](/LICENSE.md) for detailed source code licensing terms.
 
-[League Basic JS Module Template]: https://github.com/League-of-Foundry-Developers/FoundryVTT-Module-Template
-[LIMITED LICENSE AGREEMENT FOR MODULE DEVELOPMENT]: https://foundryvtt.com/article/license/
+This project was started using the [League Basic JS Module Template](https://github.com/League-of-Foundry-Developers/FoundryVTT-Module-Template).
+
 

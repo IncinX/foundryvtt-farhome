@@ -1,3 +1,5 @@
+// #todo This should be moved into a utility folder since there are cross dependencies between the core and roller which is not ideal.
+
 export function sendStandardMessage(content) {
   // Roll mode controls what chat it goes to
   const rollMode = game.settings.get('core', 'rollMode');

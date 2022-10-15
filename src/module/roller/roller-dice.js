@@ -1,3 +1,5 @@
+// #todo Should add some simple tests for this file
+
 export const Dice = {
   HERO: 1,
   SUPERIOR: 2,
@@ -247,10 +249,6 @@ rollToRollResultMapping.set(Faces.DEFENSE, { successes: 1 });
 rollToRollResultMapping.set(Faces.DOUBLE_DEFENSE, { successes: 2 });
 rollToRollResultMapping.set(Faces.CRITICAL_DEFENSE, { successes: 2, crits: 1 });
 rollToRollResultMapping.set(Faces.WOUND, { wounds: 1 });
-
-export function interpretResult(result) {
-  return new RollValues(result.successes, result.crits, result.wounds);
-}
 
 export function parseRollValues(roll) {
   const result = rollToRollResultMapping.get(roll.face);

@@ -21,8 +21,6 @@ export async function createCompendiumFromRules(
   const ruleParser = new FarhomeRuleParser();
   const parsedRules = ruleParser.parse(rulesText);
 
-  console.log(parsedRules);
-
   const parsedRulesEntries = Object.entries(parsedRules);
 
   for (let ruleEntryIndex = 0; ruleEntryIndex < parsedRulesEntries.length; ruleEntryIndex++) {
