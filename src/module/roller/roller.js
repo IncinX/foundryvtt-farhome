@@ -51,7 +51,7 @@ export function connectRoller() {
 function _rollerChatMessageHandler(_chatLog, messageText, _data) {
   if (messageText !== undefined) {
     if (game.farhome.roller.handlesCommand(messageText)) {
-      game.farhome.roller.processRollCommand(messageText).then(sendChatRoll);    
+      game.farhome.roller.processRollCommand(messageText).then(sendChatRoll);
       return false;
     }
   }
