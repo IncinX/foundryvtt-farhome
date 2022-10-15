@@ -1,31 +1,31 @@
-.fh-roller input[type=checkbox] {
+.fh-roller {
+  input[type=checkbox] {
+    border: 1px solid transparent;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    margin: 0;
+  }
 
-  border: 1px solid transparent;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100%;
-  height: 40px;
-  width: 40px;
-  cursor: pointer;
-  -webkit-appearance: none;
-  appearance: none;
-  outline: none;
-  margin: 0;
-}
+  input[type=checkbox]:disabled {
+    cursor: default;
+    filter: opacity(25%);
+  }
 
-.fh-roller input[type=checkbox]:disabled {
-  cursor: default;
-  filter: opacity(25%);
-}
+  input[type=checkbox]:checked {
+    outline: none;
+    filter: drop-shadow(0px 0px 2px black);
+    border: 3px solid #0004ff;
+  }
 
-.fh-roller input[type=checkbox]:checked {
-  outline: none;
-  filter: drop-shadow(0px 0px 2px black);
-  border: 3px solid #0004ff;
+  input[type=checkbox]:disabled.fh-hexed-roll {
+    filter: brightness(0.6) opacity(50%);
+    border: 2px solid #42004e;
+  }
 }
-
-/* Think this through so it is obvious it is hexed
-.fh-hexed-roll {
-  filter: brightness(0.2) hue-rotate(230deg);
-}
-*/

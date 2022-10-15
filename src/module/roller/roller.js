@@ -99,6 +99,8 @@ async function _handleReroll(event) {
   rollSummaryElement.empty();
   rollSummaryElement.append(newRollSummary);
 
+  // #todo html() only returns the inner html which happens to work in this case, but it's not a good idea to rely on that.
+  //       _applyHex has a better way of doing this... change this to using that approach
   sendActorMessage(messageQuery.html());
 }
 
@@ -272,8 +274,8 @@ export async function sendChatRoll(evaluatedRollHtml, activeEffectsHtml = '', ma
  * @param {Number} hexCount Number of hexes to apply to the roll.
  */
 async function _applyHex(evaluatedRollHtml, hexCount) {
-  const messageQuery = $(evaluatedRollHtml);
-  const enableInputElements = messageQuery.find('input:enabled');
+  let rollDOM = new DOMParser().parseFromString(evaluatedRollHtml, 'text/html');
+  let enableInputElements = rollDOM.querySelectorAll('input:enabled');
 
   for (
     let enabledInputsIndex = 0;
@@ -297,14 +299,13 @@ async function _applyHex(evaluatedRollHtml, hexCount) {
 
       // Disable and hex the current roll
       enabledInputElement.disabled = true;
-      enabledInputElement.class = 'fh-hexed-roll';
+      enabledInputElement.classList.add('fh-hexed-roll');
 
       hexCount--;
     }
   }
 
-  //return messageQuery.html();
-  return evaluatedRollHtml;
+  return rollDOM.body.innerHTML;
 }
 
 /**
