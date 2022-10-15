@@ -19,20 +19,15 @@
   - [ ] Buttons for spend healing surge, and mana restore
   - [ ] Create a wizard that can do level ups (with continuation to keep doing level ups... this will help for NPC creation)
   - [ ] Create a wizard that can do monster creation
-- [ ] MAJOR: Magic Compendium Update
 
 ## P1
 
 - [ ] Default values for token lighting
 - [ ] Try removing the bold from the text labels everywhere
-- [ ] Consider applying a blur and darkening effect to the farhome background
 - [ ] Add indicators in the summary for how much was added by bonus modifiers
-- [ ] Create clean infrastructure for creating new roll templates, re-rolling from templates, re-posting rolls from re-rolled templates. Document it in code.
-- [ ] Upgrade FoundryVTT to the latest version (and verify that my system keeps working) - Do this on test server first after the new updates are out.
 
 ## P2
 
-- [ ] Add support for private members according to this (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_class_fields)
 - [ ] Automated tests for template evaluator
 - [ ] Start churning through #todo's to clean things up
 - [ ] Add jsdoc comments to get all the documentation up to par
