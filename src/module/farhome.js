@@ -56,22 +56,6 @@ Hooks.once('init', async () => {
   CONFIG.Combat.initiative.formula = '';
   Combatant.prototype._getInitiativeFormula = getInitiativeFormula;
 
-  // #debug Mess around with the effects... move this into a function with a nice comment when it is working
-  //        These status effects automatically translate to activeEffects when added to character tokens... and then is an easy way to get hex and poison working for now
-  const effectData = {
-    id: 'testEffect',
-    label: 'farhome.extraDice',
-    icon: 'icons/svg/holy-shield.svg',
-  };
-
-  CONFIG.statusEffects = [];
-  CONFIG.statusEffects.push(effectData);
-
-  // #debug Too early to do this, need to hook later
-  //game.scene.hud.token.refreshStatusIcons();
-
-  // #todo How to trigger an update to the status effects that show on tokens? Look at that github project that adds counters to effects
-
   // Register custom system settings
   registerSettings();
 

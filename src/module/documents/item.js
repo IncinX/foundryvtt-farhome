@@ -1,6 +1,7 @@
 import { evaluateTemplate as evaluateRollTemplate } from '../core/template-evaluator';
 import { convertSpellLevelToManaCost } from '../core/mana';
 import { sendActorMessage } from '../core/chat';
+import { getEffectData, getEffectHtml } from '../core/effects';
 import { sendChatRoll } from '../roller/roller';
 
 const MAX_SPELL_LEVEL = 10;
@@ -126,8 +127,8 @@ export class FarhomeItem extends Item {
     );
 
     // Evaluate the active effects for the character (ie/ hex, poison, etc)
-    // #todo Fill out active effects area
-    const activeEffectsHtml = ``;
+    const activeEffectData = getEffectData(actorContext);
+    const activeEffectsHtml = await getEffectHtml(activeEffectData);
 
     // Evaluate mana data if it is a spell
     let manaData = undefined;

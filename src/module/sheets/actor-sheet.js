@@ -1,5 +1,6 @@
 import { onManageActiveEffect, prepareActiveEffectCategories } from '../core/effects.js';
 import { localizeObject } from '../core/localization.js';
+import { getEffectData, getEffectHtml } from '../core/effects';
 import { sendChatRoll } from '../roller/roller.js';
 
 // #todo Add Poison/Hex icons later
@@ -455,8 +456,13 @@ export default class FarhomeActorSheet extends ActorSheet {
         roll: rollHtml,
       });
 
+      // Evaluate the active effects for the character (ie/ hex, poison, etc)
+      const actorContext = this.actor.data;
+      const activeEffectData = getEffectData(actorContext);
+      const activeEffectsHtml = await getEffectHtml(activeEffectData);
+
       // Send the chat roll for display (along with summary calculation, etc.)
-      return sendChatRoll(evaluatedRollHtml);
+      return sendChatRoll(evaluatedRollHtml, activeEffectsHtml);
     }
   }
 

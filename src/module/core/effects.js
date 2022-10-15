@@ -20,10 +20,46 @@ export function populateStatusEffectsFromCompendium(compendiumName) {
     }
 
     // Sort the list by label
-    CONFIG.statusEffects.sort((a, b) => a.label > b.label ? 1 : -1);
+    CONFIG.statusEffects.sort((a, b) => (a.label > b.label ? 1 : -1));
   });
 }
 
+/**
+ * Examines the active effects on an actor and returns a numerical effect summary.
+ * @param {Object} actorContext The actor data context to examine.
+ * @returns {Object} An object containing the numerical effect summary (such as hex and poison).
+ */
+export function getEffectData(actorContext) {
+  let effectsData = {
+    hex: 0,
+    poison: 0,
+  };
+
+  for (const effect of actorContext.effects) {
+    const effectStatusId = effect.data.flags.core.statusId;
+
+    if (effectStatusId.startsWith('hex')) {
+      effectsData.hex += parseInt(effectStatusId.split('-')[1]);
+    } else if (effectStatusId.startsWith('poison')) {
+      effectsData.poison += parseInt(effectStatusId.split('-')[1]);
+    }
+  }
+
+  return effectsData;
+}
+
+/**
+ * Composite an html representation of the effect data to embed.
+ * @param {Object} effectData Get the numerical effect data (@see getEffectData ).
+ * @returns {String} The html representation of the effect data.
+ */
+export async function getEffectHtml(effectData) {
+  const effectsHtml = await renderTemplate('systems/farhome/templates/chat/embedded-effect.hbs', effectData);
+
+  return effectsHtml;
+}
+
+// #todo These functions below were part of the original template and currently isn't called.
 /**
  * Manage Active Effect instances through the Actor Sheet via effect control buttons.
  * @param {MouseEvent} event      The left-click event on the effect control
