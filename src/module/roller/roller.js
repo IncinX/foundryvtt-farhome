@@ -88,7 +88,7 @@ async function _handleReroll(event) {
   // Do the re-roll after the parsing so it doesn't interfere with the parsing.
   for (let pendingRerollElement of pendingRerollElements) {
     const rollData = _parseRoll(pendingRerollElement);
-    const newRoll = await game.farhome.roller.evaluateRerolls([], [rollData]);
+    const newRoll = game.farhome.roller.evaluateRerolls([], [rollData]);
     const rollHtml = await game.farhome.roller.formatRolls(newRoll, false);
     pendingRerollElement.insertAdjacentHTML('afterend', rollHtml);
   }
@@ -279,7 +279,7 @@ export class FHRoller {
   async evaluateRollFormula(formula) {
     try {
       const parsedFormula = parseFormula(formula, this.parsers);
-      const rolls = await this.evaluateRolls(parsedFormula);
+      const rolls = this.evaluateRolls(parsedFormula);
 
       console.log(`Farhome | Rolled ${rolls} with formula ${parsedFormula}`);
 
@@ -291,7 +291,7 @@ export class FHRoller {
     }
   }
 
-  async evaluateRolls(pool) {
+  evaluateRolls(pool) {
     return [
       ...rollDie(pool.hero, Dice.HERO, HERO_ROLL_TABLE, this.rng),
       ...rollDie(pool.superior, Dice.SUPERIOR, SUPERIOR_ROLL_TABLE, this.rng),
@@ -306,10 +306,10 @@ export class FHRoller {
     ];
   }
 
-  async evaluateRerolls(keptResults, reRollResults) {
+  evaluateRerolls(keptResults, reRollResults) {
     const reRolledDice = reRollResults.map((roll) => roll.die);
     const pool = this.toDicePool(reRolledDice);
-    const reRolls = await this.evaluateRolls(pool);
+    const reRolls = this.evaluateRolls(pool);
     return [...keptResults, ...reRolls];
   }
 

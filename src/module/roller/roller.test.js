@@ -11,18 +11,18 @@ test('should react to fh command', () => {
   expect(fhRoller.handlesCommand('/fh ')).toBe(true);
 });
 
-test('should roll a hero success', async () => {
+test('should roll a hero success', () => {
   const fhRoller = new FHRoller(makeRng(0));
-  const result = await fhRoller.evaluateRolls(new DicePool(1, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+  const result = fhRoller.evaluateRolls(new DicePool(1, 0, 0, 0, 0, 0, 0, 0, 0, 0));
 
   expect(result.length).toBe(1);
   expect(result[0].die).toBe(Dice.HERO);
   expect(result[0].face).toBe(Faces.SUCCESS);
 });
 
-test('should roll one of each dice with rng 0', async () => {
+test('should roll one of each dice with rng 0', () => {
   const fhRoller = new FHRoller(makeRng(...Array(10).fill(0)));
-  const result = await fhRoller.evaluateRolls(new DicePool(...Array(10).fill(1)));
+  const result = fhRoller.evaluateRolls(new DicePool(...Array(10).fill(1)));
 
   expect(result.length).toBe(10);
 
@@ -57,9 +57,9 @@ test('should roll one of each dice with rng 0', async () => {
   expect(result[9].face).toBe(Faces.WOUND);
 });
 
-test('should roll one of each dice with rng 1', async () => {
+test('should roll one of each dice with rng 1', () => {
   const fhRoller = new FHRoller(makeRng(...Array(10).fill(1)));
-  const result = await fhRoller.evaluateRolls(new DicePool(...Array(10).fill(1)));
+  const result = fhRoller.evaluateRolls(new DicePool(...Array(10).fill(1)));
 
   expect(result.length).toBe(10);
 
@@ -94,9 +94,9 @@ test('should roll one of each dice with rng 1', async () => {
   expect(result[9].face).toBe(Faces.WOUND);
 });
 
-test('should roll one of each dice with rng 2', async () => {
+test('should roll one of each dice with rng 2', () => {
   const fhRoller = new FHRoller(makeRng(...Array(10).fill(2)));
-  const result = await fhRoller.evaluateRolls(new DicePool(...Array(10).fill(1)));
+  const result = fhRoller.evaluateRolls(new DicePool(...Array(10).fill(1)));
 
   expect(result.length).toBe(10);
 
@@ -131,9 +131,9 @@ test('should roll one of each dice with rng 2', async () => {
   expect(result[9].face).toBe(Faces.WOUND);
 });
 
-test('should roll one of each dice with rng 3', async () => {
+test('should roll one of each dice with rng 3', () => {
   const fhRoller = new FHRoller(makeRng(...Array(10).fill(3)));
-  const result = await fhRoller.evaluateRolls(new DicePool(...Array(10).fill(1)));
+  const result = fhRoller.evaluateRolls(new DicePool(...Array(10).fill(1)));
 
   expect(result.length).toBe(10);
 
@@ -168,9 +168,9 @@ test('should roll one of each dice with rng 3', async () => {
   expect(result[9].face).toBe(Faces.BLANK);
 });
 
-test('should roll one of each dice with rng 4', async () => {
+test('should roll one of each dice with rng 4', () => {
   const fhRoller = new FHRoller(makeRng(...Array(10).fill(4)));
-  const result = await fhRoller.evaluateRolls(new DicePool(...Array(10).fill(1)));
+  const result = fhRoller.evaluateRolls(new DicePool(...Array(10).fill(1)));
 
   expect(result.length).toBe(10);
 
@@ -205,9 +205,9 @@ test('should roll one of each dice with rng 4', async () => {
   expect(result[9].face).toBe(Faces.BLANK);
 });
 
-test('should roll one of each dice with rng 5', async () => {
+test('should roll one of each dice with rng 5', () => {
   const fhRoller = new FHRoller(makeRng(...Array(10).fill(5)));
-  const result = await fhRoller.evaluateRolls(new DicePool(...Array(10).fill(1)));
+  const result = fhRoller.evaluateRolls(new DicePool(...Array(10).fill(1)));
 
   expect(result.length).toBe(10);
 

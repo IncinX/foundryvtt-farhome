@@ -4,8 +4,8 @@ const parsers = [new FHParser()];
 
 test('it should fail to parse a roll formula', () => {
   const msg =
-    'Incorrect roll formula 1dx + 4ds! Usage: Any combination of the following letters: ' +
-    'h, s, e, n, b, t, +, D, d, g, w (h = hero, s = superior, e = enhanced, n = normal, b = bad, t = terrible, + = superior defense, D = superior defense, d = defense, g = guaranteed wound, w = wound). To roll multiple dice simply add multiple letters or prepend a number, e.g.: c3ba';
+    '<p>Incorrect roll formula 1dx + 4ds!</p><p>Usage: Any combination of the following letters: ' +
+    'h, s, e, n, b, t, +, D, d, g, w (h = hero, s = superior, e = enhanced, n = normal, b = bad, t = terrible, + = superior defense, D = superior defense, d = defense, g = guaranteed wound, w = wound). To roll multiple dice simply add multiple letters or prepend a number, e.g.: c3ba</p>';
   expect(() => parseFormula('1dx + 4ds', parsers)).toThrow(msg);
 });
 
