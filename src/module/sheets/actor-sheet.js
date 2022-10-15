@@ -1,14 +1,6 @@
-import { sendActorMessage } from '../helpers/chat.js';
-import { onManageActiveEffect, prepareActiveEffectCategories } from '../helpers/effects.js';
-import { localizeObject } from '../helpers/localization.js';
-import {
-  getStrongestKey,
-  getDefaultRollTemplate,
-  getWeaponRollTemplate,
-  getArmorRollTemplate,
-  getSpellRollTemplate,
-  getManeuverRollTemplate,
-} from '../helpers/roll-templates.js';
+import { onManageActiveEffect, prepareActiveEffectCategories } from '../core/effects.js';
+import { localizeObject } from '../core/localization.js';
+import { sendChatRoll } from '../roller/roller.js';
 
 // #todo Add Poison/Hex icons later
 
@@ -266,8 +258,11 @@ export default class FarhomeActorSheet extends ActorSheet {
     const actorData = this.actor.data.data;
 
     if (type === 'armor') {
+      const rollTemplateHtml = await renderTemplate(
+        'systems/farhome/templates/item-roll-templates/armor-item-roll-template.hbs',
+      );
       itemData.data.rollTemplate = {
-        value: getArmorRollTemplate(),
+        value: rollTemplateHtml,
       };
     } else if (type === 'weapon' || type === 'maneuver') {
       const relevantWeaponAttributes = {
@@ -275,16 +270,30 @@ export default class FarhomeActorSheet extends ActorSheet {
         dex: actorData.attributes.dex,
       };
 
-      const strongestWeaponProficiency = getStrongestKey(actorData.proficiencies.weapons);
-      const strongestAttribute = getStrongestKey(relevantWeaponAttributes);
+      const strongestWeaponProficiency = FarhomeActorSheet._getStrongestKey(actorData.proficiencies.weapons);
+      const strongestAttribute = FarhomeActorSheet._getStrongestKey(relevantWeaponAttributes);
 
       if (type === 'weapon') {
+        const rollTemplateHtml = await renderTemplate(
+          'systems/farhome/templates/item-roll-templates/weapon-item-roll-template.hbs',
+          {
+            strongestProf: `a.${strongestWeaponProficiency}`,
+            strongestAttr: `a.${strongestAttribute}`,
+          },
+        );
         itemData.data.rollTemplate = {
-          value: getWeaponRollTemplate(`a.${strongestWeaponProficiency}`, `a.${strongestAttribute}`),
+          value: rollTemplateHtml,
         };
       } else {
+        const rollTemplateHtml = await renderTemplate(
+          'systems/farhome/templates/item-roll-templates/maneuver-item-roll-template.hbs',
+          {
+            strongestProf: `a.${strongestWeaponProficiency}`,
+            strongestAttr: `a.${strongestAttribute}`,
+          },
+        );
         itemData.data.rollTemplate = {
-          value: getManeuverRollTemplate(`a.${strongestWeaponProficiency}`, `a.${strongestAttribute}`),
+          value: rollTemplateHtml,
         };
       }
     } else if (type === 'spell') {
@@ -295,14 +304,27 @@ export default class FarhomeActorSheet extends ActorSheet {
         cha: actorData.attributes.cha,
       };
 
-      const strongestSpellProficiency = getStrongestKey(actorData.proficiencies.spells);
-      const strongestAttribute = getStrongestKey(relevantSpellAttributes);
+      const strongestSpellProficiency = FarhomeActorSheet._getStrongestKey(actorData.proficiencies.spells);
+      const strongestAttribute = FarhomeActorSheet._getStrongestKey(relevantSpellAttributes);
+
+      const rollTemplateHtml = await renderTemplate(
+        'systems/farhome/templates/item-roll-templates/spell-item-roll-template.hbs',
+        {
+          strongestProf: `a.${strongestSpellProficiency}`,
+          strongestAttr: `a.${strongestAttribute}`,
+        },
+      );
+
       itemData.data.rollTemplate = {
-        value: getSpellRollTemplate(`a.${strongestSpellProficiency}`, `a.${strongestAttribute}`),
+        value: rollTemplateHtml,
       };
     } else {
+      const rollTemplateHtml = await renderTemplate(
+        'systems/farhome/templates/item-roll-templates/default-item-roll-template.hbs',
+      );
+
       itemData.data.rollTemplate = {
-        value: getDefaultRollTemplate(),
+        value: rollTemplateHtml,
       };
     }
 
@@ -396,7 +418,7 @@ export default class FarhomeActorSheet extends ActorSheet {
    * @param {Event} event   The originating click event
    * @private
    */
-  _onRoll(event) {
+  async _onRoll(event) {
     event.preventDefault();
     const element = event.currentTarget;
     const dataset = element.dataset;
@@ -412,10 +434,38 @@ export default class FarhomeActorSheet extends ActorSheet {
 
     // Handle rolls that supply the formula directly.
     if (dataset.roll) {
-      let label = dataset.label ?? '';
-      let roll = game.farhome.roller.rollFormula(dataset.roll);
+      const label = dataset.label ?? '';
+      const rollHtml = await game.farhome.roller.evaluateRollFormula(dataset.roll);
 
-      return sendActorMessage(`<h1>${label}</h1>${roll}`);
+      // Render the skill using the header-roll template
+      const evaluatedRollHtml = await renderTemplate('systems/farhome/templates/chat/header-roll.hbs', {
+        label: label,
+        roll: rollHtml,
+      });
+
+      // Send the chat roll for display (along with summary calculation, etc.)
+      return sendChatRoll(evaluatedRollHtml);
     }
+  }
+
+  /**
+   * Gets the name of the key in an object that has the highest value.
+   * @param {Object} obj The object to search.
+   * @returns {string} The name of the key with the highest value.
+   * @private
+   */
+  static _getStrongestKey(obj) {
+    let strongestKey = null;
+    let strongestValue = -Infinity;
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        const value = obj[key].value;
+        if (value > strongestValue) {
+          strongestKey = key;
+          strongestValue = value;
+        }
+      }
+    }
+    return strongestKey;
   }
 }

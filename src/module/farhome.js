@@ -1,23 +1,25 @@
-import { FARHOME } from './helpers/config';
-import { createItemMacro, rollItemMacro } from './helpers/macros';
-import { ChatRoller } from './helpers/chat-roller';
 import { registerSettings } from './settings';
 import { preloadTemplates } from './preload-templates';
+
+import { FARHOME } from './core/config';
+import { createItemMacro, rollItemMacro } from './core/macros';
+import { getInitiativeFormula } from './core/initiative';
+
 import { FarhomeActor } from './documents/actor';
-import { FarhomeItem } from './documents/item';
-import { _getInitiativeFormula } from './helpers/initiative';
-import { secureRandomNumber } from './roller/rng';
-import { FHRoller } from './roller/fh/roller';
-import { FHRollSystem } from './roller/system';
+import { FarhomeItem, connectItemHooks } from './documents/item';
+import FarhomeItemSheet from './sheets/item-sheet';
+import FarhomeActorSheet from './sheets/actor-sheet';
+
 import { createCompendiumFromRules } from './importers/farhome-rules-importer';
 import {
   createCompendiumFromVetoolsBeastiary,
   VetoolsMonsterImportConfig,
 } from './importers/vetools-monsters-importer';
-import { connectRulesImporterApp } from './apps/farhome-rules-importer-app';
-import { connectVetoolsMonsterImporterApp } from './apps/vetools-monsters-importer-app';
-import FarhomeItemSheet from './sheets/item-sheet';
-import FarhomeActorSheet from './sheets/actor-sheet';
+import { connectRulesImporterApp as connectRulesImporterAppHooks } from './apps/farhome-rules-importer-app';
+import { connectVetoolsMonsterImporterApp as connectVetoolsMonsterImporterAppHooks } from './apps/vetools-monsters-importer-app';
+
+import { secureRandomNumber } from './roller/roller-util';
+import { FHRoller, connectRoller as connectRollerHooks } from './roller/roller';
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
@@ -25,9 +27,9 @@ import FarhomeActorSheet from './sheets/actor-sheet';
 
 // Initialize system
 Hooks.once('init', async () => {
-  console.log('farhome | Initializing farhome');
+  console.log('Farhome | Initializing farhome');
 
-  const roller = new FHRoller(secureRandomNumber, 'fh');
+  const roller = new FHRoller(secureRandomNumber);
 
   game.farhome = {
     // Centralized roller for global use
@@ -51,7 +53,7 @@ Hooks.once('init', async () => {
 
   // Configure the initiative formula
   CONFIG.Combat.initiative.formula = '';
-  Combatant.prototype._getInitiativeFormula = _getInitiativeFormula;
+  Combatant.prototype._getInitiativeFormula = getInitiativeFormula;
 
   // Register custom system settings
   registerSettings();
@@ -72,10 +74,6 @@ Hooks.once('init', async () => {
 });
 
 Hooks.on('init', () => {
-  // Register chat handler
-  // #todo Clean this up a bit later (moving to separate files that specifically handle the roll logic)
-  Hooks.on('chatMessage', FHRollSystem.diceRollerChatMessageHandler);
-
   // Register font here
   $('head').append('<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fondamento">');
 });
@@ -114,23 +112,14 @@ Hooks.once('setup', async () => {
 
 Hooks.once('ready', async () => {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
+  // #todo Move these to connect functions similar to below.
   Hooks.on('hotbarDrop', (_bar, data, slot) => createItemMacro(data, slot));
 });
 
 /* -------------------------------------------- */
-/*  Render Chat Log Hook                        */
+/*  Connect Hooks to sub-systems                */
 /* -------------------------------------------- */
-
-Hooks.on('renderChatLog', (_app, html, _data) => {
-  // #todo ChatRoller should probably be renamed to TemplateRoller
-  FarhomeItem.subscribeToRenderChatLog(html);
-  ChatRoller.subscribeToRenderChatLog(html);
-  FHRollSystem.subscribeToRenderChatLog(html);
-});
-
-/* -------------------------------------------- */
-/*  Connect Sub-Applications                    */
-/* -------------------------------------------- */
-
-connectRulesImporterApp();
-connectVetoolsMonsterImporterApp();
+connectRollerHooks();
+connectItemHooks();
+connectRulesImporterAppHooks();
+connectVetoolsMonsterImporterAppHooks();

@@ -45,7 +45,7 @@ export function proficiencyRollFormula(proficiency, attribute) {
   return rollFormula;
 }
 
-export function proficiencyRoll(roller, proficiency, attribute) {
+export async function proficiencyRoll(roller, proficiency, attribute) {
   // #todo Likely need to add an actor activeEffectFormula to handle effects later.
   let rollFormula = proficiencyRollFormula(proficiency, attribute);
   return roller(rollFormula);
