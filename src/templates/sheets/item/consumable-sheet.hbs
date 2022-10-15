@@ -1,4 +1,4 @@
-{{!-- TODO: This is identical to feat-sheet. Unify this with a partial later. --}}
+{{!-- TODO: This is virtually identical to feat-sheet. Unify this with a partial later. --}}
 
 <form class="{{cssClass}}" autocomplete="off">
   {{!-- Uncomment to debug data context --}}
@@ -10,6 +10,7 @@
   {{!-- Sheet Tab Navigation --}}
   <nav class="sheet-tabs tabs" data-group="primary">
     <a class="item" data-tab="description">{{localize "farhome.description"}}</a>
+    <a class="item" data-tab="attributes">{{localize "farhome.attributes"}}</a>
     <a class="item" data-tab="rollTemplate">{{localize "farhome.rollTemplate"}}</a>
   </nav>
 
@@ -18,6 +19,24 @@
     {{!-- Description Tab --}}
     <div class="tab" data-group="primary" data-tab="description">
       {{editor content=data.description.value target="data.description.value" button=true owner=owner editable=editable}}
+    </div>
+
+    {{!-- Attributes Tab --}}
+    <div class="tab attributes" data-group="primary" data-tab="attributes">
+      <table>
+        <colgroup>
+          <col class="attribute-label" />
+          <col class="attribute-data" />
+        </colgroup>
+        {{>
+        "systems/farhome/templates/partials/row-number-partial.hbs"
+        data.quantity
+        objectString="data.quantity"}}
+        {{>
+        "systems/farhome/templates/partials/row-number-partial.hbs"
+        data.weight
+        objectString="data.weight"}}
+      </table>
     </div>
 
     {{!-- Roll Template Tab --}}
