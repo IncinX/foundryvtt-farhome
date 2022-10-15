@@ -190,8 +190,6 @@ export async function evaluateTemplateChunk(templateChunk, actorContext, itemCon
     'success',
     'crit',
     'wound',
-    'hex',
-    'poison',
     's',
     'a',
     'i',
