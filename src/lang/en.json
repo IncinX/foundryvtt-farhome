@@ -171,6 +171,27 @@
     "items": "Items",
     "spendMana": "Spend Mana",
     "reroll": "Re-Roll Selected",
-    "rollSummary": "Roll Summary"
+    "rollSummary": "Roll Summary",
+    "blind": "Blind",
+    "burn": "Burn",
+    "dazed": "Dazed",
+    "fear": "Fear",
+    "grapple": "Grapple",
+    "hex-1": "Hex 1",
+    "hex-2": "Hex 2",
+    "hex-3": "Hex 3",
+    "incapacitated": "Incapacitated",
+    "paralyzed": "Paralyzed",
+    "poison-1": "Poison 1",
+    "poison-2": "Poison 2",
+    "poison-3": "Poison 3",
+    "prone": "Prone",
+    "restrained": "Restrained",
+    "silenced": "Silenced",
+    "sleep": "Sleep",
+    "slowed": "Slowed",
+    "stagger": "Stagger",
+    "stunned": "Stunned",
+    "weaken": "Weaken"
   }
 }

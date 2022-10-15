@@ -18,6 +18,7 @@ import { connectRulesImporterApp } from './apps/farhome-rules-importer-app';
 import { connectVetoolsMonsterImporterApp } from './apps/vetools-monsters-importer-app';
 import FarhomeItemSheet from './sheets/item-sheet';
 import FarhomeActorSheet from './sheets/actor-sheet';
+import { populateStatusEffectsFromCompendium } from './core/effects';
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
@@ -52,6 +53,22 @@ Hooks.once('init', async () => {
   // Configure the initiative formula
   CONFIG.Combat.initiative.formula = '';
   Combatant.prototype._getInitiativeFormula = _getInitiativeFormula;
+
+  // #debug Mess around with the effects... move this into a function with a nice comment when it is working
+  //        These status effects automatically translate to activeEffects when added to character tokens... and then is an easy way to get hex and poison working for now
+  const effectData = {
+    id: 'testEffect',
+    label: 'farhome.extraDice',
+    icon: 'icons/svg/holy-shield.svg',
+  };
+
+  CONFIG.statusEffects = [];
+  CONFIG.statusEffects.push(effectData);
+
+  // #debug Too early to do this, need to hook later
+  //game.scene.hud.token.refreshStatusIcons();
+
+  // #todo How to trigger an update to the status effects that show on tokens? Look at that github project that adds counters to effects
 
   // Register custom system settings
   registerSettings();
@@ -115,6 +132,11 @@ Hooks.once('setup', async () => {
 Hooks.once('ready', async () => {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on('hotbarDrop', (_bar, data, slot) => createItemMacro(data, slot));
+
+  // Iterate through the conditions pack to populate the conditions
+  // The compendiums will be loaded in ready and it is before the user has a chance to click on the token
+  // to show the status effect icons. This is the best opportunity to change the status effects for the system.
+  populateStatusEffectsFromCompendium('farhome.farhome-conditions');
 });
 
 /* -------------------------------------------- */
