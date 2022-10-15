@@ -218,10 +218,10 @@ export async function sendChatRoll(evaluatedRollHtml, activeEffectsHtml = '', ma
 
 /**
  * Given a die and various die faces, roll it (and potentially explode)
- * @param times how many times a die should be rolled
- * @param die enum value
- * @param faces the enum with all the die's faces
- * @param rng random number generator
+ * @param {Number} times How many times a die should be rolled
+ * @param {Number} die Enum value for the die to roll
+ * @param {Object} faces The enum with all the die's faces
+ * @param {Object} rng Rrandom number generator
  * @return an array with all rolled faces
  */
 export function rollDie(times, die, faces, rng) {
@@ -233,30 +233,50 @@ export function rollDie(times, die, faces, rng) {
     });
 }
 
+/**
+ * Combines evaluated roll values to a summed monoid.
+ * @param {Array} rolls Array of rolls to combine.
+ * @param {Function} rollToRollResult Function to convert rolls to a result monoid.
+ * @param {Function} rollValuesMonoid Object with identity and combine functions to combine monoid's.
+ * @return {Object} Monoid with the combined roll results.
+ */
 export function combineRolls(rolls, rollToRollResult, rollValuesMonoid) {
   const results = rolls.map((roll) => rollToRollResult(roll));
   return combineAll(results, rollValuesMonoid);
 }
 
+/**
+ * Class representing a roll with a die and a face.
+ */
 export class Roll {
+  /**
+   * Constructs the roll object.
+   * @param {Number} die Enum value for the die being represented.
+   * @param {Number} face Enum value for the face being represented.
+   */
   constructor(die, face) {
     this.die = die;
     this.face = face;
   }
 
+  /**
+   * Returns the roll as a string.
+   * @return {String} String representation of the roll.
+   * @override
+   */
   toString() {
     return `die: ${this.die}, face: ${this.face}`;
   }
 }
 
-export class ReRoll {
-  constructor(roll, shouldReRoll) {
-    this.roll = roll;
-    this.shouldReRoll = shouldReRoll;
-  }
-}
-
+/**
+ * Centralized roller class used throughout the farhome game.
+ */
 export class FHRoller {
+  /**
+   * Constructs the farhome class with a given random number generator.
+   * @param {Object} rng Random number generator that can be customized for testing purposes.
+   */
   constructor(rng) {
     this.command = 'fh';
 
@@ -267,16 +287,31 @@ export class FHRoller {
     this.rng = rng;
   }
 
+  /**
+   * Indicates whether a messages that is prefixed with a / can be parsed by this roller object.
+   * @param {String} command Command to check for parsability.
+   * @return {Boolean} True if the command can be parsed, false otherwise.
+   */
   handlesCommand(command) {
     return command.startsWith(`/${this.command} `);
   }
 
+  /**
+   * Parses and executes a given roll command.
+   * @param {String} command Command to check for parsability and execution.
+   * @return {String} HTML string containing the roll results.
+   */
   async processRollCommand(command) {
     // try to match "/{command} {formula} # {flavourText}" pattern
     const matches = command.match(new RegExp(`^/${this.command} (.*?)(?:\\s*#\\s*([^]+)?)?$`)) || [];
     return this.evaluateRollFormula(matches[1] || '', matches[2]);
   }
 
+  /**
+   * Evaluates a given roll formula (the roll formula is documented in roll-parser or shown with the '/fh help' command).
+   * @param {String} formula Roll formula to evaluate.
+   * @return {String} HTML string containing the roll results or an HTML error message if there was a failure to parse.
+   */
   async evaluateRollFormula(formula) {
     try {
       const parsedFormula = parseFormula(formula, this.parsers);
@@ -292,6 +327,11 @@ export class FHRoller {
     }
   }
 
+  /**
+   * Rolls the dice from a pool which is an object where each key represented a die and the value is the number of dice to roll.
+   * @param {Object} pool Object containing the dice to roll.
+   * @return {Array} Array of rolls as @see Roll objects.
+   */
   evaluateRolls(pool) {
     return [
       ...rollDie(pool.hero, Dice.HERO, HERO_ROLL_TABLE, this.rng),
@@ -307,19 +347,36 @@ export class FHRoller {
     ];
   }
 
-  evaluateRerolls(keptResults, reRollResults) {
-    const reRolledDice = reRollResults.map((roll) => roll.die);
+  /**
+   * Creates a union of unrolled dice and dice to re-roll for new values.
+   * @param {Array} keptResults Array of dice objects to keep and join to the final list.
+   * @param {Array} rerollResults Array of dice objects to keep and join to the final list.
+   * @return {Array} Array of rolls as @see Roll objects.
+   */
+  evaluateRerolls(keptResults, rerollResults) {
+    const reRolledDice = rerollResults.map((roll) => roll.die);
     const pool = this.toDicePool(reRolledDice);
     const reRolls = this.evaluateRolls(pool);
     return [...keptResults, ...reRolls];
   }
 
-  // #todo There are two combineRolls functions, here and global, fix that.
+  /**
+   * Combines the rolls into a single monoid representig the sum of the die results.
+   * @param {Array} rolls The rolls to combine.
+   * @return {Object} Monoid representing the sum result of all the rolls.
+   */
   combineRolls(rolls) {
+    // #todo There are two combineRolls functions, here and global, fix that.
     const results = rolls.map((roll) => parseRollValues(roll));
     return combineAll(results, rollValuesMonoid);
   }
 
+  /**
+   * Formats the given rolls into an HTML representation.
+   * @param {Array} rolls The rolls to format.
+   * @return {Boolean} wrapDiv Whether to wrap the result in a div for proper formatting. If false, the rolls are represented only as HTML input tags.
+   * @return {String} HTML string containing the roll results.
+   */
   async formatRolls(rolls, wrapDiv = true) {
     const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
     const rollHtml = await renderTemplate('systems/farhome/templates/chat/raw-rolls.hbs', {
@@ -330,6 +387,11 @@ export class FHRoller {
     return rollHtml;
   }
 
+  /**
+   * Converts a set of dice to a dice pool where the key represents the die name and the value indicates the number of those dice.
+   * @param {Array} dice Array of dice objects to convert to a dice pool. The dice objects are represented as @see Roll objects.
+   * @return {Object} Object representing the dice pool.
+   */
   toDicePool(dice) {
     const hero = countMatches(dice, (die) => die === Dice.HERO);
     const superior = countMatches(dice, (die) => die === Dice.SUPERIOR);
