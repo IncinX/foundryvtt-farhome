@@ -1,15 +1,15 @@
 {{#if wrapDiv}}
-<div class="fh-roller">
+<div class='fh-roller'>
   <form>
 {{/if}}
 
     {{#each rolls as |roll rollIndex|}}
       <input
-        class="fh-roller-roll"
-        type="checkbox"
-        style="background-image: url('systems/farhome/images/{{roll.imageName}}.png')"
-        data-die="{{roll.die}}"
-        data-face="{{roll.face}}"
+        class='fh-roller-roll'
+        type='checkbox'
+        style='background-image: url("systems/farhome/images/{{roll.imageName}}.png")'
+        data-die='{{roll.die}}'
+        data-face='{{roll.face}}'
       >
     {{/each}}
 
