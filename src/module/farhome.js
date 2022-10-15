@@ -2,6 +2,7 @@ import { registerSettings } from './settings';
 import { preloadTemplates } from './preload-templates';
 
 import { FARHOME } from './core/config';
+import { populateStatusEffectsFromCompendium } from './core/effects';
 import { createItemMacro, rollItemMacro } from './core/macros';
 import { getInitiativeFormula } from './core/initiative';
 
@@ -114,6 +115,11 @@ Hooks.once('ready', async () => {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   // #todo Move these to connect functions similar to below.
   Hooks.on('hotbarDrop', (_bar, data, slot) => createItemMacro(data, slot));
+
+  // Iterate through the conditions pack to populate the conditions
+  // The compendiums will be loaded in ready and it is before the user has a chance to click on the token
+  // to show the status effect icons. This is the best opportunity to change the status effects for the system.
+  populateStatusEffectsFromCompendium('farhome.farhome-conditions');
 });
 
 /* -------------------------------------------- */

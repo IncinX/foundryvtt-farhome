@@ -147,82 +147,51 @@ export class RollValues {
 
 const heroImages = new Map();
 heroImages.set(Faces.SUCCESS, 'hero-success');
-heroImages.set(Faces.SUCCESS, 'hero-success');
 heroImages.set(Faces.DOUBLE_SUCCESS, 'hero-successx2');
-heroImages.set(Faces.DOUBLE_SUCCESS, 'hero-successx2');
-heroImages.set(Faces.CRITICAL_SUCCESS, 'hero-crit');
 heroImages.set(Faces.CRITICAL_SUCCESS, 'hero-crit');
 
 const superiorImages = new Map();
 superiorImages.set(Faces.BLANK, 'superior-blank');
-superiorImages.set(Faces.SUCCESS, 'superior-success');
-superiorImages.set(Faces.SUCCESS, 'superior-success');
 superiorImages.set(Faces.SUCCESS, 'superior-success');
 superiorImages.set(Faces.DOUBLE_SUCCESS, 'superior-successx2');
 superiorImages.set(Faces.CRITICAL_SUCCESS, 'superior-crit');
 
 const enhancedImages = new Map();
 enhancedImages.set(Faces.BLANK, 'enhanced-blank');
-enhancedImages.set(Faces.BLANK, 'enhanced-blank');
-enhancedImages.set(Faces.SUCCESS, 'enhanced-success');
-enhancedImages.set(Faces.SUCCESS, 'enhanced-success');
 enhancedImages.set(Faces.SUCCESS, 'enhanced-success');
 enhancedImages.set(Faces.CRITICAL_SUCCESS, 'enhanced-crit');
 
 const normalImages = new Map();
 normalImages.set(Faces.BLANK, 'normal-blank');
-normalImages.set(Faces.BLANK, 'normal-blank');
-normalImages.set(Faces.BLANK, 'normal-blank');
-normalImages.set(Faces.BLANK, 'normal-blank');
-normalImages.set(Faces.SUCCESS, 'normal-success');
 normalImages.set(Faces.SUCCESS, 'normal-success');
 
 const badImages = new Map();
 badImages.set(Faces.CRITICAL_FAILURE, 'bad-crit');
 badImages.set(Faces.FAILURE, 'bad-fail');
-badImages.set(Faces.FAILURE, 'bad-fail');
-badImages.set(Faces.FAILURE, 'bad-fail');
-badImages.set(Faces.BLANK, 'bad-blank');
 badImages.set(Faces.BLANK, 'bad-blank');
 
 const terribleImages = new Map();
 terribleImages.set(Faces.CRITICAL_FAILURE, 'terrible-crit');
 terribleImages.set(Faces.DOUBLE_FAILURE, 'terrible-failx2');
 terribleImages.set(Faces.FAILURE, 'terrible-fail');
-terribleImages.set(Faces.FAILURE, 'terrible-fail');
-terribleImages.set(Faces.FAILURE, 'terrible-fail');
 terribleImages.set(Faces.BLANK, 'terrible-blank');
 
 const defenseImages = new Map();
 defenseImages.set(Faces.BLANK, 'defense-blank');
-defenseImages.set(Faces.BLANK, 'defense-blank');
-defenseImages.set(Faces.DEFENSE, 'defense-success');
-defenseImages.set(Faces.DEFENSE, 'defense-success');
 defenseImages.set(Faces.DEFENSE, 'defense-success');
 defenseImages.set(Faces.CRITICAL_DEFENSE, 'defense-crit');
 
 const superiorDefenseImages = new Map();
 superiorDefenseImages.set(Faces.BLANK, 'superior-defense-blank');
-superiorDefenseImages.set(Faces.BLANK, 'superior-defense-blank');
 superiorDefenseImages.set(Faces.DEFENSE, 'superior-defense-success');
 superiorDefenseImages.set(Faces.DOUBLE_DEFENSE, 'superior-defense-successx2');
-superiorDefenseImages.set(Faces.CRITICAL_DEFENSE, 'superior-defense-crit');
 superiorDefenseImages.set(Faces.CRITICAL_DEFENSE, 'superior-defense-crit');
 
 const guaranteedWoundImages = new Map();
 guaranteedWoundImages.set(Faces.WOUND, 'guaranteed-wound-wound');
-guaranteedWoundImages.set(Faces.WOUND, 'guaranteed-wound-wound');
-guaranteedWoundImages.set(Faces.WOUND, 'guaranteed-wound-wound');
-guaranteedWoundImages.set(Faces.WOUND, 'guaranteed-wound-wound');
-guaranteedWoundImages.set(Faces.WOUND, 'guaranteed-wound-wound');
-guaranteedWoundImages.set(Faces.WOUND, 'guaranteed-wound-wound');
 
 const woundImages = new Map();
 woundImages.set(Faces.WOUND, 'wound-wound');
-woundImages.set(Faces.WOUND, 'wound-wound');
-woundImages.set(Faces.WOUND, 'wound-wound');
-woundImages.set(Faces.BLANK, 'wound-blank');
-woundImages.set(Faces.BLANK, 'wound-blank');
 woundImages.set(Faces.BLANK, 'wound-blank');
 
 export const dieRollImages = new Map();

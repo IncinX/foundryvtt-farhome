@@ -190,8 +190,6 @@ export async function evaluateTemplateChunk(templateChunk, actorContext, itemCon
     'success',
     'crit',
     'wound',
-    'hex',
-    'poison',
     's',
     'a',
     'i',
@@ -205,8 +203,6 @@ export async function evaluateTemplateChunk(templateChunk, actorContext, itemCon
     success,
     crit,
     wound,
-    hex,
-    poison,
     evaluatorSystemContext,
     evaluatorActorContext,
     evaluatorItemContext,
@@ -277,22 +273,4 @@ function crit(critCount) {
  */
 function wound(woundCount) {
   return `<div class='fh-wounds' data-wounds='${woundCount}'></div>`;
-}
-
-/**
- * Creates an embedded HTML string to indicate a given number of hexes.
- * @param {number} hexCount The number of hexes to embed.
- * @returns Embedded HTML string with the given number of hexes.
- */
-function hex(hexCount) {
-  return `<div class='fh-hex' data-hex='${hexCount}'></div>`;
-}
-
-/**
- * Creates an embedded HTML string to indicate a given number of poisons.
- * @param {number} poisonCount The number of poisons to embed.
- * @returns Embedded HTML string with the given number of poisons.
- */
-function poison(poisonCount) {
-  return `<div class='fh-poison' data-poison='${poisonCount}'></div>`;
 }

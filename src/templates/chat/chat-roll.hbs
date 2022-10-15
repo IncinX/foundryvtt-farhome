@@ -1,24 +1,28 @@
-<div class='fh-roll'>
-  <div class='fh-evaluated-roll'>{{{evaluatedRollHtml}}}</div>
-  <div class='fh-active-effects'>{{{activeEffectsHtml}}}</div>
+<div class='fh-evaluated-roll'>{{{evaluatedRollHtml}}}</div>
+<div class='fh-active-effects'>{{{activeEffectsHtml}}}</div>
 
-  {{#if rollSummaryHtml}}
-    <hr>
-    <h2>{{localize 'farhome.rollSummary'}}</h2>
-    <div class='fh-roll-summary'>{{{rollSummaryHtml}}}</div>
+{{#if poisonRollHtml}}
+  <hr>
+  <h2>{{localize 'farhome.poisonRoll'}}</h2>
+  <div class='fh-evaluated-roll'>{{{poisonRollHtml}}}</div>
+{{/if}}
 
+{{#if rollSummaryHtml}}
+  <hr>
+  <h2>{{localize 'farhome.rollSummary'}}</h2>
+  <div class='fh-roll-summary'>{{{rollSummaryHtml}}}</div>
+
+  <form>
+    <button class='fh-reroll'>{{localize 'farhome.reroll'}}</button>
+  </form>
+{{/if}}
+
+{{#if manaData}}
+  {{#with manaData}}
     <form>
-      <button class='fh-reroll'>{{localize 'farhome.reroll'}}</button>
+      <button class='fh-spend-mana' data-mana='{{manaCost}}' data-actor-id='{{actorId}}'>
+        {{localize 'farhome.spendMana'}} ({{manaCost}}/{{availableMana}})
+      </button>
     </form>
-  {{/if}}
-
-  {{#if manaData}}
-    {{#with manaData}}
-      <form>
-        <button class="fh-spend-mana" data-mana="{{manaCost}}" data-actor-id="{{actorId}}">
-          {{localize 'farhome.spendMana'}} ({{manaCost}}/{{availableMana}})
-        </button>
-      </form>
-    {{/with}}
-  {{/if}}
-</div>
+  {{/with}}
+{{/if}}

@@ -1,50 +1,31 @@
-.fh-roller form input[type=checkbox] {
+.fh-roller {
+  input[type=checkbox] {
+    border: 1px solid transparent;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    margin: 0;
+  }
 
-  border: 1px solid transparent;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100%;
-  height: 40px;
-  width: 40px;
-  cursor: pointer;
-  -webkit-appearance: none;
-  appearance: none;
-  outline: none;
-  margin: 0;
-}
+  input[type=checkbox]:disabled {
+    cursor: default;
+    filter: opacity(25%);
+  }
 
-.fh-roller form input[type=checkbox]:disabled {
-  cursor: default;
-  filter: opacity(25%);
-}
+  input[type=checkbox]:checked {
+    outline: none;
+    filter: drop-shadow(0px 0px 2px black);
+    border: 3px solid #0004ff;
+  }
 
-.fh-roller form input[type=checkbox]:checked {
-  outline: none;
-  filter: drop-shadow(0px 0px 2px black);
-  border: 3px solid #0004ff;
-}
-
-.fh-roller form input[type=checkbox].fh-roller-was-re-roll {
-  border-bottom: 1px solid green;
-}
-
-.fh-roller .flavor-text {
-  color: #444;
-  font-size: 85%;
-}
-
-.fh-roller img.ova-best {
-  height: 52px;
-  width: 52px;
-  border: 4px solid darkgreen;
-  border-radius: 8px;
-  padding: 2px;
-}
-
-.fh-roller img.ova-worst {
-  height: 52px;
-  width: 52px;
-  border: 4px solid darkred;
-  border-radius: 8px;
-  padding: 2px;
+  input[type=checkbox]:disabled.fh-hexed-roll {
+    filter: brightness(0.6) opacity(25%);
+    border: 5px solid #42004e;
+  }
 }

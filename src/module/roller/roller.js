@@ -21,6 +21,7 @@ import {
   DEFENSE_ROLL_TABLE,
   WOUND_ROLL_TABLE,
   GUARANTEED_WOUND_ROLL_TABLE,
+  Faces,
 } from './roller-dice';
 import { FHParser, parseFormula } from './roller-parser';
 import { sendActorMessage } from '../core/chat';
@@ -73,16 +74,14 @@ async function _handleReroll(event) {
   const originalMessageElement = button.parentElement.parentElement;
   const messageElementClone = originalMessageElement.cloneNode(true);
   const messageQuery = $(messageElementClone);
-  const rollElements = messageQuery.find('input');
+  const rollElements = messageQuery.find('input:checked');
 
   // Iterate through the inputs to find the dice to re-roll.
   let pendingRerollElements = [];
 
   rollElements.each((_index, element) => {
-    if (element.checked) {
-      element.disabled = true;
-      pendingRerollElements.push(element);
-    }
+    element.disabled = true;
+    pendingRerollElements.push(element);
   });
 
   // Do the re-roll after the parsing so it doesn't interfere with the parsing.
@@ -100,6 +99,8 @@ async function _handleReroll(event) {
   rollSummaryElement.empty();
   rollSummaryElement.append(newRollSummary);
 
+  // #todo html() only returns the inner html which happens to work in this case, but it's not a good idea to rely on that.
+  //       _applyHex has a better way of doing this... change this to using that approach
   sendActorMessage(messageQuery.html());
 }
 
@@ -117,7 +118,7 @@ function _parseRoll(input) {
 /**
  * Parses HTML containing roll elements to get a summary of successes, crits, wounds, etc.
  * @param {String} rollHtml HTML text containing roll elements.
- * @return {Object} Roll unmodified summary data containing successes, crits, wounds, hexes and poisons.
+ * @return {Object} Roll unmodified summary data containing successes, crits, wounds, etc.
  */
 export function _getRollSummaryData(rollHtml) {
   try {
@@ -143,8 +144,6 @@ export function _getRollSummaryData(rollHtml) {
       successes: initialRollSummaryData.successes,
       crits: initialRollSummaryData.crits,
       wounds: initialRollSummaryData.wounds,
-      hex: 0,
-      poison: 0,
     };
 
     // #todo These hard-coded class strings should be communicated through const static exports (possibly from a class)
@@ -161,14 +160,6 @@ export function _getRollSummaryData(rollHtml) {
       rollModifiersData.wounds += parseInt(element.dataset.wounds);
     });
 
-    fhRollQuery.find('.fh-hex').each((_index, element) => {
-      rollModifiersData.hex += parseInt(element.dataset.hex);
-    });
-
-    fhRollQuery.find('.fh-poison').each((_index, element) => {
-      rollModifiersData.poison += parseInt(element.dataset.poison);
-    });
-
     return rollModifiersData;
   } catch (_error) {
     // Do nothing since it is likely unparseable HTML which might happen in the case of error messages like
@@ -178,6 +169,32 @@ export function _getRollSummaryData(rollHtml) {
     };
     return rollModifiersData;
   }
+}
+
+/**
+ * Parses HTML containing effect elements to get a summary of hexes, poisons, etc.
+ * @param {String} effectHtml HTML text containing roll elements.
+ * @return {Object} Effect summary data containing hexes, poisons, etc.
+ */
+export function _getEffectSummaryData(effectHtml) {
+  const fhEffectQuery = $(effectHtml);
+
+  // Compute the effect modifiers
+  let effectModifierData = {
+    hex: 0,
+    poison: 0,
+  };
+
+  // #todo This isn't finding sibling elements
+  fhEffectQuery.siblings('.fh-hex').each((_index, element) => {
+    effectModifierData.hex += parseInt(element.dataset.hex);
+  });
+
+  fhEffectQuery.siblings('.fh-poison').each((_index, element) => {
+    effectModifierData.poison += parseInt(element.dataset.poison);
+  });
+
+  return effectModifierData;
 }
 
 /**
@@ -198,21 +215,97 @@ export async function _getRollSummary(rollSummaryData) {
  * @param {Object} manaData Object containing the required data to spend mana data.
  */
 export async function sendChatRoll(evaluatedRollHtml, activeEffectsHtml = '', manaData = undefined) {
+  // Get the active effects that apply to the roll
+  const effectSummaryData = _getEffectSummaryData(activeEffectsHtml);
+
+  //
+  // Compute and apply hex if it is present
+  // Hex downgrades a crit to a single success for each level of hex.
+  //
+  const hexedRollHtml = await _applyHex(evaluatedRollHtml, effectSummaryData.hex);
+
+  //
   // Evaluate the roll summary if it is present.
-  const rollSummaryData = _getRollSummaryData(evaluatedRollHtml);
+  //
+  let rollSummaryData = _getRollSummaryData(hexedRollHtml);
+
+  //
+  // Compute and apply the poison if it is present
+  // Poison adds terrible dice to the roll for each level of poison
+  //
+  let poisonRollHtml = '';
+  if (effectSummaryData.poison > 0) {
+    // Roll terrible dice for each level of poison
+    const poisonRollFormula = `${effectSummaryData.poison}t`;
+    poisonRollHtml = await game.farhome.roller.evaluateRollFormula(poisonRollFormula);
+
+    // Apply the poison to the summary data
+    const poisonRollSummaryData = _getRollSummaryData(poisonRollHtml);
+
+    // Adjust the roll summary based on poison
+    // #todo Ideally the rollSummaryData has a function to add another rollSummaryData to it
+    rollSummaryData.successes += poisonRollSummaryData.successes;
+    rollSummaryData.crits += poisonRollSummaryData.crits;
+  }
+
+  // #todo Add blinded effect which adds two terrible dice to the roll
+
+  //
+  // Compute the final roll summary HTML
+  //
   const rollSummaryHtml = rollSummaryData.containsRollData ? await _getRollSummary(rollSummaryData) : undefined;
 
-  // #todo Need to analyze the activeEffectsHtml roll summary data, combine it, etc.
-
   const messageHtmlString = await renderTemplate('systems/farhome/templates/chat/chat-roll.hbs', {
-    evaluatedRollHtml: evaluatedRollHtml,
+    evaluatedRollHtml: hexedRollHtml,
     activeEffectsHtml: activeEffectsHtml,
+    poisonRollHtml: poisonRollHtml,
     rollSummaryHtml: rollSummaryHtml,
     manaData: manaData,
   });
 
   // Send the evaluatedTemplate to chat.
   sendActorMessage(messageHtmlString);
+}
+
+/**
+ * Apply hexes to a given roll.
+ * Hex downgrades a crit to a single success for each level of hex.
+ * @param {String} evaluatedRollHtml HTML string containing all the roll data
+ * @param {Number} hexCount Number of hexes to apply to the roll.
+ */
+async function _applyHex(evaluatedRollHtml, hexCount) {
+  let rollDOM = new DOMParser().parseFromString(evaluatedRollHtml, 'text/html');
+  let enableInputElements = rollDOM.querySelectorAll('input:enabled');
+
+  for (
+    let enabledInputsIndex = 0;
+    enabledInputsIndex < enableInputElements.length && hexCount > 0;
+    enabledInputsIndex++
+  ) {
+    let enabledInputElement = enableInputElements[enabledInputsIndex];
+
+    // Parse the die and face
+    const rollData = _parseRoll(enabledInputElement);
+
+    // If it is a critical, downgrade it to a success
+    if (rollData.face === Faces.CRITICAL_SUCCESS) {
+      rollData.face = Faces.SUCCESS;
+
+      // Replace with a formatted element (that also has a fh-hexed class)
+      const rollHtml = await game.farhome.roller.formatRolls([rollData], false);
+
+      // Add the new roll element
+      enabledInputElement.insertAdjacentHTML('afterend', rollHtml);
+
+      // Disable and hex the current roll
+      enabledInputElement.disabled = true;
+      enabledInputElement.classList.add('fh-hexed-roll');
+
+      hexCount--;
+    }
+  }
+
+  return rollDOM.body.innerHTML;
 }
 
 /**
@@ -377,7 +470,6 @@ export class FHRoller {
    * @return {String} HTML string containing the roll results.
    */
   async formatRolls(rolls, wrapDiv = true) {
-    const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
     const rollHtml = await renderTemplate('systems/farhome/templates/chat/raw-rolls.hbs', {
       rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
       wrapDiv: wrapDiv,
