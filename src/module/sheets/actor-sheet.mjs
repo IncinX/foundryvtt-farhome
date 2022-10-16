@@ -1,7 +1,6 @@
-import { onManageActiveEffect, prepareActiveEffectCategories } from '../core/effects.js';
-import { localizeObject } from '../core/localization.js';
-import { getEffectData, getEffectHtml } from '../core/effects';
-import { sendChatRoll } from '../roller/roller.js';
+import { getEffectData, getEffectHtml, onManageActiveEffect, prepareActiveEffectCategories } from '../core/effects';
+import { localizeObject } from '../core/localization';
+import { sendChatRoll } from '../roller/roller';
 
 // #todo Add Poison/Hex icons later
 

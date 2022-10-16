@@ -3,7 +3,7 @@
 // #todo Decide if functions should be in or out of any classes
 // #todo Remove async everywhere in this file that it is unnecessary, pay attention to returned promises too.
 
-import { countMatches, combineAll, escapeHtml } from './roller-util';
+import { countMatches, combineAll } from './roller-util';
 import { DieRollView } from './roller-view';
 import {
   Dice,
