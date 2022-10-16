@@ -206,6 +206,7 @@
     "stagger": "Stagger",
     "stunned": "Stunned",
     "weaken": "Weaken",
-    "poisonRoll": "Poison Roll"
+    "poisonRoll": "Poison Roll",
+    "blindRoll": "Blind Roll"
   }
 }
