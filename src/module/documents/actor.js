@@ -6,7 +6,10 @@ import { getSpellPowerToMaxManaTable } from '../core/mana';
  * @extends {Actor}
  */
 export class FarhomeActor extends Actor {
-  /** @override */
+  /**
+   * @inheritdoc
+   * @override
+   */
   prepareData() {
     // Prepare data for the actor. Calling the super version of this executes
     // the following, in order: data reset (to clear active effects),
@@ -15,7 +18,10 @@ export class FarhomeActor extends Actor {
     super.prepareData();
   }
 
-  /** @override */
+  /**
+   * @inheritdoc
+   * @override
+   */
   prepareBaseData() {
     // Data modifications in this step occur before processing embedded
     // documents or derived data.
@@ -45,11 +51,21 @@ export class FarhomeActor extends Actor {
 
   /** @inheritdoc */
   _preCreate(data, options, user) {
+    super._preCreate(data, options, user);
+
+    // Configure prototype token settings
     if (this.type === 'character') {
       this.data.token.update({
         vision: true,
         actorLink: true,
         disposition: 1,
+      });
+    } else if (this.type === 'npc') {
+      this.data.token.update({
+        dimSight: 30,
+        brightSight: 15,
+        vision: true,
+        disposition: -1,
       });
     }
   }
