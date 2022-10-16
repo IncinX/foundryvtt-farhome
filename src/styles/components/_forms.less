@@ -97,3 +97,9 @@
     padding: 0 8px;
   }
 }
+
+// Hack to make the editor application big enough to enter text when there is none.
+// #todo This should be tweaked similar to what dnd5e does
+div[role='application'].tox {
+  min-height: 450px;
+}
