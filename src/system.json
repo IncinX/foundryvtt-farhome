@@ -7,7 +7,7 @@
   "minimumCoreVersion": "9",
   "compatibleCoreVersion": "9.269",
   "scripts": [],
-  "esmodules": ["module/farhome.js"],
+  "esmodules": ["module/farhome.mjs"],
   "styles": ["styles/farhome.css"],
   "packs": [
     {
