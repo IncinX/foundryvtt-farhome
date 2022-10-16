@@ -30,8 +30,6 @@
     {{>"systems/farhome/templates/partials/actor/inventory-partial.hbs"}}
 
     {{!-- Notes Tab --}}
-    <div class="tab notes-tab" data-group="primary" data-tab="notes">
-      {{editor content=data.notes.value target="data.notes.value" button=true owner=owner editable=editable}}
-    </div>
+    {{>"systems/farhome/templates/partials/actor/notes-partial.hbs"}}
   </section>
 </form>

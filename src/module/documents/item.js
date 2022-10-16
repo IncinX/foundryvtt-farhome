@@ -80,7 +80,7 @@ export class FarhomeItem extends Item {
     }
     dialogContent += '</select></p>';
 
-    let d = new Dialog({
+    let manaDialog = new Dialog({
       title: ` ${itemContext.name}: Select Spell Level`,
       content: dialogContent,
       buttons: {
@@ -101,7 +101,7 @@ export class FarhomeItem extends Item {
       default: 'cast',
     });
 
-    d.render(true);
+    manaDialog.render(true);
   }
 
   /**

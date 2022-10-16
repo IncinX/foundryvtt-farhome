@@ -251,7 +251,7 @@
     }
   },
   "Item": {
-    "types": ["money", "item", "weapon", "armor", "feat", "maneuver", "spell", "consumable", "crafting", "condition"],
+    "types": ["money", "item", "weapon", "armor", "feat", "maneuver", "spell", "consumable", "crafting", "condition", "note"],
     "templates": {
       "base": {
         "description": {
@@ -391,6 +391,12 @@
     },
     "condition": {
       "templates": ["base"]
+    },
+    "note": {
+      "templates": [],
+      "note": {
+        "value": "Insert note here.  Click the edit button that shows up when you hover this text."
+      }
     }
   }
 }
