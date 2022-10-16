@@ -183,15 +183,19 @@ export function _getEffectSummaryData(effectHtml) {
   let effectModifierData = {
     hex: 0,
     poison: 0,
+    blind: 0,
   };
 
-  // #todo This isn't finding sibling elements
   fhEffectQuery.siblings('.fh-hex').each((_index, element) => {
     effectModifierData.hex += parseInt(element.dataset.hex);
   });
 
   fhEffectQuery.siblings('.fh-poison').each((_index, element) => {
     effectModifierData.poison += parseInt(element.dataset.poison);
+  });
+
+  fhEffectQuery.siblings('.fh-blind').each((_index, element) => {
+    effectModifierData.blind += parseInt(element.dataset.blind);
   });
 
   return effectModifierData;
@@ -248,7 +252,24 @@ export async function sendChatRoll(evaluatedRollHtml, activeEffectsHtml = '', ma
     rollSummaryData.crits += poisonRollSummaryData.crits;
   }
 
-  // #todo Add blinded effect which adds two terrible dice to the roll
+  //
+  // Compute and apply the blinded effect if it is present
+  // Blindness or not seeing a target adds 2 terrible dice to the roll
+  //
+  let blindRollHtml = '';
+  if (effectSummaryData.blind > 0) {
+    // Roll 2 terrible dice if blinded
+    const blindRollFormula = `2t`;
+    blindRollHtml = await game.farhome.roller.evaluateRollFormula(blindRollFormula);
+
+    // Apply the poison to the summary data
+    const blindRollSummaryData = _getRollSummaryData(blindRollHtml);
+
+    // Adjust the roll summary based on being blind
+    // #todo Ideally the rollSummaryData has a function to add another rollSummaryData to it
+    rollSummaryData.successes += blindRollSummaryData.successes;
+    rollSummaryData.crits += blindRollSummaryData.crits;
+  }
 
   //
   // Compute the final roll summary HTML
@@ -259,6 +280,7 @@ export async function sendChatRoll(evaluatedRollHtml, activeEffectsHtml = '', ma
     evaluatedRollHtml: hexedRollHtml,
     activeEffectsHtml: activeEffectsHtml,
     poisonRollHtml: poisonRollHtml,
+    blindRollHtml: blindRollHtml,
     rollSummaryHtml: rollSummaryHtml,
     manaData: manaData,
   });
