@@ -4,6 +4,7 @@ export async function preloadTemplates() {
     'systems/farhome/templates/partials/actor/attributes-partial.hbs',
     'systems/farhome/templates/partials/actor/feats-partial.hbs',
     'systems/farhome/templates/partials/actor/maneuvers-partial.hbs',
+    'systems/farhome/templates/partials/actor/notes-partial.hbs',
     'systems/farhome/templates/partials/actor/spells-partial.hbs',
     'systems/farhome/templates/partials/actor/inventory-partial.hbs',
     'systems/farhome/templates/partials/attribute-partial.hbs',

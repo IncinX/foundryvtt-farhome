@@ -110,15 +110,16 @@ export default class FarhomeActorSheet extends ActorSheet {
    */
   _prepareItems(context) {
     // Initialize containers.
-    const money = [];
-    const inventory = [];
-    const weapons = [];
-    const armors = [];
-    const feats = [];
-    const maneuvers = [];
-    const consumables = [];
-    const craftingItems = [];
-    const spells = {
+    let money = [];
+    let inventory = [];
+    let weapons = [];
+    let armors = [];
+    let feats = [];
+    let maneuvers = [];
+    let consumables = [];
+    let craftingItems = [];
+    let notes = [];
+    let spells = {
       0: [],
       1: [],
       2: [],
@@ -166,6 +167,10 @@ export default class FarhomeActorSheet extends ActorSheet {
       else if (i.type === 'crafting') {
         craftingItems.push(i);
       }
+      // Append to notes
+      else if (i.type === 'note') {
+        notes.push(i);
+      }
       // Append to spells.
       else if (i.type === 'spell') {
         if (i.data.spellLevel.value !== null) {
@@ -183,6 +188,7 @@ export default class FarhomeActorSheet extends ActorSheet {
     context.maneuvers = maneuvers;
     context.consumables = consumables;
     context.craftingItems = craftingItems;
+    context.notes = notes;
     context.spells = spells;
   }
 
@@ -331,6 +337,8 @@ export default class FarhomeActorSheet extends ActorSheet {
       itemData.data.rollTemplate = {
         value: rollTemplateHtml,
       };
+    } else if (type === 'note') {
+      // Do nothing since it doesn't have a roll template.
     } else {
       const rollTemplateHtml = await renderTemplate(
         'systems/farhome/templates/item-roll-templates/default-item-roll-template.hbs',
@@ -364,10 +372,31 @@ export default class FarhomeActorSheet extends ActorSheet {
   async _onItemDelete(event) {
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
-    item.delete();
 
-    // #todo I don't think this sliding motion actually works, add it later.
-    li.slideUp(200, () => this.render(false));
+    // First get confirmation
+    let confirmationDialog = new Dialog({
+      title: `Delete ${item.name}?`,
+      content: `<div class='delete-data' data-actor-id='${this.actor.id}' data-item-id='${item.id}'>Are you sure you want to delete ${item.name}?</div>`,
+      buttons: {
+        delete: {
+          icon: '<i class="fas fa-check"></i>',
+          label: 'Delete',
+          callback: (html) => {
+            const primaryDiv = html.find('.delete-data')[0];
+            const actor = game.actors.get(primaryDiv.dataset.actorId);
+            let item = actor.items.get(primaryDiv.dataset.itemId);
+            item.delete();
+          },
+        },
+        cancel: {
+          icon: '<i class="fas fa-times"></i>',
+          label: 'Cancel',
+        },
+      },
+      default: 'cancel',
+    });
+
+    confirmationDialog.render(true);
   }
 
   /**

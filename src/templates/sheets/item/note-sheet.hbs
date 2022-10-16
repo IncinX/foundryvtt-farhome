@@ -1,0 +1,19 @@
+<form class="{{cssClass}}" autocomplete="off">
+  {{!-- Uncomment to debug data context --}}
+  {{!--{{log .}}--}}
+
+  {{!-- Note Sheet Header --}}
+  <header class="sheet-header">
+    <img class="profile-img flex0" src="{{item.img}}" data-edit="img" title="{{item.name}}"/>
+    <div class="header-fields">
+      <h1 class="flex1">
+        <input name="name" type="text" value="{{item.name}}" placeholder="{{localize 'farhome.itemName'}}" />
+      </h1>
+    </div>
+  </header>
+
+  {{!-- Note Sheet Content --}}
+  <section class="sheet-body">
+    {{editor content=data.note.value target="data.note.value" button=true owner=owner editable=editable}}
+  </div>
+</form>

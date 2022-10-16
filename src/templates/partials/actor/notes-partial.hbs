@@ -1,0 +1,23 @@
+<div class="tab notes-tab" data-group="primary" data-tab="notes">
+  <ol class="items-list">
+    <li class="item flexrow items-header">
+      <div class="item-image"></div>
+      <div class="item-name">{{localize 'farhome.name'}}</div>
+      <div class="item-controls">
+        <a class="item-control item-create" title="{{localize 'farhome.createNote'}}" data-type="note"><i class="fas fa-plus"></i> {{localize 'farhome.createNote'}}</a>
+      </div>
+    </li>
+    {{#each notes as |note id|}}
+    <li class="item flexrow" data-item-id="{{note._id}}">
+      <div class="item-image"><img src="{{note.img}}" title="{{note.name}}" width="24" height="24"></div>
+      <h4 class="item-name">
+        <a class="item-edit">{{note.name}}</a>
+      </h4>
+      <div class="item-controls">
+        <a class="item-control item-edit" title="{{localize 'farhome.editNote'}}"><i class="fas fa-edit"></i></a>
+        <a class="item-control item-delete" title="{{localize 'farhome.deleteNote'}}"><i class="fas fa-trash"></i></a>
+      </div>
+    </li>
+    {{/each}}
+  </ol>
+</div>
