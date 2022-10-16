@@ -6,7 +6,6 @@ import { getSpellPowerToMaxManaTable } from '../core/mana';
  * @extends {Actor}
  */
 export class FarhomeActor extends Actor {
-  
   /**
    * @inheritdoc
    * @override
