@@ -1,6 +1,6 @@
 import { getEffectData, getEffectHtml, onManageActiveEffect, prepareActiveEffectCategories } from '../core/effects';
 import { localizeObject } from '../core/localization';
-import { sendActorMessage } from '../core/chat';
+import { sendStandardMessage } from '../core/chat';
 import { sendChatRoll } from '../roller/roller';
 
 // #todo Add Poison/Hex icons later
@@ -231,6 +231,9 @@ export default class FarhomeActorSheet extends ActorSheet {
 
     // Mana refill
     html.find('.mana-refill').click(this._onManaRefill.bind(this));
+
+    // Healing surges
+    html.find('.healing-surge').click(this._onHealingSurge.bind(this));
 
     // Drag events for macros.
     if (this.actor.isOwner) {
@@ -498,14 +501,67 @@ export default class FarhomeActorSheet extends ActorSheet {
     }
   }
 
+  /**
+   * Handle healing surge clicks.
+   * @param {Event} event The originating click event
+   */
+  async _onHealingSurge(event) {
+    event.preventDefault();
+
+    const actorContext = this.actor.data.data;
+    const currentHealingSurges = actorContext.features.healingSurges.value;
+
+    if (currentHealingSurges > 0) {
+      const healingSurgeRollHtml = await game.farhome.roller.evaluateRollFormula('www');
+
+      /* DEBUG
+      const healingSurgeMessageHtml = await renderTemplate(
+        'systems/farhome/templates/chat/healing-surge.hbs',
+        {
+          actorId: this.actor.id,
+          roll: healingSurgeRoll,
+        }
+      );
+      */
+
+      const healingSurgeMessageHtml = await renderTemplate('systems/farhome/templates/chat/header-roll.hbs', {
+        label: game.i18n.localize('farhome.healingSurge'),
+        roll: healingSurgeRollHtml,
+      });
+
+      /* This should be done in the applyHealing function
+      this.actor.update({ 'data.features.healingSurges.value': currentHealingSurges - 1});
+      */
+      const healingSurgeData = {
+        actorId: this.actor.id,
+      };
+
+      // #todo This would be cleaner if sendChatRoll used named arguments or had a named argument object.
+      await sendChatRoll(healingSurgeMessageHtml, '', undefined, healingSurgeData);
+
+      // #todo Need to add applyHealing to a chat handler (with appropriate connect messages)
+      // #todo To allow for re-roll, this likely needs to be sent through sendChatRoll with appropriate template options.
+      //       Is it possible to support named parameters like with Python so I can have optional parameters and specify the one that matters?
+    } else {
+      await sendStandardMessage(`${this.actor.name} has no healing surges left to spend.`);
+    }
+  }
+
+  /**
+   * Handle mana refill clicks.
+   * @param {Event} event The originating click event
+   */
   async _onManaRefill(event) {
     event.preventDefault();
+
     const actorContext = this.actor.data.data;
+
     const manaRefillValue = Math.max(Math.ceil(actorContext.level.value / 2), 1);
     const newManaValue = Math.min(actorContext.features.mana.max, actorContext.features.mana.value + manaRefillValue);
+
     this.actor.update({ 'data.features.mana.value': newManaValue });
 
-    sendActorMessage(`${this.actor.name} restored ${newManaValue - actorContext.features.mana.value} mana.`);
+    await sendStandardMessage(`${this.actor.name} restored ${newManaValue - actorContext.features.mana.value} mana.`);
   }
 
   /**

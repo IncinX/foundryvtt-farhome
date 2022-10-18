@@ -32,3 +32,13 @@
     </form>
   {{/with}}
 {{/if}}
+
+{{#if healingSurgeData}}
+  {{#with healingSurgeData}}
+    <form>
+      <button class='fh-apply-healing' data-actor-id='{{actorId}}'>
+        {{localize 'farhome.applyHealing'}}
+      </button>
+    </form>
+  {{/with}}
+{{/if}}

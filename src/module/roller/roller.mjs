@@ -218,7 +218,7 @@ export async function _getRollSummary(rollSummaryData) {
  * @param {String} activeEffectsHtml HTML string containing the effect elements like hex and poison.
  * @param {Object} manaData Object containing the required data to spend mana data.
  */
-export async function sendChatRoll(evaluatedRollHtml, activeEffectsHtml = '', manaData = undefined) {
+export async function sendChatRoll(evaluatedRollHtml, activeEffectsHtml = '', manaData = undefined, healingSurgeData = undefined) {
   // Get the active effects that apply to the roll
   const effectSummaryData = _getEffectSummaryData(activeEffectsHtml);
 
@@ -283,6 +283,7 @@ export async function sendChatRoll(evaluatedRollHtml, activeEffectsHtml = '', ma
     blindRollHtml: blindRollHtml,
     rollSummaryHtml: rollSummaryHtml,
     manaData: manaData,
+    healingSurgeData: healingSurgeData
   });
 
   // Send the evaluatedTemplate to chat.

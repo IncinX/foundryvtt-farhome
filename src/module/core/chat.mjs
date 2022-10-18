@@ -15,5 +15,6 @@ export function sendStandardMessage(content) {
 }
 
 export function sendActorMessage(content) {
+  // #todo What is the difference with this method? This should maybe accept an actor as a parameter.
   return sendStandardMessage(content);
 }
