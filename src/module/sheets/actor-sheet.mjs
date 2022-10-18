@@ -503,7 +503,7 @@ export default class FarhomeActorSheet extends ActorSheet {
     const actorContext = this.actor.data.data;
     const manaRefillValue = Math.max(Math.ceil(actorContext.level.value / 2), 1);
     const newManaValue = Math.min(actorContext.features.mana.max, actorContext.features.mana.value + manaRefillValue);
-    this.actor.update({ "data.features.mana.value": newManaValue });
+    this.actor.update({ 'data.features.mana.value': newManaValue });
 
     sendActorMessage(`${this.actor.name} restored ${newManaValue - actorContext.features.mana.value} mana.`);
   }
