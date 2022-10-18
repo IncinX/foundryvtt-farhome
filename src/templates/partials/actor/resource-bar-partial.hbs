@@ -1,40 +1,56 @@
 <div class="resource-fields grid grid-8col">
+
+  <!-- Hero Dice -->
   {{>
   "systems/farhome/templates/partials/max-resource-partial.hbs"
   data.features.hero
   objectString="data.features.hero"
   separatorString=" / "}}
+  
+  <!-- Wounds -->
   {{>
   "systems/farhome/templates/partials/max-resource-partial.hbs"
   data.features.wounds
   objectString="data.features.wounds"
   separatorString=" / "}}
+  
+  <!-- Temp Wounds -->
   {{>
   "systems/farhome/templates/partials/resource-partial.hbs"
   data.features.tempWounds
   objectString="data.features.tempWounds"}}
+  
+  <!-- Healing Surges -->
   {{>
   "systems/farhome/templates/partials/max-resource-partial.hbs"
   data.features.healingSurges
   objectString="data.features.healingSurges"
   separatorString=" / "}}
+  
+  <!-- AP -->
   {{>
   "systems/farhome/templates/partials/max-resource-partial.hbs"
   data.features.ap
   objectString="data.features.ap"
   separatorString=" / "}}
+  
+  <!-- Spell Power -->
   {{>
   "systems/farhome/templates/partials/resource-partial.hbs"
   data.features.spellPower
   objectString="data.features.spellPower"}}
+
+  <!-- Mana -->
   <div class="resource-box flex-group-center">
     <div class="resource-content flexrow flex-center flex-between">
       <input type="text" name="data.features.mana.value" value="{{data.features.mana.value}}" data-dtype="Number"/>
       <span> / </span>
       <input type="text" name="data.features.mana.max" value="{{data.features.mana.max}}" data-dtype="Number" disabled/>
     </div>
-    <label for="data.features.mana.value" class="resource-label">{{data.features.mana.label}}</label>
+    <label for="data.features.mana.value" class="resource-label mana-refill">{{data.features.mana.label}}</label>
   </div>
+  
+  <!-- Movement -->
   <div class="resource-box flex-group-center">
     <div class="resource-content flexrow flex-center flex-between">
       <input type="text" name="data.features.move.value" value="{{data.features.move.value}}" data-dtype="Number"

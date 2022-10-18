@@ -1,5 +1,6 @@
 import { getEffectData, getEffectHtml, onManageActiveEffect, prepareActiveEffectCategories } from '../core/effects';
 import { localizeObject } from '../core/localization';
+import { sendActorMessage } from '../core/chat';
 import { sendChatRoll } from '../roller/roller';
 
 // #todo Add Poison/Hex icons later
@@ -227,6 +228,9 @@ export default class FarhomeActorSheet extends ActorSheet {
 
     // Rollable abilities.
     html.find('.rollable').click(this._onRoll.bind(this));
+
+    // Mana refill
+    html.find('.mana-refill').click(this._onManaRefill.bind(this));
 
     // Drag events for macros.
     if (this.actor.isOwner) {
@@ -492,6 +496,16 @@ export default class FarhomeActorSheet extends ActorSheet {
       // Send the chat roll for display (along with summary calculation, etc.)
       return sendChatRoll(evaluatedRollHtml, activeEffectsHtml);
     }
+  }
+
+  async _onManaRefill(event) {
+    event.preventDefault();
+    const actorContext = this.actor.data.data;
+    const manaRefillValue = Math.max(Math.ceil(actorContext.level.value / 2), 1);
+    const newManaValue = Math.min(actorContext.features.mana.max, actorContext.features.mana.value + manaRefillValue);
+    this.actor.update({ 'data.features.mana.value': newManaValue });
+
+    sendActorMessage(`${this.actor.name} restored ${newManaValue - actorContext.features.mana.value} mana.`);
   }
 
   /**
