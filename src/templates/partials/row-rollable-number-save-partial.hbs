@@ -1,0 +1,12 @@
+<tr>
+  <td>
+    <label class="rollable" for="{{objectString}}.value" data-roll="{{roll}}" data-label="{{label}} {{localize 'farhome.save'}}">
+      <span class="resource-label">{{label}}</span>
+      <span class="attribute-tag">{{attribute}}</span>
+    </label>
+  </td>
+  <td>
+    {{!-- TODO Add support for negative numbers? --}}
+    <input type="text" name="{{objectString}}.value" value="{{value}}" data-dtype="Number" pattern="[0-9]+" min="0" required/>
+  </td>
+</tr>
