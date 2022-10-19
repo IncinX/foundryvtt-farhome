@@ -213,6 +213,33 @@ export async function _getRollSummary(rollSummaryData) {
 }
 
 /**
+ * Checks if the roll in the message is exclusively an armor roll.
+ * An armor roll is classified as any roll that only contains armor dice (or wounds).
+ * @param {String} evaluatedRollHtml The evaluated roll HTML to check.
+ * @returns {Boolean} True if the roll is an armor roll, false otherwise.
+ */
+async function _isArmorRoll(evaluatedRollHtml) {
+  const rollDOM = new DOMParser().parseFromString(evaluatedRollHtml, 'text/html');
+  const enabledInputElements = rollDOM.querySelectorAll('input:enabled');
+
+  const validDice = new Set();
+  validDice.add(Dice.SUPERIOR_DEFENSE);
+  validDice.add(Dice.DEFENSE);
+  validDice.add(Dice.GUARANTEED_WOUND);
+  validDice.add(Dice.WOUND);
+
+  for (const enabledInputElement of enabledInputElements) {
+    const die = parseInt(enabledInputElement.dataset.die ?? '0', 10);
+
+    if (!validDice.has(die)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/**
  * Send the chat roll with the embedded roll html data, generate a summary and add appropriate buttons.
  * @param {String} evaluatedRollHtml HTML string containing the roll elements.
  * @param {String} activeEffectsHtml HTML string containing the effect elements like hex and poison.
@@ -239,41 +266,46 @@ export async function sendChatRoll(
   let rollSummaryData = _getRollSummaryData(hexedRollHtml);
 
   //
-  // Compute and apply the poison if it is present
-  // Poison adds terrible dice to the roll for each level of poison
+  // Only apply poison and blindness if it is not an armor roll.
   //
   let poisonRollHtml = '';
-  if (effectSummaryData.poison > 0) {
-    // Roll terrible dice for each level of poison
-    const poisonRollFormula = `${effectSummaryData.poison}t`;
-    poisonRollHtml = await game.farhome.roller.evaluateRollFormula(poisonRollFormula);
-
-    // Apply the poison to the summary data
-    const poisonRollSummaryData = _getRollSummaryData(poisonRollHtml);
-
-    // Adjust the roll summary based on poison
-    // #todo Ideally the rollSummaryData has a function to add another rollSummaryData to it
-    rollSummaryData.successes += poisonRollSummaryData.successes;
-    rollSummaryData.crits += poisonRollSummaryData.crits;
-  }
-
-  //
-  // Compute and apply the blinded effect if it is present
-  // Blindness or not seeing a target adds 2 terrible dice to the roll
-  //
   let blindRollHtml = '';
-  if (effectSummaryData.blind > 0) {
-    // Roll 2 terrible dice if blinded
-    const blindRollFormula = `2t`;
-    blindRollHtml = await game.farhome.roller.evaluateRollFormula(blindRollFormula);
+  if (!_isArmorRoll(hexedRollHtml)) {
+    //
+    // Compute and apply the poison if it is present
+    // Poison adds terrible dice to the roll for each level of poison
+    //
+    if (effectSummaryData.poison > 0) {
+      // Roll terrible dice for each level of poison
+      const poisonRollFormula = `${effectSummaryData.poison}t`;
+      poisonRollHtml = await game.farhome.roller.evaluateRollFormula(poisonRollFormula);
 
-    // Apply the poison to the summary data
-    const blindRollSummaryData = _getRollSummaryData(blindRollHtml);
+      // Apply the poison to the summary data
+      const poisonRollSummaryData = _getRollSummaryData(poisonRollHtml);
 
-    // Adjust the roll summary based on being blind
-    // #todo Ideally the rollSummaryData has a function to add another rollSummaryData to it
-    rollSummaryData.successes += blindRollSummaryData.successes;
-    rollSummaryData.crits += blindRollSummaryData.crits;
+      // Adjust the roll summary based on poison
+      // #todo Ideally the rollSummaryData has a function to add another rollSummaryData to it
+      rollSummaryData.successes += poisonRollSummaryData.successes;
+      rollSummaryData.crits += poisonRollSummaryData.crits;
+    }
+
+    //
+    // Compute and apply the blinded effect if it is present
+    // Blindness or not seeing a target adds 2 terrible dice to the roll
+    //
+    if (effectSummaryData.blind > 0) {
+      // Roll 2 terrible dice if blinded
+      const blindRollFormula = `2t`;
+      blindRollHtml = await game.farhome.roller.evaluateRollFormula(blindRollFormula);
+
+      // Apply the poison to the summary data
+      const blindRollSummaryData = _getRollSummaryData(blindRollHtml);
+
+      // Adjust the roll summary based on being blind
+      // #todo Ideally the rollSummaryData has a function to add another rollSummaryData to it
+      rollSummaryData.successes += blindRollSummaryData.successes;
+      rollSummaryData.crits += blindRollSummaryData.crits;
+    }
   }
 
   //
@@ -317,14 +349,27 @@ async function _applyHex(evaluatedRollHtml, hexCount) {
     const rollData = _parseRoll(enabledInputElement);
 
     // If it is a critical, downgrade it to a success
-    if (rollData.face === Faces.CRITICAL_SUCCESS) {
-      rollData.face = Faces.SUCCESS;
+    let hexApplied = false;
+    switch (rollData.face) {
+      case Faces.CRITICAL_SUCCESS:
+        rollData.face = Faces.SUCCESS;
+        hexApplied = true;
+        break;
+      case Faces.CRITICAL_DEFENSE:
+        rollData.face = Faces.DEFENSE;
+        hexApplied = true;
+        break;
+    }
 
+    if (hexApplied) {
       // Replace with a formatted element (that also has a fh-hexed class)
       const rollHtml = await game.farhome.roller.formatRolls([rollData], false);
 
       // Add the new roll element
-      enabledInputElement.insertAdjacentHTML('afterend', rollHtml);
+      // It is disabled since a hexed roll cannot be re-rolled.
+      let newElement = enabledInputElement.insertAdjacentHTML('afterend', rollHtml);
+      enabledInputElement.nextElementSibling.classList.add('fh-hexed-reroll');
+      enabledInputElement.nextElementSibling.disabled = true;
 
       // Disable and hex the current roll
       enabledInputElement.disabled = true;
