@@ -1,6 +1,6 @@
 import { getEffectData, getEffectHtml, onManageActiveEffect, prepareActiveEffectCategories } from '../core/effects';
 import { localizeObject } from '../core/localization';
-import { sendStandardMessage } from '../core/chat';
+import { findMessageContentNode, sendActorMessage } from '../core/chat';
 import { sendChatRoll } from '../roller/roller';
 
 // #todo Add Poison/Hex icons later
@@ -9,7 +9,7 @@ import { sendChatRoll } from '../roller/roller';
  * Extend the basic ActorSheet to implement Farhome specifics.
  * @extends {ActorSheet}
  */
-export default class FarhomeActorSheet extends ActorSheet {
+export class FarhomeActorSheet extends ActorSheet {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ['farhome', 'sheet', 'actor'],
@@ -514,36 +514,22 @@ export default class FarhomeActorSheet extends ActorSheet {
     if (currentHealingSurges > 0) {
       const healingSurgeRollHtml = await game.farhome.roller.evaluateRollFormula('www');
 
-      /* DEBUG
-      const healingSurgeMessageHtml = await renderTemplate(
-        'systems/farhome/templates/chat/healing-surge.hbs',
-        {
-          actorId: this.actor.id,
-          roll: healingSurgeRoll,
-        }
-      );
-      */
-
       const healingSurgeMessageHtml = await renderTemplate('systems/farhome/templates/chat/header-roll.hbs', {
         label: game.i18n.localize('farhome.healingSurge'),
         roll: healingSurgeRollHtml,
       });
 
-      /* This should be done in the applyHealing function
-      this.actor.update({ 'data.features.healingSurges.value': currentHealingSurges - 1});
-      */
+      // Spend the healing surge
+      this.actor.update({ 'data.features.healingSurges.value': currentHealingSurges - 1 });
+
       const healingSurgeData = {
         actorId: this.actor.id,
       };
 
       // #todo This would be cleaner if sendChatRoll used named arguments or had a named argument object.
       await sendChatRoll(healingSurgeMessageHtml, '', undefined, healingSurgeData);
-
-      // #todo Need to add applyHealing to a chat handler (with appropriate connect messages)
-      // #todo To allow for re-roll, this likely needs to be sent through sendChatRoll with appropriate template options.
-      //       Is it possible to support named parameters like with Python so I can have optional parameters and specify the one that matters?
     } else {
-      await sendStandardMessage(`${this.actor.name} has no healing surges left to spend.`);
+      await sendActorMessage(`${this.actor.name} has no healing surges left to spend.`);
     }
   }
 
@@ -561,7 +547,9 @@ export default class FarhomeActorSheet extends ActorSheet {
 
     this.actor.update({ 'data.features.mana.value': newManaValue });
 
-    await sendStandardMessage(`${this.actor.name} restored ${newManaValue - actorContext.features.mana.value} mana.`);
+    await sendActorMessage(
+      `<strong>${this.actor.name}</strong> restored ${newManaValue - actorContext.features.mana.value} mana.`,
+    );
   }
 
   /**
@@ -584,4 +572,51 @@ export default class FarhomeActorSheet extends ActorSheet {
     }
     return strongestKey;
   }
+}
+
+/**
+ * Connect the item hooks to the foundry hook system.
+ */
+export function connectActorHooks() {
+  Hooks.on('renderChatLog', (_app, html, _data) => {
+    html.on('click', '.fh-apply-healing', _handleApplyHealing);
+  });
+}
+
+/**
+ * Handle click message generated from the "Apply Healing" button in chat.
+ * @param {Event} event   The originating click event
+ * @private
+ */
+async function _handleApplyHealing(event) {
+  event.preventDefault();
+
+  // Disable the button
+  event.currentTarget.disabled = true;
+
+  // Get the data from the button
+  let actorId = event.currentTarget.dataset.actorId;
+
+  // Check for ownership
+  let actor = game.actors.get(actorId);
+  if (!actor.isOwner) {
+    sendActorMessage('You do not own this actor, so stop trying to apply their healing surge.');
+    return;
+  }
+
+  // Calculate the healed amount
+  const actorContext = actor.data.data;
+
+  const messageContentNode = findMessageContentNode(event.currentTarget);
+  const rollSummaryNode = messageContentNode.querySelector('.fh-roll-summary');
+
+  const rolledHealedWounds = parseInt(rollSummaryNode.dataset.wounds);
+  const maxHealAmount = actorContext.features.wounds.max - actorContext.features.wounds.value;
+  const healedWounds = Math.min(rolledHealedWounds, maxHealAmount);
+
+  // Apply the healing
+  actor.update({ 'data.features.wounds.value': healedWounds });
+
+  // Send the confirmation message to the chat
+  sendActorMessage(`<strong>${actor.name}</strong> healed ${healedWounds} wounds.`);
 }
