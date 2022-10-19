@@ -94,7 +94,7 @@ async function _handleReroll(event) {
   rollSummaryElement[0].dataset.successes = newRollSummaryData.successes;
   rollSummaryElement[0].dataset.crits = newRollSummaryData.crits;
   rollSummaryElement[0].dataset.wounds = newRollSummaryData.wounds;
-  
+
   // Update the roll summary HTML data
   rollSummaryElement.empty();
   rollSummaryElement.append(newRollSummary);
