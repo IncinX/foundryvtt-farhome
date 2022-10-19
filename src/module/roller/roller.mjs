@@ -87,7 +87,15 @@ async function _handleReroll(event) {
   // Need to re-compute the summary and re-post under the fh-roll-summary class
   const newRollSummaryData = _getRollSummaryData(messageQuery);
   const newRollSummary = await _getRollSummary(newRollSummaryData);
+
   let rollSummaryElement = $(messageQuery).find('.fh-roll-summary');
+
+  // Update the roll summary embedded data
+  rollSummaryElement[0].dataset.successes = newRollSummaryData.successes;
+  rollSummaryElement[0].dataset.crits = newRollSummaryData.crits;
+  rollSummaryElement[0].dataset.wounds = newRollSummaryData.wounds;
+  
+  // Update the roll summary HTML data
   rollSummaryElement.empty();
   rollSummaryElement.append(newRollSummary);
 

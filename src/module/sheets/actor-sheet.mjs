@@ -615,7 +615,7 @@ async function _handleApplyHealing(event) {
   const healedWounds = Math.min(rolledHealedWounds, maxHealAmount);
 
   // Apply the healing
-  actor.update({ 'data.features.wounds.value': healedWounds });
+  actor.update({ 'data.features.wounds.value': actorContext.features.wounds.value + healedWounds });
 
   // Send the confirmation message to the chat
   sendActorMessage(`<strong>${actor.name}</strong> healed ${healedWounds} wounds.`);
