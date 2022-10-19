@@ -130,7 +130,8 @@ export function _getRollSummaryData(rollHtml) {
     fhRollQuery.find('input').each((_index, element) => {
       containsRollData = true;
 
-      if (!element.disabled) {
+      // The roll counts if it is enabled or if it is a hexed reroll die (which counts but is also disabled from being re-rolled).
+      if (!element.disabled || element.classList.contains('fh-hexed-reroll')) {
         const rollData = _parseRoll(element);
         rolls.push(rollData);
       }
