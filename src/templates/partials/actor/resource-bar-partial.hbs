@@ -21,11 +21,14 @@
   objectString="data.features.tempWounds"}}
   
   <!-- Healing Surges -->
-  {{>
-  "systems/farhome/templates/partials/max-resource-partial.hbs"
-  data.features.healingSurges
-  objectString="data.features.healingSurges"
-  separatorString=" / "}}
+  <div class="resource-box flex-group-center">
+    <div class="resource-content flexrow flex-center flex-between">
+      <input type="text" name="data.features.healingSurges.value" value="{{data.features.healingSurges.value}}" data-dtype="Number"/>
+      <span> / </span>
+      <input type="text" name="data.features.healingSurges.max" value="{{data.features.healingSurges.max}}" data-dtype="Number"/>
+    </div>
+    <label for="data.features.healingSurges.value" class="resource-label healing-surge">{{data.features.healingSurges.label}}</label>
+  </div>
   
   <!-- AP -->
   {{>

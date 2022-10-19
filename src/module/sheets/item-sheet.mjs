@@ -1,6 +1,7 @@
 import { localizeObject } from '../core/localization';
+import { sendActorMessage } from '../core/chat';
 
-export default class FarhomeItemSheet extends ItemSheet {
+export class FarhomeItemSheet extends ItemSheet {
   /** @override */
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
@@ -77,4 +78,45 @@ export default class FarhomeItemSheet extends ItemSheet {
     // Roll Handler
     html.find('.item-roll').click((ev) => this.item.roll());
   }
+}
+
+/**
+ * Connect the item hooks to the foundry hook system.
+ */
+export function connectItemHooks() {
+  Hooks.on('renderChatLog', (_app, html, _data) => {
+    html.on('click', '.fh-spend-mana', _handleManaSpend);
+  });
+}
+
+/**
+ * Handle click message generated from the "Spend Mana" button in chat.
+ * @param {Event} event   The originating click event
+ * @private
+ */
+async function _handleManaSpend(event) {
+  event.preventDefault();
+
+  // Disable the button
+  event.currentTarget.disabled = true;
+
+  // Get the data from the button
+  let manaCost = parseInt(event.currentTarget.dataset.mana);
+  let actorId = event.currentTarget.dataset.actorId;
+
+  // Check for ownership
+  let actor = game.actors.get(actorId);
+  if (!actor.isOwner) {
+    sendActorMessage(
+      'You do not own this actor, so stop trying to spend their mana. ' +
+        'They are <i>probably</i> competant enough to do that themselves.',
+    );
+    return;
+  }
+
+  // Deduct the mana off of the character's sheet
+  actor.update({ 'data.features.mana.value': actor.data.data.features.mana.value - manaCost });
+
+  // Send the confirmation message to the chat
+  sendActorMessage(`<b>${actor.name}</b> spent ${manaCost} mana.`);
 }

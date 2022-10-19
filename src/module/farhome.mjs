@@ -7,9 +7,9 @@ import { createItemMacro, rollItemMacro } from './core/macros';
 import { getInitiativeFormula } from './core/initiative';
 
 import { FarhomeActor } from './documents/actor';
-import { FarhomeItem, connectItemHooks } from './documents/item';
-import FarhomeItemSheet from './sheets/item-sheet';
-import FarhomeActorSheet from './sheets/actor-sheet';
+import { FarhomeItem } from './documents/item';
+import { FarhomeItemSheet, connectItemHooks } from './sheets/item-sheet';
+import { FarhomeActorSheet, connectActorHooks } from './sheets/actor-sheet';
 
 import { createCompendiumFromRules } from './importers/farhome-rules-importer';
 import {
@@ -126,6 +126,7 @@ Hooks.once('ready', async () => {
 /*  Connect Hooks to sub-systems                */
 /* -------------------------------------------- */
 connectRollerHooks();
+connectActorHooks();
 connectItemHooks();
 connectRulesImporterAppHooks();
 connectVetoolsMonsterImporterAppHooks();

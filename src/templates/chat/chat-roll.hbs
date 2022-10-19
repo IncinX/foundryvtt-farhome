@@ -16,7 +16,9 @@
 {{#if rollSummaryHtml}}
   <hr>
   <h2>{{localize 'farhome.rollSummary'}}</h2>
-  <div class='fh-roll-summary'>{{{rollSummaryHtml}}}</div>
+  <div class='fh-roll-summary' data-successes='{{rollSummaryData.successes}}' data-crits='{{rollSummaryData.crits}}' data-wounds='{{rollSummaryData.wounds}}'>
+    {{{rollSummaryHtml}}}
+  </div>
 
   <form>
     <button class='fh-reroll'>{{localize 'farhome.reroll'}}</button>
@@ -28,6 +30,16 @@
     <form>
       <button class='fh-spend-mana' data-mana='{{manaCost}}' data-actor-id='{{actorId}}'>
         {{localize 'farhome.spendMana'}} ({{manaCost}}/{{availableMana}})
+      </button>
+    </form>
+  {{/with}}
+{{/if}}
+
+{{#if healingSurgeData}}
+  {{#with healingSurgeData}}
+    <form>
+      <button class='fh-apply-healing' data-actor-id='{{actorId}}'>
+        {{localize 'farhome.applyHealing'}}
       </button>
     </form>
   {{/with}}

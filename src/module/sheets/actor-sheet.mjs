@@ -1,6 +1,6 @@
 import { getEffectData, getEffectHtml, onManageActiveEffect, prepareActiveEffectCategories } from '../core/effects';
 import { localizeObject } from '../core/localization';
-import { sendActorMessage } from '../core/chat';
+import { findMessageContentNode, sendActorMessage } from '../core/chat';
 import { sendChatRoll } from '../roller/roller';
 
 // #todo Add Poison/Hex icons later
@@ -9,7 +9,7 @@ import { sendChatRoll } from '../roller/roller';
  * Extend the basic ActorSheet to implement Farhome specifics.
  * @extends {ActorSheet}
  */
-export default class FarhomeActorSheet extends ActorSheet {
+export class FarhomeActorSheet extends ActorSheet {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ['farhome', 'sheet', 'actor'],
@@ -231,6 +231,9 @@ export default class FarhomeActorSheet extends ActorSheet {
 
     // Mana refill
     html.find('.mana-refill').click(this._onManaRefill.bind(this));
+
+    // Healing surges
+    html.find('.healing-surge').click(this._onHealingSurge.bind(this));
 
     // Drag events for macros.
     if (this.actor.isOwner) {
@@ -498,14 +501,55 @@ export default class FarhomeActorSheet extends ActorSheet {
     }
   }
 
+  /**
+   * Handle healing surge clicks.
+   * @param {Event} event The originating click event
+   */
+  async _onHealingSurge(event) {
+    event.preventDefault();
+
+    const actorContext = this.actor.data.data;
+    const currentHealingSurges = actorContext.features.healingSurges.value;
+
+    if (currentHealingSurges > 0) {
+      const healingSurgeRollHtml = await game.farhome.roller.evaluateRollFormula('www');
+
+      const healingSurgeMessageHtml = await renderTemplate('systems/farhome/templates/chat/header-roll.hbs', {
+        label: game.i18n.localize('farhome.healingSurge'),
+        roll: healingSurgeRollHtml,
+      });
+
+      // Spend the healing surge
+      this.actor.update({ 'data.features.healingSurges.value': currentHealingSurges - 1 });
+
+      const healingSurgeData = {
+        actorId: this.actor.id,
+      };
+
+      // #todo This would be cleaner if sendChatRoll used named arguments or had a named argument object.
+      await sendChatRoll(healingSurgeMessageHtml, '', undefined, healingSurgeData);
+    } else {
+      await sendActorMessage(`${this.actor.name} has no healing surges left to spend.`);
+    }
+  }
+
+  /**
+   * Handle mana refill clicks.
+   * @param {Event} event The originating click event
+   */
   async _onManaRefill(event) {
     event.preventDefault();
+
     const actorContext = this.actor.data.data;
+
     const manaRefillValue = Math.max(Math.ceil(actorContext.level.value / 2), 1);
     const newManaValue = Math.min(actorContext.features.mana.max, actorContext.features.mana.value + manaRefillValue);
+
     this.actor.update({ 'data.features.mana.value': newManaValue });
 
-    sendActorMessage(`${this.actor.name} restored ${newManaValue - actorContext.features.mana.value} mana.`);
+    await sendActorMessage(
+      `<strong>${this.actor.name}</strong> restored ${newManaValue - actorContext.features.mana.value} mana.`,
+    );
   }
 
   /**
@@ -528,4 +572,51 @@ export default class FarhomeActorSheet extends ActorSheet {
     }
     return strongestKey;
   }
+}
+
+/**
+ * Connect the item hooks to the foundry hook system.
+ */
+export function connectActorHooks() {
+  Hooks.on('renderChatLog', (_app, html, _data) => {
+    html.on('click', '.fh-apply-healing', _handleApplyHealing);
+  });
+}
+
+/**
+ * Handle click message generated from the "Apply Healing" button in chat.
+ * @param {Event} event   The originating click event
+ * @private
+ */
+async function _handleApplyHealing(event) {
+  event.preventDefault();
+
+  // Disable the button
+  event.currentTarget.disabled = true;
+
+  // Get the data from the button
+  let actorId = event.currentTarget.dataset.actorId;
+
+  // Check for ownership
+  let actor = game.actors.get(actorId);
+  if (!actor.isOwner) {
+    sendActorMessage('You do not own this actor, so stop trying to apply their healing surge.');
+    return;
+  }
+
+  // Calculate the healed amount
+  const actorContext = actor.data.data;
+
+  const messageContentNode = findMessageContentNode(event.currentTarget);
+  const rollSummaryNode = messageContentNode.querySelector('.fh-roll-summary');
+
+  const rolledHealedWounds = parseInt(rollSummaryNode.dataset.wounds);
+  const maxHealAmount = actorContext.features.wounds.max - actorContext.features.wounds.value;
+  const healedWounds = Math.min(rolledHealedWounds, maxHealAmount);
+
+  // Apply the healing
+  actor.update({ 'data.features.wounds.value': actorContext.features.wounds.value + healedWounds });
+
+  // Send the confirmation message to the chat
+  sendActorMessage(`<strong>${actor.name}</strong> healed ${healedWounds} wounds.`);
 }

@@ -1,8 +1,3 @@
-// #todo Remove export if a function isn't used elsewhere
-// #todo Remove unncecessary classes and functions
-// #todo Decide if functions should be in or out of any classes
-// #todo Remove async everywhere in this file that it is unnecessary, pay attention to returned promises too.
-
 import { countMatches, combineAll } from './roller-util';
 import { DieRollView } from './roller-view';
 import {
@@ -24,7 +19,7 @@ import {
   Faces,
 } from './roller-dice';
 import { FHParser, parseFormula } from './roller-parser';
-import { sendActorMessage } from '../core/chat';
+import { findMessageContentNode, sendActorMessage } from '../core/chat';
 
 /**
  * Establish hooks for the dice roller to interact with the chat.
@@ -67,11 +62,8 @@ function _rollerChatMessageHandler(_chatLog, messageText, _data) {
 async function _handleReroll(event) {
   event.preventDefault();
 
-  // #todo It may be insufficient to just use button.parentElement.parentElement... I think I need to traverse up the DOM tree until I find the main content element
-  // #todo This function can probably be cleaned up and stream-lined
-
   const button = event.target;
-  const originalMessageElement = button.parentElement.parentElement;
+  const originalMessageElement = findMessageContentNode(button);
   const messageElementClone = originalMessageElement.cloneNode(true);
   const messageQuery = $(messageElementClone);
   const rollElements = messageQuery.find('input:checked');
@@ -95,7 +87,15 @@ async function _handleReroll(event) {
   // Need to re-compute the summary and re-post under the fh-roll-summary class
   const newRollSummaryData = _getRollSummaryData(messageQuery);
   const newRollSummary = await _getRollSummary(newRollSummaryData);
+
   let rollSummaryElement = $(messageQuery).find('.fh-roll-summary');
+
+  // Update the roll summary embedded data
+  rollSummaryElement[0].dataset.successes = newRollSummaryData.successes;
+  rollSummaryElement[0].dataset.crits = newRollSummaryData.crits;
+  rollSummaryElement[0].dataset.wounds = newRollSummaryData.wounds;
+
+  // Update the roll summary HTML data
   rollSummaryElement.empty();
   rollSummaryElement.append(newRollSummary);
 
@@ -218,7 +218,12 @@ export async function _getRollSummary(rollSummaryData) {
  * @param {String} activeEffectsHtml HTML string containing the effect elements like hex and poison.
  * @param {Object} manaData Object containing the required data to spend mana data.
  */
-export async function sendChatRoll(evaluatedRollHtml, activeEffectsHtml = '', manaData = undefined) {
+export async function sendChatRoll(
+  evaluatedRollHtml,
+  activeEffectsHtml = '',
+  manaData = undefined,
+  healingSurgeData = undefined,
+) {
   // Get the active effects that apply to the roll
   const effectSummaryData = _getEffectSummaryData(activeEffectsHtml);
 
@@ -281,8 +286,10 @@ export async function sendChatRoll(evaluatedRollHtml, activeEffectsHtml = '', ma
     activeEffectsHtml: activeEffectsHtml,
     poisonRollHtml: poisonRollHtml,
     blindRollHtml: blindRollHtml,
+    rollSummaryData: rollSummaryData,
     rollSummaryHtml: rollSummaryHtml,
     manaData: manaData,
+    healingSurgeData: healingSurgeData,
   });
 
   // Send the evaluatedTemplate to chat.

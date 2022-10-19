@@ -5,13 +5,11 @@
 - [ ] For the roll summary (add text saying +1 from template or something)
 - [ ] Tweak coloring of messages to match the character sheets
 - [ ] Tweak size of icon on character sheets (but not on actor sheet)
-- [ ] Add support for poison/hex effects (and apply it to proficiency and template rolls)
 - [ ] Add support for new user query syntax {{}} in templates or allow a user input tab to items that allow for a customized query syntax, applying to a variable, response type, etc.
   - [ ] This is to support things that need a user response beyond just spell level
 - [ ] Move todo list out to GitHub issues
 - [ ] Add new templates for NPC's that do not add the description to the template by default.
 
-- [ ] MAJOR: Effects Update
 - [ ] MAJOR: Update farhome to Foundry version 10.0
   - [ ] Fix farhome compatibility warnings for the latest Foundry update
   - [ ] There are package updates and data model warnings all over the place
@@ -21,10 +19,6 @@
   - [ ] Create a wizard that can do monster creation
 
 ## P1
-
-- [ ] Default values for token lighting
-- [ ] Try removing the bold from the text labels everywhere
-- [ ] Add indicators in the summary for how much was added by bonus modifiers
 
 ## P2
 

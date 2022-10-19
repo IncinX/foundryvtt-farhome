@@ -208,6 +208,8 @@
     "weaken": "Weaken",
     "poisonRoll": "Poison Roll",
     "blindRoll": "Blind Roll",
-    "save": "Save"
+    "save": "Save",
+    "applyHealing": "Apply Healing",
+    "healingSurge": "Healing Surge"
   }
 }
