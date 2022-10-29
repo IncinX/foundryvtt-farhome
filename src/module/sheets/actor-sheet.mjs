@@ -242,7 +242,11 @@ export class FarhomeActorSheet extends ActorSheet {
     if (this.actor.isOwner) {
       let handler = (ev) => this._onDragStart(ev);
       html.find('li.item').each((i, li) => {
-        if (li.classList.contains('inventory-header')) return;
+        // Skip headers
+        if (li.classList.contains('items-header')) return;
+        if (li.classList.contains('item-divider')) return;
+
+        // Setup draggable items
         li.setAttribute('draggable', true);
         li.addEventListener('dragstart', handler, false);
       });
