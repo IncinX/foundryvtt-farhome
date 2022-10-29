@@ -251,7 +251,7 @@
     }
   },
   "Item": {
-    "types": ["money", "item", "weapon", "armor", "feat", "maneuver", "spell", "consumable", "crafting", "condition", "note"],
+    "types": ["money", "item", "weapon", "armor", "feat", "maneuver", "spell", "consumable", "crafting", "condition", "note", "charges"],
     "templates": {
       "base": {
         "description": {
@@ -300,16 +300,21 @@
           "value": 0,
           "min": 0
         }
+      },
+      "charges": {
+        "charges": {
+          "value": 0
+        }
       }
     },
     "money": {
       "templates": ["base", "item"]
     },
     "item": {
-      "templates": ["base", "item", "rarity", "equippable", "attunable"]
+      "templates": ["base", "item", "rarity", "equippable", "attunable", "charges"]
     },
     "weapon": {
-      "templates": ["base", "item", "rarity", "equippable", "attunable", "range", "damageType"],
+      "templates": ["base", "item", "rarity", "equippable", "attunable", "range", "damageType", "charges"],
       "weaponType": {
         "value": "oneHand"
       },
@@ -330,7 +335,7 @@
       }
     },
     "armor": {
-      "templates": ["base", "item", "rarity", "equippable", "attunable"],
+      "templates": ["base", "item", "rarity", "equippable", "attunable", "charges"],
       "armorBonus": {
         "value": 0
       },
@@ -384,7 +389,7 @@
       }
     },
     "consumable": {
-      "templates": ["base", "item"]
+      "templates": ["base", "item", "charges"]
     },
     "crafting": {
       "templates": ["base", "item"]

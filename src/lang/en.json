@@ -210,6 +210,7 @@
     "blindRoll": "Blind Roll",
     "save": "Save",
     "applyHealing": "Apply Healing",
-    "healingSurge": "Healing Surge"
+    "healingSurge": "Healing Surge",
+    "charges": "Charges"
   }
 }

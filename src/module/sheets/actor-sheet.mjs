@@ -219,6 +219,9 @@ export class FarhomeActorSheet extends ActorSheet {
     html.find('.item-attuned-input').change(this._onItemAttunedChanged.bind(this));
     html.find('.item-prepared-input').change(this._onItemPreparedChanged.bind(this));
 
+    // Item charges
+    html.find('.item-charges-input').change(this._onItemChargesChanged.bind(this));
+
     // Item quantities
     html.find('.item-quantity-input').change(this._onItemQuantityChanged.bind(this));
 
@@ -239,7 +242,11 @@ export class FarhomeActorSheet extends ActorSheet {
     if (this.actor.isOwner) {
       let handler = (ev) => this._onDragStart(ev);
       html.find('li.item').each((i, li) => {
-        if (li.classList.contains('inventory-header')) return;
+        // Skip headers
+        if (li.classList.contains('items-header')) return;
+        if (li.classList.contains('item-divider')) return;
+
+        // Setup draggable items
         li.setAttribute('draggable', true);
         li.addEventListener('dragstart', handler, false);
       });
@@ -448,6 +455,17 @@ export class FarhomeActorSheet extends ActorSheet {
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
     await item.update({ 'data.prepared.value': event.target.checked });
+  }
+
+  /**
+   * Handle charges changes of an Owned Item
+   * @param {Event} event   The originating click event
+   * @private
+   */
+  async _onItemChargesChanged(event) {
+    const li = $(event.currentTarget).parents('.item');
+    const item = this.actor.items.get(li.data('itemId'));
+    await item.update({ 'data.charges.value': parseInt(event.target.value) });
   }
 
   /**
