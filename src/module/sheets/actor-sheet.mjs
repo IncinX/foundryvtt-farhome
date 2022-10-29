@@ -23,7 +23,7 @@ export class FarhomeActorSheet extends ActorSheet {
 
   /** @override */
   get template() {
-    return `systems/farhome/templates/sheets/actor/${this.actor.data.type}-sheet.hbs`;
+    return `systems/farhome/templates/sheets/actor/${this.actor.type}-sheet.hbs`;
   }
 
   /** @override */
@@ -38,10 +38,10 @@ export class FarhomeActorSheet extends ActorSheet {
     context.config = CONFIG.FARHOME;
 
     // Use a safe clone of the actor data for further operations.
-    const actorData = this.actor.data.toObject(false);
+    const actorData = this.actor.toObject(false);
 
-    // Add the actor's data to context.data for easier access, as well as flags.
-    context.data = actorData.data;
+    // Add the actor's data to context.system for easier access, as well as flags.
+    context.system = actorData.system;
     context.flags = actorData.flags;
 
     // Prepare the items
@@ -76,7 +76,7 @@ export class FarhomeActorSheet extends ActorSheet {
    */
   _prepareActorData(context) {
     // Do derived localization of the entire context data.
-    localizeObject(null, context.data);
+    localizeObject(null, context.system);
   }
 
   /**
@@ -173,8 +173,8 @@ export class FarhomeActorSheet extends ActorSheet {
       }
       // Append to spells.
       else if (i.type === 'spell') {
-        if (i.data.spellLevel.value !== null) {
-          spells[i.data.spellLevel.value].push(i);
+        if (i.system.spellLevel.value !== null) {
+          spells[i.system.spellLevel.value].push(i);
         }
       }
     }
@@ -281,19 +281,19 @@ export class FarhomeActorSheet extends ActorSheet {
 
     // Populate the spell item
     if (type === 'spell') {
-      itemData.data.spellLevel = {
+      itemData.system.spellLevel = {
         value: parseInt(controlData.spellLevel),
       };
     }
 
     // Setup a custom template depending on the item type.
-    const actorData = this.actor.data.data;
+    const actorData = this.actor.system;
 
     if (type === 'armor') {
       const rollTemplateHtml = await renderTemplate(
         'systems/farhome/templates/item-roll-templates/armor-item-roll-template.hbs',
       );
-      itemData.data.rollTemplate = {
+      itemData.system.rollTemplate = {
         value: rollTemplateHtml,
       };
     } else if (type === 'weapon' || type === 'maneuver') {
@@ -313,7 +313,7 @@ export class FarhomeActorSheet extends ActorSheet {
             strongestAttr: `a.${strongestAttribute}`,
           },
         );
-        itemData.data.rollTemplate = {
+        itemData.system.rollTemplate = {
           value: rollTemplateHtml,
         };
       } else {
@@ -324,7 +324,7 @@ export class FarhomeActorSheet extends ActorSheet {
             strongestAttr: `a.${strongestAttribute}`,
           },
         );
-        itemData.data.rollTemplate = {
+        itemData.system.rollTemplate = {
           value: rollTemplateHtml,
         };
       }
@@ -347,7 +347,7 @@ export class FarhomeActorSheet extends ActorSheet {
         },
       );
 
-      itemData.data.rollTemplate = {
+      itemData.system.rollTemplate = {
         value: rollTemplateHtml,
       };
     } else if (type === 'note') {
@@ -357,7 +357,7 @@ export class FarhomeActorSheet extends ActorSheet {
         'systems/farhome/templates/item-roll-templates/default-item-roll-template.hbs',
       );
 
-      itemData.data.rollTemplate = {
+      itemData.system.rollTemplate = {
         value: rollTemplateHtml,
       };
     }
@@ -510,7 +510,7 @@ export class FarhomeActorSheet extends ActorSheet {
       });
 
       // Evaluate the active effects for the character (ie/ hex, poison, etc)
-      const actorContext = this.actor.data;
+      const actorContext = this.actor.system;
       const activeEffectData = getEffectData(actorContext);
       const activeEffectsHtml = await getEffectHtml(activeEffectData);
 
@@ -526,7 +526,7 @@ export class FarhomeActorSheet extends ActorSheet {
   async _onHealingSurge(event) {
     event.preventDefault();
 
-    const actorContext = this.actor.data.data;
+    const actorContext = this.actor.system;
     const currentHealingSurges = actorContext.features.healingSurges.value;
 
     if (currentHealingSurges > 0) {
@@ -558,7 +558,7 @@ export class FarhomeActorSheet extends ActorSheet {
   async _onManaRefill(event) {
     event.preventDefault();
 
-    const actorContext = this.actor.data.data;
+    const actorContext = this.actor.system;
 
     const manaRefillValue = Math.max(Math.ceil(actorContext.level.value / 2), 1);
     const newManaValue = Math.min(actorContext.features.mana.max, actorContext.features.mana.value + manaRefillValue);
@@ -623,7 +623,7 @@ async function _handleApplyHealing(event) {
   }
 
   // Calculate the healed amount
-  const actorContext = actor.data.data;
+  const actorContext = actor.system;
 
   const messageContentNode = findMessageContentNode(event.currentTarget);
   const rollSummaryNode = messageContentNode.querySelector('.fh-roll-summary');

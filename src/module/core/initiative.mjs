@@ -12,7 +12,7 @@ export function getInitiativeFormula() {
   const actor = this.actor;
   if (!actor) return '0';
 
-  let data = actor.data.data;
+  let data = actor.system;
   let rollFormula = proficiencyRollFormula(0, data.attributes.dex.value);
 
   const parsedFormula = game.farhome.roller.parsers[0].parse(rollFormula);

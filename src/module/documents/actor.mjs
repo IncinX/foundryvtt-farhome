@@ -37,16 +37,11 @@ export class FarhomeActor extends Actor {
    * is queried and has a roll executed directly from it).
    */
   prepareDerivedData() {
-    const actorData = this.data;
-    const data = actorData.data;
-    const flags = actorData.flags.farhome || {};
-
-    // Make separate methods for each Actor type (character, npc, etc.) to keep
-    // things organized.
-    this._prepareActorBaseData(actorData);
-    this._prepareCharacterData(actorData);
-    this._prepareNpcData(actorData);
-    this._prepareStashData(actorData);
+    // Make separate methods for each Actor type (character, npc, etc.) to keep things organized.
+    this._prepareActorBaseData();
+    this._prepareCharacterData();
+    this._prepareNpcData();
+    this._prepareStashData();
   }
 
   /** @inheritdoc */
@@ -73,11 +68,11 @@ export class FarhomeActor extends Actor {
   /**
    * Prepare Actor general derived data
    */
-  _prepareActorBaseData(actorData) {
+  _prepareActorBaseData() {
     // Stash is special and isn't treated like a regular actor with base data.
-    if (actorData.type === 'stash') return;
+    if (this.type === 'stash') return;
 
-    const data = actorData.data;
+    const data = this.system;
 
     // Calculate the max mana based on the spell power
     let spellPowerToManaTable = getSpellPowerToMaxManaTable();
@@ -201,10 +196,10 @@ export class FarhomeActor extends Actor {
   /**
    * Prepare Character type specific data
    */
-  _prepareCharacterData(actorData) {
-    if (actorData.type !== 'character') return;
+  _prepareCharacterData() {
+    if (this.type !== 'character') return;
 
-    const data = actorData.data;
+    const data = this.system;
 
     // Character specific derived data should be calculated here
   }
@@ -212,10 +207,10 @@ export class FarhomeActor extends Actor {
   /**
    * Prepare NPC type specific data.
    */
-  _prepareNpcData(actorData) {
-    if (actorData.type !== 'npc') return;
+  _prepareNpcData() {
+    if (this.type !== 'npc') return;
 
-    const data = actorData.data;
+    const data = this.system;
 
     // NPC specific derived data should be calculated here
   }
@@ -223,10 +218,10 @@ export class FarhomeActor extends Actor {
   /**
    * Prepare stash type specific data.
    */
-  _prepareStashData(actorData) {
-    if (actorData.type !== 'stash') return;
+  _prepareStashData() {
+    if (this.type !== 'stash') return;
 
-    const data = actorData.data;
+    const data = this.system;
 
     // Stash specific derived data should be calculated here
   }
@@ -263,7 +258,7 @@ export class FarhomeActor extends Actor {
    * Prepare character roll data.
    */
   _getCharacterRollData(data) {
-    if (this.data.type !== 'character') return {};
+    if (this.type !== 'character') return {};
 
     // Generate a character roll context and return it
     return {};
@@ -273,7 +268,7 @@ export class FarhomeActor extends Actor {
    * Prepare NPC roll data.
    */
   _getNpcRollData(data) {
-    if (this.data.type !== 'npc') return {};
+    if (this.type !== 'npc') return {};
 
     // Generate an NPC roll context and return it
     return {};
@@ -283,7 +278,7 @@ export class FarhomeActor extends Actor {
    * Prepare stash roll data.
    */
   _getStashRollData(data) {
-    if (this.data.type !== 'stash') return {};
+    if (this.type !== 'stash') return {};
 
     // Generate an stash roll context and return it
     return {};

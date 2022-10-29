@@ -33,7 +33,7 @@
       <div class="item-attuned"></div>
       <div class="item-charges"></div>
       <div class="item-quantity">
-        <input type="text" class="item-quantity-input" value="{{money.data.quantity.value}}" min="0" data-dtype="Number">
+        <input type="text" class="item-quantity-input" value="{{money.system.quantity.value}}" min="0" data-dtype="Number">
       </div>
       <div class="item-controls">
         <a class="item-control item-edit" title="{{localize 'farhome.editMoney'}}"><i class="fas fa-edit"></i></a>
@@ -61,16 +61,16 @@
         <a class="item-name-link">{{weapon.name}}</a>
       </h4>
       <div class="item-equipped">
-        <input type="checkbox" class="item-equipped-input" data-dtype="Boolean" {{checked weapon.data.equipped.value}}/>
+        <input type="checkbox" class="item-equipped-input" data-dtype="Boolean" {{checked weapon.system.equipped.value}}/>
       </div>
       <div class="item-attuned">
-        <input type="checkbox" class="item-attuned-input" data-dtype="Boolean" {{checked weapon.data.attuned.value}}/>
+        <input type="checkbox" class="item-attuned-input" data-dtype="Boolean" {{checked weapon.system.attuned.value}}/>
       </div>
       <div class="item-charges">
-        <input type="text" class="item-charges-input" value="{{weapon.data.charges.value}}" min="0" data-dtype="Number"/>
+        <input type="text" class="item-charges-input" value="{{weapon.system.charges.value}}" min="0" data-dtype="Number"/>
       </div>
       <div class="item-quantity">
-        <input type="text" class="item-quantity-input" value="{{weapon.data.quantity.value}}" min="0" data-dtype="Number"/>
+        <input type="text" class="item-quantity-input" value="{{weapon.system.quantity.value}}" min="0" data-dtype="Number"/>
       </div>
       <div class="item-controls">
         <a class="item-control item-edit" title="{{localize 'farhome.editWeapon'}}"><i class="fas fa-edit"></i></a>
@@ -98,16 +98,16 @@
         <a class="item-name-link">{{armor.name}}</a>
       </h4>
       <div class="item-equipped">
-        <input type="checkbox" class="item-equipped-input" data-dtype="Boolean" {{checked armor.data.equipped.value}}/>
+        <input type="checkbox" class="item-equipped-input" data-dtype="Boolean" {{checked armor.system.equipped.value}}/>
       </div>
       <div class="item-attuned">
-        <input type="checkbox" class="item-attuned-input" data-dtype="Boolean" {{checked armor.data.attuned.value}}/>
+        <input type="checkbox" class="item-attuned-input" data-dtype="Boolean" {{checked armor.system.attuned.value}}/>
       </div>
       <div class="item-charges">
-        <input type="text" class="item-charges-input" value="{{armor.data.charges.value}}" min="0" data-dtype="Number"/>
+        <input type="text" class="item-charges-input" value="{{armor.system.charges.value}}" min="0" data-dtype="Number"/>
       </div>
       <div class="item-quantity">
-        <input type="text" class="item-quantity-input" value="{{armor.data.quantity.value}}" min="0" data-dtype="Number"/>
+        <input type="text" class="item-quantity-input" value="{{armor.system.quantity.value}}" min="0" data-dtype="Number"/>
       </div>
       <div class="item-controls">
         <a class="item-control item-edit" title="{{localize 'farhome.editArmor'}}"><i class="fas fa-edit"></i></a>
@@ -138,7 +138,7 @@
       <div class="item-attuned"></div>
       <div class="item-charges"></div>
       <div class="item-quantity">
-        <input type="text" class="item-quantity-input" value="{{consumable.data.quantity.value}}" min="0" data-dtype="Number"/>
+        <input type="text" class="item-quantity-input" value="{{consumable.system.quantity.value}}" min="0" data-dtype="Number"/>
       </div>
       <div class="item-controls">
         <a class="item-control item-edit" title="{{localize 'farhome.editConsumable'}}"><i class="fas fa-edit"></i></a>
@@ -169,7 +169,7 @@
       <div class="item-attuned"></div>
       <div class="item-charges"></div>
       <div class="item-quantity">
-        <input type="text" class="item-quantity-input" value="{{craftingItem.data.quantity.value}}" min="0" data-dtype="Number"/>
+        <input type="text" class="item-quantity-input" value="{{craftingItem.system.quantity.value}}" min="0" data-dtype="Number"/>
       </div>
       <div class="item-controls">
         <a class="item-control item-edit" title="{{localize 'farhome.editCraftingItem'}}"><i class="fas fa-edit"></i></a>
@@ -197,16 +197,16 @@
         <a class="item-name-link">{{item.name}}</a>
       </h4>
       <div class="item-equipped">
-        <input type="checkbox" class="item-equipped-input" data-dtype="Boolean" {{checked item.data.equipped.value}}/>
+        <input type="checkbox" class="item-equipped-input" data-dtype="Boolean" {{checked item.system.equipped.value}}/>
       </div>
       <div class="item-attuned">
-        <input type="checkbox" class="item-attuned-input" data-dtype="Boolean" {{checked item.data.attuned.value}}/>
+        <input type="checkbox" class="item-attuned-input" data-dtype="Boolean" {{checked item.system.attuned.value}}/>
       </div>
       <div class="item-charges">
-        <input type="text" class="item-charges-input" value="{{item.data.charges.value}}" min="0" data-dtype="Number"/>
+        <input type="text" class="item-charges-input" value="{{item.system.charges.value}}" min="0" data-dtype="Number"/>
       </div>
       <div class="item-quantity">
-        <input type="text" class="item-quantity-input" min="0" data-dtype="Number" value="{{item.data.quantity.value}}"/>
+        <input type="text" class="item-quantity-input" min="0" data-dtype="Number" value="{{item.system.quantity.value}}"/>
       </div>
       <div class="item-controls">
         <a class="item-control item-edit" title="{{localize 'farhome.editItem'}}"><i class="fas fa-edit"></i></a>

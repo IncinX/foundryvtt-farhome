@@ -14,7 +14,7 @@ export class FarhomeItemSheet extends ItemSheet {
 
   /** @override */
   get template() {
-    return `systems/farhome/templates/sheets/item/${this.item.data.type}-sheet.hbs`;
+    return `systems/farhome/templates/sheets/item/${this.item.type}-sheet.hbs`;
   }
 
   /** @override */
@@ -29,10 +29,10 @@ export class FarhomeItemSheet extends ItemSheet {
     context.config = CONFIG.FARHOME;
 
     // Use a safe clone of the actor data for further operations.
-    const itemData = this.item.data.toObject(false);
+    const itemData = this.item.toObject(false);
 
-    // Add the actor's data to context.data for easier access, as well as flags.
-    context.data = itemData.data;
+    // Add the actor's data to context.system for easier access, as well as flags.
+    context.system = itemData.system;
     context.flags = itemData.flags;
 
     this._prepareAllItemData(context);
@@ -56,7 +56,7 @@ export class FarhomeItemSheet extends ItemSheet {
    */
   _prepareAllItemData(itemData) {
     // Do derived localization of the entire context data.
-    localizeObject(null, itemData.data);
+    localizeObject(null, itemData.system);
   }
 
   /** @override */
@@ -115,7 +115,7 @@ async function _handleManaSpend(event) {
   }
 
   // Deduct the mana off of the character's sheet
-  actor.update({ 'data.features.mana.value': actor.data.data.features.mana.value - manaCost });
+  actor.update({ 'data.features.mana.value': actor.system.features.mana.value - manaCost });
 
   // Send the confirmation message to the chat
   sendActorMessage(`<b>${actor.name}</b> spent ${manaCost} mana.`);

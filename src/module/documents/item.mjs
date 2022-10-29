@@ -17,11 +17,6 @@ export class FarhomeItem extends Item {
     // As with the actor class, items are documents that can have their data
     // preparation methods overridden (such as prepareBaseData()).
     super.prepareData();
-
-    // Get the Item's data
-    const itemData = this.data;
-    const actorData = this.actor ? this.actor.data : {};
-    const data = itemData.data;
   }
 
   /**
@@ -32,7 +27,7 @@ export class FarhomeItem extends Item {
     // If present, return the actor's roll data.
     if (!this.actor) return null;
     const rollData = this.actor.getRollData();
-    rollData.item = foundry.utils.deepClone(this.data.data);
+    rollData.item = foundry.utils.deepClone(this.system);
 
     return rollData;
   }
@@ -42,7 +37,7 @@ export class FarhomeItem extends Item {
    * @param {Event} event   The originating click event
    */
   async roll() {
-    const itemContext = this.data;
+    const itemContext = this.system;
 
     if (itemContext.type === 'spell') {
       this._spellLevelDialog();
@@ -58,18 +53,18 @@ export class FarhomeItem extends Item {
    */
   async _spellLevelDialog() {
     // #todo Consider using renderTemplate instead of embedded HTML here and everywhere else that does so.
-    const itemContext = this.data;
-    const actorContext = this.actor ? this.actor.data : null;
-    const currentMana = actorContext ? actorContext.data.features.mana.value : 0;
+    const itemContext = this.system;
+    const actorContext = this.actor ? this.actor.system : null;
+    const currentMana = actorContext ? actorContext.system.features.mana.value : 0;
 
     let selectorUniqueId = `spell-level-selector-${Math.random().toString(16).substring(2)}`;
 
-    let dialogContent = `<p>${itemContext.data.description.value}</p>`;
+    let dialogContent = `<p>${itemContext.system.description.value}</p>`;
 
     dialogContent += `<p><b>Select the level with which to cast the spell</b></p>`;
 
     dialogContent += `<p><select id="${selectorUniqueId}" style="width: 100%">`;
-    for (let level = itemContext.data.spellLevel.value; level <= MAX_SPELL_LEVEL; level++) {
+    for (let level = itemContext.system.spellLevel.value; level <= MAX_SPELL_LEVEL; level++) {
       if (level === 0) {
         dialogContent += `<option value="${level}">Cantrip</option>`;
       } else {
@@ -88,7 +83,7 @@ export class FarhomeItem extends Item {
           label: 'Cast',
           callback: () => {
             let castedSpellLevel = parseInt(document.getElementById(selectorUniqueId).value);
-            let spellLevelDifference = castedSpellLevel - itemContext.data.spellLevel.value;
+            let spellLevelDifference = castedSpellLevel - itemContext.system.spellLevel.value;
             this._executeRoll({ castedSpellLevel: castedSpellLevel, spellLevelDifference: spellLevelDifference });
           },
         },
@@ -109,8 +104,8 @@ export class FarhomeItem extends Item {
    * @private
    */
   async _executeRoll(extraItemContext = {}) {
-    const actorContext = this.actor ? this.actor.data : null;
-    let itemContext = this.data;
+    const actorContext = this.actor ? this.actor.dasystemta : null;
+    let itemContext = this.system;
 
     // Add the extra item context which may have been queried by a user or inferred.
     var superItemContext = {
@@ -120,7 +115,7 @@ export class FarhomeItem extends Item {
 
     // Evaluate the farhome template text with the given actor and item context.
     const evaluatedRollHtml = await evaluateRollTemplate(
-      itemContext.data.rollTemplate.value,
+      itemContext.system.rollTemplate.value,
       actorContext,
       superItemContext,
     );
@@ -136,7 +131,7 @@ export class FarhomeItem extends Item {
       manaData = {
         actorId: actorContext._id,
         manaCost: manaCost,
-        availableMana: actorContext.data.features.mana.value,
+        availableMana: actorContext.system.features.mana.value,
       };
     }
 
