@@ -18,12 +18,12 @@ export class FarhomeItemSheet extends ItemSheet {
   }
 
   /** @override */
-  getData() {
+  async getData() {
     // Retrieve the data structure from the base sheet. You can inspect or log
     // the context variable to see the structure, but some key properties for
     // sheets are the actor object, the data object, whether or not it's
     // editable, the items array, and the effects array.
-    const context = super.getData();
+    const context = await super.getData();
 
     // Add the farhome configuration so it is available in handlebars.
     context.config = CONFIG.FARHOME;
@@ -38,13 +38,30 @@ export class FarhomeItemSheet extends ItemSheet {
     this._prepareAllItemData(context);
 
     // Retrieve the roll data for TinyMCE editors.
+    // #todo I don't think this is needed anymore.
     context.rollData = {};
     let actor = this.object?.parent ?? null;
     if (actor) {
       context.rollData = actor.getRollData();
     }
 
+    // Run the TextEditor.enrichHTML on editor text entries
+    context.enrichedText = {
+      description: await this._enrichTextHTML(context.system.description),
+      rollTemplate: await this._enrichTextHTML(context.system.rollTemplate),
+      note: await this._enrichTextHTML(context.system.note),
+    };
+
     return context;
+  }
+
+  /**
+   * Enriches the text HTML for a given field if it exists, otherwise it returns empty.
+   * @param {string} field The field to enrich.
+   * @return {string} The enriched HTML.
+   */
+  async _enrichTextHTML(field) {
+    return field !== undefined ? await TextEditor.enrichHTML(field.value, { async: true }) : '';
   }
 
   /**

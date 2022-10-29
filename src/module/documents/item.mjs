@@ -115,11 +115,7 @@ export class FarhomeItem extends Item {
     };
 
     // Evaluate the farhome template text with the given actor and item context.
-    const evaluatedRollHtml = await evaluateRollTemplate(
-      this.system.rollTemplate.value,
-      this.actor,
-      superItemContext,
-    );
+    const evaluatedRollHtml = await evaluateRollTemplate(this.system.rollTemplate.value, this.actor, superItemContext);
 
     // Evaluate the active effects for the character (ie/ hex, poison, etc)
     const activeEffectData = getEffectData(this.actor);

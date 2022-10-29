@@ -27,12 +27,12 @@ export class FarhomeActorSheet extends ActorSheet {
   }
 
   /** @override */
-  getData() {
+  async getData() {
     // Retrieve the data structure from the base sheet. You can inspect or log
     // the context variable to see the structure, but some key properties for
     // sheets are the actor object, the data object, whether or not it's
     // editable, the items array, and the effects array.
-    const context = super.getData();
+    const context = await super.getData();
 
     // Add the farhome configuration so it is available in handlebars.
     context.config = CONFIG.FARHOME;
@@ -59,10 +59,16 @@ export class FarhomeActorSheet extends ActorSheet {
     }
 
     // Add roll data for TinyMCE editors.
+    // #todo I don't think this is necessary anymore
     context.rollData = context.actor.getRollData();
 
     // Prepare active effects
     context.effects = prepareActiveEffectCategories(this.actor.effects);
+
+    // Run the TextEditor.enrichHTML on editor text entries
+    context.enrichedText = {
+      biography: await TextEditor.enrichHTML(context.system.biography.value, { async: true }),
+    };
 
     return context;
   }

@@ -15,12 +15,12 @@
   <section class="sheet-body">
     {{!-- Description Tab --}}
     <div class="tab" data-group="primary" data-tab="description">
-      {{editor content=system.description.value target="system.description.value" button=true owner=owner editable=editable}}
+      {{editor enrichedText.description target="system.description.value" button=true owner=owner editable=editable}}
     </div>
 
     {{!-- Roll Template Tab --}}
     <div class="tab" data-group="primary" data-tab="rollTemplate">
-      {{editor content=system.rollTemplate.value target="system.rollTemplate.value" button=true owner=owner editable=editable}}
+      {{editor enrichedText.rollTemplate target="system.rollTemplate.value" button=true owner=owner editable=editable}}
     </div>
   </div>
 </form>
