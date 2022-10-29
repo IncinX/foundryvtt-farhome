@@ -62,6 +62,8 @@ function _rollerChatMessageHandler(_chatLog, messageText, _data) {
 async function _handleReroll(event) {
   event.preventDefault();
 
+  // #todo This is all super broken right now, fix it up!
+
   const button = event.target;
   const originalMessageElement = findMessageContentNode(button);
   const messageElementClone = originalMessageElement.cloneNode(true);
@@ -84,6 +86,28 @@ async function _handleReroll(event) {
     pendingRerollElement.insertAdjacentHTML('afterend', rollHtml);
   }
 
+  // Get the effect data from the original message.
+  const effectSummaryData = _getEffectSummaryData($(messageQuery).find('.fh-active-effects').html());
+
+  // Count existing hexes in the original message
+  const appliedHexCount = $(messageQuery).find('.fh-hexed-roll').length;
+
+  // Apply additional hexes to the roll
+  const remainingHexes = effectSummaryData.hex - appliedHexCount;
+  if (remainingHexes > 0) {
+    // Use the first evaluated roll which is currently the actual roll template. This the only place that hex can currently
+    // be applied. THe extra rolls are system rolls like poison and blind that can't be hexed.
+    // #todo Perhaps later there may be radiance or inspiration that could be automatically rolled. This logic needs
+    //       to factor in the fh-hexable-roll class.
+    const evaluatedRoll = $(messageQuery).find('.fh-evaluated-roll')[0];
+
+    // Compute the new hexed roll html
+    const hexedRoll = await _applyHex(evaluatedRoll.innerHTML, remainingHexes);
+
+    // Replace the existing fh-evaluated-roll with hexRoll
+    evaluatedRoll.innerHTML = hexedRoll;
+  }
+
   // Need to re-compute the summary and re-post under the fh-roll-summary class
   const newRollSummaryData = _getRollSummaryData(messageQuery);
   const newRollSummary = await _getRollSummary(newRollSummaryData);
@@ -99,8 +123,7 @@ async function _handleReroll(event) {
   rollSummaryElement.empty();
   rollSummaryElement.append(newRollSummary);
 
-  // #todo html() only returns the inner html which happens to work in this case, but it's not a good idea to rely on that.
-  //       _applyHex has a better way of doing this... change this to using that approach
+  // Send the updated message without going through the main chat function since this re-roll logic avoids that.
   sendActorMessage(messageQuery.html());
 }
 
@@ -147,8 +170,6 @@ export function _getRollSummaryData(rollHtml) {
       wounds: initialRollSummaryData.wounds,
     };
 
-    // #todo These hard-coded class strings should be communicated through const static exports (possibly from a class)
-
     fhRollQuery.find('.fh-successes').each((_index, element) => {
       rollModifiersData.successes += parseInt(element.dataset.successes);
     });
@@ -179,6 +200,8 @@ export function _getRollSummaryData(rollHtml) {
  */
 export function _getEffectSummaryData(effectHtml) {
   const fhEffectQuery = $(effectHtml);
+
+  // #todo Should modify all this stuff so that the effect values are dataset elements on fh-active effects
 
   // Compute the effect modifiers
   let effectModifierData = {
@@ -219,7 +242,7 @@ export async function _getRollSummary(rollSummaryData) {
  * @param {String} evaluatedRollHtml The evaluated roll HTML to check.
  * @returns {Boolean} True if the roll is an armor roll, false otherwise.
  */
-async function _isArmorRoll(evaluatedRollHtml) {
+function _isArmorRoll(evaluatedRollHtml) {
   const rollDOM = new DOMParser().parseFromString(evaluatedRollHtml, 'text/html');
   const enabledInputElements = rollDOM.querySelectorAll('input:enabled');
 
@@ -336,6 +359,8 @@ export async function sendChatRoll(
  * @param {Number} hexCount Number of hexes to apply to the roll.
  */
 async function _applyHex(evaluatedRollHtml, hexCount) {
+  // #todo Consider DOMParser vs jQuery for all of this stuff in all the functions
+
   let rollDOM = new DOMParser().parseFromString(evaluatedRollHtml, 'text/html');
   let enableInputElements = rollDOM.querySelectorAll('input:enabled');
 
