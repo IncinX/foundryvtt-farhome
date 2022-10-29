@@ -115,7 +115,7 @@ async function _handleManaSpend(event) {
   }
 
   // Deduct the mana off of the character's sheet
-  actor.update({ 'data.features.mana.value': actor.system.features.mana.value - manaCost });
+  actor.update({ 'system.features.mana.value': actor.system.features.mana.value - manaCost });
 
   // Send the confirmation message to the chat
   sendActorMessage(`<b>${actor.name}</b> spent ${manaCost} mana.`);

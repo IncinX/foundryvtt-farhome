@@ -432,7 +432,7 @@ export class FarhomeActorSheet extends ActorSheet {
     // #todo Code duplication between all this and attuned/prepared can probably be reduced by binding a string parameter for the data path.
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
-    await item.update({ 'data.equipped.value': event.target.checked });
+    await item.update({ 'system.equipped.value': event.target.checked });
   }
 
   /**
@@ -443,7 +443,7 @@ export class FarhomeActorSheet extends ActorSheet {
   async _onItemAttunedChanged(event) {
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
-    await item.update({ 'data.attuned.value': event.target.checked });
+    await item.update({ 'system.attuned.value': event.target.checked });
   }
 
   /**
@@ -454,7 +454,7 @@ export class FarhomeActorSheet extends ActorSheet {
   async _onItemPreparedChanged(event) {
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
-    await item.update({ 'data.prepared.value': event.target.checked });
+    await item.update({ 'system.prepared.value': event.target.checked });
   }
 
   /**
@@ -465,7 +465,7 @@ export class FarhomeActorSheet extends ActorSheet {
   async _onItemChargesChanged(event) {
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
-    await item.update({ 'data.charges.value': parseInt(event.target.value) });
+    await item.update({ 'system.charges.value': parseInt(event.target.value) });
   }
 
   /**
@@ -476,7 +476,7 @@ export class FarhomeActorSheet extends ActorSheet {
   async _onItemQuantityChanged(event) {
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
-    await item.update({ 'data.quantity.value': parseInt(event.target.value) });
+    await item.update({ 'system.quantity.value': parseInt(event.target.value) });
   }
 
   /**
@@ -538,7 +538,7 @@ export class FarhomeActorSheet extends ActorSheet {
       });
 
       // Spend the healing surge
-      this.actor.update({ 'data.features.healingSurges.value': currentHealingSurges - 1 });
+      this.actor.update({ 'system.features.healingSurges.value': currentHealingSurges - 1 });
 
       const healingSurgeData = {
         actorId: this.actor.id,
@@ -563,7 +563,7 @@ export class FarhomeActorSheet extends ActorSheet {
     const manaRefillValue = Math.max(Math.ceil(actorContext.level.value / 2), 1);
     const newManaValue = Math.min(actorContext.features.mana.max, actorContext.features.mana.value + manaRefillValue);
 
-    this.actor.update({ 'data.features.mana.value': newManaValue });
+    this.actor.update({ 'system.features.mana.value': newManaValue });
 
     await sendActorMessage(
       `<strong>${this.actor.name}</strong> restored ${newManaValue - actorContext.features.mana.value} mana.`,
@@ -633,7 +633,7 @@ async function _handleApplyHealing(event) {
   const healedWounds = Math.min(rolledHealedWounds, maxHealAmount);
 
   // Apply the healing
-  actor.update({ 'data.features.wounds.value': actorContext.features.wounds.value + healedWounds });
+  actor.update({ 'system.features.wounds.value': actorContext.features.wounds.value + healedWounds });
 
   // Send the confirmation message to the chat
   sendActorMessage(`<strong>${actor.name}</strong> healed ${healedWounds} wounds.`);

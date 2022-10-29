@@ -16,7 +16,7 @@
   <section class="sheet-body">
     {{!-- Description Tab --}}
     <div class="tab" data-group="primary" data-tab="description">
-      {{editor content=data.description.value target="data.description.value" button=true owner=owner editable=editable}}
+      {{editor content=system.description.value target="system.description.value" button=true owner=owner editable=editable}}
     </div>
 
     {{!-- Attributes Tab --}}
@@ -28,45 +28,45 @@
         </colgroup>
         {{>
         "systems/farhome/templates/partials/row-bool-partial.hbs"
-        data.prepared
-        objectString="data.prepared"}}
+        system.prepared
+        objectString="system.prepared"}}
         {{>
         "systems/farhome/templates/partials/row-number-partial.hbs"
-        data.spellLevel
-        objectString="data.spellLevel"}}
+        system.spellLevel
+        objectString="system.spellLevel"}}
         {{>
         "systems/farhome/templates/partials/row-select-partial.hbs"
-        data.spellSchool
-        objectString="data.spellSchool"
+        system.spellSchool
+        objectString="system.spellSchool"
         mapping=config.spellSchools}}
         {{>
         "systems/farhome/templates/partials/row-select-partial.hbs"
-        data.damageType
-        objectString="data.damageType"
+        system.damageType
+        objectString="system.damageType"
         mapping=config.damageTypes}}
         {{>
         "systems/farhome/templates/partials/row-select-partial.hbs"
-        data.areaOfEffect
-        objectString="data.areaOfEffect"
+        system.areaOfEffect
+        objectString="system.areaOfEffect"
         mapping=config.areaOfEffectTypes}}
         {{>
         "systems/farhome/templates/partials/row-string-partial.hbs"
-        data.range
-        objectString="data.range"}}
+        system.range
+        objectString="system.range"}}
         {{>
         "systems/farhome/templates/partials/row-string-partial.hbs"
-        data.duration
-        objectString="data.duration"}}
+        system.duration
+        objectString="system.duration"}}
         {{>
         "systems/farhome/templates/partials/row-string-partial.hbs"
-        data.castingTime
-        objectString="data.castingTime"}}
+        system.castingTime
+        objectString="system.castingTime"}}
       </table>
     </div>
 
     {{!-- Roll Template Tab --}}
     <div class="tab" data-group="primary" data-tab="rollTemplate">
-      {{editor content=data.rollTemplate.value target="data.rollTemplate.value" button=true owner=owner editable=editable}}
+      {{editor content=system.rollTemplate.value target="system.rollTemplate.value" button=true owner=owner editable=editable}}
     </div>
   </div>
 </form>

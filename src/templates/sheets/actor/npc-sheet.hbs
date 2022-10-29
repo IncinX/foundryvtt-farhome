@@ -13,21 +13,21 @@
           <label class="under-label" for="name">{{localize 'farhome.characterName'}}</label>
           <div class="race-background-info flexrow flex-between flex2">
             <div class="race-info flexcol">
-              <input class="header-input" name="data.race.value" type="text" value="{{data.race.value}}"
-                placeholder="{{data.race.label}}" />
-              <label class="under-label" for="data.race.value">{{localize 'farhome.race'}}</label>
+              <input class="header-input" name="system.race.value" type="text" value="{{system.race.value}}"
+                placeholder="{{system.race.label}}" />
+              <label class="under-label" for="system.race.value">{{localize 'farhome.race'}}</label>
             </div>
             <div class="background-info flexcol">
-              <input class="header-input" name="data.background.value" type="text" value="{{data.background.value}}"
-                placeholder="{{data.background.label}}" />
-              <label class="under-label" for="data.background.value">{{localize 'farhome.background'}}</label>
+              <input class="header-input" name="system.background.value" type="text" value="{{system.background.value}}"
+                placeholder="{{system.background.label}}" />
+              <label class="under-label" for="system.background.value">{{localize 'farhome.background'}}</label>
             </div>
           </div>
         </div>
         <div class="character-info flexcol flex1">
-          <input class="header-input" name="data.cr.value" type="text" value="{{data.cr.value}}"
-            data-dtype="Number" placeholder="{{data.cr.label}}" />
-          <label class="under-label" for="data.cr.value">{{localize 'farhome.cr'}}</label>
+          <input class="header-input" name="system.cr.value" type="text" value="{{system.cr.value}}"
+            data-dtype="Number" placeholder="{{system.cr.label}}" />
+          <label class="under-label" for="system.cr.value">{{localize 'farhome.cr'}}</label>
         </div>
       </div>
     </header>
@@ -66,7 +66,7 @@
 
     {{!-- Biography Tab --}}
     <div class="tab biography-tab" data-group="primary" data-tab="biography">
-      {{editor content=data.biography.value target="data.biography.value" button=true owner=owner editable=editable}}
+      {{editor content=system.biography.value target="system.biography.value" button=true owner=owner editable=editable}}
     </div>
 
     {{!-- Notes Tab --}}

@@ -123,10 +123,14 @@ export async function evaluateTemplateChunk(templateChunk, actorContext, itemCon
     rarity: itemContext.system.rarity ? game.i18n.localize(`farhome.${itemContext.system.rarity.value}`) : '',
     apCost: itemContext.system.apCost ? itemContext.system.apCost.value : '',
     range: itemContext.system.range ? itemContext.system.range.value : '',
-    damageType: itemContext.system.damageType ? game.i18n.localize(`farhome.${itemContext.system.damageType.value}`) : '',
+    damageType: itemContext.system.damageType
+      ? game.i18n.localize(`farhome.${itemContext.system.damageType.value}`)
+      : '',
     quantity: itemContext.system.quantity ? itemContext.system.quantity.value : '',
     weight: itemContext.system.weight ? itemContext.system.weight : '',
-    weaponType: itemContext.system.weaponType ? game.i18n.localize(`farhome.${itemContext.system.weaponType.value}`) : '',
+    weaponType: itemContext.system.weaponType
+      ? game.i18n.localize(`farhome.${itemContext.system.weaponType.value}`)
+      : '',
     armorBonus: itemContext.system.armorBonus ? itemContext.system.armorBonus.value : '',
     armorPenalty: itemContext.system.armorPenalty ? itemContext.system.armorPenalty.value : '',
     armorType: itemContext.system.armorType ? game.i18n.localize(`farhome.${itemContext.system.armorType.value}`) : '',

@@ -19,7 +19,7 @@
   <section class="sheet-body">
     {{!-- Description Tab --}}
     <div class="tab" data-group="primary" data-tab="description">
-      {{editor content=data.description.value target="data.description.value" button=true owner=owner editable=editable}}
+      {{editor content=system.description.value target="system.description.value" button=true owner=owner editable=editable}}
     </div>
 
     {{!-- Attributes Tab --}}
@@ -31,35 +31,35 @@
         </colgroup>
         {{>
         "systems/farhome/templates/partials/row-bool-partial.hbs"
-        data.equipped
-        objectString="data.equipped"}}
+        system.equipped
+        objectString="system.equipped"}}
         {{>
         "systems/farhome/templates/partials/row-bool-partial.hbs"
-        data.attuned
-        objectString="data.attuned"}}
+        system.attuned
+        objectString="system.attuned"}}
         {{>
         "systems/farhome/templates/partials/row-number-partial.hbs"
-        data.charges
-        objectString="data.charges"}}
+        system.charges
+        objectString="system.charges"}}
         {{>
         "systems/farhome/templates/partials/row-number-partial.hbs"
-        data.quantity
-        objectString="data.quantity"}}
+        system.quantity
+        objectString="system.quantity"}}
         {{>
         "systems/farhome/templates/partials/row-number-partial.hbs"
-        data.weight
-        objectString="data.weight"}}
+        system.weight
+        objectString="system.weight"}}
         {{>
         "systems/farhome/templates/partials/row-select-partial.hbs"
-        data.rarity
-        objectString="data.rarity"
+        system.rarity
+        objectString="system.rarity"
         mapping=config.rarities}}
       </table>
     </div>
 
     {{!-- Roll Template Tab --}}
     <div class="tab" data-group="primary" data-tab="rollTemplate">
-      {{editor content=data.rollTemplate.value target="data.rollTemplate.value" button=true owner=owner editable=editable}}
+      {{editor content=system.rollTemplate.value target="system.rollTemplate.value" button=true owner=owner editable=editable}}
     </div>
   </div>
 </form>
