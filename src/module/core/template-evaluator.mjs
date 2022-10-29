@@ -30,6 +30,11 @@ export async function evaluateTemplate(templateString, actorContext, itemContext
     }
   }
 
+  // #todo Due to the nature of paragraphs in HTML and how the WYSIWYG formats, there is a possibility for nested paragraphs.
+  //       Browsers will terminate those as empty paragraphs, so we should remove them here.
+  //       Additionally, we should remove paragraphs before div's, as they seem to be terminated by browsers as well.
+  //       For now, the workaround is to just hide them with css which isn't ideal.
+
   return evaluatedString;
 }
 
