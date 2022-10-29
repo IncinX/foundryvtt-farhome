@@ -276,7 +276,7 @@ export class FarhomeActorSheet extends ActorSheet {
     const itemData = {
       name: name,
       type: type,
-      data: {},
+      system: {},
     };
 
     // Populate the spell item

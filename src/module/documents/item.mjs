@@ -104,34 +104,35 @@ export class FarhomeItem extends Item {
    * @private
    */
   async _executeRoll(extraItemContext = {}) {
-    const actorContext = this.actor ? this.actor.dasystemta : null;
-    let itemContext = this.system;
+    if (this.actor === undefined) {
+      console.log('No actor found for this item.');
+    }
 
     // Add the extra item context which may have been queried by a user or inferred.
     var superItemContext = {
-      ...itemContext,
+      ...this,
       ...extraItemContext,
     };
 
     // Evaluate the farhome template text with the given actor and item context.
     const evaluatedRollHtml = await evaluateRollTemplate(
-      itemContext.system.rollTemplate.value,
-      actorContext,
+      this.system.rollTemplate.value,
+      this.actor,
       superItemContext,
     );
 
     // Evaluate the active effects for the character (ie/ hex, poison, etc)
-    const activeEffectData = getEffectData(actorContext);
+    const activeEffectData = getEffectData(this.actor);
     const activeEffectsHtml = await getEffectHtml(activeEffectData);
 
     // Evaluate mana data if it is a spell
     let manaData = undefined;
-    if (itemContext.type === 'spell' && actorContext !== null) {
+    if (this.type === 'spell' && actorContext !== null) {
       let manaCost = convertSpellLevelToManaCost(extraItemContext.castedSpellLevel);
       manaData = {
-        actorId: actorContext._id,
+        actorId: this.actor._id,
         manaCost: manaCost,
-        availableMana: actorContext.system.features.mana.value,
+        availableMana: this.actor.system.features.mana.value,
       };
     }
 
