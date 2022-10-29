@@ -37,9 +37,7 @@ export class FarhomeItem extends Item {
    * @param {Event} event   The originating click event
    */
   async roll() {
-    const itemContext = this.system;
-
-    if (itemContext.type === 'spell') {
+    if (this.type === 'spell') {
       this._spellLevelDialog();
     } else {
       this._executeRoll();
@@ -53,18 +51,16 @@ export class FarhomeItem extends Item {
    */
   async _spellLevelDialog() {
     // #todo Consider using renderTemplate instead of embedded HTML here and everywhere else that does so.
-    const itemContext = this.system;
-    const actorContext = this.actor ? this.actor.system : null;
-    const currentMana = actorContext ? actorContext.system.features.mana.value : 0;
+    const currentMana = this.actor ? this.actor.system.features.mana.value : 0;
 
     let selectorUniqueId = `spell-level-selector-${Math.random().toString(16).substring(2)}`;
 
-    let dialogContent = `<p>${itemContext.system.description.value}</p>`;
+    let dialogContent = `<p>${this.system.description.value}</p>`;
 
     dialogContent += `<p><b>Select the level with which to cast the spell</b></p>`;
 
     dialogContent += `<p><select id="${selectorUniqueId}" style="width: 100%">`;
-    for (let level = itemContext.system.spellLevel.value; level <= MAX_SPELL_LEVEL; level++) {
+    for (let level = this.system.spellLevel.value; level <= MAX_SPELL_LEVEL; level++) {
       if (level === 0) {
         dialogContent += `<option value="${level}">Cantrip</option>`;
       } else {
@@ -75,7 +71,7 @@ export class FarhomeItem extends Item {
     dialogContent += '</select></p>';
 
     let manaDialog = new Dialog({
-      title: ` ${itemContext.name}: Select Spell Level`,
+      title: ` ${this.name}: Select Spell Level`,
       content: dialogContent,
       buttons: {
         cast: {
@@ -83,7 +79,7 @@ export class FarhomeItem extends Item {
           label: 'Cast',
           callback: () => {
             let castedSpellLevel = parseInt(document.getElementById(selectorUniqueId).value);
-            let spellLevelDifference = castedSpellLevel - itemContext.system.spellLevel.value;
+            let spellLevelDifference = castedSpellLevel - this.system.spellLevel.value;
             this._executeRoll({ castedSpellLevel: castedSpellLevel, spellLevelDifference: spellLevelDifference });
           },
         },
@@ -123,7 +119,7 @@ export class FarhomeItem extends Item {
 
     // Evaluate mana data if it is a spell
     let manaData = undefined;
-    if (this.type === 'spell' && actorContext !== null) {
+    if (this.type === 'spell') {
       let manaCost = convertSpellLevelToManaCost(extraItemContext.castedSpellLevel);
       manaData = {
         actorId: this.actor._id,

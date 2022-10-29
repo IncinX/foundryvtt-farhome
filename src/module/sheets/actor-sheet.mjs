@@ -516,8 +516,7 @@ export class FarhomeActorSheet extends ActorSheet {
       });
 
       // Evaluate the active effects for the character (ie/ hex, poison, etc)
-      const actorContext = this.actor.system;
-      const activeEffectData = getEffectData(actorContext);
+      const activeEffectData = getEffectData(this.actor);
       const activeEffectsHtml = await getEffectHtml(activeEffectData);
 
       // Send the chat roll for display (along with summary calculation, etc.)

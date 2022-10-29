@@ -126,6 +126,7 @@ export async function evaluateTemplateChunk(templateChunk, actorContext, itemCon
     damageType: itemContext.system.damageType
       ? game.i18n.localize(`farhome.${itemContext.system.damageType.value}`)
       : '',
+    charges: itemContext.system.charges ? itemContext.system.charges.value : '',
     quantity: itemContext.system.quantity ? itemContext.system.quantity.value : '',
     weight: itemContext.system.weight ? itemContext.system.weight : '',
     weaponType: itemContext.system.weaponType
