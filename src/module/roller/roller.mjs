@@ -62,6 +62,8 @@ function _rollerChatMessageHandler(_chatLog, messageText, _data) {
 async function _handleReroll(event) {
   event.preventDefault();
 
+  // #todo This is all super broken right now, fix it up!
+
   const button = event.target;
   const originalMessageElement = findMessageContentNode(button);
   const messageElementClone = originalMessageElement.cloneNode(true);
@@ -84,6 +86,28 @@ async function _handleReroll(event) {
     pendingRerollElement.insertAdjacentHTML('afterend', rollHtml);
   }
 
+  // Get the effect data from the original message.
+  const effectSummaryData = _getEffectSummaryData($(messageQuery).find('.fh-active-effects').html());
+
+  // Count existing hexes in the original message
+  const appliedHexCount = $(messageQuery).find('.fh-hexed-roll').length;
+
+  // Apply additional hexes to the roll
+  const remainingHexes = effectSummaryData.hex - appliedHexCount;
+  if (remainingHexes > 0) {
+    // Use the first evaluated roll which is currently the actual roll template. This the only place that hex can currently
+    // be applied. THe extra rolls are system rolls like poison and blind that can't be hexed.
+    // #todo Perhaps later there may be radiance or inspiration that could be automatically rolled. This logic needs
+    //       to factor in the fh-hexable-roll class.
+    const evaluatedRoll = $(messageQuery).find('.fh-evaluated-roll')[0];
+
+    // Compute the new hexed roll html
+    const hexedRoll = await _applyHex(evaluatedRoll.innerHTML, remainingHexes);
+
+    // Replace the existing fh-evaluated-roll with hexRoll
+    evaluatedRoll.innerHTML = hexedRoll;
+  }
+
   // Need to re-compute the summary and re-post under the fh-roll-summary class
   const newRollSummaryData = _getRollSummaryData(messageQuery);
   const newRollSummary = await _getRollSummary(newRollSummaryData);
@@ -99,8 +123,7 @@ async function _handleReroll(event) {
   rollSummaryElement.empty();
   rollSummaryElement.append(newRollSummary);
 
-  // #todo html() only returns the inner html which happens to work in this case, but it's not a good idea to rely on that.
-  //       _applyHex has a better way of doing this... change this to using that approach
+  // Send the updated message without going through the main chat function since this re-roll logic avoids that.
   sendActorMessage(messageQuery.html());
 }
 
@@ -130,7 +153,8 @@ export function _getRollSummaryData(rollHtml) {
     fhRollQuery.find('input').each((_index, element) => {
       containsRollData = true;
 
-      if (!element.disabled) {
+      // The roll counts if it is enabled or if it is a hexed reroll die (which counts but is also disabled from being re-rolled).
+      if (!element.disabled || element.classList.contains('fh-hexed-reroll')) {
         const rollData = _parseRoll(element);
         rolls.push(rollData);
       }
@@ -145,8 +169,6 @@ export function _getRollSummaryData(rollHtml) {
       crits: initialRollSummaryData.crits,
       wounds: initialRollSummaryData.wounds,
     };
-
-    // #todo These hard-coded class strings should be communicated through const static exports (possibly from a class)
 
     fhRollQuery.find('.fh-successes').each((_index, element) => {
       rollModifiersData.successes += parseInt(element.dataset.successes);
@@ -178,6 +200,8 @@ export function _getRollSummaryData(rollHtml) {
  */
 export function _getEffectSummaryData(effectHtml) {
   const fhEffectQuery = $(effectHtml);
+
+  // #todo Should modify all this stuff so that the effect values are dataset elements on fh-active effects
 
   // Compute the effect modifiers
   let effectModifierData = {
@@ -213,6 +237,33 @@ export async function _getRollSummary(rollSummaryData) {
 }
 
 /**
+ * Checks if the roll in the message is exclusively an armor roll.
+ * An armor roll is classified as any roll that only contains armor dice (or wounds).
+ * @param {String} evaluatedRollHtml The evaluated roll HTML to check.
+ * @returns {Boolean} True if the roll is an armor roll, false otherwise.
+ */
+function _isArmorRoll(evaluatedRollHtml) {
+  const rollDOM = new DOMParser().parseFromString(evaluatedRollHtml, 'text/html');
+  const enabledInputElements = rollDOM.querySelectorAll('input:enabled');
+
+  const validDice = new Set();
+  validDice.add(Dice.SUPERIOR_DEFENSE);
+  validDice.add(Dice.DEFENSE);
+  validDice.add(Dice.GUARANTEED_WOUND);
+  validDice.add(Dice.WOUND);
+
+  for (const enabledInputElement of enabledInputElements) {
+    const die = parseInt(enabledInputElement.dataset.die ?? '0', 10);
+
+    if (!validDice.has(die)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/**
  * Send the chat roll with the embedded roll html data, generate a summary and add appropriate buttons.
  * @param {String} evaluatedRollHtml HTML string containing the roll elements.
  * @param {String} activeEffectsHtml HTML string containing the effect elements like hex and poison.
@@ -239,41 +290,46 @@ export async function sendChatRoll(
   let rollSummaryData = _getRollSummaryData(hexedRollHtml);
 
   //
-  // Compute and apply the poison if it is present
-  // Poison adds terrible dice to the roll for each level of poison
+  // Only apply poison and blindness if it is not an armor roll.
   //
   let poisonRollHtml = '';
-  if (effectSummaryData.poison > 0) {
-    // Roll terrible dice for each level of poison
-    const poisonRollFormula = `${effectSummaryData.poison}t`;
-    poisonRollHtml = await game.farhome.roller.evaluateRollFormula(poisonRollFormula);
-
-    // Apply the poison to the summary data
-    const poisonRollSummaryData = _getRollSummaryData(poisonRollHtml);
-
-    // Adjust the roll summary based on poison
-    // #todo Ideally the rollSummaryData has a function to add another rollSummaryData to it
-    rollSummaryData.successes += poisonRollSummaryData.successes;
-    rollSummaryData.crits += poisonRollSummaryData.crits;
-  }
-
-  //
-  // Compute and apply the blinded effect if it is present
-  // Blindness or not seeing a target adds 2 terrible dice to the roll
-  //
   let blindRollHtml = '';
-  if (effectSummaryData.blind > 0) {
-    // Roll 2 terrible dice if blinded
-    const blindRollFormula = `2t`;
-    blindRollHtml = await game.farhome.roller.evaluateRollFormula(blindRollFormula);
+  if (!_isArmorRoll(hexedRollHtml)) {
+    //
+    // Compute and apply the poison if it is present
+    // Poison adds terrible dice to the roll for each level of poison
+    //
+    if (effectSummaryData.poison > 0) {
+      // Roll terrible dice for each level of poison
+      const poisonRollFormula = `${effectSummaryData.poison}t`;
+      poisonRollHtml = await game.farhome.roller.evaluateRollFormula(poisonRollFormula);
 
-    // Apply the poison to the summary data
-    const blindRollSummaryData = _getRollSummaryData(blindRollHtml);
+      // Apply the poison to the summary data
+      const poisonRollSummaryData = _getRollSummaryData(poisonRollHtml);
 
-    // Adjust the roll summary based on being blind
-    // #todo Ideally the rollSummaryData has a function to add another rollSummaryData to it
-    rollSummaryData.successes += blindRollSummaryData.successes;
-    rollSummaryData.crits += blindRollSummaryData.crits;
+      // Adjust the roll summary based on poison
+      // #todo Ideally the rollSummaryData has a function to add another rollSummaryData to it
+      rollSummaryData.successes += poisonRollSummaryData.successes;
+      rollSummaryData.crits += poisonRollSummaryData.crits;
+    }
+
+    //
+    // Compute and apply the blinded effect if it is present
+    // Blindness or not seeing a target adds 2 terrible dice to the roll
+    //
+    if (effectSummaryData.blind > 0) {
+      // Roll 2 terrible dice if blinded
+      const blindRollFormula = `2t`;
+      blindRollHtml = await game.farhome.roller.evaluateRollFormula(blindRollFormula);
+
+      // Apply the poison to the summary data
+      const blindRollSummaryData = _getRollSummaryData(blindRollHtml);
+
+      // Adjust the roll summary based on being blind
+      // #todo Ideally the rollSummaryData has a function to add another rollSummaryData to it
+      rollSummaryData.successes += blindRollSummaryData.successes;
+      rollSummaryData.crits += blindRollSummaryData.crits;
+    }
   }
 
   //
@@ -303,6 +359,8 @@ export async function sendChatRoll(
  * @param {Number} hexCount Number of hexes to apply to the roll.
  */
 async function _applyHex(evaluatedRollHtml, hexCount) {
+  // #todo Consider DOMParser vs jQuery for all of this stuff in all the functions
+
   let rollDOM = new DOMParser().parseFromString(evaluatedRollHtml, 'text/html');
   let enableInputElements = rollDOM.querySelectorAll('input:enabled');
 
@@ -317,14 +375,27 @@ async function _applyHex(evaluatedRollHtml, hexCount) {
     const rollData = _parseRoll(enabledInputElement);
 
     // If it is a critical, downgrade it to a success
-    if (rollData.face === Faces.CRITICAL_SUCCESS) {
-      rollData.face = Faces.SUCCESS;
+    let hexApplied = false;
+    switch (rollData.face) {
+      case Faces.CRITICAL_SUCCESS:
+        rollData.face = Faces.SUCCESS;
+        hexApplied = true;
+        break;
+      case Faces.CRITICAL_DEFENSE:
+        rollData.face = Faces.DEFENSE;
+        hexApplied = true;
+        break;
+    }
 
+    if (hexApplied) {
       // Replace with a formatted element (that also has a fh-hexed class)
       const rollHtml = await game.farhome.roller.formatRolls([rollData], false);
 
       // Add the new roll element
-      enabledInputElement.insertAdjacentHTML('afterend', rollHtml);
+      // It is disabled since a hexed roll cannot be re-rolled.
+      let newElement = enabledInputElement.insertAdjacentHTML('afterend', rollHtml);
+      enabledInputElement.nextElementSibling.classList.add('fh-hexed-reroll');
+      enabledInputElement.nextElementSibling.disabled = true;
 
       // Disable and hex the current roll
       enabledInputElement.disabled = true;
