@@ -98,9 +98,186 @@ export async function createCompendiumFromVetoolsBeastiary(
       pack: worldCompendiumName,
     });
 
-    console.log(monsterDocument);
+    // #todo Setup weapon proficiencies (common between oneHand/twoHand/ranged/unarmed) - Make a guess by Action's to hit? Or perhaps general CR?
 
-    // #todo Add items
+    // #todo Add saves and skill proficiencies
+
+    // #todo Add Move/Sprint (as well as walk/fly/swim speeds)
+    
+    // #todo Add AC
+
+    // #todo Add passive perception perhaps
+
+    // #todo Add "spellcasting" as spells
+
+    // Add "traits" as feats
+    if (monster.trait) {
+      for (const trait of monster.trait) {
+        const traitEntries = trait.entries.join('\n');
+  
+        const newMonsterTrait = {
+          name: `Trait: ${trait.name}`,
+          type: 'feat',
+          data: {
+            description: {
+              value: traitEntries,
+            },
+            rollTemplate: {
+              value: '<h1>[[i.name]]</h1><p>[[i.description]]</p>',
+            },
+          }
+        };
+  
+        await Item.create(newMonsterTrait, { parent: monsterDocument[0] });
+      }
+    }
+
+    // Add "languages" as a feat
+    if (monster.languages) {
+      const newMonsterLanguage = {
+        name: `Languages: ${monster.languages}`,
+        type: 'feat',
+        data: {
+          description: {
+            value: monster.languages,
+          },
+          rollTemplate: {
+            value: '<h1>Languages</h1><p>[[i.description]]</p>',
+          },
+        }
+      };
+  
+      await Item.create(newMonsterLanguage, { parent: monsterDocument[0] });
+    }
+    
+    // Add "senses" as a feat
+    if (monster.senses) {
+      const newMonsterSenses = {
+        name: `Senses: ${monster.senses}`,
+        type: 'feat',
+        data: {
+          description: {
+            value: monster.senses,
+          },
+          rollTemplate: {
+            value: '<h1>Senses</h1><p>[[i.description]]</p>',
+          },
+        }
+      };
+  
+      await Item.create(newMonsterSenses, { parent: monsterDocument[0] });
+    }
+    
+    // Add "immune" as a feat
+    if (monster.immune) {
+      const damageImmunities = monster.immune.join(', ');
+
+      const newMonsterDamageImmunities = {
+        name: `Damage Immunities: ${damageImmunities}`,
+        type: 'feat',
+        data: {
+          description: {
+            value: damageImmunities,
+          },
+          rollTemplate: {
+            value: '<h1>Damage Immunities</h1><p>[[i.description]]</p>',
+          },
+        }
+      };
+  
+      await Item.create(newMonsterDamageImmunities, { parent: monsterDocument[0] });
+    }
+    
+    // Add "conditionImmune" as a feat
+    if (monster.conditionImmune) {
+      const conditionImmunities = monster.conditionImmune.join(', ');
+
+      const newMonsterConditionImmunities = {
+        name: `Condition Immunities: ${conditionImmunities}`,
+        type: 'feat',
+        data: {
+          description: {
+            value: conditionImmunities,
+          },
+          rollTemplate: {
+            value: '<h1>Condition Immunities</h1><p>[[i.description]]</p>',
+          },
+        }
+      };
+  
+      await Item.create(newMonsterConditionImmunities, { parent: monsterDocument[0] });
+    }
+
+    // Add "legendary" as legendary actions
+    if (monster.legendary) {
+      for (const legendary of monster.legendary) {
+        const legendaryEntries = legendary.entries.join('\n');
+  
+        const newMonsterManeuver = {
+          name: `Legendary: ${legendary.name}`,
+          type: 'maneuver',
+          data: {
+            description: {
+              value: legendaryEntries,
+            },
+            rollTemplate: {
+              value: '<h1>[[i.name]]</h1><p>[[skill(a.unarmed, a.str)]]</p>',
+            },
+            range: {
+              value: '',
+            },
+            apCosts: {
+              value: '',
+            },
+            weaponRequirements: {
+              value: '',
+            },
+            levelRequirements: {
+              value: '',
+            }
+          }
+        };
+  
+        await Item.create(newMonsterManeuver, { parent: monsterDocument[0] });
+      }
+    }
+
+    // Add "actions" as maneuvers (it's up to the GM to decide how often to do it)
+    if (monster.action) {
+      for (const action of monster.action) {
+        const actionEntries = action.entries.join('\n');
+
+        // #todo Parse description and convert to-hit and damage to farhome rolls
+        //       The to-hit may just be an unarmed roll or something as long as the weapon proficiency is updated.
+  
+        const newMonsterManeuver = {
+          name: `Action: ${action.name}`,
+          type: 'maneuver',
+          data: {
+            description: {
+              value: actionEntries,
+            },
+            rollTemplate: {
+              value: '<h1>[[i.name]]</h1><p>[[skill(a.unarmed, a.str)]]</p>',
+            },
+            range: {
+              value: '',
+            },
+            apCosts: {
+              value: '',
+            },
+            weaponRequirements: {
+              value: '',
+            },
+            levelRequirements: {
+              value: '',
+            }
+          }
+        };
+  
+        await Item.create(newMonsterManeuver, { parent: monsterDocument[0] });
+      }
+    }
   }
 
   // Send the final progress completion state
