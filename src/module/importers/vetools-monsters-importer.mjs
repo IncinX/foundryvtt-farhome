@@ -5,14 +5,16 @@
 
 export class VetoolsMonsterImportConfig {
   constructor() {
-    // Calibrated for approximate difficulty of several high, medium, and low end creatures
-    this.hpScale = 0.3;
-
     // No significant calibration needed since it is a multiplier for an existing scaling formula
     this.crScale = 1.0;
 
-    // Initially calibrated for plate armor between the two systems
-    this.acScale = 1.0;
+    // Calibrated for approximate difficulty of several high, medium, and low end creatures
+    this.hpScale = 0.3;
+
+    // Calibrated for approximate difficulty of several high, medium, and low end creatures
+    // Full armor between DND5e and Farhome is roughly equivalent to 0.3 if using the algorithm in _convertAC
+    // It was bumped up a little bit higher due to higher level creatures.
+    this.acScale = 0.33;
   }
 }
 
@@ -325,26 +327,34 @@ function _convertCr(vetoolsMonsterImportConfig, veCr) {
 
 function _convertAC(vetoolsMonsterImportConfig, monsterAC) {
   // Parse the brackets in AC () for the armor type and use that if it is found.
-  const armorName = monsterAC.match(/\(([^)]+)\)/)[1];
+  const armorDescriptionMatch = monsterAC.match(/\(([^)]+)\)/);
+  const armorDescription = armorDescriptionMatch ? armorDescriptionMatch[1] : 'natural evasion';
   const armorValue = parseInt(monsterAC.match(/\d+/)[0]);
 
   let roll = '';
 
-  if (armorName) {
-    const armorList = armorName.split(',');
+  if (armorDescription) {
+    const armorList = armorDescription.split(',');
     for (const armorItem of armorList) {
-      switch (armorName) {
+      switch (armorItem) {
         case 'shield':
           roll = `D${roll}`;
           break;
+        case 'cage':
+        case 'breastplate':
+        case 'chain armor':
+        case 'leather':
         case 'leather armor':
         case 'studded leather':
+        case 'studded leather armor':
           roll = `${roll}D2d`;
           break;
         case 'hide armor':
           roll = `${roll}D3d`;
           break;
         case 'chain shirt':
+        case 'chain mail':
+        case 'coin mail':
         case 'scale mail':
           // Scale mail can vary between 16 and 19 in D&D 5e
           // 19 is stronger than plate, so we'll make it slightly stronger than plate if it is 19 or more
@@ -354,14 +364,18 @@ function _convertAC(vetoolsMonsterImportConfig, monsterAC) {
             roll = `${roll}2D2d`;
           }
           break;
+        case 'splint':
         case 'half plate':
           roll = `${roll}2D3d`;
           break;
         case 'plate':
+        case 'plate armor':
           roll = `${roll}3D2d`;
           break;
         default:
-          console.warn(`Unknown armor type: ${armorName}`);
+          console.warn(`Unknown armor type: ${armorItem}`);
+        case 'natural':
+        case 'natural evasion': // Custom defined type in case no armor type is specified
         case 'patchwork armor':
         case 'natural armor':
           // For natural armor:
@@ -386,18 +400,16 @@ function _convertAC(vetoolsMonsterImportConfig, monsterAC) {
           break;
       }
     }
-  } else {
-    armorName = 'natural evasion';
   }
 
   const newArmor = {
-    name: _toTitleCase(armorName),
+    name: _toTitleCase(armorDescription),
     type: 'armor',
     data: {
       description: {
         value: '',
       },
-      equpped: {
+      equipped: {
         value: true,
       },
       rollTemplate: {

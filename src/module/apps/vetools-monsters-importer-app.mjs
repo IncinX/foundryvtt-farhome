@@ -11,10 +11,14 @@ import {
  */
 class VetoolsMonsterImporterApplication extends FormApplication {
   constructor() {
+    const defaultConfig = new VetoolsMonsterImportConfig();
+
     let data = {
       compendiumName: '',
       vetoolsMonsterUrl: '',
-      hpScale: 0.3,
+      crScale: defaultConfig.crScale,
+      hpScale: defaultConfig.hpScale,
+      acScale: defaultConfig.acScale,
     };
 
     super(data, {});
@@ -61,7 +65,9 @@ class VetoolsMonsterImporterApplication extends FormApplication {
 
   async _updateObject(_event, formData) {
     let vetoolsMonsterImportConfig = new VetoolsMonsterImportConfig();
+    vetoolsMonsterImportConfig.crScale = formData.crScale;
     vetoolsMonsterImportConfig.hpScale = formData.hpScale;
+    vetoolsMonsterImportConfig.acScale = formData.acScale;
 
     await createCompendiumFromVetoolsBeastiary(
       formData.vetoolsMonsterUrl,
