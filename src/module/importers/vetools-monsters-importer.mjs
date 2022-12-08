@@ -245,6 +245,14 @@ export async function createCompendiumFromVetoolsBeastiary(
         await Item.create(newMonsterManeuver, { parent: monsterDocument[0] });
       }
     }
+    
+    // Add "reaction" as maneuvers (it's up to the GM to decide how often to do it)
+    if (monster.reaction) {
+      for (const reaction of monster.reaction) {
+        const newMonsterManeuver = _convertAction(vetoolsMonsterImportConfig, reaction, 'Reaction');
+        await Item.create(newMonsterManeuver, { parent: monsterDocument[0] });
+      }
+    }
   }
 
   // Send the final progress completion state
