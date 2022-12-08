@@ -519,7 +519,7 @@ function _convertHitToRoll(vetoolsMonsterImportConfig, veHitValue) {
   const startingSuperiorDice = 0;
   const startingEnhancedDice = 0;
   const startingNormalDice = 5;
-  const goalHitValue = veHitvalue * vetoolsMonsterImportConfig.hitScale;
+  const goalHitValue = veHitValue * vetoolsMonsterImportConfig.hitScale;
 
   // Setup the starting roll to be the maximum number of regular defense dice
   let currentSuperiorDice = startingSuperiorDice;
