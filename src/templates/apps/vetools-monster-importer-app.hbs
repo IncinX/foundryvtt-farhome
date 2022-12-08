@@ -1,13 +1,31 @@
 <form class='{{cssClass}}' autocomplete='off'>
   <div>
     <label for='compendium-name'>Compendium Name</label>
-    <input id='compendium-name' name='compendiumName' type='text' value='{{compendiumName}}'/>
+    <input id='compendium-name' name='compendiumName' type='text' value='{{compendiumName}}' />
 
     <label for='monster-url'>5etools Monster Data URL (Raw Text)</label>
-    <input id='monster-url' name='vetoolsMonsterUrl' type='text' value='{{vetoolsMonsterUrl}}'/>
+    <input id='monster-url' name='vetoolsMonsterUrl' type='text' value='{{vetoolsMonsterUrl}}' />
+
+    <label for='cr-scaling'>CR Scaling</label>
+    <input id='cr-scaling' name='crScale' type='number' step='0.01' value='{{crScale}}' />
     
+    <label for='prof-scaling'>Proficiency Scaling</label>
+    <input id='prof-scaling' name='profScale' type='number' step='0.01' value='{{profScale}}' />
+
     <label for='hp-scaling'>HP Scaling</label>
-    <input id='hp-scaling' name='hpScale' type='number' step='0.01' value='{{hpScale}}'/>
+    <input id='hp-scaling' name='hpScale' type='number' step='0.01' value='{{hpScale}}' />
+
+    <label for='ac-scaling'>AC Scaling</label>
+    <input id='ac-scaling' name='acScale' type='number' step='0.01' value='{{acScale}}' />
+
+    <label for='hit-scaling'>Hit Scaling</label>
+    <input id='hit-scaling' name='hitScale' type='number' step='0.01' value='{{hitScale}}' />
+    
+    <label for='damage-scaling'>Damage Scaling</label>
+    <input id='damage-scaling' name='damageScale' type='number' step='0.01' value='{{damageScale}}' />
+    
+    <label for='guaranteed-wound-ratio'>Guaranteed Wound Ratio</label>
+    <input id='guaranteed-wound-ratio' name='guaranteedWoundRatio' type='number' step='0.01' value='{{guaranteedWoundRatio}}' />
 
     <button id='import' type='submit'>Import</button>
 

@@ -11,10 +11,18 @@ import {
  */
 class VetoolsMonsterImporterApplication extends FormApplication {
   constructor() {
+    const defaultConfig = new VetoolsMonsterImportConfig();
+
     let data = {
       compendiumName: '',
       vetoolsMonsterUrl: '',
-      hpScale: 0.3,
+      crScale: defaultConfig.crScale,
+      profScale: defaultConfig.profScale,
+      hpScale: defaultConfig.hpScale,
+      acScale: defaultConfig.acScale,
+      hitScale: defaultConfig.hitScale,
+      damageScale: defaultConfig.damageScale,
+      guaranteedWoundRatio: defaultConfig.guaranteedWoundRatio,
     };
 
     super(data, {});
@@ -61,7 +69,13 @@ class VetoolsMonsterImporterApplication extends FormApplication {
 
   async _updateObject(_event, formData) {
     let vetoolsMonsterImportConfig = new VetoolsMonsterImportConfig();
+    vetoolsMonsterImportConfig.crScale = formData.crScale;
+    vetoolsMonsterImportConfig.profScale = formData.profScale;
     vetoolsMonsterImportConfig.hpScale = formData.hpScale;
+    vetoolsMonsterImportConfig.acScale = formData.acScale;
+    vetoolsMonsterImportConfig.hitScale = formData.hitScale;
+    vetoolsMonsterImportConfig.damageScale = formData.damageScale;
+    vetoolsMonsterImportConfig.guaranteedWoundRatio = formData.guaranteedWoundRatio;
 
     await createCompendiumFromVetoolsBeastiary(
       formData.vetoolsMonsterUrl,
