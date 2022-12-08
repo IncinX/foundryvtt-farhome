@@ -129,7 +129,7 @@ export async function createCompendiumFromVetoolsBeastiary(
             },
             sta: {
               survival: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.survival, monster.con) },
-              exhaustion: 0,
+              exhaustion: { value: 0 },
             },
             int: {
               arcana: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.arcana, monster.int) },
