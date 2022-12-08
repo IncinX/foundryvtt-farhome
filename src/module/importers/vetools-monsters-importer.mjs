@@ -570,7 +570,7 @@ function _convertDamageToRoll(vetoolsMonsterImportConfig, veDamgageValue) {
     }
   }
 
-  const roll = 'g'.repeat(currentSuperiorDice) + 'w'.repeat(currentEnhancedDice);
+  const roll = 'g'.repeat(currentGuaranteedWoundDice) + 'w'.repeat(currentWoundDice);
   return roll;
 }
 
