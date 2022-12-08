@@ -432,6 +432,11 @@ function _convertHp(vetoolsMonsterImportConfig, veHp) {
 function _convertCr(vetoolsMonsterImportConfig, veCr) {
   const veAveragePartySize = 4.0;
   const veToFhMultiplier = 30.0 / 20.0; // Calculated based on max level differences
+
+  if (typeof veCr === 'object') {
+    veCr = veCr.lair ? veCr.laid : veCr.cr;
+  }
+
   const numericalVeCr = Function(`return ${veCr}`)();
   const farhomeCr =
     numericalVeCr < 1
