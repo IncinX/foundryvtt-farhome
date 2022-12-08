@@ -640,8 +640,6 @@ function _convertActionTextToRollTemplate(vetoolsMonsterImportConfig, actionText
     rollTemplate = '<h1>[[i.name]]</h1><p>[[i.description]]</p>';
   }
 
-  console.log(rollTemplate);
-
   return rollTemplate;
 }
 
