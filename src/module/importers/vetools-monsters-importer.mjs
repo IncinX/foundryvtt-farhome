@@ -5,8 +5,14 @@
 
 export class VetoolsMonsterImportConfig {
   constructor() {
+    // Calibrated for approximate difficulty of several high, medium, and low end creatures
     this.hpScale = 0.3;
+
+    // No significant calibration needed since it is a multiplier for an existing scaling formula
     this.crScale = 1.0;
+
+    // Initially calibrated for plate armor between the two systems
+    this.acScale = 1.0;
   }
 }
 
@@ -103,8 +109,13 @@ export async function createCompendiumFromVetoolsBeastiary(
     // #todo Add saves and skill proficiencies
 
     // #todo Add Move/Sprint (as well as walk/fly/swim speeds)
-    
-    // #todo Add AC
+
+    // Add armor to cover the AC
+    if (monster.ac) {
+      const newMonsterArmor = _convertAC(vetoolsMonsterImportConfig, monster.ac);
+
+      await Item.create(newMonsterArmor, { parent: monsterDocument[0] });
+    }
 
     // #todo Add passive perception perhaps
 
@@ -114,7 +125,7 @@ export async function createCompendiumFromVetoolsBeastiary(
     if (monster.trait) {
       for (const trait of monster.trait) {
         const traitEntries = trait.entries.join('\n');
-  
+
         const newMonsterTrait = {
           name: `Trait: ${trait.name}`,
           type: 'feat',
@@ -125,9 +136,9 @@ export async function createCompendiumFromVetoolsBeastiary(
             rollTemplate: {
               value: '<h1>[[i.name]]</h1><p>[[i.description]]</p>',
             },
-          }
+          },
         };
-  
+
         await Item.create(newMonsterTrait, { parent: monsterDocument[0] });
       }
     }
@@ -144,12 +155,12 @@ export async function createCompendiumFromVetoolsBeastiary(
           rollTemplate: {
             value: '<h1>Languages</h1><p>[[i.description]]</p>',
           },
-        }
+        },
       };
-  
+
       await Item.create(newMonsterLanguage, { parent: monsterDocument[0] });
     }
-    
+
     // Add "senses" as a feat
     if (monster.senses) {
       const newMonsterSenses = {
@@ -162,12 +173,12 @@ export async function createCompendiumFromVetoolsBeastiary(
           rollTemplate: {
             value: '<h1>Senses</h1><p>[[i.description]]</p>',
           },
-        }
+        },
       };
-  
+
       await Item.create(newMonsterSenses, { parent: monsterDocument[0] });
     }
-    
+
     // Add "immune" as a feat
     if (monster.immune) {
       const damageImmunities = monster.immune.join(', ');
@@ -182,12 +193,12 @@ export async function createCompendiumFromVetoolsBeastiary(
           rollTemplate: {
             value: '<h1>Damage Immunities</h1><p>[[i.description]]</p>',
           },
-        }
+        },
       };
-  
+
       await Item.create(newMonsterDamageImmunities, { parent: monsterDocument[0] });
     }
-    
+
     // Add "conditionImmune" as a feat
     if (monster.conditionImmune) {
       const conditionImmunities = monster.conditionImmune.join(', ');
@@ -202,42 +213,21 @@ export async function createCompendiumFromVetoolsBeastiary(
           rollTemplate: {
             value: '<h1>Condition Immunities</h1><p>[[i.description]]</p>',
           },
-        }
+        },
       };
-  
+
       await Item.create(newMonsterConditionImmunities, { parent: monsterDocument[0] });
     }
+
+    // #todo Use look-up tables for AC (or smart mathematical formula meant to emulate) and for To-Hit and Damage
+
+    // #todo Use look-up tables or math formula for DC rolls to save against spells
 
     // Add "legendary" as legendary actions
     if (monster.legendary) {
       for (const legendary of monster.legendary) {
-        const legendaryEntries = legendary.entries.join('\n');
-  
-        const newMonsterManeuver = {
-          name: `Legendary: ${legendary.name}`,
-          type: 'maneuver',
-          data: {
-            description: {
-              value: legendaryEntries,
-            },
-            rollTemplate: {
-              value: '<h1>[[i.name]]</h1><p>[[skill(a.unarmed, a.str)]]</p>',
-            },
-            range: {
-              value: '',
-            },
-            apCosts: {
-              value: '',
-            },
-            weaponRequirements: {
-              value: '',
-            },
-            levelRequirements: {
-              value: '',
-            }
-          }
-        };
-  
+        const newMonsterManeuver = _convertAction(vetoolsMonsterImportConfig, legendary, 'Legendary');
+
         await Item.create(newMonsterManeuver, { parent: monsterDocument[0] });
       }
     }
@@ -245,36 +235,7 @@ export async function createCompendiumFromVetoolsBeastiary(
     // Add "actions" as maneuvers (it's up to the GM to decide how often to do it)
     if (monster.action) {
       for (const action of monster.action) {
-        const actionEntries = action.entries.join('\n');
-
-        // #todo Parse description and convert to-hit and damage to farhome rolls
-        //       The to-hit may just be an unarmed roll or something as long as the weapon proficiency is updated.
-  
-        const newMonsterManeuver = {
-          name: `Action: ${action.name}`,
-          type: 'maneuver',
-          data: {
-            description: {
-              value: actionEntries,
-            },
-            rollTemplate: {
-              value: '<h1>[[i.name]]</h1><p>[[skill(a.unarmed, a.str)]]</p>',
-            },
-            range: {
-              value: '',
-            },
-            apCosts: {
-              value: '',
-            },
-            weaponRequirements: {
-              value: '',
-            },
-            levelRequirements: {
-              value: '',
-            }
-          }
-        };
-  
+        const newMonsterManeuver = _convertAction(vetoolsMonsterImportConfig, action, 'Action');
         await Item.create(newMonsterManeuver, { parent: monsterDocument[0] });
       }
     }
@@ -284,8 +245,6 @@ export async function createCompendiumFromVetoolsBeastiary(
   if (typeof progressCallback === 'function') {
     progressCallback(beastiaryJson.monster.length, beastiaryJson.monster.length);
   }
-
-  // #todo If I can add a bunch of data to this on document creation, it will make it much more unit-testable if I have a parsing function that returns the data in a json layout, ready for document creation.
 }
 
 function _toTitleCase(str) {
@@ -296,6 +255,22 @@ function _getImageLink(veSource, veName) {
   const veSourceUriComponent = encodeURIComponent(veSource.replace('3pp', '(3pp)'));
   const veNameUriComponent = encodeURIComponent(veName);
   return `https://raw.githubusercontent.com/IncinX/5etools/master/img/${veSourceUriComponent}/${veNameUriComponent}.png`;
+}
+
+function _countCharacterInString(string, character) {
+  return (string.match(new RegExp(character, 'g')) || []).length;
+}
+
+function _calculateAverageDefenseSuccesses(rollString) {
+  // Add the average rolls for defense and superior defense based on the sum of all faces divided by the
+  // number of faces.
+  const defenseDieAverage = 5.0 / 6.0;
+  const superiorDefenseDieAverage = 7.0 / 6.0;
+
+  const defenseCount = _countCharacterInString(rollString, 'd');
+  const superiorDefenseCount = _countCharacterInString(rollString, 'D');
+
+  return defenseCount * defenseDieAverage + superiorDefenseCount * superiorDefenseDieAverage;
 }
 
 function _convertTokenSize(veSize) {
@@ -346,4 +321,124 @@ function _convertCr(vetoolsMonsterImportConfig, veCr) {
       ? numericalVeCr
       : Math.floor(numericalVeCr * veToFhMultiplier * veAveragePartySize * vetoolsMonsterImportConfig.crScale);
   return farhomeCr;
+}
+
+function _convertAC(vetoolsMonsterImportConfig, monsterAC) {
+  // Parse the brackets in AC () for the armor type and use that if it is found.
+  const armorName = monsterAC.match(/\(([^)]+)\)/)[1];
+  const armorValue = parseInt(monsterAC.match(/\d+/)[0]);
+
+  let roll = '';
+
+  if (armorName) {
+    const armorList = armorName.split(',');
+    for (const armorItem of armorList) {
+      switch (armorName) {
+        case 'shield':
+          roll = `D${roll}`;
+          break;
+        case 'leather armor':
+        case 'studded leather':
+          roll = `${roll}D2d`;
+          break;
+        case 'hide armor':
+          roll = `${roll}D3d`;
+          break;
+        case 'chain shirt':
+        case 'scale mail':
+          // Scale mail can vary between 16 and 19 in D&D 5e
+          // 19 is stronger than plate, so we'll make it slightly stronger than plate if it is 19 or more
+          if (armorValue >= 19) {
+            roll = `${roll}3D3d`;
+          } else {
+            roll = `${roll}2D2d`;
+          }
+          break;
+        case 'half plate':
+          roll = `${roll}2D3d`;
+          break;
+        case 'plate':
+          roll = `${roll}3D2d`;
+          break;
+        default:
+          console.warn(`Unknown armor type: ${armorName}`);
+        case 'patchwork armor':
+        case 'natural armor':
+          // For natural armor:
+          // The way the formula works is by having a maximum number of regular defense dice and then upgrading
+          // one of those to a superior before adding another regular defense die.
+          const maxDefenseDice = 3;
+          const startingDefenseDice = 1;
+          const goalArmorValue = armorValue * vetoolsMonsterImportConfig.acScale;
+
+          // Setup the starting roll to be the maximum number of regular defense dice
+          roll = 'd'.repeat(startingDefenseDice);
+
+          while (_calculateAverageDefenseSuccesses(roll) < goalArmorValue) {
+            if (_countCharacterInString(roll, 'd') >= maxDefenseDice) {
+              // Upgrade a regular defense die to a superior defense die
+              // Superior dice are always placed at the beginning, and regular dice are always removed at the end.
+              roll = `D${roll.slice(0, -1)}`;
+            } else {
+              roll = `${roll}d`;
+            }
+          }
+          break;
+      }
+    }
+  } else {
+    armorName = 'natural evasion';
+  }
+
+  const newArmor = {
+    name: _toTitleCase(armorName),
+    type: 'armor',
+    data: {
+      description: {
+        value: '',
+      },
+      equpped: {
+        value: true,
+      },
+      rollTemplate: {
+        value: `<h1>[[i.name]]</h1><p>[[fh('${roll}')]]</p>`,
+      },
+    },
+  };
+
+  return newArmor;
+}
+
+function _convertAction(vetoolsMonsterImportConfig, action, namePrefix) {
+  const actionEntries = action.entries.join('\n');
+
+  // #todo Parse description and convert to-hit and damage to farhome rolls
+  //       The to-hit may just be an unarmed roll or something as long as the weapon proficiency is updated.
+
+  const newManeuver = {
+    name: `${namePrefix}: ${action.name}`,
+    type: 'maneuver',
+    data: {
+      description: {
+        value: actionEntries,
+      },
+      rollTemplate: {
+        value: '<h1>[[i.name]]</h1><p>[[skill(a.unarmed, a.str)]]</p>',
+      },
+      range: {
+        value: '',
+      },
+      apCosts: {
+        value: '',
+      },
+      weaponRequirements: {
+        value: '',
+      },
+      levelRequirements: {
+        value: '',
+      },
+    },
+  };
+
+  return newManeuver;
 }
