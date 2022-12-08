@@ -434,16 +434,18 @@ function _convertAC(vetoolsMonsterImportConfig, monsterAC) {
 }
 
 function _convertHitToRoll(hitValue) {
-  return '';
+  // #debug
+  return 's';
 }
 
 function _convertDamageToRoll(damgageValue) {
-  return '';
+  // #debug
+  return 'w';
 }
 
 function _convertActionTextToRollTemplate(actionText) {
-  // #debug for now
-  const rollTemplate = '<h1>[[i.name]]</h1><p>[[skill(a.unarmed, a.str)]]</p>';
+  // Start the roll template with the name header
+  let rollTemplate = '<h1>[[i.name]]</h1>';
 
   // Parse the value inside {@hit +N}
   const hitValueMatch = actionText.match(/(?<=\{@hit )(.*?)(?=\})/);
@@ -455,22 +457,33 @@ function _convertActionTextToRollTemplate(actionText) {
     const hitValue = parseInt(hitValueMatch[0]);
     const rawHitText = hitTextMatch[1];
 
-    console.log(hitValue);
+    rollTemplate += `<h2>Attack</h2><p>[[fh('${_convertHitToRoll(hitValue)}')]]</p>`;
 
     // Then remove all the text in () and remove double spaces
     const hitTextWithoutBrackets = rawHitText.replace(/\(\{.*?\}\)/g, '');
     const hitTextClean = hitTextWithoutBrackets.replace(/\s+/g, ' ');
     const hitTextMulti = hitTextClean.split(' plus ');
 
-    for (const hitText of hitTextMulti) { 
-      console.log(hitText);
+    for (const hitText of hitTextMulti) {
+      const damageValueMatch = hitText.match(/^(\d+)/);
+
+      if (damageValueMatch) {
+        const damageValue = damageValueMatch[0];
+
+        const damageTypeMatch = hitText.match(/\w+(?=\s+damage)/);
+        const damageTypeString = damageTypeMatch ? `${_toTitleCase(damageTypeMatch[0])} Damage` : 'Damage';
+
+        rollTemplate += `<h2>${damageTypeString}</h2><p>[[fh('${_convertDamageToRoll(damageValue)}')]]</p>}`;
+      }
     }
 
     // Then look for the text 'damage', get the damage type before it, and the damage value before that
     // Convert the damage value to a roll
   } else {
-    return '<h1>[[i.name]]</h1><p>[[i.description]]</p>'
+    rollTemplate = '<h1>[[i.name]]</h1><p>[[i.description]]</p>';
   }
+
+  console.log(rollTemplate);
 
   return rollTemplate;
 }
@@ -482,6 +495,8 @@ function _convertAction(vetoolsMonsterImportConfig, action, namePrefix) {
   //       The to-hit may just be an unarmed roll or something as long as the weapon proficiency is updated.
 
   // #todo Parse for range and reach information later
+
+  // #todo Prepare sensible ap cost values later
 
   const newManeuver = {
     name: `${namePrefix}: ${action.name}`,
