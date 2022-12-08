@@ -107,52 +107,59 @@ export async function createCompendiumFromVetoolsBeastiary(
           will: { value: _convertAttribute(monster.wis) },
           cha: { value: _convertAttribute(monster.cha) },
         },
-        proficiencies: {
-          saves: {
-            str: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.save.str, monster.str) },
-            dex: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.save.dex, monster.dex) },
-            sta: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.save.con, monster.con) },
-            int: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.save.int, monster.int) },
-            will: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.save.wis, monster.wis) },
-            cha: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.save.cha, monster.cha) },
-          },
-          attributes: {
-            str: {
-              athletics: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.athletics, monster.str) },
-              intimidation: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.intimidation, monster.str) },
-            },
-            dex: {
-              acrobatics: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.acrobatics, monster.dex) },
-              sleightOfHand: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill['sleight of hand'], monster.dex) },
-              stealth: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.stealth, monster.dex) },
-              lockpicking: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill['sleight of hand'], monster.dex) },
-            },
-            sta: {
-              survival: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.survival, monster.con) },
-              exhaustion: { value: 0 },
-            },
-            int: {
-              arcana: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.arcana, monster.int) },
-              lore: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.history, monster.int) },
-              investigation: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.investigation, monster.int) },
-              nature: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.nature, monster.int) },
-            },
-            will: {
-              animalHandling: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill['animal handling'], monster.wis) },
-              insight: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.insight, monster.wis) },
-              medicine: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.medicine, monster.wis) },
-              perception: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.perception, monster.wis) },
-            },
-            cha: {
-              conversation: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.persuasion, monster.cha) },
-              diplomacy: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.deception, monster.cha) },
-              performance: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.performance, monster.cha) },
-              religion: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.religion, monster.cha) },
-            },
-          },
-        },
+        proficiencies: {},
       },
     };
+
+    // Setup monster save proficiencies
+    if (monster.save) {
+      newMonsterDocument.data.proficiencies.saves = {
+        str: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.save.str , monster.str) },
+        dex: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.save.dex, monster.dex) },
+        sta: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.save.con, monster.con) },
+        int: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.save.int, monster.int) },
+        will: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.save.wis, monster.wis) },
+        cha: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.save.cha, monster.cha) },
+      }
+    }
+
+    // Setup monster skill proficiencies
+    if (monster.skill) {
+      newMonsterDocument.data.proficiencies.attributes = {
+        str: {
+          athletics: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.athletics, monster.str) },
+          intimidation: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.intimidation, monster.str) },
+        },
+        dex: {
+          acrobatics: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.acrobatics, monster.dex) },
+          sleightOfHand: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill['sleight of hand'], monster.dex) },
+          stealth: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.stealth, monster.dex) },
+          lockpicking: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill['sleight of hand'], monster.dex) },
+        },
+        sta: {
+          survival: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.survival, monster.con) },
+          exhaustion: { value: 0 },
+        },
+        int: {
+          arcana: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.arcana, monster.int) },
+          lore: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.history, monster.int) },
+          investigation: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.investigation, monster.int) },
+          nature: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.nature, monster.int) },
+        },
+        will: {
+          animalHandling: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill['animal handling'], monster.wis) },
+          insight: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.insight, monster.wis) },
+          medicine: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.medicine, monster.wis) },
+          perception: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.perception, monster.wis) },
+        },
+        cha: {
+          conversation: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.persuasion, monster.cha) },
+          diplomacy: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.deception, monster.cha) },
+          performance: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.performance, monster.cha) },
+          religion: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.religion, monster.cha) },
+        },
+      };
+    }
 
     // Create the compendium documents
     let monsterDocument = await game.farhome.FarhomeActor.createDocuments([newMonsterDocument], {
@@ -389,6 +396,10 @@ function _convertAttribute(veAttribute) {
 }
 
 function _convertProficiency(vetoolsMonsterImportConfig, veProf, veAttr) {
+  if (!veProf || !veAttr) {
+    return 0;
+  }
+
   const maxStat = _convertAttribute(veAttr);
   const veProfInt = parseInt(veProf);
   return Math.min(Math.floor(vetoolsMonsterImportConfig.profScale * veProfInt), maxStat);
