@@ -74,6 +74,9 @@ export async function createCompendiumFromVetoolsBeastiary(
     }
 
     const monster = beastiaryJson.monster[monsterIndex];
+
+    console.log(`Farhome | Importing monster ${monster.name}`);
+
     const monsterImgUri = _getImageLink(monster.source, monster.name);
     const monsterWounds = _convertHp(vetoolsMonsterImportConfig, monster.hp.average);
 
