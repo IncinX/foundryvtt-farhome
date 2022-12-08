@@ -112,6 +112,10 @@ export async function createCompendiumFromVetoolsBeastiary(
 
     // #todo Add Move/Sprint (as well as walk/fly/swim speeds)
 
+    // #todo Adjust vision based on darkvision/etc
+
+    // #todo Adjust AP, Healing Surges and Spell Power (based on factors TBD)
+
     // Add armor to cover the AC
     if (monster.ac) {
       const newMonsterArmor = _convertAC(vetoolsMonsterImportConfig, monster.ac);
