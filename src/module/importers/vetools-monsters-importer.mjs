@@ -245,7 +245,7 @@ export async function createCompendiumFromVetoolsBeastiary(
         await Item.create(newMonsterManeuver, { parent: monsterDocument[0] });
       }
     }
-    
+
     // Add "reaction" as maneuvers (it's up to the GM to decide how often to do it)
     if (monster.reaction) {
       for (const reaction of monster.reaction) {
@@ -433,11 +433,55 @@ function _convertAC(vetoolsMonsterImportConfig, monsterAC) {
   return newArmor;
 }
 
+function _convertHitToRoll(hitValue) {
+  return '';
+}
+
+function _convertDamageToRoll(damgageValue) {
+  return '';
+}
+
+function _convertActionTextToRollTemplate(actionText) {
+  // #debug for now
+  const rollTemplate = '<h1>[[i.name]]</h1><p>[[skill(a.unarmed, a.str)]]</p>';
+
+  // Parse the value inside {@hit +N}
+  const hitValueMatch = actionText.match(/(?<=\{@hit )(.*?)(?=\})/);
+
+  // Extra all text after Hit:
+  const hitTextMatch = actionText.match(/Hit: (.*)/);
+
+  if (hitValueMatch && hitTextMatch) {
+    const hitValue = parseInt(hitValueMatch[0]);
+    const rawHitText = hitTextMatch[1];
+
+    console.log(hitValue);
+
+    // Then remove all the text in () and remove double spaces
+    const hitTextWithoutBrackets = rawHitText.replace(/\(\{.*?\}\)/g, '');
+    const hitTextClean = hitTextWithoutBrackets.replace(/\s+/g, ' ');
+    const hitTextMulti = hitTextClean.split(' plus ');
+
+    for (const hitText of hitTextMulti) { 
+      console.log(hitText);
+    }
+
+    // Then look for the text 'damage', get the damage type before it, and the damage value before that
+    // Convert the damage value to a roll
+  } else {
+    return '<h1>[[i.name]]</h1><p>[[i.description]]</p>'
+  }
+
+  return rollTemplate;
+}
+
 function _convertAction(vetoolsMonsterImportConfig, action, namePrefix) {
   const actionEntries = action.entries.join('\n');
 
   // #todo Parse description and convert to-hit and damage to farhome rolls
   //       The to-hit may just be an unarmed roll or something as long as the weapon proficiency is updated.
+
+  // #todo Parse for range and reach information later
 
   const newManeuver = {
     name: `${namePrefix}: ${action.name}`,
@@ -447,7 +491,7 @@ function _convertAction(vetoolsMonsterImportConfig, action, namePrefix) {
         value: actionEntries,
       },
       rollTemplate: {
-        value: '<h1>[[i.name]]</h1><p>[[skill(a.unarmed, a.str)]]</p>',
+        value: _convertActionTextToRollTemplate(actionEntries),
       },
       range: {
         value: '',
