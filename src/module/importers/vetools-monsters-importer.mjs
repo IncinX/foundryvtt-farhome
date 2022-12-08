@@ -473,7 +473,7 @@ function _convertActionTextToRollTemplate(actionText) {
         const damageTypeMatch = hitText.match(/\w+(?=\s+damage)/);
         const damageTypeString = damageTypeMatch ? `${_toTitleCase(damageTypeMatch[0])} Damage` : 'Damage';
 
-        rollTemplate += `<h2>${damageTypeString}</h2><p>[[fh('${_convertDamageToRoll(damageValue)}')]]</p>}`;
+        rollTemplate += `<h2>${damageTypeString}</h2><p>[[fh('${_convertDamageToRoll(damageValue)}')]]</p>`;
       }
     }
 
