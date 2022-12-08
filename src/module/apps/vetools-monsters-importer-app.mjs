@@ -17,8 +17,11 @@ class VetoolsMonsterImporterApplication extends FormApplication {
       compendiumName: '',
       vetoolsMonsterUrl: '',
       crScale: defaultConfig.crScale,
+      profScale: defaultConfig.profScale,
       hpScale: defaultConfig.hpScale,
       acScale: defaultConfig.acScale,
+      hitScale: defaultConfig.hitScale,
+      damageScale: defaultConfig.damageScale,
     };
 
     super(data, {});
@@ -66,8 +69,11 @@ class VetoolsMonsterImporterApplication extends FormApplication {
   async _updateObject(_event, formData) {
     let vetoolsMonsterImportConfig = new VetoolsMonsterImportConfig();
     vetoolsMonsterImportConfig.crScale = formData.crScale;
+    vetoolsMonsterImportConfig.profScale = formData.profScale;
     vetoolsMonsterImportConfig.hpScale = formData.hpScale;
     vetoolsMonsterImportConfig.acScale = formData.acScale;
+    vetoolsMonsterImportConfig.hitScale = formData.hitScale;
+    vetoolsMonsterImportConfig.damageScale = formData.damageScale;
 
     await createCompendiumFromVetoolsBeastiary(
       formData.vetoolsMonsterUrl,

@@ -9,12 +9,21 @@ export class VetoolsMonsterImportConfig {
     this.crScale = 1.0;
 
     // Calibrated for approximate difficulty of several high, medium, and low end creatures
+    this.profScale = 0.5;
+
+    // Calibrated for approximate difficulty of several high, medium, and low end creatures
     this.hpScale = 0.3;
 
     // Calibrated for approximate difficulty of several high, medium, and low end creatures
     // Full armor between DND5e and Farhome is roughly equivalent to 0.3 if using the algorithm in _convertAC
     // It was bumped up a little bit higher due to higher level creatures.
     this.acScale = 0.33;
+
+    // Calibrated similarly to hitScale
+    this.hitScale = 0.33;
+
+    // Calibrated similarly to hpScale
+    this.damageScale = 0.3;
   }
 }
 
@@ -98,6 +107,50 @@ export async function createCompendiumFromVetoolsBeastiary(
           will: { value: _convertAttribute(monster.wis) },
           cha: { value: _convertAttribute(monster.cha) },
         },
+        proficiencies: {
+          saves: {
+            str: { value: _convertProficiency(monster.save.str, monster.str) },
+            dex: { value: _convertProficiency(monster.save.dex, monster.dex) },
+            sta: { value: _convertProficiency(monster.save.con, monster.con) },
+            int: { value: _convertProficiency(monster.save.int, monster.int) },
+            will: { value: _convertProficiency(monster.save.wis, monster.wis) },
+            cha: { value: _convertProficiency(monster.save.cha, monster.cha) },
+          },
+          attributes: {
+            str: {
+              athletics: { value: _convertProficiency(monster.skill.athletics, monster.str) },
+              intimidation: { value: _convertProficiency(monster.skill.intimidation, monster.str) },
+            },
+            dex: {
+              acrobatics: { value: _convertProficiency(monster.skill.acrobatics, monster.dex) },
+              sleightOfHand: { value: _convertProficiency(monster.skill['sleight of hand'], monster.dex) },
+              stealth: { value: _convertProficiency(monster.skill.stealth, monster.dex) },
+              lockpicking: { value: _convertProficiency(monster.skill['sleight of hand'], monster.dex) },
+            },
+            sta: {
+              survival: { value: _convertProficiency(monster.skill.survival, monster.con) },
+              exhaustion: 0,
+            },
+            int: {
+              arcana: { value: _convertProficiency(monster.skill.arcana, monster.int) },
+              lore: { value: _convertProficiency(monster.skill.history, monster.int) },
+              investigation: { value: _convertProficiency(monster.skill.investigation, monster.int) },
+              nature: { value: _convertProficiency(monster.skill.nature, monster.int) },
+            },
+            will: {
+              animalHandling: { value: _convertProficiency(monster.skill['animal handling'], monster.wis) },
+              insight: { value: _convertProficiency(monster.skill.insight, monster.wis) },
+              medicine: { value: _convertProficiency(monster.skill.medicine, monster.wis) },
+              perception: { value: _convertProficiency(monster.skill.perception, monster.wis) },
+            },
+            cha: {
+              conversation: { value: _convertProficiency(monster.skill.persuasion, monster.cha) },
+              diplomacy: { value: _convertProficiency(monster.skill.deception, monster.cha) },
+              performance: { value: _convertProficiency(monster.skill.performance, monster.cha) },
+              religion: { value: _convertProficiency(monster.skill.religion, monster.cha) },
+            },
+          },
+        },
       },
     };
 
@@ -108,7 +161,8 @@ export async function createCompendiumFromVetoolsBeastiary(
 
     // #todo Setup weapon proficiencies (common between oneHand/twoHand/ranged/unarmed) - Make a guess by Action's to hit? Or perhaps general CR?
 
-    // #todo Add saves and skill proficiencies
+    // #todo Proficiency scaling needs some work, just look at ancient flame dragons from ToB as an example.
+    //       Maybe use CR to calculate a percentage and use save/skill prof to add extra attribute?
 
     // #todo Add Move/Sprint (as well as walk/fly/swim speeds)
 
@@ -271,18 +325,30 @@ function _getImageLink(veSource, veName) {
   return `https://raw.githubusercontent.com/IncinX/5etools/master/img/${veSourceUriComponent}/${veNameUriComponent}.png`;
 }
 
-function _countCharacterInString(string, character) {
-  return (string.match(new RegExp(character, 'g')) || []).length;
+function _calculateWoundTotal(guaranteedWoundCount, woundCount) {
+  // Add the average rolls for guaranteed wound and wound die based on the sum of all faces divided by the
+  // number of faces.
+  const guaranteedWoundAverage = 6.0 / 6.0;
+  const woundAverage = 3.0 / 6.0;
+
+  return guaranteedWoundCount * guaranteedWoundAverage + woundCount + woundAverage;
 }
 
-function _calculateAverageDefenseSuccesses(rollString) {
+function _calculateHitSuccesses(superiorCount, enhancedCount, normalCount) {
+  // Add the average rolls for superior, enhanced, and normal dice based on the sum of all faces divided by the
+  // number of faces.
+  const superiorAverage = 7.0 / 6.0;
+  const enhancedAverage = 5.0 / 6.0;
+  const normalAverage = 2.0 / 6.0;
+
+  return superiorCount * superiorAverage + enhancedCount * enhancedAverage + normalCount * normalAverage;
+}
+
+function _calculateAverageDefenseSuccesses(superiorDefenseCount, defenseCount) {
   // Add the average rolls for defense and superior defense based on the sum of all faces divided by the
   // number of faces.
   const defenseDieAverage = 5.0 / 6.0;
   const superiorDefenseDieAverage = 7.0 / 6.0;
-
-  const defenseCount = _countCharacterInString(rollString, 'd');
-  const superiorDefenseCount = _countCharacterInString(rollString, 'D');
 
   return defenseCount * defenseDieAverage + superiorDefenseCount * superiorDefenseDieAverage;
 }
@@ -320,6 +386,12 @@ function _convertAlignment(veAlignment) {
 
 function _convertAttribute(veAttribute) {
   return Math.floor((veAttribute - 10) / 2);
+}
+
+function _convertProficiency(vetoolsMonsterImportConfig, veProf, veAttr) {
+  const maxStat = _convertAttribute(veAttr);
+  const veProfInt = parseInt(veProf);
+  return Math.min(Math.floor(vetoolsMonsterImportConfig.profScale * veProfInt), maxStat);
 }
 
 function _convertHp(vetoolsMonsterImportConfig, veHp) {
@@ -393,22 +465,7 @@ function _convertAC(vetoolsMonsterImportConfig, monsterAC) {
           // For natural armor:
           // The way the formula works is by having a maximum number of regular defense dice and then upgrading
           // one of those to a superior before adding another regular defense die.
-          const maxDefenseDice = 3;
-          const startingDefenseDice = 1;
-          const goalArmorValue = armorValue * vetoolsMonsterImportConfig.acScale;
-
-          // Setup the starting roll to be the maximum number of regular defense dice
-          roll = 'd'.repeat(startingDefenseDice);
-
-          while (_calculateAverageDefenseSuccesses(roll) < goalArmorValue) {
-            if (_countCharacterInString(roll, 'd') >= maxDefenseDice) {
-              // Upgrade a regular defense die to a superior defense die
-              // Superior dice are always placed at the beginning, and regular dice are always removed at the end.
-              roll = `D${roll.slice(0, -1)}`;
-            } else {
-              roll = `${roll}d`;
-            }
-          }
+          roll = _convertACToDefenseRoll(vetoolsMonsterImportConfig, armorValue);
           break;
       }
     }
@@ -433,17 +490,91 @@ function _convertAC(vetoolsMonsterImportConfig, monsterAC) {
   return newArmor;
 }
 
-function _convertHitToRoll(hitValue) {
-  // #debug
-  return 's';
+function _convertACToDefenseRoll(vetoolsMonsterImportConfig, veArmorValue) {
+  const maxDefenseDice = 3;
+  const startingSuperiorDefenseDice = 0;
+  const startingDefenseDice = 1;
+  const goalArmorValue = veArmorValue * vetoolsMonsterImportConfig.acScale;
+
+  // Setup the starting roll to be the maximum number of regular defense dice
+  let currentSuperiorDefenseDice = startingSuperiorDefenseDice;
+  let currentDefenseDice = startingDefenseDice;
+
+  while (_calculateAverageDefenseSuccesses(currentSuperiorDefenseDice, currentDefenseDice) < goalArmorValue) {
+    if (currentDefenseDice >= maxDefenseDice) {
+      // Upgrade a regular defense die to a superior defense die
+      currentSuperiorDefenseDice++;
+      currentDefenseDice--;
+    } else {
+      currentDefenseDice++;
+    }
+  }
+
+  const roll = 'D'.repeat(currentSuperiorDefenseDice) + 'd'.repeat(currentDefenseDice);
+  return roll;
 }
 
-function _convertDamageToRoll(damgageValue) {
-  // #debug
-  return 'w';
+function _convertHitToRoll(vetoolsMonsterImportConfig, veHitValue) {
+  const maxEnhancedDice = 2;
+  const startingSuperiorDice = 0;
+  const startingEnhancedDice = 0;
+  const startingNormalDice = 5;
+  const goalHitValue = veHitvalue * vetoolsMonsterImportConfig.hitScale;
+
+  // Setup the starting roll to be the maximum number of regular defense dice
+  let currentSuperiorDice = startingSuperiorDice;
+  let currentEnhancedDice = startingEnhancedDice;
+  let currentNormalDice = startingNormalDice;
+
+  while (_calculateHitSuccesses(currentSuperiorDice, currentEnhancedDice, currentNormalDice) < goalHitValue) {
+    // First normal are enhanced to superior, then normal are enhanced to superior
+    // Then enhanced are added. Normals are never added during this process since it doesn't make sense for
+    // high end scaling.
+    if (currentEnhancedDice >= maxEnhancedDice) {
+      // Upgrade an enhanced die to a superior die
+      currentSuperiorDice++;
+      currentEnhancedDice--;
+    } else if (currentNormalDice > 0) {
+      // Upgrade an enhanced die to a superior die
+      currentEnhancedDice++;
+      currentNormalDice--;
+    } else {
+      currentEnhancedDice++;
+    }
+  }
+
+  const roll = 's'.repeat(currentSuperiorDice) + 'e'.repeat(currentEnhancedDice) + 'n'.repeat(currentNormalDice);
+  return roll;
 }
 
-function _convertActionTextToRollTemplate(actionText) {
+function _convertDamageToRoll(vetoolsMonsterImportConfig, veDamgageValue) {
+  const guaranteedWoundRatio = 0.2;
+  const startingGuaranteedWoundDice = 0;
+  const startingWoundDice = 1;
+  const goalHitValue = veDamgageValue * vetoolsMonsterImportConfig.damageScale;
+
+  // Setup the starting roll to be the maximum number of regular defense dice
+  let currentGuaranteedWoundDice = startingGuaranteedWoundDice;
+  let currentWoundDice = startingWoundDice;
+
+  while (_calculateWoundTotal(currentGuaranteedWoundDice, currentWoundDice) < goalHitValue) {
+    // First normal are enhanced to superior, then normal are enhanced to superior
+    // Then enhanced are added. Normals are never added during this process since it doesn't make sense for
+    // high end scaling.
+    if (currentGuaranteedWoundDice / currentWoundDice < guaranteedWoundRatio) {
+      // Upgrade a wound to a guaranteed wound.
+      currentGuaranteedWoundDice++;
+      currentWoundDice--;
+    } else {
+      currentWoundDice++;
+    }
+  }
+
+  const roll = 'g'.repeat(currentSuperiorDice) + 'w'.repeat(currentEnhancedDice);
+  return roll;
+}
+
+function _convertActionTextToRollTemplate(vetoolsMonsterImportConfig, actionText) {
   // Start the roll template with the name header
   let rollTemplate = '<h1>[[i.name]]</h1>';
 
@@ -476,9 +607,6 @@ function _convertActionTextToRollTemplate(actionText) {
         rollTemplate += `<h2>${damageTypeString}</h2><p>[[fh('${_convertDamageToRoll(damageValue)}')]]</p>`;
       }
     }
-
-    // Then look for the text 'damage', get the damage type before it, and the damage value before that
-    // Convert the damage value to a roll
   } else {
     rollTemplate = '<h1>[[i.name]]</h1><p>[[i.description]]</p>';
   }
@@ -506,7 +634,7 @@ function _convertAction(vetoolsMonsterImportConfig, action, namePrefix) {
         value: actionEntries,
       },
       rollTemplate: {
-        value: _convertActionTextToRollTemplate(actionEntries),
+        value: _convertActionTextToRollTemplate(vetoolsMonsterImportConfig, actionEntries),
       },
       range: {
         value: '',
