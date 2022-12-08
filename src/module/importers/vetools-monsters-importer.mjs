@@ -456,7 +456,8 @@ function _convertAC(vetoolsMonsterImportConfig, monsterAC) {
   if (armorDescription) {
     const armorList = armorDescription.split(',');
     for (const armorItem of armorList) {
-      switch (armorItem) {
+      const armorItemTrimmed = armorItem.trim();
+      switch (armorItemTrimmed) {
         case 'shield':
           roll = `D${roll}`;
           break;
@@ -493,7 +494,7 @@ function _convertAC(vetoolsMonsterImportConfig, monsterAC) {
           roll = `${roll}3D2d`;
           break;
         default:
-          console.warn(`Unknown armor type: ${armorItem}`);
+          console.warn(`Unknown armor type: ${armorItemTrimmed}`);
         case 'natural':
         case 'natural evasion': // Custom defined type in case no armor type is specified
         case 'patchwork armor':
