@@ -24,7 +24,8 @@ export function sendStandardMessage(content) {
 
   // Construct the chat message and send it
   let chatData = {
-    user: game.user._id,
+    user: game.user.id,
+    speaker: ChatMessage.getSpeaker(),
     content: content,
   };
 
