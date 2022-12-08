@@ -19,11 +19,14 @@ export class VetoolsMonsterImportConfig {
     // It was bumped up a little bit higher due to higher level creatures.
     this.acScale = 0.33;
 
-    // Calibrated similarly to hitScale
-    this.hitScale = 0.33;
+    // Calibrated for approximate difficulty of several high, medium, and low end creatures
+    this.hitScale = 0.66;
 
     // Calibrated similarly to hpScale
     this.damageScale = 0.3;
+
+    // Chosen arbitrarily to be 20% of the damage
+    this.guaranteedWoundRatio = 0.2;
   }
 }
 
@@ -573,7 +576,6 @@ function _convertHitToRoll(vetoolsMonsterImportConfig, veHitValue) {
 }
 
 function _convertDamageToRoll(vetoolsMonsterImportConfig, veDamgageValue) {
-  const guaranteedWoundRatio = 0.2;
   const startingGuaranteedWoundDice = 0;
   const startingWoundDice = 1;
   const goalHitValue = veDamgageValue * vetoolsMonsterImportConfig.damageScale;
@@ -586,7 +588,7 @@ function _convertDamageToRoll(vetoolsMonsterImportConfig, veDamgageValue) {
     // First normal are enhanced to superior, then normal are enhanced to superior
     // Then enhanced are added. Normals are never added during this process since it doesn't make sense for
     // high end scaling.
-    if (currentGuaranteedWoundDice / currentWoundDice < guaranteedWoundRatio) {
+    if (currentGuaranteedWoundDice / currentWoundDice < vetoolsMonsterImportConfig.guaranteedWoundRatio) {
       // Upgrade a wound to a guaranteed wound.
       currentGuaranteedWoundDice++;
       currentWoundDice--;

@@ -22,6 +22,7 @@ class VetoolsMonsterImporterApplication extends FormApplication {
       acScale: defaultConfig.acScale,
       hitScale: defaultConfig.hitScale,
       damageScale: defaultConfig.damageScale,
+      guaranteedWoundRatio: defaultConfig.guaranteedWoundRatio,
     };
 
     super(data, {});
@@ -74,6 +75,7 @@ class VetoolsMonsterImporterApplication extends FormApplication {
     vetoolsMonsterImportConfig.acScale = formData.acScale;
     vetoolsMonsterImportConfig.hitScale = formData.hitScale;
     vetoolsMonsterImportConfig.damageScale = formData.damageScale;
+    vetoolsMonsterImportConfig.guaranteedWoundRatio = formData.guaranteedWoundRatio;
 
     await createCompendiumFromVetoolsBeastiary(
       formData.vetoolsMonsterUrl,
