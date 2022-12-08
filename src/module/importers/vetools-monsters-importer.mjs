@@ -599,7 +599,8 @@ function _convertActionTextToRollTemplate(vetoolsMonsterImportConfig, actionText
     const hitValue = parseInt(hitValueMatch[0]);
     const rawHitText = hitTextMatch[1];
 
-    rollTemplate += `<h2>Attack</h2><p>[[fh('${_convertHitToRoll(hitValue)}')]]</p>`;
+    const hitRoll = _convertHitToRoll(vetoolsMonsterImportConfig, hitValue);
+    rollTemplate += `<h2>Attack</h2><p>[[fh('${hitRoll}')]]</p>`;
 
     // Then remove all the text in () and remove double spaces
     const hitTextWithoutBrackets = rawHitText.replace(/\(\{.*?\}\)/g, '');
@@ -615,7 +616,8 @@ function _convertActionTextToRollTemplate(vetoolsMonsterImportConfig, actionText
         const damageTypeMatch = hitText.match(/\w+(?=\s+damage)/);
         const damageTypeString = damageTypeMatch ? `${_toTitleCase(damageTypeMatch[0])} Damage` : 'Damage';
 
-        rollTemplate += `<h2>${damageTypeString}</h2><p>[[fh('${_convertDamageToRoll(damageValue)}')]]</p>`;
+        const damageRoll = _convertDamageToRoll(vetoolsMonsterImportConfig, damageValue);
+        rollTemplate += `<h2>${damageTypeString}</h2><p>[[fh('${damageRoll}')]]</p>`;
       }
     }
   } else {
