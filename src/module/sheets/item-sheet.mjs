@@ -14,37 +14,54 @@ export class FarhomeItemSheet extends ItemSheet {
 
   /** @override */
   get template() {
-    return `systems/farhome/templates/sheets/item/${this.item.data.type}-sheet.hbs`;
+    return `systems/farhome/templates/sheets/item/${this.item.type}-sheet.hbs`;
   }
 
   /** @override */
-  getData() {
+  async getData() {
     // Retrieve the data structure from the base sheet. You can inspect or log
     // the context variable to see the structure, but some key properties for
     // sheets are the actor object, the data object, whether or not it's
     // editable, the items array, and the effects array.
-    const context = super.getData();
+    const context = await super.getData();
 
     // Add the farhome configuration so it is available in handlebars.
     context.config = CONFIG.FARHOME;
 
     // Use a safe clone of the actor data for further operations.
-    const itemData = this.item.data.toObject(false);
+    const itemData = this.item.toObject(false);
 
-    // Add the actor's data to context.data for easier access, as well as flags.
-    context.data = itemData.data;
+    // Add the actor's data to context.system for easier access, as well as flags.
+    context.system = itemData.system;
     context.flags = itemData.flags;
 
     this._prepareAllItemData(context);
 
     // Retrieve the roll data for TinyMCE editors.
+    // #todo I don't think this is needed anymore.
     context.rollData = {};
     let actor = this.object?.parent ?? null;
     if (actor) {
       context.rollData = actor.getRollData();
     }
 
+    // Run the TextEditor.enrichHTML on editor text entries
+    context.enrichedText = {
+      description: await this._enrichTextHTML(context.system.description),
+      rollTemplate: await this._enrichTextHTML(context.system.rollTemplate),
+      note: await this._enrichTextHTML(context.system.note),
+    };
+
     return context;
+  }
+
+  /**
+   * Enriches the text HTML for a given field if it exists, otherwise it returns empty.
+   * @param {string} field The field to enrich.
+   * @return {string} The enriched HTML.
+   */
+  async _enrichTextHTML(field) {
+    return field !== undefined ? await TextEditor.enrichHTML(field.value, { async: true }) : '';
   }
 
   /**
@@ -56,7 +73,7 @@ export class FarhomeItemSheet extends ItemSheet {
    */
   _prepareAllItemData(itemData) {
     // Do derived localization of the entire context data.
-    localizeObject(null, itemData.data);
+    localizeObject(null, itemData.system);
   }
 
   /** @override */
@@ -115,7 +132,7 @@ async function _handleManaSpend(event) {
   }
 
   // Deduct the mana off of the character's sheet
-  actor.update({ 'data.features.mana.value': actor.data.data.features.mana.value - manaCost });
+  actor.update({ 'system.features.mana.value': actor.system.features.mana.value - manaCost });
 
   // Send the confirmation message to the chat
   sendActorMessage(`<b>${actor.name}</b> spent ${manaCost} mana.`);

@@ -18,7 +18,7 @@
   <section class="sheet-body">
     {{!-- Description Tab --}}
     <div class="tab" data-group="primary" data-tab="description">
-      {{editor content=data.description.value target="data.description.value" button=true owner=owner editable=editable}}
+      {{editor enrichedText.description target="system.description.value" button=true owner=owner editable=editable}}
     </div>
 
     {{!-- Attributes Tab --}}
@@ -30,18 +30,18 @@
         </colgroup>
         {{>
         "systems/farhome/templates/partials/row-number-partial.hbs"
-        data.quantity
-        objectString="data.quantity"}}
+        system.quantity
+        objectString="system.quantity"}}
         {{>
         "systems/farhome/templates/partials/row-number-partial.hbs"
-        data.weight
-        objectString="data.weight"}}
+        system.weight
+        objectString="system.weight"}}
       </table>
     </div>
 
     {{!-- Roll Template Tab --}}
     <div class="tab" data-group="primary" data-tab="rollTemplate">
-      {{editor content=data.rollTemplate.value target="data.rollTemplate.value" button=true owner=owner editable=editable}}
+      {{editor enrichedText.rollTemplate target="system.rollTemplate.value" button=true owner=owner editable=editable}}
     </div>
   </div>
 </form>

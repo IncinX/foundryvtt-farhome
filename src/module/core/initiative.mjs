@@ -12,8 +12,8 @@ export function getInitiativeFormula() {
   const actor = this.actor;
   if (!actor) return '0';
 
-  let data = actor.data.data;
-  let rollFormula = proficiencyRollFormula(0, data.attributes.dex.value);
+  let data = actor.system;
+  let rollFormula = proficiencyRollFormula(0, system.attributes.dex.value);
 
   const parsedFormula = game.farhome.roller.parsers[0].parse(rollFormula);
   const rolls = game.farhome.roller.evaluateRolls(parsedFormula);
@@ -32,7 +32,7 @@ export function getInitiativeFormula() {
     sendChatRoll(evaluatedRollHtml);
   });
 
-  let initiativeValue = rollValues.successes + data.attributes.dex.value / 10.0;
+  let initiativeValue = rollValues.successes + system.attributes.dex.value / 10.0;
 
   return `${initiativeValue}`;
 }

@@ -16,7 +16,7 @@
   <section class="sheet-body">
     {{!-- Description Tab --}}
     <div class="tab" data-group="primary" data-tab="description">
-      {{editor content=data.description.value target="data.description.value" button=true owner=owner editable=editable}}
+      {{editor enrichedText.description target="system.description.value" button=true owner=owner editable=editable}}
     </div>
 
     {{!-- Attributes Tab --}}
@@ -28,69 +28,69 @@
         </colgroup>
         {{>
         "systems/farhome/templates/partials/row-bool-partial.hbs"
-        data.equipped
-        objectString="data.equipped"}}
+        system.equipped
+        objectString="system.equipped"}}
         {{>
         "systems/farhome/templates/partials/row-bool-partial.hbs"
-        data.attuned
-        objectString="data.attuned"}}
+        system.attuned
+        objectString="system.attuned"}}
         {{>
         "systems/farhome/templates/partials/row-number-partial.hbs"
-        data.charges
-        objectString="data.charges"}}
+        system.charges
+        objectString="system.charges"}}
         {{>
         "systems/farhome/templates/partials/row-number-partial.hbs"
-        data.quantity
-        objectString="data.quantity"}}
+        system.quantity
+        objectString="system.quantity"}}
         {{>
         "systems/farhome/templates/partials/row-number-partial.hbs"
-        data.weight
-        objectString="data.weight"}}
+        system.weight
+        objectString="system.weight"}}
         {{>
         "systems/farhome/templates/partials/row-select-partial.hbs"
-        data.rarity
-        objectString="data.rarity"
+        system.rarity
+        objectString="system.rarity"
         mapping=config.rarities}}
         {{>
         "systems/farhome/templates/partials/row-select-partial.hbs"
-        data.weaponType
-        objectString="data.weaponType"
+        system.weaponType
+        objectString="system.weaponType"
         mapping=config.weaponTypes}}
         {{>
         "systems/farhome/templates/partials/row-select-partial.hbs"
-        data.damageType
-        objectString="data.damageType"
+        system.damageType
+        objectString="system.damageType"
         mapping=config.damageTypes}}
         {{>
         "systems/farhome/templates/partials/row-string-partial.hbs"
-        data.range
-        objectString="data.range"}}
+        system.range
+        objectString="system.range"}}
         {{>
         "systems/farhome/templates/partials/row-bool-partial.hbs"
-        data.finesse
-        objectString="data.finesse"}}
+        system.finesse
+        objectString="system.finesse"}}
         {{>
         "systems/farhome/templates/partials/row-bool-partial.hbs"
-        data.heavy
-        objectString="data.heavy"}}
+        system.heavy
+        objectString="system.heavy"}}
         {{>
         "systems/farhome/templates/partials/row-bool-partial.hbs"
-        data.loading
-        objectString="data.loading"}}
+        system.loading
+        objectString="system.loading"}}
         {{>
         "systems/farhome/templates/partials/row-number-partial.hbs"
-        data.versatile
-        objectString="data.versatile"}}
+        system.versatile
+        objectString="system.versatile"}}
         {{>
         "systems/farhome/templates/partials/row-number-partial.hbs"
-        data.reach
-        objectString="data.reach"}}
+        system.reach
+        objectString="system.reach"}}
       </table>
     </div>
 
     {{!-- Roll Template Tab --}}
     <div class="tab" data-group="primary" data-tab="rollTemplate">
-      {{editor content=data.rollTemplate.value target="data.rollTemplate.value" button=true owner=owner editable=editable}}
+      {{editor enrichedText.rollTemplate target="system.rollTemplate.value" button=true owner=owner editable=editable}}
     </div>
   </div>
 </form>
