@@ -7,8 +7,10 @@
  */
 export async function createItemMacro(data, slot) {
   if (data.type !== 'Item') return;
-  if (!('data' in data)) return ui.notifications.warn('You can only create macro buttons for owned Items');
-  const item = data.data;
+
+  const item = await Item.implementation.fromDropData(data);
+
+  if (!item) return ui.notifications.warn('You can only create macro buttons for owned Items');
 
   // #todo Should probably change the reference from name to id if possible.
 
@@ -17,15 +19,15 @@ export async function createItemMacro(data, slot) {
   let macro = game.macros.find((m) => m.name === item.name && m.command === command);
   if (!macro) {
     macro = await Macro.create({
-      name: item.name,
       type: 'script',
+      scope: 'actor',
+      name: item.name,
       img: item.img,
       command: command,
       flags: { 'farhome.itemMacro': true },
     });
   }
   game.user.assignHotbarMacro(macro, slot);
-  return false;
 }
 
 /**

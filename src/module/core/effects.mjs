@@ -9,11 +9,11 @@ export function populateStatusEffectsFromCompendium(compendiumName) {
     CONFIG.statusEffects = [];
 
     for (const conditionDocument of conditionDocuments) {
-      const conditionId = conditionDocument.data.name.toLowerCase().replace(' ', '-');
+      const conditionId = conditionDocument.name.toLowerCase().replace(' ', '-');
       const effectData = {
         id: conditionId,
         label: `farhome.${conditionId}`,
-        icon: conditionDocument.data.img,
+        icon: conditionDocument.img,
       };
 
       CONFIG.statusEffects.push(effectData);
@@ -36,7 +36,7 @@ export function getEffectData(actorContext) {
   };
 
   for (const effect of actorContext.effects) {
-    const effectStatusId = effect.data.flags.core.statusId;
+    const effectStatusId = effect.flags.core.statusId;
 
     if (effectStatusId.startsWith('hex')) {
       effectsData.hex += parseInt(effectStatusId.split('-')[1]);
@@ -89,7 +89,7 @@ export function onManageActiveEffect(event, owner) {
     case 'delete':
       return effect.delete();
     case 'toggle':
-      return effect.update({ disabled: !effect.data.disabled });
+      return effect.update({ disabled: !effect.disabled });
   }
 }
 
@@ -121,7 +121,7 @@ export function prepareActiveEffectCategories(effects) {
   // Iterate over active effects, classifying them into categories
   for (let e of effects) {
     e._getSourceName(); // Trigger a lookup for the source name
-    if (e.data.disabled) categories.inactive.effects.push(e);
+    if (e.disabled) categories.inactive.effects.push(e);
     else if (e.isTemporary) categories.temporary.effects.push(e);
     else categories.passive.effects.push(e);
   }

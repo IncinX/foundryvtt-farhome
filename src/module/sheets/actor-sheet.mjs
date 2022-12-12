@@ -23,25 +23,25 @@ export class FarhomeActorSheet extends ActorSheet {
 
   /** @override */
   get template() {
-    return `systems/farhome/templates/sheets/actor/${this.actor.data.type}-sheet.hbs`;
+    return `systems/farhome/templates/sheets/actor/${this.actor.type}-sheet.hbs`;
   }
 
   /** @override */
-  getData() {
+  async getData() {
     // Retrieve the data structure from the base sheet. You can inspect or log
     // the context variable to see the structure, but some key properties for
     // sheets are the actor object, the data object, whether or not it's
     // editable, the items array, and the effects array.
-    const context = super.getData();
+    const context = await super.getData();
 
     // Add the farhome configuration so it is available in handlebars.
     context.config = CONFIG.FARHOME;
 
     // Use a safe clone of the actor data for further operations.
-    const actorData = this.actor.data.toObject(false);
+    const actorData = this.actor.toObject(false);
 
-    // Add the actor's data to context.data for easier access, as well as flags.
-    context.data = actorData.data;
+    // Add the actor's data to context.system for easier access, as well as flags.
+    context.system = actorData.system;
     context.flags = actorData.flags;
 
     // Prepare the items
@@ -59,10 +59,16 @@ export class FarhomeActorSheet extends ActorSheet {
     }
 
     // Add roll data for TinyMCE editors.
+    // #todo I don't think this is necessary anymore
     context.rollData = context.actor.getRollData();
 
     // Prepare active effects
     context.effects = prepareActiveEffectCategories(this.actor.effects);
+
+    // Run the TextEditor.enrichHTML on editor text entries
+    context.enrichedText = {
+      biography: await TextEditor.enrichHTML(context.system.biography.value, { async: true }),
+    };
 
     return context;
   }
@@ -76,7 +82,7 @@ export class FarhomeActorSheet extends ActorSheet {
    */
   _prepareActorData(context) {
     // Do derived localization of the entire context data.
-    localizeObject(null, context.data);
+    localizeObject(null, context.system);
   }
 
   /**
@@ -173,8 +179,8 @@ export class FarhomeActorSheet extends ActorSheet {
       }
       // Append to spells.
       else if (i.type === 'spell') {
-        if (i.data.spellLevel.value !== null) {
-          spells[i.data.spellLevel.value].push(i);
+        if (i.system.spellLevel.value !== null) {
+          spells[i.system.spellLevel.value].push(i);
         }
       }
     }
@@ -276,24 +282,24 @@ export class FarhomeActorSheet extends ActorSheet {
     const itemData = {
       name: name,
       type: type,
-      data: {},
+      system: {},
     };
 
     // Populate the spell item
     if (type === 'spell') {
-      itemData.data.spellLevel = {
+      itemData.system.spellLevel = {
         value: parseInt(controlData.spellLevel),
       };
     }
 
     // Setup a custom template depending on the item type.
-    const actorData = this.actor.data.data;
+    const actorData = this.actor.system;
 
     if (type === 'armor') {
       const rollTemplateHtml = await renderTemplate(
         'systems/farhome/templates/item-roll-templates/armor-item-roll-template.hbs',
       );
-      itemData.data.rollTemplate = {
+      itemData.system.rollTemplate = {
         value: rollTemplateHtml,
       };
     } else if (type === 'weapon' || type === 'maneuver') {
@@ -313,7 +319,7 @@ export class FarhomeActorSheet extends ActorSheet {
             strongestAttr: `a.${strongestAttribute}`,
           },
         );
-        itemData.data.rollTemplate = {
+        itemData.system.rollTemplate = {
           value: rollTemplateHtml,
         };
       } else {
@@ -324,7 +330,7 @@ export class FarhomeActorSheet extends ActorSheet {
             strongestAttr: `a.${strongestAttribute}`,
           },
         );
-        itemData.data.rollTemplate = {
+        itemData.system.rollTemplate = {
           value: rollTemplateHtml,
         };
       }
@@ -347,7 +353,7 @@ export class FarhomeActorSheet extends ActorSheet {
         },
       );
 
-      itemData.data.rollTemplate = {
+      itemData.system.rollTemplate = {
         value: rollTemplateHtml,
       };
     } else if (type === 'note') {
@@ -357,7 +363,7 @@ export class FarhomeActorSheet extends ActorSheet {
         'systems/farhome/templates/item-roll-templates/default-item-roll-template.hbs',
       );
 
-      itemData.data.rollTemplate = {
+      itemData.system.rollTemplate = {
         value: rollTemplateHtml,
       };
     }
@@ -432,7 +438,7 @@ export class FarhomeActorSheet extends ActorSheet {
     // #todo Code duplication between all this and attuned/prepared can probably be reduced by binding a string parameter for the data path.
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
-    await item.update({ 'data.equipped.value': event.target.checked });
+    await item.update({ 'system.equipped.value': event.target.checked });
   }
 
   /**
@@ -443,7 +449,7 @@ export class FarhomeActorSheet extends ActorSheet {
   async _onItemAttunedChanged(event) {
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
-    await item.update({ 'data.attuned.value': event.target.checked });
+    await item.update({ 'system.attuned.value': event.target.checked });
   }
 
   /**
@@ -454,7 +460,7 @@ export class FarhomeActorSheet extends ActorSheet {
   async _onItemPreparedChanged(event) {
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
-    await item.update({ 'data.prepared.value': event.target.checked });
+    await item.update({ 'system.prepared.value': event.target.checked });
   }
 
   /**
@@ -465,7 +471,7 @@ export class FarhomeActorSheet extends ActorSheet {
   async _onItemChargesChanged(event) {
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
-    await item.update({ 'data.charges.value': parseInt(event.target.value) });
+    await item.update({ 'system.charges.value': parseInt(event.target.value) });
   }
 
   /**
@@ -476,7 +482,7 @@ export class FarhomeActorSheet extends ActorSheet {
   async _onItemQuantityChanged(event) {
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
-    await item.update({ 'data.quantity.value': parseInt(event.target.value) });
+    await item.update({ 'system.quantity.value': parseInt(event.target.value) });
   }
 
   /**
@@ -510,8 +516,7 @@ export class FarhomeActorSheet extends ActorSheet {
       });
 
       // Evaluate the active effects for the character (ie/ hex, poison, etc)
-      const actorContext = this.actor.data;
-      const activeEffectData = getEffectData(actorContext);
+      const activeEffectData = getEffectData(this.actor);
       const activeEffectsHtml = await getEffectHtml(activeEffectData);
 
       // Send the chat roll for display (along with summary calculation, etc.)
@@ -526,7 +531,7 @@ export class FarhomeActorSheet extends ActorSheet {
   async _onHealingSurge(event) {
     event.preventDefault();
 
-    const actorContext = this.actor.data.data;
+    const actorContext = this.actor.system;
     const currentHealingSurges = actorContext.features.healingSurges.value;
 
     if (currentHealingSurges > 0) {
@@ -538,7 +543,7 @@ export class FarhomeActorSheet extends ActorSheet {
       });
 
       // Spend the healing surge
-      this.actor.update({ 'data.features.healingSurges.value': currentHealingSurges - 1 });
+      this.actor.update({ 'system.features.healingSurges.value': currentHealingSurges - 1 });
 
       const healingSurgeData = {
         actorId: this.actor.id,
@@ -558,12 +563,12 @@ export class FarhomeActorSheet extends ActorSheet {
   async _onManaRefill(event) {
     event.preventDefault();
 
-    const actorContext = this.actor.data.data;
+    const actorContext = this.actor.system;
 
     const manaRefillValue = Math.max(Math.ceil(actorContext.level.value / 2), 1);
     const newManaValue = Math.min(actorContext.features.mana.max, actorContext.features.mana.value + manaRefillValue);
 
-    this.actor.update({ 'data.features.mana.value': newManaValue });
+    this.actor.update({ 'system.features.mana.value': newManaValue });
 
     await sendActorMessage(
       `<strong>${this.actor.name}</strong> restored ${newManaValue - actorContext.features.mana.value} mana.`,
@@ -623,7 +628,7 @@ async function _handleApplyHealing(event) {
   }
 
   // Calculate the healed amount
-  const actorContext = actor.data.data;
+  const actorContext = actor.system;
 
   const messageContentNode = findMessageContentNode(event.currentTarget);
   const rollSummaryNode = messageContentNode.querySelector('.fh-roll-summary');
@@ -633,7 +638,7 @@ async function _handleApplyHealing(event) {
   const healedWounds = Math.min(rolledHealedWounds, maxHealAmount);
 
   // Apply the healing
-  actor.update({ 'data.features.wounds.value': actorContext.features.wounds.value + healedWounds });
+  actor.update({ 'system.features.wounds.value': actorContext.features.wounds.value + healedWounds });
 
   // Send the confirmation message to the chat
   sendActorMessage(`<strong>${actor.name}</strong> healed ${healedWounds} wounds.`);

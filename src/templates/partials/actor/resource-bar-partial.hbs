@@ -3,64 +3,64 @@
   <!-- Hero Dice -->
   {{>
   "systems/farhome/templates/partials/max-resource-partial.hbs"
-  data.features.hero
-  objectString="data.features.hero"
+  system.features.hero
+  objectString="system.features.hero"
   separatorString=" / "}}
   
   <!-- Wounds -->
   {{>
   "systems/farhome/templates/partials/max-resource-partial.hbs"
-  data.features.wounds
-  objectString="data.features.wounds"
+  system.features.wounds
+  objectString="system.features.wounds"
   separatorString=" / "}}
   
   <!-- Temp Wounds -->
   {{>
   "systems/farhome/templates/partials/resource-partial.hbs"
-  data.features.tempWounds
-  objectString="data.features.tempWounds"}}
+  system.features.tempWounds
+  objectString="system.features.tempWounds"}}
   
   <!-- Healing Surges -->
   <div class="resource-box flex-group-center">
     <div class="resource-content flexrow flex-center flex-between">
-      <input type="text" name="data.features.healingSurges.value" value="{{data.features.healingSurges.value}}" data-dtype="Number"/>
+      <input type="text" name="system.features.healingSurges.value" value="{{system.features.healingSurges.value}}" data-dtype="Number"/>
       <span> / </span>
-      <input type="text" name="data.features.healingSurges.max" value="{{data.features.healingSurges.max}}" data-dtype="Number"/>
+      <input type="text" name="system.features.healingSurges.max" value="{{system.features.healingSurges.max}}" data-dtype="Number"/>
     </div>
-    <label for="data.features.healingSurges.value" class="resource-label healing-surge">{{data.features.healingSurges.label}}</label>
+    <label for="system.features.healingSurges.value" class="resource-label healing-surge">{{system.features.healingSurges.label}}</label>
   </div>
   
   <!-- AP -->
   {{>
   "systems/farhome/templates/partials/max-resource-partial.hbs"
-  data.features.ap
-  objectString="data.features.ap"
+  system.features.ap
+  objectString="system.features.ap"
   separatorString=" / "}}
   
   <!-- Spell Power -->
   {{>
   "systems/farhome/templates/partials/resource-partial.hbs"
-  data.features.spellPower
-  objectString="data.features.spellPower"}}
+  system.features.spellPower
+  objectString="system.features.spellPower"}}
 
   <!-- Mana -->
   <div class="resource-box flex-group-center">
     <div class="resource-content flexrow flex-center flex-between">
-      <input type="text" name="data.features.mana.value" value="{{data.features.mana.value}}" data-dtype="Number"/>
+      <input type="text" name="system.features.mana.value" value="{{system.features.mana.value}}" data-dtype="Number"/>
       <span> / </span>
-      <input type="text" name="data.features.mana.max" value="{{data.features.mana.max}}" data-dtype="Number" disabled/>
+      <input type="text" name="system.features.mana.max" value="{{system.features.mana.max}}" data-dtype="Number" disabled/>
     </div>
-    <label for="data.features.mana.value" class="resource-label mana-refill">{{data.features.mana.label}}</label>
+    <label for="system.features.mana.value" class="resource-label mana-refill">{{system.features.mana.label}}</label>
   </div>
   
   <!-- Movement -->
   <div class="resource-box flex-group-center">
     <div class="resource-content flexrow flex-center flex-between">
-      <input type="text" name="data.features.move.value" value="{{data.features.move.value}}" data-dtype="Number"
+      <input type="text" name="system.features.move.value" value="{{system.features.move.value}}" data-dtype="Number"
         placeholder="{{localize 'farhome.move'}}" />
-      <input type="text" name="data.features.sprint.value" value="{{data.features.sprint.value}}"
+      <input type="text" name="system.features.sprint.value" value="{{system.features.sprint.value}}"
         data-dtype="Number" placeholder="{{localize 'farhome.sprint'}}" />
     </div>
-    <label for="data.features.move.value" class="resource-label">{{data.features.move.label}}</label>
+    <label for="system.features.move.value" class="resource-label">{{system.features.move.label}}</label>
   </div>
 </div>

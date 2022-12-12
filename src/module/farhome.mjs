@@ -114,7 +114,12 @@ Hooks.once('setup', async () => {
 Hooks.once('ready', async () => {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   // #todo Move these to connect functions similar to below.
-  Hooks.on('hotbarDrop', (_bar, data, slot) => createItemMacro(data, slot));
+  Hooks.on('hotbarDrop', (_bar, data, slot) => {
+    createItemMacro(data, slot);
+
+    // Must return false to prevent default behavior.
+    return false;
+  });
 
   // Iterate through the conditions pack to populate the conditions
   // The compendiums will be loaded in ready and it is before the user has a chance to click on the token
