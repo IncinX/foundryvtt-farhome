@@ -5,7 +5,7 @@
   "version": "This is auto replaced",
   "author": "Thomas Perry",
   "minimumCoreVersion": "9",
-  "compatibleCoreVersion": "9.269",
+  "compatibleCoreVersion": "9.291",
   "scripts": [],
   "esmodules": ["module/farhome.js"],
   "styles": ["styles/farhome.css"],
