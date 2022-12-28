@@ -50,18 +50,22 @@ export class FarhomeActor extends Actor {
 
     // Configure prototype token settings
     if (this.type === 'character') {
-      this.data.token.update({
+      const prototypeToken = {
         vision: true,
         actorLink: true,
         disposition: 1,
-      });
+      };
+
+      this.updateSource({ prototypeToken });
     } else if (this.type === 'npc') {
-      this.data.token.update({
+      const prototypeToken = {
         dimSight: 30,
         brightSight: 15,
         vision: true,
         disposition: -1,
-      });
+      };
+
+      this.updateSource({ prototypeToken });
     }
   }
 
@@ -104,34 +108,30 @@ export class FarhomeActor extends Actor {
 
     // Setup rolls for weapons
     // It uses the maximum of strength of dexterity for everything but ranged.
-    this.system.proficiencies.weapons.oneHand.attribute =
+    const strongestStrDexTag =
       this.system.attributes.str.value > this.system.attributes.dex.value
         ? game.i18n.localize('farhome.strTag')
         : game.i18n.localize('farhome.dexTag');
+
+    this.system.proficiencies.weapons.oneHand.attribute = strongestStrDexTag;
     this.system.proficiencies.weapons.oneHand.roll = proficiencyRollFormula(
       this.system.proficiencies.weapons.oneHand.value,
       Math.max(this.system.attributes.str.value, this.system.attributes.dex.value),
     );
 
-    this.system.proficiencies.weapons.twoHand.attribute =
-      this.system.attributes.str.value > this.system.attributes.dex.value
-        ? game.i18n.localize('farhome.strTag')
-        : game.i18n.localize('farhome.dexTag');
+    this.system.proficiencies.weapons.twoHand.attribute = strongestStrDexTag;
     this.system.proficiencies.weapons.twoHand.roll = proficiencyRollFormula(
       this.system.proficiencies.weapons.twoHand.value,
       Math.max(this.system.attributes.str.value, this.system.attributes.dex.value),
     );
 
-    this.system.proficiencies.weapons.unarmed.attribute =
-      this.system.attributes.str.value > this.system.attributes.dex.value
-        ? game.i18n.localize('farhome.strTag')
-        : game.i18n.localize('farhome.dexTag');
+    this.system.proficiencies.weapons.unarmed.attribute = strongestStrDexTag;
     this.system.proficiencies.weapons.unarmed.roll = proficiencyRollFormula(
       this.system.proficiencies.weapons.unarmed.value,
       Math.max(this.system.attributes.str.value, this.system.attributes.dex.value),
     );
 
-    this.system.proficiencies.weapons.ranged.attribute = game.i18n.localize('farhome.dexTag');
+    this.system.proficiencies.weapons.ranged.attribute = strongestStrDexTag;
     this.system.proficiencies.weapons.ranged.roll = proficiencyRollFormula(
       this.system.proficiencies.weapons.ranged.value,
       this.system.attributes.dex.value,

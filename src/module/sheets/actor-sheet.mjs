@@ -50,12 +50,12 @@ export class FarhomeActorSheet extends ActorSheet {
 
     // Prepare character data and items.
     if (actorData.type == 'character') {
-      this._prepareCharacterData(context);
+      await this._prepareCharacterData(context);
     }
 
     // Prepare NPC data and items.
     if (actorData.type == 'npc') {
-      this._prepareNpcData(context);
+      await this._prepareNpcData(context);
     }
 
     // Add roll data for TinyMCE editors.
@@ -64,11 +64,6 @@ export class FarhomeActorSheet extends ActorSheet {
 
     // Prepare active effects
     context.effects = prepareActiveEffectCategories(this.actor.effects);
-
-    // Run the TextEditor.enrichHTML on editor text entries
-    context.enrichedText = {
-      biography: await TextEditor.enrichHTML(context.system.biography.value, { async: true }),
-    };
 
     return context;
   }
@@ -92,8 +87,10 @@ export class FarhomeActorSheet extends ActorSheet {
    *
    * @return {undefined}
    */
-  _prepareCharacterData(context) {
-    // Nothing to do right now.
+  async _prepareCharacterData(context) {
+    context.enrichedText = {
+      biography: await TextEditor.enrichHTML(context.system.biography.value, { async: true }),
+    };
   }
 
   /**
@@ -103,8 +100,11 @@ export class FarhomeActorSheet extends ActorSheet {
    *
    * @return {undefined}
    */
-  _prepareNpcData(context) {
-    // Nothing to do right now.
+  async _prepareNpcData(context) {
+    // #todo This is duplicated with character data above but it doesn't apply for stashes. Consider refactoring.
+    context.enrichedText = {
+      biography: await TextEditor.enrichHTML(context.system.biography.value, { async: true }),
+    };
   }
 
   /**
