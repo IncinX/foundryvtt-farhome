@@ -50,18 +50,22 @@ export class FarhomeActor extends Actor {
 
     // Configure prototype token settings
     if (this.type === 'character') {
-      this.data.token.update({
+      const prototypeToken = { 
         vision: true,
         actorLink: true,
         disposition: 1,
-      });
+      };
+
+      this.updateSource({prototypeToken});
     } else if (this.type === 'npc') {
-      this.data.token.update({
+      const prototypeToken = {
         dimSight: 30,
         brightSight: 15,
         vision: true,
         disposition: -1,
-      });
+      };
+
+      this.updateSource({prototypeToken});
     }
   }
 
