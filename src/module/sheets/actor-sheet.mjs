@@ -105,7 +105,6 @@ export class FarhomeActorSheet extends ActorSheet {
     context.enrichedText = {
       biography: await TextEditor.enrichHTML(context.system.biography.value, { async: true }),
     };
-
   }
 
   /**
