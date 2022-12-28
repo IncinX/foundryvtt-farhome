@@ -85,11 +85,11 @@ export async function createCompendiumFromVetoolsBeastiary(
       name: monster.name,
       type: 'npc',
       img: monsterImgUri,
-      token: {
+      prototypeToken: {
         ..._convertTokenSize(monster.size),
         img: monsterImgUri,
       },
-      data: {
+      system: {
         cr: {
           value: _convertCr(vetoolsMonsterImportConfig, monster.cr),
         },

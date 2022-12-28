@@ -545,7 +545,7 @@ class FarhomeRuleParser {
     const baseItemObject = {
       name: name,
       type: type,
-      data: {
+      system: {
         description: {
           value: description,
         },
@@ -604,7 +604,7 @@ class FarhomeRuleParser {
     const spellObject = {
       name: name,
       type: 'maneuver',
-      data: {
+      system: {
         description: {
           value: description,
         },
@@ -673,7 +673,7 @@ class FarhomeRuleParser {
     const spellObject = {
       name: name,
       type: 'spell',
-      data: {
+      system: {
         description: {
           value: description,
         },

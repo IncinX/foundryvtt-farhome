@@ -12,9 +12,6 @@
         "biography": {
           "value": "<h1>Biography</h1><p>Insert biography here. Click the edit button that shows up when you hover this text.</p>"
         },
-        "notes": {
-          "value": "<h1>Notes</h1><p>Insert biography here. Click the edit button that shows up when you hover this text.</p>"
-        },
         "features": {
           "wounds": {
             "value": 1,
@@ -246,7 +243,7 @@
         "value": 0
       }
     },
-    "partyStash": {
+    "stash": {
       "templates": []
     }
   },
