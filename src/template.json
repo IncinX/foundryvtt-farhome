@@ -2,11 +2,6 @@
   "Actor": {
     "types": ["character", "npc", "stash"],
     "templates": {
-      "notes": {
-        "notes": {
-          "value": "<h1>Notes</h1><p>Insert biography here. Click the edit button that shows up when you hover this text.</p>"
-        },
-      },
       "base": {
         "race": {
           "value": ""
