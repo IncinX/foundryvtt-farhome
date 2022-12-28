@@ -246,8 +246,8 @@
         "value": 0
       }
     },
-    "partyStash": {
-      "templates": []
+    "stash": {
+      "templates": ["base"]
     }
   },
   "Item": {
