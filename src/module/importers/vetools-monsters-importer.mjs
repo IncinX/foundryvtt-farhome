@@ -119,7 +119,7 @@ export async function createCompendiumFromVetoolsBeastiary(
 
     // Setup monster save proficiencies
     if (monster.save) {
-      newMonsterDocument.data.proficiencies.saves = {
+      newMonsterDocument.system.proficiencies.saves = {
         str: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.save.str, monster.str) },
         dex: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.save.dex, monster.dex) },
         sta: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.save.con, monster.con) },
@@ -131,7 +131,7 @@ export async function createCompendiumFromVetoolsBeastiary(
 
     // Setup monster skill proficiencies
     if (monster.skill) {
-      newMonsterDocument.data.proficiencies.attributes = {
+      newMonsterDocument.system.proficiencies.attributes = {
         str: {
           athletics: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.athletics, monster.str) },
           intimidation: {
@@ -216,7 +216,7 @@ export async function createCompendiumFromVetoolsBeastiary(
         const newMonsterTrait = {
           name: `Trait: ${trait.name}`,
           type: 'feat',
-          data: {
+          system: {
             description: {
               value: traitEntries,
             },
@@ -235,7 +235,7 @@ export async function createCompendiumFromVetoolsBeastiary(
       const newMonsterLanguage = {
         name: `Languages: ${monster.languages}`,
         type: 'feat',
-        data: {
+        system: {
           description: {
             value: monster.languages,
           },
@@ -253,7 +253,7 @@ export async function createCompendiumFromVetoolsBeastiary(
       const newMonsterSenses = {
         name: `Senses: ${monster.senses}`,
         type: 'feat',
-        data: {
+        system: {
           description: {
             value: monster.senses,
           },
@@ -273,7 +273,7 @@ export async function createCompendiumFromVetoolsBeastiary(
       const newMonsterDamageImmunities = {
         name: `Damage Immunities: ${damageImmunities}`,
         type: 'feat',
-        data: {
+        system: {
           description: {
             value: damageImmunities,
           },
@@ -293,7 +293,7 @@ export async function createCompendiumFromVetoolsBeastiary(
       const newMonsterConditionImmunities = {
         name: `Condition Immunities: ${conditionImmunities}`,
         type: 'feat',
-        data: {
+        system: {
           description: {
             value: conditionImmunities,
           },
@@ -511,7 +511,7 @@ function _convertAC(vetoolsMonsterImportConfig, monsterAC) {
   const newArmor = {
     name: _toTitleCase(armorDescription),
     type: 'armor',
-    data: {
+    system: {
       description: {
         value: '',
       },
@@ -665,7 +665,7 @@ function _convertAction(vetoolsMonsterImportConfig, action, namePrefix) {
   const newManeuver = {
     name: `${namePrefix}: ${action.name}`,
     type: 'maneuver',
-    data: {
+    system: {
       description: {
         value: actionEntries,
       },
