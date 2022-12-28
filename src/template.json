@@ -257,6 +257,8 @@
         "description": {
           "value": "Insert item description here.  Click the edit button that shows up when you hover this text."
         },
+        "prompts": [
+        ],
         "rollTemplate": {
           "value": ""
         }
