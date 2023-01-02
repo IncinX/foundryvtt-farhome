@@ -211,6 +211,9 @@
     "save": "Save",
     "applyHealing": "Apply Healing",
     "healingSurge": "Healing Surge",
-    "charges": "Charges"
+    "charges": "Charges",
+    "prompts": "Prompts",
+    "addPrompt": "Add Prompt",
+    "removePrompt": "Remove Prompt"
   }
 }

@@ -9,6 +9,7 @@
   <nav class="sheet-tabs tabs" data-group="primary">
     <a class="item" data-tab="description">{{localize "farhome.description"}}</a>
     <a class="item" data-tab="attributes">{{localize "farhome.attributes"}}</a>
+    <a class="item" data-tab="prompts">{{localize "farhome.prompts"}}</a>
     <a class="item" data-tab="rollTemplate">{{localize "farhome.rollTemplate"}}</a>
   </nav>
 
@@ -86,6 +87,35 @@
         system.reach
         objectString="system.reach"}}
       </table>
+    </div>
+
+    {{!-- Prompt Tab --}}
+    {{!-- #todo Move this into a partial for easier re-use later. --}}
+    <div class="tab" data-group="primary" data-tab="prompts">
+      <button type="button" class="item-add-prompt">
+        {{localize "farhome.addPrompt"}}
+      </button>
+      {{#each system.prompts as |prompt|}}
+      <div class="item-prompt">
+        <div class="item-prompt-label">
+          <input
+            type="text"
+            name="prompt.title"
+            value="{{prompt.title}}"
+          />
+        </div>
+        <div class="item-prompt-value">
+          <input
+            type="text"
+            name="prompt.description"
+            value="{{prompt.description}}"
+          />
+        </div>
+        <button type="button" class="item-remove-prompt">
+          {{localize "farhome.removePrompt"}}
+        </button>
+      </div>
+      {{/each}}
     </div>
 
     {{!-- Roll Template Tab --}}

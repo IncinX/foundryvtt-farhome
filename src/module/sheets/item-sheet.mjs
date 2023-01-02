@@ -94,6 +94,40 @@ export class FarhomeItemSheet extends ItemSheet {
 
     // Roll Handler
     html.find('.item-roll').click((ev) => this.item.roll());
+
+    // Prompts
+    html.find('.item-add-prompt').click((ev) => this._onItemPrompt(ev));
+  }
+
+  /**
+   * Handle adding a new prompt to an item.
+   * @param {Event} _event The originating click event
+   * @private
+   */
+  async _onItemPrompt(_event) {
+    // #todo Fix localization warnings
+
+    const newPrompts = [
+      {
+        title: 'New Prompt',
+        description: 'A new prompt.',
+        choices: [
+          {
+            label: 'Choice 1',
+            value: 1
+          },
+          {
+            label: 'Choice 2',
+            value: 2
+          },
+        ]
+      }
+    ];
+
+    this.item.update({ 'system.prompts': newPrompts });
+    
+    console.log(this.item);
+    console.log(this.item.system);
   }
 }
 
