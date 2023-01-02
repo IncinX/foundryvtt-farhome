@@ -12,9 +12,6 @@
         "biography": {
           "value": "<h1>Biography</h1><p>Insert biography here. Click the edit button that shows up when you hover this text.</p>"
         },
-        "notes": {
-          "value": "<h1>Notes</h1><p>Insert biography here. Click the edit button that shows up when you hover this text.</p>"
-        },
         "features": {
           "wounds": {
             "value": 1,
@@ -232,7 +229,7 @@
       }
     },
     "character": {
-      "templates": ["base"],
+      "templates": ["base", "notes"],
       "level": {
         "value": 0
       },
@@ -241,12 +238,12 @@
       }
     },
     "npc": {
-      "templates": ["base"],
+      "templates": ["base", "notes"],
       "cr": {
         "value": 0
       }
     },
-    "partyStash": {
+    "stash": {
       "templates": []
     }
   },
