@@ -96,7 +96,12 @@ export class FarhomeItemSheet extends ItemSheet {
     html.find('.item-roll').click((ev) => this.item.roll());
 
     // Prompts
-    html.find('.item-add-prompt').click((ev) => this._onItemPrompt(ev));
+    html.find('.item-add-prompt').click(this._onItemAddPrompt.bind(this));
+    html.find('.item-remove-prompt').click(this._onItemRemovePrompt.bind(this));
+    html.find('.item-prompt-title-input').change(this._onItemPromptTitleChange.bind(this));
+    html.find('.item-prompt-description-input').change(this._onItemPromptDescriptionChange.bind(this));
+    html.find('.item-prompt-choice-input').change(this._onItemPromptChoiceChange.bind(this));
+    html.find('.item-prompt-value-input').change(this._onItemPromptValueChange.bind(this));
   }
 
   /**
@@ -104,8 +109,11 @@ export class FarhomeItemSheet extends ItemSheet {
    * @param {Event} _event The originating click event
    * @private
    */
-  async _onItemPrompt(_event) {
+  async _onItemAddPrompt(_event) {
     // #todo Fix localization warnings
+
+    // #note Due to the nature of the templates with an embedded array. It was decided to update the entire array when changes are made.
+    // #note The use of "choice" instead of "label" was intentional since the localization automation uses "label" as a key.
 
     const newPrompts = [
       {
@@ -113,21 +121,99 @@ export class FarhomeItemSheet extends ItemSheet {
         description: 'A new prompt.',
         choices: [
           {
-            label: 'Choice 1',
-            value: 1
+            choice: 'Choice 1',
+            value: 1,
           },
           {
-            label: 'Choice 2',
-            value: 2
+            choice: 'Choice 2',
+            value: 2,
           },
-        ]
-      }
+        ],
+      },
     ];
 
     this.item.update({ 'system.prompts': newPrompts });
-    
+
     console.log(this.item);
     console.log(this.item.system);
+  }
+
+  /**
+   * Handle removal of an item.
+   * @param {Event} event The originating click event
+   * @private
+   */
+  async _onItemRemovePrompt(event) {
+    const itemPrompt = $(event.currentTarget).parents('.item-prompt');
+    const promptIndex = itemPrompt.data('promptIndex');
+
+    this.item.system.prompts.splice(promptIndex, 1);
+
+    this.item.update({ 'system.prompts': this.item.system.prompts });
+  }
+
+  /**
+   * Handle the change of a prompts title.
+   * @param {Event} event The originating changed event
+   * @private
+   */
+  async _onItemPromptTitleChange(event) {
+    const itemPrompt = $(event.currentTarget).parents('.item-prompt');
+    const promptIndex = itemPrompt.data('promptIndex');
+
+    let prompt = this.item.system.prompts[promptIndex];
+    prompt.title = event.currentTarget.value;
+
+    this.item.update({ 'system.prompts': this.item.system.prompts });
+  }
+
+  /**
+   * Handle the change of a prompts description.
+   * @param {Event} event The originating changed event
+   * @private
+   */
+  async _onItemPromptDescriptionChange(event) {
+    const itemPrompt = $(event.currentTarget).parents('.item-prompt');
+    const promptIndex = itemPrompt.data('promptIndex');
+
+    let prompt = this.item.system.prompts[promptIndex];
+    prompt.description = event.currentTarget.value;
+
+    this.item.update({ 'system.prompts': this.item.system.prompts });
+  }
+
+  /**
+   * Handle the change of a prompts choice label.
+   * @param {Event} event The originating changed event
+   * @private
+   */
+  async _onItemPromptChoiceChange(event) {
+    const itemPrompt = $(event.currentTarget).parents('.item-prompt');
+    const promptIndex = itemPrompt.data('promptIndex');
+    const choicePrompt = $(event.currentTarget).parents('.item-prompt-choice');
+    const choiceIndex = choicePrompt.data('choiceIndex');
+
+    let prompt = this.item.system.prompts[promptIndex];
+    prompt.choices[choiceIndex].choice = event.currentTarget.value;
+
+    this.item.update({ 'system.prompts': this.item.system.prompts });
+  }
+
+  /**
+   * Handle the change of a prompts choice value.
+   * @param {Event} event The originating changed event
+   * @private
+   */
+  async _onItemPromptValueChange(event) {
+    const itemPrompt = $(event.currentTarget).parents('.item-prompt');
+    const promptIndex = itemPrompt.data('promptIndex');
+    const choicePrompt = $(event.currentTarget).parents('.item-prompt-choice');
+    const choiceIndex = choicePrompt.data('choiceIndex');
+
+    let prompt = this.item.system.prompts[promptIndex];
+    prompt.choices[choiceIndex].value = event.currentTarget.value;
+
+    this.item.update({ 'system.prompts': this.item.system.prompts });
   }
 }
 

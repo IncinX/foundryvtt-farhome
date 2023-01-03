@@ -95,25 +95,37 @@
       <button type="button" class="item-add-prompt">
         {{localize "farhome.addPrompt"}}
       </button>
-      {{#each system.prompts as |prompt|}}
-      <div class="item-prompt">
-        <div class="item-prompt-label">
+      {{#each system.prompts as |prompt promptIndex|}}
+      <div class="item-prompt" data-prompt-index="{{promptIndex}}">
+        <div>
           <input
+            class="item-prompt-label-input"
             type="text"
-            name="prompt.title"
             value="{{prompt.title}}"
           />
-        </div>
-        <div class="item-prompt-value">
           <input
+            class="item-prompt-description-input"
             type="text"
-            name="prompt.description"
             value="{{prompt.description}}"
           />
         </div>
         <button type="button" class="item-remove-prompt">
           {{localize "farhome.removePrompt"}}
         </button>
+        {{#each prompt.choices as |choice choiceIndex|}}
+        <div class="item-prompt-choice" data-choice-index="{{choiceIndex}}">
+          <input
+            class="item-prompt-choice-input"
+            type="text"
+            value="{{prompt.label}}"
+          />
+          <input
+            class="item-prompt-value-input"
+            type="text"
+            value="{{choice.value}}"
+          />
+        </div>
+        {{/each}}
       </div>
       {{/each}}
     </div>
