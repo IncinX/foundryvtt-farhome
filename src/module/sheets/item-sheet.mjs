@@ -119,6 +119,8 @@ export class FarhomeItemSheet extends ItemSheet {
     // #todo Consider using placeholder for the text boxes.
     // #todo Consider defaulting new choices to use the index of the choice.
 
+    // #todo Change description to a TOX editor.
+
     const newPrompt = 
     {
       title: 'Prompt Title',
