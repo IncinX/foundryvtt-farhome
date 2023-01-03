@@ -100,8 +100,8 @@ export class FarhomeItemSheet extends ItemSheet {
     html.find('.item-remove-prompt').click(this._onItemRemovePrompt.bind(this));
     html.find('.item-prompt-title-input').change(this._onItemPromptTitleChange.bind(this));
     html.find('.item-prompt-description-input').change(this._onItemPromptDescriptionChange.bind(this));
-    html.find('.item-prompt-choice-input').change(this._onItemPromptChoiceChange.bind(this));
-    html.find('.item-prompt-value-input').change(this._onItemPromptValueChange.bind(this));
+    html.find('.item-prompt-choice-name-input').change(this._onItemPromptChoiceNameChange.bind(this));
+    html.find('.item-prompt-choice-value-input').change(this._onItemPromptChoiceValueChange.bind(this));
   }
 
   /**
@@ -110,29 +110,34 @@ export class FarhomeItemSheet extends ItemSheet {
    * @private
    */
   async _onItemAddPrompt(_event) {
-    // #todo Fix localization warnings
+    // #todo Add the ability to add choices
+    // #todo Fix localization errors from within prompts (likely requires change to the localizeObject) function.
 
     // #note Due to the nature of the templates with an embedded array. It was decided to update the entire array when changes are made.
     // #note The use of "choice" instead of "label" was intentional since the localization automation uses "label" as a key.
 
-    const newPrompts = [
-      {
-        title: 'New Prompt',
-        description: 'A new prompt.',
-        choices: [
-          {
-            choice: 'Choice 1',
-            value: 1,
-          },
-          {
-            choice: 'Choice 2',
-            value: 2,
-          },
-        ],
-      },
-    ];
+    // #todo Consider using placeholder for the text boxes.
+    // #todo Consider defaulting new choices to use the index of the choice.
 
-    this.item.update({ 'system.prompts': newPrompts });
+    const newPrompt = 
+    {
+      title: 'Prompt Title',
+      description: 'Prompt Description.',
+      choices: [
+        {
+          name: 'Choice 1',
+          value: 1,
+        },
+        {
+          name: 'Choice 2',
+          value: 2,
+        },
+      ],
+    };
+
+    this.item.system.prompts.push(newPrompt);
+
+    this.item.update({ 'system.prompts': this.item.system.prompts });
 
     console.log(this.item);
     console.log(this.item.system);
@@ -183,18 +188,18 @@ export class FarhomeItemSheet extends ItemSheet {
   }
 
   /**
-   * Handle the change of a prompts choice label.
+   * Handle the change of a prompts choice name.
    * @param {Event} event The originating changed event
    * @private
    */
-  async _onItemPromptChoiceChange(event) {
+  async _onItemPromptChoiceNameChange(event) {
     const itemPrompt = $(event.currentTarget).parents('.item-prompt');
     const promptIndex = itemPrompt.data('promptIndex');
     const choicePrompt = $(event.currentTarget).parents('.item-prompt-choice');
     const choiceIndex = choicePrompt.data('choiceIndex');
 
     let prompt = this.item.system.prompts[promptIndex];
-    prompt.choices[choiceIndex].choice = event.currentTarget.value;
+    prompt.choices[choiceIndex].name = event.currentTarget.value;
 
     this.item.update({ 'system.prompts': this.item.system.prompts });
   }
@@ -204,7 +209,7 @@ export class FarhomeItemSheet extends ItemSheet {
    * @param {Event} event The originating changed event
    * @private
    */
-  async _onItemPromptValueChange(event) {
+  async _onItemPromptChoiceValueChange(event) {
     const itemPrompt = $(event.currentTarget).parents('.item-prompt');
     const promptIndex = itemPrompt.data('promptIndex');
     const choicePrompt = $(event.currentTarget).parents('.item-prompt-choice');
