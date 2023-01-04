@@ -110,7 +110,7 @@ export class FarhomeItemSheet extends ItemSheet {
    * @private
    */
   async _onItemAddPrompt(_event) {
-    // #todo Add the ability to add choices
+    // #todo Add the ability to add and remove choices
     // #todo Fix localization errors from within prompts (likely requires change to the localizeObject) function.
 
     // #note Due to the nature of the templates with an embedded array. It was decided to update the entire array when changes are made.
