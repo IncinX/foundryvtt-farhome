@@ -37,11 +37,22 @@ export class FarhomeItem extends Item {
    * @param {Event} event   The originating click event
    */
   async roll() {
+    let extraItemContext = {};
+
     if (this.type === 'spell') {
-      this._spellLevelDialog();
-    } else {
-      this._executeRoll();
+      // Add spell dialog context to the extra item context.
+      Object.assign(extraItemContext, await this._spellLevelDialog());
     }
+
+    // Process prompts and add them to the item context.
+    // #todo This should probably be within a prompt context object? Maybe??? Or just keep them with the item context perhaps...?
+    for (const prompt of this.system.prompts) {
+      const promptValue = await this._promptDialog(prompt);
+
+      extraItemContext[prompt.variable] = promptValue;
+    }
+
+    await this._executeRoll(extraItemContext);
   }
 
   /**
@@ -70,7 +81,7 @@ export class FarhomeItem extends Item {
     }
     dialogContent += '</select></p>';
 
-    let manaDialog = new Dialog({
+    const extraItemContext = await Dialog.wait({
       title: ` ${this.name}: Select Spell Level`,
       content: dialogContent,
       buttons: {
@@ -78,9 +89,13 @@ export class FarhomeItem extends Item {
           icon: '<i class="fas fa-check"></i>',
           label: 'Cast',
           callback: () => {
-            let castedSpellLevel = parseInt(document.getElementById(selectorUniqueId).value);
-            let spellLevelDifference = castedSpellLevel - this.system.spellLevel.value;
-            this._executeRoll({ castedSpellLevel: castedSpellLevel, spellLevelDifference: spellLevelDifference });
+            const castedSpellLevel = parseInt(document.getElementById(selectorUniqueId).value);
+            const spellLevelDifference = castedSpellLevel - this.system.spellLevel.value;
+            const extraItemContext = {
+              castedSpellLevel: castedSpellLevel,
+              spellLevelDifference: spellLevelDifference,
+            };
+            return extraItemContext;
           },
         },
         cancel: {
@@ -91,29 +106,7 @@ export class FarhomeItem extends Item {
       default: 'cast',
     });
 
-    manaDialog.render(true);
-  }
-
-  /**
-   * Execute a clickable roll by evaluating it's template and creating the chat message.
-   * @param {object} extraItemContext Additional context to be passed to the template evaluation.
-   * @private
-   */
-  async _executeRoll(extraItemContext = {}) {
-    if (this.actor === undefined) {
-      console.log('No actor found for this item.');
-    }
-
-    for (const prompt of this.system.prompts) {
-      const promptValue = await this._promptDialog(prompt);
-
-      extraItemContext[prompt.variable] = promptValue;
-    }
-
-    // #todo Handle prompts until complete and then complete roll.
-    // #todo Change the mana dialog prompt to use the asynchronous callback pattern similar to _spellLevelDialog (if it works)
-
-    await this._completeRoll(extraItemContext);
+    return extraItemContext;
   }
 
   /**
@@ -125,7 +118,7 @@ export class FarhomeItem extends Item {
     // #todo Consider using renderTemplate instead of embedded HTML here and everywhere else that does so.
     let selectorUniqueId = `prompt-selector-${Math.random().toString(16).substring(2)}`;
 
-    let dialogContent = `<p>${this.system.description.value}</p>`;
+    let dialogContent = `<p>${prompt.description.value}</p>`;
 
     dialogContent += `<p><select id="${selectorUniqueId}" style="width: 100%">`;
 
@@ -143,9 +136,7 @@ export class FarhomeItem extends Item {
           icon: '<i class="fas fa-check"></i>',
           label: 'Confirm',
           callback: () => {
-            let selectedValue = parseInt(document.getElementById(selectorUniqueId).value);
-            console.log(`DEBUG: selectedValue = ${selectedValue}`);
-            return selectedValue;
+            return parseInt(document.getElementById(selectorUniqueId).value);
           },
         },
         cancel: {
@@ -156,18 +147,18 @@ export class FarhomeItem extends Item {
       default: 'confirm',
     });
 
-    console.log(`DEBUG: promptDialog = ${promptReturn}`);
-
     return promptReturn;
   }
 
   /**
-   * Completes a clickable roll by evaluating it's template and creating the chat message.
+   * Execute a clickable roll by evaluating it's template and creating the chat message.
    * @param {object} extraItemContext Additional context to be passed to the template evaluation.
    * @private
    */
-  async _completeRoll(extraItemContext = {}) {
-    // #todo Handle prompts until complete and then complete roll.
+  async _executeRoll(extraItemContext = {}) {
+    if (this.actor === undefined) {
+      console.log('No actor found for this item.');
+    }
 
     // Add the extra item context which may have been queried by a user or inferred.
     var superItemContext = {
