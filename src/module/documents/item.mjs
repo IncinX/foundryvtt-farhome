@@ -135,7 +135,7 @@ export class FarhomeItem extends Item {
 
     dialogContent += '</select></p>';
 
-    let promptDialog = new Dialog({
+    let promptReturn = await Dialog.wait({
       title: prompt.title,
       content: dialogContent,
       buttons: {
@@ -156,13 +156,11 @@ export class FarhomeItem extends Item {
       default: 'confirm',
     });
 
-    let promptReturn = await promptDialog.render(true);
-
-    console.log(`DEBUG: promptDialog = ${promptReturn}`)
+    console.log(`DEBUG: promptDialog = ${promptReturn}`);
 
     return promptReturn;
   }
-  
+
   /**
    * Completes a clickable roll by evaluating it's template and creating the chat message.
    * @param {object} extraItemContext Additional context to be passed to the template evaluation.

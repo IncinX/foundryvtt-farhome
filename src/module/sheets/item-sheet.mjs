@@ -118,8 +118,8 @@ export class FarhomeItemSheet extends ItemSheet {
     // #todo Consider defaulting new choices to use the index of the choice.
     // #todo Change description to a TOX editor.
 
-    const newPrompt = 
-    {
+    // #todo Should change this to a proper javascript Object and use that in documentation
+    const newPrompt = {
       title: '',
       description: '',
       variable: '',
@@ -141,15 +141,14 @@ export class FarhomeItemSheet extends ItemSheet {
 
     await this._updatePrompts();
   }
-  
+
   /**
    * Handle addition of a choice.
    * @param {Event} event The originating click event
    * @private
    */
   async _onItemAddChoice(event) {
-    const newChoice = 
-    {
+    const newChoice = {
       name: '',
       value: '',
     };
@@ -158,7 +157,7 @@ export class FarhomeItemSheet extends ItemSheet {
 
     await this._updatePrompts();
   }
-  
+
   /**
    * Handle removal of a choice.
    * @param {Event} event The originating click event
@@ -217,7 +216,7 @@ export class FarhomeItemSheet extends ItemSheet {
 
     await this._updatePrompts();
   }
-  
+
   /**
    * Updates the prompts field of an item.
    * @private
