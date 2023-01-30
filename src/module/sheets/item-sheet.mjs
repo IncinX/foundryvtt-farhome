@@ -102,6 +102,7 @@ export class FarhomeItemSheet extends ItemSheet {
     html.find('.item-remove-choice').click(this._onItemRemoveChoice.bind(this));
     html.find('.item-prompt-title-input').change(this._onItemPromptTitleChange.bind(this));
     html.find('.item-prompt-description-input').change(this._onItemPromptDescriptionChange.bind(this));
+    html.find('.item-prompt-variable-input').change(this._onItemPromptVariableChange.bind(this));
     html.find('.item-prompt-choice-name-input').change(this._onItemPromptChoiceNameChange.bind(this));
     html.find('.item-prompt-choice-value-input').change(this._onItemPromptChoiceValueChange.bind(this));
   }
@@ -189,6 +190,18 @@ export class FarhomeItemSheet extends ItemSheet {
   async _onItemPromptDescriptionChange(event) {
     let prompt = this.item.system.prompts[this._getPromptIndex(event)];
     prompt.description = event.currentTarget.value;
+
+    await this._updatePrompts();
+  }
+
+  /**
+   * Handle the change of a prompts variable.
+   * @param {Event} event The originating changed event
+   * @private
+   */
+  async _onItemPromptVariableChange(event) {
+    let prompt = this.item.system.prompts[this._getPromptIndex(event)];
+    prompt.variable = event.currentTarget.value;
 
     await this._updatePrompts();
   }

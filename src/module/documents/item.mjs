@@ -118,7 +118,7 @@ export class FarhomeItem extends Item {
     // #todo Consider using renderTemplate instead of embedded HTML here and everywhere else that does so.
     let selectorUniqueId = `prompt-selector-${Math.random().toString(16).substring(2)}`;
 
-    let dialogContent = `<p>${prompt.description.value}</p>`;
+    let dialogContent = `<p>${prompt.description}</p>`;
 
     dialogContent += `<p><select id="${selectorUniqueId}" style="width: 100%">`;
 
