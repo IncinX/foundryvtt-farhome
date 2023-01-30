@@ -127,10 +127,7 @@ export class FarhomeItemSheet extends ItemSheet {
 
     this.item.system.prompts.push(newPrompt);
 
-    this.item.update({ 'system.prompts': this.item.system.prompts });
-
-    console.log(this.item);
-    console.log(this.item.system);
+    await this._updatePrompts();
   }
 
   /**
@@ -139,12 +136,9 @@ export class FarhomeItemSheet extends ItemSheet {
    * @private
    */
   async _onItemRemovePrompt(event) {
-    const itemPrompt = $(event.currentTarget).parents('.item-prompt');
-    const promptIndex = itemPrompt.data('promptIndex');
+    this.item.system.prompts.splice(this._getPromptIndex(event), 1);
 
-    this.item.system.prompts.splice(promptIndex, 1);
-
-    this.item.update({ 'system.prompts': this.item.system.prompts });
+    await this._updatePrompts();
   }
   
   /**
@@ -153,18 +147,15 @@ export class FarhomeItemSheet extends ItemSheet {
    * @private
    */
   async _onItemAddChoice(event) {
-    const itemPrompt = $(event.currentTarget).parents('.item-prompt');
-    const promptIndex = itemPrompt.data('promptIndex');
-    
     const newChoice = 
     {
       name: '',
       value: '',
     };
 
-    this.item.system.prompts[promptIndex].choices.push(newChoice);
+    this.item.system.prompts[this._getPromptIndex(event)].choices.push(newChoice);
 
-    this.item.update({ 'system.prompts': this.item.system.prompts });
+    await this._updatePrompts();
   }
   
   /**
@@ -173,15 +164,9 @@ export class FarhomeItemSheet extends ItemSheet {
    * @private
    */
   async _onItemRemoveChoice(event) {
-    const itemPrompt = $(event.currentTarget).parents('.item-prompt');
-    const promptIndex = itemPrompt.data('promptIndex');
+    this.item.system.prompts[this._getPromptIndex(event)].choices.splice(this._getChoiceIndex(event), 1);
 
-    const itemPromptChoice = $(event.currentTarget).parents('.item-prompt-choice');
-    const choiceIndex = itemPrompt.data('choiceIndex');
-
-    this.item.system.prompts[promptIndex].choices.splice(choiceIndex, 1);
-
-    this.item.update({ 'system.prompts': this.item.system.prompts });
+    await this._updatePrompts();
   }
 
   /**
@@ -190,13 +175,10 @@ export class FarhomeItemSheet extends ItemSheet {
    * @private
    */
   async _onItemPromptTitleChange(event) {
-    const itemPrompt = $(event.currentTarget).parents('.item-prompt');
-    const promptIndex = itemPrompt.data('promptIndex');
-
-    let prompt = this.item.system.prompts[promptIndex];
+    let prompt = this.item.system.prompts[this._getPromptIndex(event)];
     prompt.title = event.currentTarget.value;
 
-    this.item.update({ 'system.prompts': this.item.system.prompts });
+    await this._updatePrompts();
   }
 
   /**
@@ -205,13 +187,10 @@ export class FarhomeItemSheet extends ItemSheet {
    * @private
    */
   async _onItemPromptDescriptionChange(event) {
-    const itemPrompt = $(event.currentTarget).parents('.item-prompt');
-    const promptIndex = itemPrompt.data('promptIndex');
-
-    let prompt = this.item.system.prompts[promptIndex];
+    let prompt = this.item.system.prompts[this._getPromptIndex(event)];
     prompt.description = event.currentTarget.value;
 
-    this.item.update({ 'system.prompts': this.item.system.prompts });
+    await this._updatePrompts();
   }
 
   /**
@@ -220,15 +199,10 @@ export class FarhomeItemSheet extends ItemSheet {
    * @private
    */
   async _onItemPromptChoiceNameChange(event) {
-    const itemPrompt = $(event.currentTarget).parents('.item-prompt');
-    const promptIndex = itemPrompt.data('promptIndex');
-    const choicePrompt = $(event.currentTarget).parents('.item-prompt-choice');
-    const choiceIndex = choicePrompt.data('choiceIndex');
+    let prompt = this.item.system.prompts[this._getPromptIndex(event)];
+    prompt.choices[this._getChoiceIndex(event)].name = event.currentTarget.value;
 
-    let prompt = this.item.system.prompts[promptIndex];
-    prompt.choices[choiceIndex].name = event.currentTarget.value;
-
-    this.item.update({ 'system.prompts': this.item.system.prompts });
+    await this._updatePrompts();
   }
 
   /**
@@ -237,15 +211,40 @@ export class FarhomeItemSheet extends ItemSheet {
    * @private
    */
   async _onItemPromptChoiceValueChange(event) {
+    let prompt = this.item.system.prompts[this._getPromptIndex(event)];
+    prompt.choices[this._getChoiceIndex(event)].value = event.currentTarget.value;
+
+    await this._updatePrompts();
+  }
+  
+  /**
+   * Updates the prompts field of an item.
+   * @private
+   */
+  async _updatePrompts() {
+    await this.item.update({ 'system.prompts': this.item.system.prompts });
+  }
+
+  /**
+   * Retrieves the promptIndex of a parent item-prommpt element.
+   * @param {Event} event The originating changed event
+   * @private
+   */
+  _getPromptIndex(event) {
     const itemPrompt = $(event.currentTarget).parents('.item-prompt');
     const promptIndex = itemPrompt.data('promptIndex');
+    return promptIndex;
+  }
+
+  /**
+   * Retrieves the choiceIndex of a parent item-prompt-choice element.
+   * @param {Event} event The originating changed event
+   * @private
+   */
+  _getChoiceIndex(event) {
     const choicePrompt = $(event.currentTarget).parents('.item-prompt-choice');
     const choiceIndex = choicePrompt.data('choiceIndex');
-
-    let prompt = this.item.system.prompts[promptIndex];
-    prompt.choices[choiceIndex].value = event.currentTarget.value;
-
-    this.item.update({ 'system.prompts': this.item.system.prompts });
+    return choiceIndex;
   }
 }
 
