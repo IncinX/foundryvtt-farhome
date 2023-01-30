@@ -94,13 +94,14 @@
     <div class="tab" data-group="primary" data-tab="prompts">
       <ol class="prompt-list">
         <li class="flexrow item-divider">
-          <div class="prompt-title">{{localize 'farhome.title'}}</div>
-          <div class="prompt-description">{{localize 'farhome.description'}}</div>
+          <div class="header-prompt-title">{{localize 'farhome.title'}}</div>
+          <div class="header-prompt-description">{{localize 'farhome.description'}}</div>
+          <a class="item-add-prompt" title="{{localize 'farhome.addPrompt'}}"><i class="fas fa-plus" ></i> {{localize 'farhome.addPrompt'}}</a>
         </li>
         {{#each system.prompts as |prompt promptIndex|}}
-        <li class="flexrow">
+        <li>
           <div class="item-prompt" data-prompt-index="{{promptIndex}}">
-            <div>
+            <div class="flexrow">
               <input
                 class="item-prompt-title-input"
                 type="text"
@@ -113,31 +114,38 @@
                 placeholder="{{localize 'farhome.description'}}"
                 value="{{prompt.description}}"
               />
+              <a class="item-remove-prompt" title="{{localize 'farhome.removePrompt'}}"><i class="fas fa-trash"></i></a>
             </div>
-            <a class="item-remove-prompt" title="{{localize 'farhome.removePrompt'}}"><i class="fas fa-trash"></i></a>
-            {{#each prompt.choices as |choice choiceIndex|}}
-            <div class="item-prompt-choice" data-choice-index="{{choiceIndex}}">
-              <input
-                class="item-prompt-choice-name-input"
-                type="text"
-                placeholder="{{localize 'farhome.label'}}"
-                value="{{choice.name}}"
-              />
-              <input
-                class="item-prompt-choice-value-input"
-                type="text"
-                placeholder="{{localize 'farhome.value'}}"
-                value="{{choice.value}}"
-              />
-              <a class="item-remove-choice" title="{{localize 'farhome.removeChoice'}}"><i class="fas fa-trash"></i></a>
-            </div>
-            {{/each}}
-            <a class="item-add-choice" title="{{localize 'farhome.addChoice'}}"><i class="fas fa-plus"></i> {{localize 'farhome.addChoice'}}</a>
+            <ol class="choice-list">
+              <li class="flexrow item-divider">
+                <div class="header-prompt-choice-label">{{localize 'farhome.label'}}</div>
+                <div class="header-prompt-choice-value">{{localize 'farhome.value'}}</div>
+                <a class="item-add-choice" title="{{localize 'farhome.addChoice'}}"><i class="fas fa-plus"></i> {{localize 'farhome.addChoice'}}</a>
+              </li>
+              {{#each prompt.choices as |choice choiceIndex|}}
+              <li>
+                <div class="item-prompt-choice flexrow" data-choice-index="{{choiceIndex}}">
+                  <input
+                    class="item-prompt-choice-name-input"
+                    type="text"
+                    placeholder="{{localize 'farhome.label'}}"
+                    value="{{choice.name}}"
+                  />
+                  <input
+                    class="item-prompt-choice-value-input"
+                    type="text"
+                    placeholder="{{localize 'farhome.value'}}"
+                    value="{{choice.value}}"
+                  />
+                  <a class="item-remove-choice" title="{{localize 'farhome.removeChoice'}}"><i class="fas fa-trash"></i></a>
+                </div>
+              </li>
+              {{/each}}
+            </ol>
           </div>
         </li>
         {{/each}}
       </ol>
-      <a class="item-add-prompt" title="{{localize 'farhome.addPrompt'}}"><i class="fas fa-plus" ></i> {{localize 'farhome.addPrompt'}}</a>
     </div>
 
     {{!-- Roll Template Tab --}}

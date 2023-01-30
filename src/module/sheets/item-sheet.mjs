@@ -110,17 +110,12 @@ export class FarhomeItemSheet extends ItemSheet {
    * Handle adding a new prompt to an item.
    * @param {Event} _event The originating click event
    * @private
+   * @note Due to the nature of the templates with an embedded array. It was decided to update the entire array when changes are made.
+   * @note The use of "choice" instead of "label" was intentional since the localization automation uses "label" as a key.
    */
   async _onItemAddPrompt(_event) {
-    // #todo Add the ability to add and remove choices
     // #todo Fix localization errors from within prompts (likely requires change to the localizeObject) function.
-
-    // #note Due to the nature of the templates with an embedded array. It was decided to update the entire array when changes are made.
-    // #note The use of "choice" instead of "label" was intentional since the localization automation uses "label" as a key.
-
-    // #todo Consider using placeholder for the text boxes.
     // #todo Consider defaulting new choices to use the index of the choice.
-
     // #todo Change description to a TOX editor.
 
     const newPrompt = 
