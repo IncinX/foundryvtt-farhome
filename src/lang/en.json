@@ -214,6 +214,11 @@
     "charges": "Charges",
     "prompts": "Prompts",
     "addPrompt": "Add Prompt",
-    "removePrompt": "Remove Prompt"
+    "removePrompt": "Remove Prompt",
+    "addChoice": "Add Choice",
+    "removeChoice": "Remove Choice",
+    "title": "Title",
+    "label": "Label",
+    "value": "Value"
   }
 }

@@ -98,6 +98,8 @@ export class FarhomeItemSheet extends ItemSheet {
     // Prompts
     html.find('.item-add-prompt').click(this._onItemAddPrompt.bind(this));
     html.find('.item-remove-prompt').click(this._onItemRemovePrompt.bind(this));
+    html.find('.item-add-choice').click(this._onItemAddChoice.bind(this));
+    html.find('.item-remove-choice').click(this._onItemRemoveChoice.bind(this));
     html.find('.item-prompt-title-input').change(this._onItemPromptTitleChange.bind(this));
     html.find('.item-prompt-description-input').change(this._onItemPromptDescriptionChange.bind(this));
     html.find('.item-prompt-choice-name-input').change(this._onItemPromptChoiceNameChange.bind(this));
@@ -123,18 +125,9 @@ export class FarhomeItemSheet extends ItemSheet {
 
     const newPrompt = 
     {
-      title: 'Prompt Title',
-      description: 'Prompt Description.',
-      choices: [
-        {
-          name: 'Choice 1',
-          value: 1,
-        },
-        {
-          name: 'Choice 2',
-          value: 2,
-        },
-      ],
+      title: '',
+      description: '',
+      choices: [],
     };
 
     this.item.system.prompts.push(newPrompt);
@@ -155,6 +148,43 @@ export class FarhomeItemSheet extends ItemSheet {
     const promptIndex = itemPrompt.data('promptIndex');
 
     this.item.system.prompts.splice(promptIndex, 1);
+
+    this.item.update({ 'system.prompts': this.item.system.prompts });
+  }
+  
+  /**
+   * Handle addition of a choice.
+   * @param {Event} event The originating click event
+   * @private
+   */
+  async _onItemAddChoice(event) {
+    const itemPrompt = $(event.currentTarget).parents('.item-prompt');
+    const promptIndex = itemPrompt.data('promptIndex');
+    
+    const newChoice = 
+    {
+      name: '',
+      value: '',
+    };
+
+    this.item.system.prompts[promptIndex].choices.push(newChoice);
+
+    this.item.update({ 'system.prompts': this.item.system.prompts });
+  }
+  
+  /**
+   * Handle removal of a choice.
+   * @param {Event} event The originating click event
+   * @private
+   */
+  async _onItemRemoveChoice(event) {
+    const itemPrompt = $(event.currentTarget).parents('.item-prompt');
+    const promptIndex = itemPrompt.data('promptIndex');
+
+    const itemPromptChoice = $(event.currentTarget).parents('.item-prompt-choice');
+    const choiceIndex = itemPrompt.data('choiceIndex');
+
+    this.item.system.prompts[promptIndex].choices.splice(choiceIndex, 1);
 
     this.item.update({ 'system.prompts': this.item.system.prompts });
   }
