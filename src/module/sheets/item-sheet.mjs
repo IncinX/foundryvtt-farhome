@@ -122,6 +122,7 @@ export class FarhomeItemSheet extends ItemSheet {
     {
       title: '',
       description: '',
+      variable: '',
       choices: [],
     };
 

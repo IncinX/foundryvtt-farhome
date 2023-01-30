@@ -96,13 +96,80 @@ export class FarhomeItem extends Item {
 
   /**
    * Execute a clickable roll by evaluating it's template and creating the chat message.
-   * @param {Event} event   The originating click event
+   * @param {object} extraItemContext Additional context to be passed to the template evaluation.
    * @private
    */
   async _executeRoll(extraItemContext = {}) {
     if (this.actor === undefined) {
       console.log('No actor found for this item.');
     }
+
+    for (const prompt of this.system.prompts) {
+      const promptValue = await this._promptDialog(prompt);
+
+      extraItemContext[prompt.variable] = promptValue;
+    }
+
+    // #todo Handle prompts until complete and then complete roll.
+    // #todo Change the mana dialog prompt to use the asynchronous callback pattern similar to _spellLevelDialog (if it works)
+
+    await this._completeRoll(extraItemContext);
+  }
+
+  /**
+   * Create a prompt dialog to select customer user values.
+   * @param {object} prompt Prompt object with information about the title, description, variable and choices.
+   * @private
+   */
+  async _promptDialog(prompt) {
+    // #todo Consider using renderTemplate instead of embedded HTML here and everywhere else that does so.
+    let selectorUniqueId = `prompt-selector-${Math.random().toString(16).substring(2)}`;
+
+    let dialogContent = `<p>${this.system.description.value}</p>`;
+
+    dialogContent += `<p><select id="${selectorUniqueId}" style="width: 100%">`;
+
+    for (const choice of prompt.choices) {
+      dialogContent += `<option value="${choice.value}">${choice.name}</option>`;
+    }
+
+    dialogContent += '</select></p>';
+
+    let promptDialog = new Dialog({
+      title: prompt.title,
+      content: dialogContent,
+      buttons: {
+        confirm: {
+          icon: '<i class="fas fa-check"></i>',
+          label: 'Confirm',
+          callback: () => {
+            let selectedValue = parseInt(document.getElementById(selectorUniqueId).value);
+            console.log(`DEBUG: selectedValue = ${selectedValue}`);
+            return selectedValue;
+          },
+        },
+        cancel: {
+          icon: '<i class="fas fa-times"></i>',
+          label: 'Cancel',
+        },
+      },
+      default: 'confirm',
+    });
+
+    let promptReturn = await promptDialog.render(true);
+
+    console.log(`DEBUG: promptDialog = ${promptReturn}`)
+
+    return promptReturn;
+  }
+  
+  /**
+   * Completes a clickable roll by evaluating it's template and creating the chat message.
+   * @param {object} extraItemContext Additional context to be passed to the template evaluation.
+   * @private
+   */
+  async _completeRoll(extraItemContext = {}) {
+    // #todo Handle prompts until complete and then complete roll.
 
     // Add the extra item context which may have been queried by a user or inferred.
     var superItemContext = {

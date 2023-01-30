@@ -219,6 +219,7 @@
     "removeChoice": "Remove Choice",
     "title": "Title",
     "label": "Label",
-    "value": "Value"
+    "value": "Value",
+    "variable": "Variable"
   }
 }

@@ -2,6 +2,7 @@
   <li class="flexrow item-divider">
     <div class="header-prompt-title">{{localize 'farhome.title'}}</div>
     <div class="header-prompt-description">{{localize 'farhome.description'}}</div>
+    <div class="header-prompt-variable">{{localize 'farhome.variable'}}</div>
     <a class="item-add-prompt" title="{{localize 'farhome.addPrompt'}}"><i class="fas fa-plus" ></i> {{localize 'farhome.addPrompt'}}</a>
   </li>
   {{#each system.prompts as |prompt promptIndex|}}
@@ -19,6 +20,12 @@
           type="text"
           placeholder="{{localize 'farhome.description'}}"
           value="{{prompt.description}}"
+        />
+        <input
+          class="item-prompt-variable-input"
+          type="text"
+          placeholder="{{localize 'farhome.variable'}}"
+          value="{{prompt.variable}}"
         />
         <a class="item-remove-prompt" title="{{localize 'farhome.removePrompt'}}"><i class="fas fa-trash"></i></a>
       </div>
