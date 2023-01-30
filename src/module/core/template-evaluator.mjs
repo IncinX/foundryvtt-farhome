@@ -195,25 +195,20 @@ export async function evaluateTemplateChunk(templateChunk, actorContext, itemCon
   // #todo Technically the template code must call await for some of these functions, but it is working without that today
   //       Is that okay?
   const functionVariables = {
-    'fh': fh.bind(game.farhome.roller),
-    'skill': skill.bind(game.farhome.roller),
-    'formula': formula,
-    'success': success,
-    'crit': crit,
-    'wound': wound,
-    's': evaluatorSystemContext,
-    'a': evaluatorActorContext,
-    'i': evaluatorItemContext,
-    'help': help,
-  }
+    fh: fh.bind(game.farhome.roller),
+    skill: skill.bind(game.farhome.roller),
+    formula: formula,
+    success: success,
+    crit: crit,
+    wound: wound,
+    s: evaluatorSystemContext,
+    a: evaluatorActorContext,
+    i: evaluatorItemContext,
+    help: help,
+  };
 
-  const evaluationFunction = Function(
-    ...Object.keys(functionVariables),
-    'return ' + templateChunk + ';',
-  );
-  const evaluatedOutput = await evaluationFunction(
-    ...Object.values(functionVariables),
-  );
+  const evaluationFunction = Function(...Object.keys(functionVariables), 'return ' + templateChunk + ';');
+  const evaluatedOutput = await evaluationFunction(...Object.values(functionVariables));
 
   return evaluatedOutput;
 }
