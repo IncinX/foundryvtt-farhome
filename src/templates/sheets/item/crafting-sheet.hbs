@@ -11,6 +11,7 @@
   <nav class="sheet-tabs tabs" data-group="primary">
     <a class="item" data-tab="description">{{localize "farhome.description"}}</a>
     <a class="item" data-tab="attributes">{{localize "farhome.attributes"}}</a>
+    <a class="item" data-tab="prompts">{{localize "farhome.prompts"}}</a>
     <a class="item" data-tab="rollTemplate">{{localize "farhome.rollTemplate"}}</a>
   </nav>
 
@@ -37,6 +38,11 @@
         system.weight
         objectString="system.weight"}}
       </table>
+    </div>
+
+    {{!-- Prompts Tab --}}
+    <div class="tab" data-group="primary" data-tab="prompts">
+      {{>"systems/farhome/templates/partials/item/prompt-partial.hbs"}}
     </div>
 
     {{!-- Roll Template Tab --}}
