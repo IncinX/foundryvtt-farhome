@@ -192,31 +192,27 @@ export async function evaluateTemplateChunk(templateChunk, actorContext, itemCon
   help += '</ul>';
 
   // Evaluate the template chunk
-  // #todo How to define async function like this?
-  let evaluationFunction = Function(
-    'fh',
-    'skill',
-    'formula',
-    'success',
-    'crit',
-    'wound',
-    's',
-    'a',
-    'i',
-    'help',
+  // #todo Technically the template code must call await for some of these functions, but it is working without that today
+  //       Is that okay?
+  const functionVariables = {
+    'fh': fh.bind(game.farhome.roller),
+    'skill': skill.bind(game.farhome.roller),
+    'formula': formula,
+    'success': success,
+    'crit': crit,
+    'wound': wound,
+    's': evaluatorSystemContext,
+    'a': evaluatorActorContext,
+    'i': evaluatorItemContext,
+    'help': help,
+  }
+
+  const evaluationFunction = Function(
+    ...Object.keys(functionVariables),
     'return ' + templateChunk + ';',
   );
-  let evaluatedOutput = await evaluationFunction(
-    fh.bind(game.farhome.roller),
-    skill.bind(game.farhome.roller),
-    formula,
-    success,
-    crit,
-    wound,
-    evaluatorSystemContext,
-    evaluatorActorContext,
-    evaluatorItemContext,
-    help,
+  const evaluatedOutput = await evaluationFunction(
+    ...Object.values(functionVariables),
   );
 
   return evaluatedOutput;
