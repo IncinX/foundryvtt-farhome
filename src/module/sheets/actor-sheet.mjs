@@ -565,7 +565,42 @@ export class FarhomeActorSheet extends ActorSheet {
 
     const actorContext = this.actor.system;
 
-    const manaRefillValue = Math.max(Math.ceil(actorContext.level.value / 2), 1);
+    // RestType enumeration for dialog query and logic
+    const RestType = {
+      LongRest: 0,
+      ShortRest: 1,
+    };
+
+    const dialogContent = await renderTemplate('systems/farhome/templates/dialogs/mana-dialog.hbs');
+
+    const restType = await Dialog.wait({
+      title: 'Mana Recharge',
+      content: dialogContent,
+      buttons: {
+        shortRest: {
+          label: 'Short Rest',
+          callback: () => RestType.ShortRest,
+        },
+        longRest: {
+          label: 'Long Rest',
+          callback: () => RestType.LongRest,
+        },
+      },
+      default: 'shortRest',
+    });
+
+    let manaRefillValue = 0;
+    switch (restType) {
+      case RestType.LongRest:
+        manaRefillValue = 3 + actorContext.level.value;
+        break;
+      case RestType.ShortRest:
+        manaRefillValue = Math.max(Math.ceil(actorContext.level.value / 2), 1);
+        break;
+      default:
+        console.error(`Unknown rest type: ${restType}`);
+    }
+
     const newManaValue = Math.min(actorContext.features.mana.max, actorContext.features.mana.value + manaRefillValue);
 
     this.actor.update({ 'system.features.mana.value': newManaValue });
@@ -607,7 +642,7 @@ export function connectActorHooks() {
 }
 
 /**
- * Handle click message generated from the "Apply Healing" button in chat.
+ * Handle click message generated from the 'Apply Healing' button in chat.
  * @param {Event} event   The originating click event
  * @private
  */
