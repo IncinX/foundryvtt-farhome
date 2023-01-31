@@ -16,7 +16,7 @@ export class FarhomeActorSheet extends ActorSheet {
       width: 850,
       height: 800,
       minWidth: 850,
-      minHeight: 800,
+      minHeight: 600,
       tabs: [{ navSelector: '.sheet-tabs', contentSelector: '.sheet-body', initial: 'attributes' }],
     });
   }
