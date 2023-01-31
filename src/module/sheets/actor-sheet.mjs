@@ -2,6 +2,7 @@ import { getEffectData, getEffectHtml, onManageActiveEffect, prepareActiveEffect
 import { localizeObject } from '../core/localization';
 import { findMessageContentNode, sendActorMessage } from '../core/chat';
 import { sendChatRoll } from '../roller/roller';
+import { getByObjectPath } from '../core/object-util.mjs';
 
 // #todo Add Poison/Hex icons later
 
@@ -208,6 +209,10 @@ export class FarhomeActorSheet extends ActorSheet {
     // Everything below here is only needed if the sheet is editable
     if (!this.isEditable) return;
 
+    // Resource increment/decrement
+    html.find('.resource-increment').click(this._onResourceChange.bind(this, 1));
+    html.find('.resource-decrement').click(this._onResourceChange.bind(this, -1));
+
     // Add Inventory Item
     html.find('.item-create').click(this._onItemCreate.bind(this));
 
@@ -257,6 +262,24 @@ export class FarhomeActorSheet extends ActorSheet {
         li.addEventListener('dragstart', handler, false);
       });
     }
+  }
+
+  /**
+   * Handle incrementing and decrementing resource values (with optional max).
+   * @param {Event} event   The originating click event
+   * @param {number} delta  The amount to increment or decrement
+   * @private
+   */
+  async _onResourceChange(delta, event) {
+    event.preventDefault();
+    const resourceChangeDataElement = $(event.currentTarget).parent('.resource-change-data')[0];
+    const resourceValuePath = resourceChangeDataElement.dataset.valuePath;
+    const resourceMaxPath = resourceChangeDataElement.dataset.maxPath;
+    const newResourceValue = getByObjectPath(this.actor, resourceValuePath) + delta;
+    // #todo This update isn't working
+    // #todo Need to add logic to handle max path
+    // #todo Need to add parameters to hide/show +/- buttons
+    await this.actor.update({ resourceValuePath: newResourceValue });
   }
 
   /**
