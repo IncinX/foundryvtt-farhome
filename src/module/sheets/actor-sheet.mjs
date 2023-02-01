@@ -3,6 +3,7 @@ import { localizeObject } from '../core/localization';
 import { findMessageContentNode, sendActorMessage } from '../core/chat';
 import { sendChatRoll } from '../roller/roller';
 import { getByObjectPath } from '../core/object-util.mjs';
+import { clamp } from '../core/math.mjs';
 
 // #todo Add Poison/Hex icons later
 
@@ -272,14 +273,19 @@ export class FarhomeActorSheet extends ActorSheet {
    */
   async _onResourceChange(delta, event) {
     event.preventDefault();
+
     const resourceChangeDataElement = $(event.currentTarget).parent('.resource-change-data')[0];
     const resourceValuePath = resourceChangeDataElement.dataset.valuePath;
     const resourceMaxPath = resourceChangeDataElement.dataset.maxPath;
+
     const newResourceValue = getByObjectPath(this.actor, resourceValuePath) + delta;
-    // #todo This update isn't working
-    // #todo Need to add logic to handle max path
-    // #todo Need to add parameters to hide/show +/- buttons
-    await this.actor.update({ resourceValuePath: newResourceValue });
+    const minResourceValue = 0; // Universal minimum value, currently no resources should go below 0.
+    const maxResourceValue = resourceMaxPath !== undefined ? getByObjectPath(this.actor, resourceMaxPath) : 0;
+    const clampedResourceValue = clamp(newResourceValue, 0, Number.MAX_VALUE);
+
+    const dataUpdate = {};
+    dataUpdate[resourceValuePath] = clampedResourceValue;
+    await this.actor.update(dataUpdate);
   }
 
   /**
