@@ -280,8 +280,8 @@ export class FarhomeActorSheet extends ActorSheet {
 
     const newResourceValue = getByObjectPath(this.actor, resourceValuePath) + delta;
     const minResourceValue = 0; // Universal minimum value, currently no resources should go below 0.
-    const maxResourceValue = resourceMaxPath !== undefined ? getByObjectPath(this.actor, resourceMaxPath) : 0;
-    const clampedResourceValue = clamp(newResourceValue, 0, Number.MAX_VALUE);
+    const maxResourceValue = resourceMaxPath !== undefined ? getByObjectPath(this.actor, resourceMaxPath) : Number.MAX_VALUE;
+    const clampedResourceValue = clamp(newResourceValue, 0, maxResourceValue);
 
     const dataUpdate = {};
     dataUpdate[resourceValuePath] = clampedResourceValue;
