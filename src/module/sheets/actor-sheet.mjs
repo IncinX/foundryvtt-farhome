@@ -213,15 +213,21 @@ export class FarhomeActorSheet extends ActorSheet {
     // Resource increment/decrement
     html.find('.resource-increment').click(this._onResourceChange.bind(this, 1));
     html.find('.resource-decrement').click(this._onResourceChange.bind(this, -1));
+    
+    // Wound reset
+    html.find('.wounds-reset').click(this._onWoundsReset.bind(this));
 
-    // Mana refill
-    html.find('.mana-refill').click(this._onManaRefill.bind(this));
+    // Temporary wound reset
+    html.find('.temp-wounds-reset').click(this._onTempWoundsReset.bind(this));
 
     // AP recharge
     html.find('.ap-recharge').click(this._onApRecharge.bind(this));
 
     // Healing surges
     html.find('.healing-surge').click(this._onHealingSurge.bind(this));
+    
+    // Mana refill
+    html.find('.mana-refill').click(this._onManaRefill.bind(this));
 
     // Add Inventory Item
     html.find('.item-create').click(this._onItemCreate.bind(this));
@@ -606,6 +612,25 @@ export class FarhomeActorSheet extends ActorSheet {
     await sendActorMessage(
       `<strong>${this.actor.name}</strong> restored ${newManaValue - actorContext.features.mana.value} mana.`,
     );
+  }
+
+  /**
+   * Handle Wound reset clicks.
+   * @param {Event} event The originating click event
+   */
+  async _onWoundsReset(event) {
+    event.preventDefault();
+
+    this.actor.update({ 'system.features.wounds.value': this.actor.system.features.wounds.max });
+  }
+  /**
+   * Handle Temporary Wound reset clicks.
+   * @param {Event} event The originating click event
+   */
+  async _onTempWoundsReset(event) {
+    event.preventDefault();
+
+    this.actor.update({ 'system.features.tempWounds.value': 0 });
   }
 
   /**

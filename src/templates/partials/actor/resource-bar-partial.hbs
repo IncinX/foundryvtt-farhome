@@ -2,11 +2,11 @@
 
   <!-- Hero Dice -->
   {{>
-  "systems/farhome/templates/partials/max-resource-partial.hbs"
+  "systems/farhome/templates/partials/resource-partial.hbs"
   system.features.hero
   objectString="system.features.hero"
-  separatorString=" / "
-  extraLabelClasses=""}}
+  extraLabelClasses=""
+  labelTitle=""}}
   
   <!-- Wounds -->
   {{>
@@ -14,21 +14,24 @@
   system.features.wounds
   objectString="system.features.wounds"
   separatorString=" / "
-  extraLabelClasses=""}}
+  extraLabelClasses="wounds-reset resource-clickable"
+  labelTitle="Reset wounds to maximum"}}
   
   <!-- Temp Wounds -->
   {{>
   "systems/farhome/templates/partials/resource-partial.hbs"
   system.features.tempWounds
   objectString="system.features.tempWounds"
-  extraLabelClasses=""}}
+  extraLabelClasses="temp-wounds-reset resource-clickable"
+  labelTitle="Reset temporary wounds to zero"}}
   
   <!-- Healing Surges -->
   {{>
-  "systems/farhome/templates/partials/resource-partial.hbs"
+  "systems/farhome/templates/partials/max-resource-partial.hbs"
   system.features.healingSurges
   objectString="system.features.healingSurges"
-  extraLabelClasses="healing-surge resource-clickable"}}
+  extraLabelClasses="healing-surge resource-clickable"
+  labelTitle="Generate a healing surge message that will roll wounds, allow re-rolls, and allow healing"}}
   
   <!-- AP -->
   {{>
@@ -36,14 +39,16 @@
   system.features.ap
   objectString="system.features.ap"
   separatorString=" / "
-  extraLabelClasses="ap-recharge resource-clickable"}}
+  extraLabelClasses="ap-recharge resource-clickable"
+  labelTitle="Reset AP to maximum"}}
   
   <!-- Spell Power -->
   {{>
   "systems/farhome/templates/partials/resource-partial.hbs"
   system.features.spellPower
   objectString="system.features.spellPower"
-  extraLabelClasses=""}}
+  extraLabelClasses=""
+  labelTitle=""}}
 
   <!-- Mana -->
   {{>
@@ -51,7 +56,8 @@
   system.features.mana
   objectString="system.features.mana"
   separatorString=" / "
-  extraLabelClasses="mana-refill resource-clickable"}}
+  extraLabelClasses="mana-refill resource-clickable"
+  labelTitle="Brings up a dialog to choose short rest or long rest and refill mana accordingly"}}
   
   <!-- Movement -->
   <div class="resource-box flex-group-center">
