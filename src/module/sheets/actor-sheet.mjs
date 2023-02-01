@@ -2,6 +2,8 @@ import { getEffectData, getEffectHtml, onManageActiveEffect, prepareActiveEffect
 import { localizeObject } from '../core/localization';
 import { findMessageContentNode, sendActorMessage } from '../core/chat';
 import { sendChatRoll } from '../roller/roller';
+import { getByObjectPath } from '../core/object-util.mjs';
+import { clamp } from '../core/math.mjs';
 
 // #todo Add Poison/Hex icons later
 
@@ -16,7 +18,7 @@ export class FarhomeActorSheet extends ActorSheet {
       width: 850,
       height: 800,
       minWidth: 850,
-      minHeight: 800,
+      minHeight: 600,
       tabs: [{ navSelector: '.sheet-tabs', contentSelector: '.sheet-body', initial: 'attributes' }],
     });
   }
@@ -208,6 +210,25 @@ export class FarhomeActorSheet extends ActorSheet {
     // Everything below here is only needed if the sheet is editable
     if (!this.isEditable) return;
 
+    // Resource increment/decrement
+    html.find('.resource-increment').click(this._onResourceChange.bind(this, 1));
+    html.find('.resource-decrement').click(this._onResourceChange.bind(this, -1));
+
+    // Wound reset
+    html.find('.wounds-reset').click(this._onWoundsReset.bind(this));
+
+    // Temporary wound reset
+    html.find('.temp-wounds-reset').click(this._onTempWoundsReset.bind(this));
+
+    // AP recharge
+    html.find('.ap-recharge').click(this._onApRecharge.bind(this));
+
+    // Healing surges
+    html.find('.healing-surge').click(this._onHealingSurge.bind(this));
+
+    // Mana refill
+    html.find('.mana-refill').click(this._onManaRefill.bind(this));
+
     // Add Inventory Item
     html.find('.item-create').click(this._onItemCreate.bind(this));
 
@@ -238,12 +259,6 @@ export class FarhomeActorSheet extends ActorSheet {
     // Rollable abilities.
     html.find('.rollable').click(this._onRoll.bind(this));
 
-    // Mana refill
-    html.find('.mana-refill').click(this._onManaRefill.bind(this));
-
-    // Healing surges
-    html.find('.healing-surge').click(this._onHealingSurge.bind(this));
-
     // Drag events for macros.
     if (this.actor.isOwner) {
       let handler = (ev) => this._onDragStart(ev);
@@ -257,6 +272,30 @@ export class FarhomeActorSheet extends ActorSheet {
         li.addEventListener('dragstart', handler, false);
       });
     }
+  }
+
+  /**
+   * Handle incrementing and decrementing resource values (with optional max).
+   * @param {Event} event   The originating click event
+   * @param {number} delta  The amount to increment or decrement
+   * @private
+   */
+  async _onResourceChange(delta, event) {
+    event.preventDefault();
+
+    const resourceChangeDataElement = $(event.currentTarget).parent('.resource-change-data')[0];
+    const resourceValuePath = resourceChangeDataElement.dataset.valuePath;
+    const resourceMaxPath = resourceChangeDataElement.dataset.maxPath;
+
+    const newResourceValue = getByObjectPath(this.actor, resourceValuePath) + delta;
+    const minResourceValue = 0; // Universal minimum value, currently no resources should go below 0.
+    const maxResourceValue =
+      resourceMaxPath !== undefined ? getByObjectPath(this.actor, resourceMaxPath) : Number.MAX_VALUE;
+    const clampedResourceValue = clamp(newResourceValue, 0, maxResourceValue);
+
+    const dataUpdate = {};
+    dataUpdate[resourceValuePath] = clampedResourceValue;
+    await this.actor.update(dataUpdate);
   }
 
   /**
@@ -565,7 +604,42 @@ export class FarhomeActorSheet extends ActorSheet {
 
     const actorContext = this.actor.system;
 
-    const manaRefillValue = Math.max(Math.ceil(actorContext.level.value / 2), 1);
+    // RestType enumeration for dialog query and logic
+    const RestType = {
+      LongRest: 0,
+      ShortRest: 1,
+    };
+
+    const dialogContent = await renderTemplate('systems/farhome/templates/dialogs/mana-dialog.hbs');
+
+    const restType = await Dialog.wait({
+      title: 'Mana Recharge',
+      content: dialogContent,
+      buttons: {
+        shortRest: {
+          label: 'Short Rest',
+          callback: () => RestType.ShortRest,
+        },
+        longRest: {
+          label: 'Long Rest',
+          callback: () => RestType.LongRest,
+        },
+      },
+      default: 'shortRest',
+    });
+
+    let manaRefillValue = 0;
+    switch (restType) {
+      case RestType.LongRest:
+        manaRefillValue = 3 + actorContext.level.value;
+        break;
+      case RestType.ShortRest:
+        manaRefillValue = Math.max(Math.ceil(actorContext.level.value / 2), 1);
+        break;
+      default:
+        console.error(`Unknown rest type: ${restType}`);
+    }
+
     const newManaValue = Math.min(actorContext.features.mana.max, actorContext.features.mana.value + manaRefillValue);
 
     this.actor.update({ 'system.features.mana.value': newManaValue });
@@ -573,6 +647,35 @@ export class FarhomeActorSheet extends ActorSheet {
     await sendActorMessage(
       `<strong>${this.actor.name}</strong> restored ${newManaValue - actorContext.features.mana.value} mana.`,
     );
+  }
+
+  /**
+   * Handle Wound reset clicks.
+   * @param {Event} event The originating click event
+   */
+  async _onWoundsReset(event) {
+    event.preventDefault();
+
+    this.actor.update({ 'system.features.wounds.value': this.actor.system.features.wounds.max });
+  }
+  /**
+   * Handle Temporary Wound reset clicks.
+   * @param {Event} event The originating click event
+   */
+  async _onTempWoundsReset(event) {
+    event.preventDefault();
+
+    this.actor.update({ 'system.features.tempWounds.value': 0 });
+  }
+
+  /**
+   * Handle AP recharge clicks.
+   * @param {Event} event The originating click event
+   */
+  async _onApRecharge(event) {
+    event.preventDefault();
+
+    this.actor.update({ 'system.features.ap.value': this.actor.system.features.ap.max });
   }
 
   /**
@@ -607,7 +710,7 @@ export function connectActorHooks() {
 }
 
 /**
- * Handle click message generated from the "Apply Healing" button in chat.
+ * Handle click message generated from the 'Apply Healing' button in chat.
  * @param {Event} event   The originating click event
  * @private
  */

@@ -2,56 +2,67 @@
 
   <!-- Hero Dice -->
   {{>
-  "systems/farhome/templates/partials/max-resource-partial.hbs"
+  "systems/farhome/templates/partials/resource-partial.hbs"
   system.features.hero
   objectString="system.features.hero"
-  separatorString=" / "}}
+  extraLabelClasses=""
+  labelTitle=""}}
   
   <!-- Wounds -->
   {{>
   "systems/farhome/templates/partials/max-resource-partial.hbs"
   system.features.wounds
   objectString="system.features.wounds"
-  separatorString=" / "}}
+  separatorString=" / "
+  extraLabelClasses="wounds-reset resource-clickable"
+  labelTitle="Reset wounds to maximum"
+  extraMaxInputAttributes=""}}
   
   <!-- Temp Wounds -->
   {{>
   "systems/farhome/templates/partials/resource-partial.hbs"
   system.features.tempWounds
-  objectString="system.features.tempWounds"}}
+  objectString="system.features.tempWounds"
+  extraLabelClasses="temp-wounds-reset resource-clickable"
+  labelTitle="Reset temporary wounds to zero"}}
   
   <!-- Healing Surges -->
-  <div class="resource-box flex-group-center">
-    <div class="resource-content flexrow flex-center flex-between">
-      <input type="text" name="system.features.healingSurges.value" value="{{system.features.healingSurges.value}}" data-dtype="Number"/>
-      <span> / </span>
-      <input type="text" name="system.features.healingSurges.max" value="{{system.features.healingSurges.max}}" data-dtype="Number"/>
-    </div>
-    <label for="system.features.healingSurges.value" class="resource-label healing-surge">{{system.features.healingSurges.label}}</label>
-  </div>
+  {{>
+  "systems/farhome/templates/partials/max-resource-partial.hbs"
+  system.features.healingSurges
+  objectString="system.features.healingSurges"
+  separatorString=" / "
+  extraLabelClasses="healing-surge resource-clickable"
+  labelTitle="Generate a healing surge message that will roll wounds, allow re-rolls, and allow healing"
+  extraMaxInputAttributes=""}}
   
   <!-- AP -->
   {{>
   "systems/farhome/templates/partials/max-resource-partial.hbs"
   system.features.ap
   objectString="system.features.ap"
-  separatorString=" / "}}
+  separatorString=" / "
+  extraLabelClasses="ap-recharge resource-clickable"
+  labelTitle="Reset AP to maximum"
+  extraMaxInputAttributes=""}}
   
   <!-- Spell Power -->
   {{>
   "systems/farhome/templates/partials/resource-partial.hbs"
   system.features.spellPower
-  objectString="system.features.spellPower"}}
+  objectString="system.features.spellPower"
+  extraLabelClasses=""
+  labelTitle=""}}
 
   <!-- Mana -->
-  <div class="resource-box flex-group-center">
-    <div class="resource-content flexrow flex-center flex-between">
-      <input type="text" name="system.features.mana.value" value="{{system.features.mana.value}}" data-dtype="Number"/>
-      <span> / </span>
-      <input type="text" name="system.features.mana.max" value="{{system.features.mana.max}}" data-dtype="Number" disabled/>
-    </div>
-    <label for="system.features.mana.value" class="resource-label mana-refill">{{system.features.mana.label}}</label>
-  </div>
+  {{>
+  "systems/farhome/templates/partials/max-resource-partial.hbs"
+  system.features.mana
+  objectString="system.features.mana"
+  separatorString=" / "
+  extraLabelClasses="mana-refill resource-clickable"
+  labelTitle="Brings up a dialog to choose short rest or long rest and refill mana accordingly"
+  extraMaxInputAttributes="disabled"}}
   
   <!-- Movement -->
   <div class="resource-box flex-group-center">
