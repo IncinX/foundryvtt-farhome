@@ -214,6 +214,15 @@ export class FarhomeActorSheet extends ActorSheet {
     html.find('.resource-increment').click(this._onResourceChange.bind(this, 1));
     html.find('.resource-decrement').click(this._onResourceChange.bind(this, -1));
 
+    // Mana refill
+    html.find('.mana-refill').click(this._onManaRefill.bind(this));
+
+    // AP recharge
+    html.find('.ap-recharge').click(this._onApRecharge.bind(this));
+
+    // Healing surges
+    html.find('.healing-surge').click(this._onHealingSurge.bind(this));
+
     // Add Inventory Item
     html.find('.item-create').click(this._onItemCreate.bind(this));
 
@@ -243,12 +252,6 @@ export class FarhomeActorSheet extends ActorSheet {
 
     // Rollable abilities.
     html.find('.rollable').click(this._onRoll.bind(this));
-
-    // Mana refill
-    html.find('.mana-refill').click(this._onManaRefill.bind(this));
-
-    // Healing surges
-    html.find('.healing-surge').click(this._onHealingSurge.bind(this));
 
     // Drag events for macros.
     if (this.actor.isOwner) {
@@ -280,7 +283,8 @@ export class FarhomeActorSheet extends ActorSheet {
 
     const newResourceValue = getByObjectPath(this.actor, resourceValuePath) + delta;
     const minResourceValue = 0; // Universal minimum value, currently no resources should go below 0.
-    const maxResourceValue = resourceMaxPath !== undefined ? getByObjectPath(this.actor, resourceMaxPath) : Number.MAX_VALUE;
+    const maxResourceValue =
+      resourceMaxPath !== undefined ? getByObjectPath(this.actor, resourceMaxPath) : Number.MAX_VALUE;
     const clampedResourceValue = clamp(newResourceValue, 0, maxResourceValue);
 
     const dataUpdate = {};
@@ -602,6 +606,16 @@ export class FarhomeActorSheet extends ActorSheet {
     await sendActorMessage(
       `<strong>${this.actor.name}</strong> restored ${newManaValue - actorContext.features.mana.value} mana.`,
     );
+  }
+
+  /**
+   * Handle AP recharge clicks.
+   * @param {Event} event The originating click event
+   */
+  async _onApRecharge(event) {
+    event.preventDefault();
+
+    this.actor.update({ 'system.features.ap.value': this.actor.system.features.ap.max });
   }
 
   /**
