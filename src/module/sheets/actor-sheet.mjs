@@ -213,7 +213,7 @@ export class FarhomeActorSheet extends ActorSheet {
     // Resource increment/decrement
     html.find('.resource-increment').click(this._onResourceChange.bind(this, 1));
     html.find('.resource-decrement').click(this._onResourceChange.bind(this, -1));
-    
+
     // Wound reset
     html.find('.wounds-reset').click(this._onWoundsReset.bind(this));
 
@@ -225,7 +225,7 @@ export class FarhomeActorSheet extends ActorSheet {
 
     // Healing surges
     html.find('.healing-surge').click(this._onHealingSurge.bind(this));
-    
+
     // Mana refill
     html.find('.mana-refill').click(this._onManaRefill.bind(this));
 
