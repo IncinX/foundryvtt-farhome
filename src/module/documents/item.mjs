@@ -38,6 +38,7 @@ export class FarhomeItem extends Item {
    */
   async roll() {
     let extraItemContext = {};
+    let promptContext = {};
 
     if (this.type === 'spell') {
       // Add spell dialog context to the extra item context.
@@ -49,10 +50,10 @@ export class FarhomeItem extends Item {
     for (const prompt of this.system.prompts) {
       const promptValue = await this._promptDialog(prompt);
 
-      extraItemContext[prompt.variable] = promptValue;
+      promptContext[prompt.variable] = promptValue;
     }
 
-    await this._executeRoll(extraItemContext);
+    await this._executeRoll(extraItemContext, promptContext);
   }
 
   /**
@@ -155,7 +156,7 @@ export class FarhomeItem extends Item {
    * @param {object} extraItemContext Additional context to be passed to the template evaluation.
    * @private
    */
-  async _executeRoll(extraItemContext = {}) {
+  async _executeRoll(extraItemContext = {}, promptContext = {}) {
     if (this.actor === undefined) {
       console.log('No actor found for this item.');
     }
@@ -167,7 +168,12 @@ export class FarhomeItem extends Item {
     };
 
     // Evaluate the farhome template text with the given actor and item context.
-    const evaluatedRollHtml = await evaluateRollTemplate(this.system.rollTemplate.value, this.actor, superItemContext);
+    const evaluatedRollHtml = await evaluateRollTemplate(
+      this.system.rollTemplate.value,
+      this.actor,
+      superItemContext,
+      promptContext,
+    );
 
     // Evaluate the active effects for the character (ie/ hex, poison, etc)
     const activeEffectData = getEffectData(this.actor);

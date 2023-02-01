@@ -9,9 +9,10 @@ import { proficiencyRollFormula, proficiencyRoll } from './roll';
  * @param {String} templateString A string containing HTML with embedded template expressions.
  * @param {Object} actorContext Reference to a FarhomeActor embedded data object.
  * @param {Object} itemContext Reference to a FarhomeItem embedded data object.
+ * @param {Object} promptContext Reference to an object with user supplied prompt variables.
  * @returns String of HTML with the template expressions evaluates from the original templateString.
  */
-export async function evaluateTemplate(templateString, actorContext, itemContext) {
+export async function evaluateTemplate(templateString, actorContext, itemContext, promptContext = {}) {
   let evaluatedString = templateString;
 
   // Get a list of matches
@@ -24,7 +25,12 @@ export async function evaluateTemplate(templateString, actorContext, itemContext
       // Strip the first two and last two characters (which represent [[]] based on the regular expression.)
       let strippedRollChunk = templateChunk.substring(2, templateChunk.length - 2);
 
-      let rollChunkReplacement = await evaluateTemplateChunk(strippedRollChunk, actorContext, itemContext);
+      let rollChunkReplacement = await evaluateTemplateChunk(
+        strippedRollChunk,
+        actorContext,
+        itemContext,
+        promptContext,
+      );
 
       evaluatedString = evaluatedString.replace(templateChunk, rollChunkReplacement);
     }
@@ -45,7 +51,7 @@ export async function evaluateTemplate(templateString, actorContext, itemContext
  * @param {Object} itemContext Reference to a FarhomeItem embedded data object.
  * @returns String of HTML with the evaluated template expression.
  */
-export async function evaluateTemplateChunk(templateChunk, actorContext, itemContext) {
+export async function evaluateTemplateChunk(templateChunk, actorContext, itemContext, promptContext) {
   // #todo This should be made into an object that pre-evaluates the help text and system function binds, etc.
 
   let evaluatorSystemContext = {
@@ -169,6 +175,7 @@ export async function evaluateTemplateChunk(templateChunk, actorContext, itemCon
   help += '<li>s -- System helper function context (see below).</li><br/>';
   help += '<li>a -- Actor data context (see below).</li><br/>';
   help += '<li>i -- Item data context (see below).</li><br/>';
+  help += '<li>p -- Prompt data context (see below).</li><br/>';
 
   help += '</ul>';
 
@@ -191,6 +198,14 @@ export async function evaluateTemplateChunk(templateChunk, actorContext, itemCon
   }
   help += '</ul>';
 
+  // #todo This is pretty repetitive with the above and could use a helper function.
+  help += '<b>p (prompt context):</b><br/>';
+  help += '<ul>';
+  for (const [key, value] of Object.entries(promptContext)) {
+    help += `<li>${key}</li><br/>`;
+  }
+  help += '</ul>';
+
   // Evaluate the template chunk
   // #todo Technically the template code must call await for some of these functions, but it is working without that today
   //       Is that okay?
@@ -204,6 +219,7 @@ export async function evaluateTemplateChunk(templateChunk, actorContext, itemCon
     s: evaluatorSystemContext,
     a: evaluatorActorContext,
     i: evaluatorItemContext,
+    p: promptContext,
     help: help,
   };
 
