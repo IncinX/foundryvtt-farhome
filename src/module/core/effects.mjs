@@ -33,6 +33,8 @@ export function getEffectData(actorContext) {
   let effectsData = {
     hex: 0,
     poison: 0,
+    blind: 0,
+    exhaustion: 0,
   };
 
   for (const effect of actorContext.effects) {
@@ -44,6 +46,8 @@ export function getEffectData(actorContext) {
       effectsData.poison += parseInt(effectStatusId.split('-')[1]);
     } else if (effectStatusId.startsWith('blind')) {
       effectsData.blind = 1;
+    } else if (effectStatusId.startsWith('exhaustion')) {
+      effectsData.exhaustion += parseInt(effectStatusId.split('-')[1]);
     }
   }
 
