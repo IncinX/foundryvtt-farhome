@@ -166,6 +166,10 @@ export async function evaluateTemplateChunk(templateChunk, actorContext, itemCon
     '<li>skill(proficiency, attribute) -- Performs a skill roll with the given proficiency and attribute.</li><br/>';
   help +=
     '<li>formula(proficiency, attribute) -- Gets the roll formula with the given proficiency and attribute.</li><br/>';
+  help += '<li>ap(apCost) -- Presents a Spend AP button for the apCost provided.</li><br/>';
+  help += '<li>success(successCount) -- Adds additional successes to the roll summary.</li><br/>';
+  help += '<li>crit(critCount) -- Adds additional crits to the roll summary.</li><br/>';
+  help += '<li>wound(woundCount) -- Adds additional wounds to the roll summary.</li><br/>';
   help += '<li>s -- System helper function context (see below).</li><br/>';
   help += '<li>a -- Actor data context (see below).</li><br/>';
   help += '<li>i -- Item data context (see below).</li><br/>';
@@ -197,6 +201,7 @@ export async function evaluateTemplateChunk(templateChunk, actorContext, itemCon
     'fh',
     'skill',
     'formula',
+    'ap',
     'success',
     'crit',
     'wound',
@@ -210,6 +215,7 @@ export async function evaluateTemplateChunk(templateChunk, actorContext, itemCon
     fh.bind(game.farhome.roller),
     skill.bind(game.farhome.roller),
     formula,
+    ap,
     success,
     crit,
     wound,
@@ -256,6 +262,15 @@ async function skill(proficiency, attribute) {
  */
 function formula(proficiency, attribute) {
   return proficiencyRollFormula(proficiency, attribute);
+}
+
+/**
+ * Creates an embedded HTML string to indicate an AP cost for the "Spend AP" button.
+ * @param {number} apCost The AP to spend witht he "Spend AP" button.
+ * @returns Embedded HTML string with the given ap cost.
+ */
+function ap(apCost) {
+  return `<div class='fh-ap' data-ap='${apCost}'></div>`;
 }
 
 /**
