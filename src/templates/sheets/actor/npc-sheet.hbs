@@ -39,6 +39,7 @@
   {{!-- Sheet Tab Navigation --}}
   <nav class="sheet-tabs tabs" data-group="primary">
     <a class="item" data-tab="attributes">{{localize 'farhome.attributes'}}</a>
+    <a class="item" data-tab="effects">{{localize 'farhome.effects'}}</a>
     <a class="item" data-tab="feats">{{localize 'farhome.feats'}}</a>
     <a class="item" data-tab="maneuvers">{{localize 'farhome.maneuvers'}}</a>
     <a class="item" data-tab="spells">{{localize 'farhome.spells'}}</a>
@@ -51,6 +52,9 @@
   <section class="sheet-body">
     {{!-- Attributes Tab --}}
     {{>"systems/farhome/templates/partials/actor/attributes-partial.hbs"}}
+    
+    {{!-- Effects Tab --}}
+    {{>"systems/farhome/templates/partials/actor/effects-partial.hbs"}}
 
     {{!-- Feats Tab --}}
     {{>"systems/farhome/templates/partials/actor/feats-partial.hbs"}}

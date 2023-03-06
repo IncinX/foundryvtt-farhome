@@ -1,7 +1,7 @@
 <ul>
-    <li>Successes: {{successes}}</li>
-    <li>Criticals: {{crits}}</li>
-    {{#if wounds}}
-    <li>Wounds: {{wounds}}</li>
-    {{/if}}
+  <li>Successes: {{rollSummaryData.successes}} {{#if effectModifierData.exhaustion}}(-{{effectModifierData.exhaustion}} from exhaustion){{/if}}</li>
+  <li>Criticals: {{rollSummaryData.crits}}</li>
+  {{#if rollSummaryData.wounds}}
+  <li>Wounds: {{rollSummaryData.wounds}}</li>
+  {{/if}}
 </ul>
