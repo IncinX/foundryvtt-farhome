@@ -237,7 +237,7 @@ export class FarhomeActorSheet extends ActorSheet {
 
     // Delete Inventory Item
     html.find('.item-delete').click(this._onItemDelete.bind(this));
-    
+
     // Delete Effect
     html.find('.effect-delete').click(this._onEffectDelete.bind(this));
 
@@ -459,7 +459,7 @@ export class FarhomeActorSheet extends ActorSheet {
 
     confirmationDialog.render(true);
   }
-  
+
   /**
    * Handle deleting an effect
    * @param {Event} event   The originating click event
