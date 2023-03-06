@@ -33,6 +33,7 @@ export function getEffectData(actorContext) {
   let effectsData = {
     hex: 0,
     poison: 0,
+    blind: 0,
   };
 
   for (const effect of actorContext.effects) {
