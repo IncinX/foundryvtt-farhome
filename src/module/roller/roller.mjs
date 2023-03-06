@@ -170,20 +170,26 @@ export function _getRollSummaryData(rollHtml) {
     // Compute the roll modifiers
     let rollModifiersData = {
       containsRollData: containsRollData,
+      ap: 0,
       successes: initialRollSummaryData.successes,
       crits: initialRollSummaryData.crits,
       wounds: initialRollSummaryData.wounds,
     };
 
-    fhRollQuery.find('.fh-successes').each((_index, element) => {
+    fhRollQuery.siblings('div[class=".fh-ap"]').each((_index, element) => {
+      console.log(element);
+      rollModifiersData.ap = parseInt(element.dataset.ap);
+    });
+
+    fhRollQuery.siblings('.fh-successes').each((_index, element) => {
       rollModifiersData.successes += parseInt(element.dataset.successes);
     });
 
-    fhRollQuery.find('.fh-crits').each((_index, element) => {
+    fhRollQuery.siblings('.fh-crits').each((_index, element) => {
       rollModifiersData.crits += parseInt(element.dataset.crits);
     });
 
-    fhRollQuery.find('.fh-wounds').each((_index, element) => {
+    fhRollQuery.siblings('.fh-wounds').each((_index, element) => {
       rollModifiersData.wounds += parseInt(element.dataset.wounds);
     });
 
@@ -313,8 +319,7 @@ export async function sendChatLabelFormula(label, formula, activeEffectsHtml = '
 export async function sendChatRoll(
   evaluatedRollHtml,
   activeEffectsHtml = '',
-  manaData = undefined,
-  healingSurgeData = undefined,
+  extraRollData = { manaData: undefined, apData: undefined, healingSurgeData: undefined },
 ) {
   // Get the active effects that apply to the roll
   const effectSummaryData = _getEffectSummaryData(activeEffectsHtml);
@@ -395,8 +400,9 @@ export async function sendChatRoll(
     blindRollHtml: blindRollHtml,
     rollSummaryData: rollSummaryData,
     rollSummaryHtml: rollSummaryHtml,
-    manaData: manaData,
-    healingSurgeData: healingSurgeData,
+    manaData: extraRollData.manaData,
+    apData: extraRollData.apData,
+    healingSurgeData: extraRollData.healingSurgeData,
   });
 
   // Send the evaluatedTemplate to chat.

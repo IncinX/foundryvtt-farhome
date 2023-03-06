@@ -593,7 +593,11 @@ export class FarhomeActorSheet extends ActorSheet {
       };
 
       // #todo This would be cleaner if sendChatRoll used named arguments or had a named argument object.
-      await sendChatRoll(healingSurgeMessageHtml, '', undefined, healingSurgeData);
+      await sendChatRoll(healingSurgeMessageHtml, '', {
+        manaData: undefined,
+        apData: undefined,
+        helingSurgeData: healingSurgeData,
+      });
     } else {
       await sendActorMessage(`${this.actor.name} has no healing surges left to spend.`);
     }
