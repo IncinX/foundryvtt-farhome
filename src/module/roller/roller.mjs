@@ -353,10 +353,13 @@ export async function sendChatRoll(
       rollSummaryData.successes += blindRollSummaryData.successes;
       rollSummaryData.crits += blindRollSummaryData.crits;
     }
-  }
 
-  // Apply roll summary effects (like exhaustion)
-  _applyRollSummaryEffects(rollSummaryData, effectSummaryData);
+    // Apply roll summary effects (like exhaustion)
+    _applyRollSummaryEffects(rollSummaryData, effectSummaryData);
+  } else {
+    // If it is an armor roll, then exhaustion doesn't apply so clear it so that it doesn't show up in the summary.
+    effectSummaryData.exhaustion = 0;
+  }
 
   //
   // Compute the final roll summary HTML
