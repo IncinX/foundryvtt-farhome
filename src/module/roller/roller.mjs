@@ -109,7 +109,7 @@ async function _handleReroll(event) {
   }
 
   // Need to re-compute the summary and re-post under the fh-roll-summary class
-  const newRollSummaryData = _getRollSummaryData(messageQuery);
+  const newRollSummaryData = _getRollSummaryData(messageQuery.html());
 
   // Apply the roll summary effects (like exhaustion)
   _applyRollSummaryEffects(newRollSummaryData, effectSummaryData);
@@ -150,12 +150,13 @@ function _parseRoll(input) {
  */
 export function _getRollSummaryData(rollHtml) {
   try {
-    const fhRollQuery = $(rollHtml);
+    const fhRollDOM = new DOMParser().parseFromString(rollHtml, 'text/html');
 
     let rolls = [];
     let containsRollData = false;
 
-    fhRollQuery.find('input').each((_index, element) => {
+    // #todo This is broken during re-rolls with the new DOMParser method.
+    fhRollDOM.querySelectorAll('input').forEach((element) => {
       containsRollData = true;
 
       // The roll counts if it is enabled or if it is a hexed reroll die (which counts but is also disabled from being re-rolled).
@@ -176,20 +177,20 @@ export function _getRollSummaryData(rollHtml) {
       wounds: initialRollSummaryData.wounds,
     };
 
-    fhRollQuery.siblings('div[class=".fh-ap"]').each((_index, element) => {
-      console.log(element);
-      rollModifiersData.ap = parseInt(element.dataset.ap);
-    });
+    const apElement = fhRollDOM.querySelector('.fh-ap');
+    if (apElement) {
+      rollModifiersData.ap = parseInt(apElement.dataset.ap);
+    }
 
-    fhRollQuery.siblings('.fh-successes').each((_index, element) => {
+    fhRollDOM.querySelectorAll('.fh-successes').forEach((element) => {
       rollModifiersData.successes += parseInt(element.dataset.successes);
     });
 
-    fhRollQuery.siblings('.fh-crits').each((_index, element) => {
+    fhRollDOM.querySelectorAll('.fh-crits').forEach((element) => {
       rollModifiersData.crits += parseInt(element.dataset.crits);
     });
 
-    fhRollQuery.siblings('.fh-wounds').each((_index, element) => {
+    fhRollDOM.querySelectorAll('.fh-wounds').forEach((element) => {
       rollModifiersData.wounds += parseInt(element.dataset.wounds);
     });
 

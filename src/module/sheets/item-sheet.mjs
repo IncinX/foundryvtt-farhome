@@ -136,6 +136,7 @@ async function _handleManaSpend(event) {
   actor.update({ 'system.features.mana.value': actor.system.features.mana.value - manaCost });
 
   // Send the confirmation message to the chat
+  // #todo This should be a localized string.
   sendActorMessage(`<b>${actor.name}</b> spent ${manaCost} mana.`);
 }
 
@@ -168,5 +169,6 @@ async function _handleAPSpend(event) {
   actor.update({ 'system.features.ap.value': actor.system.features.ap.value - apCost });
 
   // Send the confirmation message to the chat
-  sendActorMessage(`<b>${actor.name}</b> spent ${apCost} AP.`);
+  // #todo This should be a localized string.
+  sendActorMessage(`<b>${actor.name}</b> spent ${apCost} ap.`);
 }
