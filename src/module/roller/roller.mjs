@@ -62,7 +62,7 @@ function _rollerChatMessageHandler(_chatLog, messageText, _data) {
 async function _handleReroll(event) {
   event.preventDefault();
 
-  // #todo This is all super broken right now, fix it up!
+  // #todo Change this to use DOMParser instead of JQuery
 
   const button = event.target;
   const originalMessageElement = findMessageContentNode(button);
@@ -211,7 +211,7 @@ export function _getRollSummaryData(rollHtml) {
  * @return {Object} Effect summary data containing hexes, poisons, etc.
  */
 export function _getEffectSummaryData(effectHtml) {
-  const fhEffectQuery = $(effectHtml);
+  const fhEffectDOM = new DOMParser().parseFromString(effectHtml, 'text/html');
 
   // #todo Should modify all this stuff so that the effect values are dataset elements on fh-active effects
 
@@ -223,19 +223,19 @@ export function _getEffectSummaryData(effectHtml) {
     exhaustion: 0,
   };
 
-  fhEffectQuery.siblings('.fh-hex').each((_index, element) => {
+  fhEffectDOM.querySelectorAll('.fh-hex').forEach((element) => {
     effectModifierData.hex += parseInt(element.dataset.hex);
   });
 
-  fhEffectQuery.siblings('.fh-poison').each((_index, element) => {
+  fhEffectDOM.querySelectorAll('.fh-poison').forEach((element) => {
     effectModifierData.poison += parseInt(element.dataset.poison);
   });
 
-  fhEffectQuery.siblings('.fh-blind').each((_index, element) => {
+  fhEffectDOM.querySelectorAll('.fh-blind').forEach((element) => {
     effectModifierData.blind += parseInt(element.dataset.blind);
   });
 
-  fhEffectQuery.siblings('.fh-exhaustion').each((_index, element) => {
+  fhEffectDOM.querySelectorAll('.fh-exhaustion').forEach((element) => {
     effectModifierData.exhaustion += parseInt(element.dataset.exhaustion);
   });
 
