@@ -1,7 +1,7 @@
 import { getEffectData, getEffectHtml, onManageActiveEffect, prepareActiveEffectCategories } from '../core/effects';
 import { localizeObject } from '../core/localization';
 import { findMessageContentNode, sendActorMessage } from '../core/chat';
-import { sendChatRoll } from '../roller/roller';
+import { sendChatRoll, sendChatLabelFormula } from '../roller/roller';
 import { getByObjectPath } from '../core/object-util.mjs';
 import { clamp } from '../core/math.mjs';
 
@@ -548,32 +548,22 @@ export class FarhomeActorSheet extends ActorSheet {
     const element = event.currentTarget;
     const dataset = element.dataset;
 
-    // Handle item rolls.
-    if (dataset.rollType) {
-      if (dataset.rollType == 'item') {
-        const itemId = element.closest('.item').dataset.itemId;
-        const item = this.actor.items.get(itemId);
-        if (item) return item.roll();
-      }
-    }
-
     // Handle rolls that supply the formula directly.
     if (dataset.roll) {
       const label = dataset.label ?? '';
-      const rollHtml = await game.farhome.roller.evaluateRollFormula(dataset.roll);
-
-      // Render the skill using the header-roll template
-      const evaluatedRollHtml = await renderTemplate('systems/farhome/templates/chat/header-roll.hbs', {
-        label: label,
-        roll: rollHtml,
-      });
 
       // Evaluate the active effects for the character (ie/ hex, poison, etc)
-      const activeEffectData = getEffectData(this.actor);
-      const activeEffectsHtml = await getEffectHtml(activeEffectData);
+      const activeEffectsData = getEffectData(this.actor);
+
+      // Disable blindness for everything except Dexterity saving throws.
+      if (element.htmlFor !== 'system.proficiencies.saves.dex.value') {
+        activeEffectsData.blind = 0;
+      }
+
+      const activeEffectsHtml = await getEffectHtml(activeEffectsData);
 
       // Send the chat roll for display (along with summary calculation, etc.)
-      return sendChatRoll(evaluatedRollHtml, activeEffectsHtml);
+      return sendChatLabelFormula(label, dataset.roll, activeEffectsHtml);
     }
   }
 

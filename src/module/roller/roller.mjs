@@ -286,6 +286,25 @@ function _isArmorRoll(evaluatedRollHtml) {
 }
 
 /**
+ * Send the chat roll with a label and a roll formula to evaluate. The activeEffectsData is used for rule logic.
+ * @param {String} label HTML string containing the label for the roll.
+ * @param {String} formula HTML string containing the formula to evaluate the roll.
+ * @param {String} activeEffectsHtml HTML for active effects that can influence the outcome of a roll.
+ */
+export async function sendChatLabelFormula(label, formula, activeEffectsHtml = '') {
+  const rollHtml = await game.farhome.roller.evaluateRollFormula(formula);
+
+  // Render the skill using the header-roll template
+  const evaluatedRollHtml = await renderTemplate('systems/farhome/templates/chat/header-roll.hbs', {
+    label: label,
+    roll: rollHtml,
+  });
+
+  // Send the chat roll for display (along with summary calculation, etc.)
+  return sendChatRoll(evaluatedRollHtml, activeEffectsHtml);
+}
+
+/**
  * Send the chat roll with the embedded roll html data, generate a summary and add appropriate buttons.
  * @param {String} evaluatedRollHtml HTML string containing the roll elements.
  * @param {String} activeEffectsHtml HTML string containing the effect elements like hex and poison.
@@ -340,6 +359,7 @@ export async function sendChatRoll(
     // Compute and apply the blinded effect if it is present
     // Blindness or not seeing a target adds 2 terrible dice to the roll
     //
+    // #todo Blind should only apply to attack, spellcasting and dexterity saving throws.
     if (effectSummaryData.blind > 0) {
       // Roll 2 terrible dice if blinded
       const blindRollFormula = `2t`;
