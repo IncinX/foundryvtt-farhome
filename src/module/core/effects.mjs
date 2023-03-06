@@ -34,6 +34,7 @@ export function getEffectData(actorContext) {
     hex: 0,
     poison: 0,
     blind: 0,
+    exhaustion: 0,
   };
 
   for (const effect of actorContext.effects) {

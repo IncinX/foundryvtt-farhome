@@ -339,7 +339,7 @@ export async function sendChatRoll(
   }
 
   // #todo Subtract crits and successes for each level of exhaustion here.
-  // #todo Also add exhaustion 1-6 to the icons and conditions pack.
+  console.log(effectSummaryData.exhaustion);
 
   //
   // Compute the final roll summary HTML
