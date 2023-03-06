@@ -299,9 +299,10 @@ export async function sendChatRoll(
     // Compute and apply the poison if it is present
     // Poison adds terrible dice to the roll for each level of poison
     //
+    // #todo The code for this and being blind is extremely similar. Should be refactored.
     if (effectSummaryData.poison > 0) {
       // Roll terrible dice for each level of poison
-      const poisonRollFormula = `${effectSummaryData.poison}t`;
+      const poisonRollFormula = `${effectSummaryData.poison}b`;
       poisonRollHtml = await game.farhome.roller.evaluateRollFormula(poisonRollFormula);
 
       // Apply the poison to the summary data
@@ -322,7 +323,7 @@ export async function sendChatRoll(
       const blindRollFormula = `2t`;
       blindRollHtml = await game.farhome.roller.evaluateRollFormula(blindRollFormula);
 
-      // Apply the poison to the summary data
+      // Apply the blind to the summary data
       const blindRollSummaryData = _getRollSummaryData(blindRollHtml);
 
       // Adjust the roll summary based on being blind
