@@ -25,6 +25,16 @@
   </form>
 {{/if}}
 
+{{#if apData}}
+  {{#if rollSummaryData.ap}}
+    <form>
+      <button class='fh-spend-ap' data-ap='{{rollSummaryData.ap}}' data-actor-id='{{apData.actorId}}'>
+        {{localize 'farhome.spendAP'}} ({{rollSummaryData.ap}}/{{apData.availableAP}})
+      </button>
+    </form>
+  {{/if}}
+{{/if}}
+
 {{#if manaData}}
   {{#with manaData}}
     <form>

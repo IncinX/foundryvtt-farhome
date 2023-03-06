@@ -128,7 +128,17 @@ export class FarhomeItem extends Item {
       };
     }
 
+    // Provide AP context data. The ap cost will be evaluated in sendChatRoll.
+    let apData = {
+      actorId: this.actor._id,
+      availableAP: this.actor.system.features.ap.max,
+    };
+
     // Send the chat roll with the appropriate data
-    sendChatRoll(evaluatedRollHtml, activeEffectsHtml, manaData);
+    sendChatRoll(evaluatedRollHtml, activeEffectsHtml, {
+      manaData: manaData,
+      apData: apData,
+      healingSurgeData: undefined,
+    });
   }
 }

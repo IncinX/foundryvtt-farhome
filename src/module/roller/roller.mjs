@@ -62,7 +62,7 @@ function _rollerChatMessageHandler(_chatLog, messageText, _data) {
 async function _handleReroll(event) {
   event.preventDefault();
 
-  // #todo This is all super broken right now, fix it up!
+  // #todo Change this to use DOMParser instead of JQuery
 
   const button = event.target;
   const originalMessageElement = findMessageContentNode(button);
@@ -109,7 +109,7 @@ async function _handleReroll(event) {
   }
 
   // Need to re-compute the summary and re-post under the fh-roll-summary class
-  const newRollSummaryData = _getRollSummaryData(messageQuery);
+  const newRollSummaryData = _getRollSummaryData(messageQuery.html());
 
   // Apply the roll summary effects (like exhaustion)
   _applyRollSummaryEffects(newRollSummaryData, effectSummaryData);
@@ -150,12 +150,13 @@ function _parseRoll(input) {
  */
 export function _getRollSummaryData(rollHtml) {
   try {
-    const fhRollQuery = $(rollHtml);
+    const fhRollDOM = new DOMParser().parseFromString(rollHtml, 'text/html');
 
     let rolls = [];
     let containsRollData = false;
 
-    fhRollQuery.find('input').each((_index, element) => {
+    // #todo This is broken during re-rolls with the new DOMParser method.
+    fhRollDOM.querySelectorAll('input').forEach((element) => {
       containsRollData = true;
 
       // The roll counts if it is enabled or if it is a hexed reroll die (which counts but is also disabled from being re-rolled).
@@ -170,20 +171,26 @@ export function _getRollSummaryData(rollHtml) {
     // Compute the roll modifiers
     let rollModifiersData = {
       containsRollData: containsRollData,
+      ap: 0,
       successes: initialRollSummaryData.successes,
       crits: initialRollSummaryData.crits,
       wounds: initialRollSummaryData.wounds,
     };
 
-    fhRollQuery.find('.fh-successes').each((_index, element) => {
+    const apElement = fhRollDOM.querySelector('.fh-ap');
+    if (apElement) {
+      rollModifiersData.ap = parseInt(apElement.dataset.ap);
+    }
+
+    fhRollDOM.querySelectorAll('.fh-successes').forEach((element) => {
       rollModifiersData.successes += parseInt(element.dataset.successes);
     });
 
-    fhRollQuery.find('.fh-crits').each((_index, element) => {
+    fhRollDOM.querySelectorAll('.fh-crits').forEach((element) => {
       rollModifiersData.crits += parseInt(element.dataset.crits);
     });
 
-    fhRollQuery.find('.fh-wounds').each((_index, element) => {
+    fhRollDOM.querySelectorAll('.fh-wounds').forEach((element) => {
       rollModifiersData.wounds += parseInt(element.dataset.wounds);
     });
 
@@ -204,7 +211,7 @@ export function _getRollSummaryData(rollHtml) {
  * @return {Object} Effect summary data containing hexes, poisons, etc.
  */
 export function _getEffectSummaryData(effectHtml) {
-  const fhEffectQuery = $(effectHtml);
+  const fhEffectDOM = new DOMParser().parseFromString(effectHtml, 'text/html');
 
   // #todo Should modify all this stuff so that the effect values are dataset elements on fh-active effects
 
@@ -216,19 +223,19 @@ export function _getEffectSummaryData(effectHtml) {
     exhaustion: 0,
   };
 
-  fhEffectQuery.siblings('.fh-hex').each((_index, element) => {
+  fhEffectDOM.querySelectorAll('.fh-hex').forEach((element) => {
     effectModifierData.hex += parseInt(element.dataset.hex);
   });
 
-  fhEffectQuery.siblings('.fh-poison').each((_index, element) => {
+  fhEffectDOM.querySelectorAll('.fh-poison').forEach((element) => {
     effectModifierData.poison += parseInt(element.dataset.poison);
   });
 
-  fhEffectQuery.siblings('.fh-blind').each((_index, element) => {
+  fhEffectDOM.querySelectorAll('.fh-blind').forEach((element) => {
     effectModifierData.blind += parseInt(element.dataset.blind);
   });
 
-  fhEffectQuery.siblings('.fh-exhaustion').each((_index, element) => {
+  fhEffectDOM.querySelectorAll('.fh-exhaustion').forEach((element) => {
     effectModifierData.exhaustion += parseInt(element.dataset.exhaustion);
   });
 
@@ -313,8 +320,7 @@ export async function sendChatLabelFormula(label, formula, activeEffectsHtml = '
 export async function sendChatRoll(
   evaluatedRollHtml,
   activeEffectsHtml = '',
-  manaData = undefined,
-  healingSurgeData = undefined,
+  extraRollData = { manaData: undefined, apData: undefined, healingSurgeData: undefined },
 ) {
   // Get the active effects that apply to the roll
   const effectSummaryData = _getEffectSummaryData(activeEffectsHtml);
@@ -395,8 +401,9 @@ export async function sendChatRoll(
     blindRollHtml: blindRollHtml,
     rollSummaryData: rollSummaryData,
     rollSummaryHtml: rollSummaryHtml,
-    manaData: manaData,
-    healingSurgeData: healingSurgeData,
+    manaData: extraRollData.manaData,
+    apData: extraRollData.apData,
+    healingSurgeData: extraRollData.healingSurgeData,
   });
 
   // Send the evaluatedTemplate to chat.
