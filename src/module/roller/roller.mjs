@@ -208,6 +208,7 @@ export function _getEffectSummaryData(effectHtml) {
     hex: 0,
     poison: 0,
     blind: 0,
+    exhaustion: 0,
   };
 
   fhEffectQuery.siblings('.fh-hex').each((_index, element) => {
@@ -220,6 +221,10 @@ export function _getEffectSummaryData(effectHtml) {
 
   fhEffectQuery.siblings('.fh-blind').each((_index, element) => {
     effectModifierData.blind += parseInt(element.dataset.blind);
+  });
+
+  fhEffectQuery.siblings('.fh-exhaustion').each((_index, element) => {
+    effectModifierData.exhaustion += parseInt(element.dataset.exhaustion);
   });
 
   return effectModifierData;
@@ -332,6 +337,9 @@ export async function sendChatRoll(
       rollSummaryData.crits += blindRollSummaryData.crits;
     }
   }
+
+  // #todo Subtract crits and successes for each level of exhaustion here.
+  // #todo Also add exhaustion 1-6 to the icons and conditions pack.
 
   //
   // Compute the final roll summary HTML

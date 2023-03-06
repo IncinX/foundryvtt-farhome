@@ -176,6 +176,7 @@
     "createItem": "Add Item",
     "editItem": "Edit Item",
     "deleteItem": "Delete Item",
+    "deleteEffect": "Delete Effect",
     "money": "Money",
     "armors": "Armors",
     "consumables": "Consumables",
@@ -212,6 +213,7 @@
     "save": "Save",
     "applyHealing": "Apply Healing",
     "healingSurge": "Healing Surge",
-    "charges": "Charges"
+    "charges": "Charges",
+    "effects": "Effects"
   }
 }

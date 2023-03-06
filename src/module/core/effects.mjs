@@ -45,6 +45,8 @@ export function getEffectData(actorContext) {
       effectsData.poison += parseInt(effectStatusId.split('-')[1]);
     } else if (effectStatusId.startsWith('blind')) {
       effectsData.blind = 1;
+    } else if (effectStatusId.startsWith('exhaustion')) {
+      effectsData.exhaustion += parseInt(effectStatusId.split('-')[1]);
     }
   }
 

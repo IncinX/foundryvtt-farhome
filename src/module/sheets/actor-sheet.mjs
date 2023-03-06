@@ -237,6 +237,9 @@ export class FarhomeActorSheet extends ActorSheet {
 
     // Delete Inventory Item
     html.find('.item-delete').click(this._onItemDelete.bind(this));
+    
+    // Delete Effect
+    html.find('.effect-delete').click(this._onEffectDelete.bind(this));
 
     // Rollable Inventory Item
     html.find('.item-name-link').click(this._onItemRoll.bind(this));
@@ -291,7 +294,7 @@ export class FarhomeActorSheet extends ActorSheet {
     const minResourceValue = 0; // Universal minimum value, currently no resources should go below 0.
     const maxResourceValue =
       resourceMaxPath !== undefined ? getByObjectPath(this.actor, resourceMaxPath) : Number.MAX_VALUE;
-    const clampedResourceValue = clamp(newResourceValue, 0, maxResourceValue);
+    const clampedResourceValue = clamp(newResourceValue, minResourceValue, maxResourceValue);
 
     const dataUpdate = {};
     dataUpdate[resourceValuePath] = clampedResourceValue;
@@ -455,6 +458,17 @@ export class FarhomeActorSheet extends ActorSheet {
     });
 
     confirmationDialog.render(true);
+  }
+  
+  /**
+   * Handle deleting an effect
+   * @param {Event} event   The originating click event
+   * @private
+   */
+  async _onEffectDelete(event) {
+    const li = $(event.currentTarget).parents('.item');
+    const effect = this.actor.effects.get(li.data('effectId'));
+    effect.delete();
   }
 
   /**
