@@ -267,6 +267,7 @@ export class FarhomeItemSheet extends ItemSheet {
 export function connectItemHooks() {
   Hooks.on('renderChatLog', (_app, html, _data) => {
     html.on('click', '.fh-spend-mana', _handleManaSpend);
+    html.on('click', '.fh-spend-ap', _handleAPSpend);
   });
 }
 
@@ -299,5 +300,39 @@ async function _handleManaSpend(event) {
   actor.update({ 'system.features.mana.value': actor.system.features.mana.value - manaCost });
 
   // Send the confirmation message to the chat
+  // #todo This should be a localized string.
   sendActorMessage(`<b>${actor.name}</b> spent ${manaCost} mana.`);
+}
+
+/**
+ * Handle click message generated from the "Spend AP" button in chat.
+ * @param {Event} event   The originating click event
+ * @private
+ */
+async function _handleAPSpend(event) {
+  event.preventDefault();
+
+  // Disable the button
+  event.currentTarget.disabled = true;
+
+  // Get the data from the button
+  let apCost = parseInt(event.currentTarget.dataset.ap);
+  let actorId = event.currentTarget.dataset.actorId;
+
+  // Check for ownership
+  let actor = game.actors.get(actorId);
+  if (!actor.isOwner) {
+    sendActorMessage(
+      'You do not own this actor, so stop trying to spend their AP. ' +
+        'They are <i>probably</i> competant enough to do that themselves.',
+    );
+    return;
+  }
+
+  // Deduct the mana off of the character's sheet
+  actor.update({ 'system.features.ap.value': actor.system.features.ap.value - apCost });
+
+  // Send the confirmation message to the chat
+  // #todo This should be a localized string.
+  sendActorMessage(`<b>${actor.name}</b> spent ${apCost} ap.`);
 }

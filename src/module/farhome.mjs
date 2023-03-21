@@ -20,7 +20,7 @@ import { connectRulesImporterApp as connectRulesImporterAppHooks } from './apps/
 import { connectVetoolsMonsterImporterApp as connectVetoolsMonsterImporterAppHooks } from './apps/vetools-monsters-importer-app';
 
 import { secureRandomNumber } from './roller/roller-util';
-import { FHRoller, connectRoller as connectRollerHooks } from './roller/roller';
+import { FHRoller, sendChatLabelFormula, connectRoller as connectRollerHooks } from './roller/roller';
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
@@ -35,6 +35,9 @@ Hooks.once('init', async () => {
   game.farhome = {
     // Centralized roller for global use
     roller,
+
+    // Easy-to-use method for sending labelled rolls to chat
+    sendChatLabelFormula,
 
     // Actor and Item Documents for global use
     FarhomeActor,
