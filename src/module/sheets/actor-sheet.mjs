@@ -596,7 +596,7 @@ export class FarhomeActorSheet extends ActorSheet {
       await sendChatRoll(healingSurgeMessageHtml, '', {
         manaData: undefined,
         apData: undefined,
-        helingSurgeData: healingSurgeData,
+        healingSurgeData: healingSurgeData,
       });
     } else {
       await sendActorMessage(`${this.actor.name} has no healing surges left to spend.`);
