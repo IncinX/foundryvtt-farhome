@@ -53,9 +53,11 @@ export class FarhomeItemSheet extends ItemSheet {
     };
 
     // Run the TextEditor.enrichHTML on prompt description entries
-    for (let prompt of context.system.prompts) {
-      prompt.enrichedDescription = await this._enrichTextHTML(prompt.description);
-      console.log(prompt.enrichedDescription);
+    const promptMaxIndex = context.system.prompts.maxIndex ?? 0;
+    for (let promptIndex = 0; promptIndex < promptMaxIndex; promptIndex++) {
+      let prompt = context.system.prompts[`${promptIndex}`];
+      prompt.description.enriched = await this._enrichTextHTML(prompt.description);
+      prompt.description.targetPath = `system.prompts.${promptIndex}.description.value`;
     }
 
     return context;
@@ -122,11 +124,9 @@ export class FarhomeItemSheet extends ItemSheet {
    */
   async _onItemAddPrompt(_event) {
     // #todo Fix localization errors from within prompts (likely requires change to the localizeObject) function.
-    // #todo Consider defaulting new choices to use the index of the choice.
-    // #todo Change description to a TOX editor.
-
     // #todo Should change this to a proper javascript Object and use that in documentation
     const newPrompt = {
+      isPrompt: true, // Used to indicate to handlebars that this is a valid prompt object since it is being similar to an array.
       title: {
         value: '',
       },
@@ -139,7 +139,9 @@ export class FarhomeItemSheet extends ItemSheet {
       choices: [],
     };
 
-    this.item.system.prompts.push(newPrompt);
+    const maxIndex = this.item.system.prompts.maxIndex ?? 0;
+    this.item.system.prompts[`${maxIndex}`] = newPrompt;
+    this.item.system.prompts['maxIndex'] = maxIndex + 1;
 
     await this._updatePrompts();
   }
@@ -150,7 +152,9 @@ export class FarhomeItemSheet extends ItemSheet {
    * @private
    */
   async _onItemRemovePrompt(event) {
-    this.item.system.prompts.splice(this._getPromptIndex(event), 1);
+    const promptIndex = this._getPromptIndex(event);
+    delete this.item.system.prompts[`${promptIndex}`];
+    this.item.system.prompts.maxIndex -= 1;
 
     await this._updatePrompts();
   }
