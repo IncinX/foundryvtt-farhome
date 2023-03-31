@@ -47,9 +47,7 @@
             value="{{prompt.description}}"
           />
           -->
-          <!-- TODO Edits are not sticking... It is definitely not committing the changes to the main data. It looks like it is commiting to a string instead of the proper array index. -->
           <!-- TODO Also shrink the size of the description to be about half the current size. -->
-          <!-- TODO Look into that label: "farhome.0" nonsense that is happening from my automatic localization. This is due to the array-like objects for prompts. Create a special ignoreLocalization flag in the object to avoid this. -->
           <!-- TODO Fix prompt deletion which is no longer working -->
           {{editor prompt.description.enriched target=prompt.description.targetPath button=true owner=true editable=true}}
 
