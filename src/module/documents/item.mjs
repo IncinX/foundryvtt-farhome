@@ -119,18 +119,18 @@ export class FarhomeItem extends Item {
     // #todo Consider using renderTemplate instead of embedded HTML here and everywhere else that does so.
     let selectorUniqueId = `prompt-selector-${Math.random().toString(16).substring(2)}`;
 
-    let dialogContent = `<p>${prompt.description}</p>`;
+    let dialogContent = `<p>${prompt.description.value}</p>`;
 
     dialogContent += `<p><select id="${selectorUniqueId}" style="width: 100%">`;
 
     for (const choice of prompt.choices) {
-      dialogContent += `<option value="${choice.value}">${choice.name}</option>`;
+      dialogContent += `<option value="${choice.variableValue.value}">${choice.name.value}</option>`;
     }
 
     dialogContent += '</select></p>';
 
     let promptReturn = await Dialog.wait({
-      title: prompt.title,
+      title: prompt.title.value,
       content: dialogContent,
       buttons: {
         confirm: {

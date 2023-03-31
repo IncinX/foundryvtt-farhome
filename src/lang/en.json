@@ -230,6 +230,7 @@
     "title": "Title",
     "label": "Label",
     "value": "Value",
-    "variable": "Variable"
+    "variable": "Variable",
+    "choices": "Choices"
   }
 }

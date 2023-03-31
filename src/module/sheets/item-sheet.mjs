@@ -52,6 +52,12 @@ export class FarhomeItemSheet extends ItemSheet {
       note: await this._enrichTextHTML(context.system.note),
     };
 
+    // Run the TextEditor.enrichHTML on prompt description entries
+    for (let prompt of context.system.prompts) {
+      prompt.enrichedDescription = await this._enrichTextHTML(prompt.description);
+      console.log(prompt.enrichedDescription);
+    }
+
     return context;
   }
 
@@ -121,9 +127,15 @@ export class FarhomeItemSheet extends ItemSheet {
 
     // #todo Should change this to a proper javascript Object and use that in documentation
     const newPrompt = {
-      title: '',
-      description: '',
-      variable: '',
+      title: {
+        value: ''
+      },
+      description: {
+        value: 'Insert Description Here'
+      },
+      variable: {
+        value: ''
+      },
       choices: [],
     };
 
@@ -150,8 +162,12 @@ export class FarhomeItemSheet extends ItemSheet {
    */
   async _onItemAddChoice(event) {
     const newChoice = {
-      name: '',
-      value: '',
+      name: {
+        value: ''
+      },
+      variableValue: {
+        value: ''
+      },
     };
 
     this.item.system.prompts[this._getPromptIndex(event)].choices.push(newChoice);
