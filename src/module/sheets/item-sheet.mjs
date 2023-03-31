@@ -128,13 +128,13 @@ export class FarhomeItemSheet extends ItemSheet {
     // #todo Should change this to a proper javascript Object and use that in documentation
     const newPrompt = {
       title: {
-        value: ''
+        value: '',
       },
       description: {
-        value: 'Insert Description Here'
+        value: 'Insert Description Here',
       },
       variable: {
-        value: ''
+        value: '',
       },
       choices: [],
     };
@@ -163,10 +163,10 @@ export class FarhomeItemSheet extends ItemSheet {
   async _onItemAddChoice(event) {
     const newChoice = {
       name: {
-        value: ''
+        value: '',
       },
       variableValue: {
-        value: ''
+        value: '',
       },
     };
 
