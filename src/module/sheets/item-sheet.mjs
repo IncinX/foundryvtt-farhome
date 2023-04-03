@@ -202,7 +202,7 @@ export class FarhomeItemSheet extends ItemSheet {
    */
   async _onItemPromptTitleChange(event) {
     let prompt = this.item.system.prompts[this._getPromptIndex(event)];
-    prompt.title = event.currentTarget.value;
+    prompt.title.value = event.currentTarget.value;
 
     await this._updatePrompts();
   }
@@ -214,7 +214,7 @@ export class FarhomeItemSheet extends ItemSheet {
    */
   async _onItemPromptDescriptionChange(event) {
     let prompt = this.item.system.prompts[this._getPromptIndex(event)];
-    prompt.description = event.currentTarget.value;
+    prompt.description.value = event.currentTarget.value;
 
     await this._updatePrompts();
   }
@@ -226,7 +226,7 @@ export class FarhomeItemSheet extends ItemSheet {
    */
   async _onItemPromptVariableChange(event) {
     let prompt = this.item.system.prompts[this._getPromptIndex(event)];
-    prompt.variable = event.currentTarget.value;
+    prompt.variable.value = event.currentTarget.value;
 
     await this._updatePrompts();
   }
@@ -238,7 +238,7 @@ export class FarhomeItemSheet extends ItemSheet {
    */
   async _onItemPromptChoiceNameChange(event) {
     let prompt = this.item.system.prompts[this._getPromptIndex(event)];
-    prompt.choices[this._getChoiceIndex(event)].name = event.currentTarget.value;
+    prompt.choices[this._getChoiceIndex(event)].name.value = event.currentTarget.value;
 
     await this._updatePrompts();
   }
@@ -250,7 +250,7 @@ export class FarhomeItemSheet extends ItemSheet {
    */
   async _onItemPromptChoiceValueChange(event) {
     let prompt = this.item.system.prompts[this._getPromptIndex(event)];
-    prompt.choices[this._getChoiceIndex(event)].value = event.currentTarget.value;
+    prompt.choices[this._getChoiceIndex(event)].variableValue.value = event.currentTarget.value;
 
     await this._updatePrompts();
   }
