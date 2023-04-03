@@ -87,15 +87,6 @@ export class FarhomeItemSheet extends ItemSheet {
   }
 
   /** @override */
-  setPosition(options = {}) {
-    const position = super.setPosition(options);
-    const sheetBody = this.element.find('.sheet-body');
-    const bodyHeight = position.height - 192;
-    sheetBody.css('height', bodyHeight);
-    return position;
-  }
-
-  /** @override */
   activateListeners(html) {
     super.activateListeners(html);
 
@@ -124,7 +115,9 @@ export class FarhomeItemSheet extends ItemSheet {
    * @note Due to the nature of the templates with an embedded object. It was decided to update the entire object when changes are made.
    * @note The use of "choice" instead of "label" was intentional since the localization automation uses "label" as a key.
    */
-  async _onItemAddPrompt(_event) {
+  async _onItemAddPrompt(event) {
+    event.preventDefault();
+
     // #todo Fix localization for placeholder options
     // #todo Should change this to a proper javascript Object and use that in documentation
     const maxIndex = this.item.system.prompts.maxIndex ?? 0;
