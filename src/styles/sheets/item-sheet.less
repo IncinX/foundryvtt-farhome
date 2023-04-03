@@ -11,6 +11,7 @@
     padding: 10px;
   }
 
+  // #todo Is this even used? I am not seeing a sheet-content on the item sheet
   .sheet-content {
     height: 100%;
     display: flex;
@@ -23,5 +24,33 @@
         background: none;
       }
     }
+  }
+
+  .sheet-body .tab .editor {
+    min-height: 250px;
+    background-color: @c-background-darken-half;
+  }
+
+  .prompt-list hr {
+    padding: 0 1em 0 1em;
+    border-color: transparent;
+    background-color: transparent;
+    height: 2em;
+  }
+
+  .item-add-prompt {
+    color: @c-text-color;
+  }
+
+  .header-prompt-choice-label, .header-prompt-choice-value,
+  .item-prompt-choice-name-input, .item-prompt-choice-value-input {
+    flex: 5;
+    margin: 2px;
+  }
+
+  .item-add-choice, .item-remove-choice {
+    flex: 2;
+    //text-align: center;
+    padding-right: 2px;
   }
 }

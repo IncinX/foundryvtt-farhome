@@ -37,11 +37,27 @@ export class FarhomeItem extends Item {
    * @param {Event} event   The originating click event
    */
   async roll() {
+    let extraItemContext = {};
+    let promptContext = {};
+
     if (this.type === 'spell') {
-      this._spellLevelDialog();
-    } else {
-      this._executeRoll();
+      // Add spell dialog context to the extra item context.
+      Object.assign(extraItemContext, await this._spellLevelDialog());
     }
+
+    // Process prompts and add them to the item context.
+    // #todo This prompt stuff should be put into a Prompt class with helper methods that include iteration.
+    const promptMaxIndex = this.system.prompts.maxIndex ?? 0;
+    for (let promptIndex = 0; promptIndex < promptMaxIndex; promptIndex++) {
+      let prompt = this.system.prompts[`${promptIndex}`];
+      if (prompt.isValid) {
+        const promptResult = await this._promptDialog(prompt);
+
+        promptContext[prompt.variable.value] = promptResult;
+      }
+    }
+
+    await this._executeRoll(extraItemContext, promptContext);
   }
 
   /**
@@ -70,7 +86,7 @@ export class FarhomeItem extends Item {
     }
     dialogContent += '</select></p>';
 
-    let manaDialog = new Dialog({
+    const extraItemContext = await Dialog.wait({
       title: ` ${this.name}: Select Spell Level`,
       content: dialogContent,
       buttons: {
@@ -78,9 +94,13 @@ export class FarhomeItem extends Item {
           icon: '<i class="fas fa-check"></i>',
           label: 'Cast',
           callback: () => {
-            let castedSpellLevel = parseInt(document.getElementById(selectorUniqueId).value);
-            let spellLevelDifference = castedSpellLevel - this.system.spellLevel.value;
-            this._executeRoll({ castedSpellLevel: castedSpellLevel, spellLevelDifference: spellLevelDifference });
+            const castedSpellLevel = parseInt(document.getElementById(selectorUniqueId).value);
+            const spellLevelDifference = castedSpellLevel - this.system.spellLevel.value;
+            const extraItemContext = {
+              castedSpellLevel: castedSpellLevel,
+              spellLevelDifference: spellLevelDifference,
+            };
+            return extraItemContext;
           },
         },
         cancel: {
@@ -91,15 +111,56 @@ export class FarhomeItem extends Item {
       default: 'cast',
     });
 
-    manaDialog.render(true);
+    return extraItemContext;
+  }
+
+  /**
+   * Create a prompt dialog to select customer user values.
+   * @param {object} prompt Prompt object with information about the title, description, variable and choices.
+   * @private
+   */
+  async _promptDialog(prompt) {
+    // #todo Consider using renderTemplate instead of embedded HTML here and everywhere else that does so.
+    let selectorUniqueId = `prompt-selector-${Math.random().toString(16).substring(2)}`;
+
+    let dialogContent = `<p>${prompt.description.value}</p>`;
+
+    dialogContent += `<p><select id="${selectorUniqueId}" style="width: 100%">`;
+
+    for (const choice of prompt.choices) {
+      dialogContent += `<option value="${choice.variableValue.value}">${choice.name.value}</option>`;
+    }
+
+    dialogContent += '</select></p>';
+
+    let promptReturn = await Dialog.wait({
+      title: prompt.title.value,
+      content: dialogContent,
+      buttons: {
+        confirm: {
+          icon: '<i class="fas fa-check"></i>',
+          label: 'Confirm',
+          callback: () => {
+            return parseInt(document.getElementById(selectorUniqueId).value);
+          },
+        },
+        cancel: {
+          icon: '<i class="fas fa-times"></i>',
+          label: 'Cancel',
+        },
+      },
+      default: 'confirm',
+    });
+
+    return promptReturn;
   }
 
   /**
    * Execute a clickable roll by evaluating it's template and creating the chat message.
-   * @param {Event} event   The originating click event
+   * @param {object} extraItemContext Additional context to be passed to the template evaluation.
    * @private
    */
-  async _executeRoll(extraItemContext = {}) {
+  async _executeRoll(extraItemContext = {}, promptContext = {}) {
     if (this.actor === undefined) {
       console.log('No actor found for this item.');
     }
@@ -111,7 +172,12 @@ export class FarhomeItem extends Item {
     };
 
     // Evaluate the farhome template text with the given actor and item context.
-    const evaluatedRollHtml = await evaluateRollTemplate(this.system.rollTemplate.value, this.actor, superItemContext);
+    const evaluatedRollHtml = await evaluateRollTemplate(
+      this.system.rollTemplate.value,
+      this.actor,
+      superItemContext,
+      promptContext,
+    );
 
     // Evaluate the active effects for the character (ie/ hex, poison, etc)
     const activeEffectData = getEffectData(this.actor);

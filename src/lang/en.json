@@ -221,6 +221,16 @@
     "applyHealing": "Apply Healing",
     "healingSurge": "Healing Surge",
     "charges": "Charges",
-    "effects": "Effects"
+    "effects": "Effects",
+    "prompts": "Prompts",
+    "addPrompt": "Add Prompt",
+    "removePrompt": "Remove Prompt",
+    "addChoice": "Add Choice",
+    "removeChoice": "Remove Choice",
+    "title": "Title",
+    "label": "Label",
+    "value": "Value",
+    "variable": "Variable",
+    "choices": "Choices"
   }
 }

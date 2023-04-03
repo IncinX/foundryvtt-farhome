@@ -8,6 +8,7 @@ export async function preloadTemplates() {
     'systems/farhome/templates/partials/actor/notes-partial.hbs',
     'systems/farhome/templates/partials/actor/spells-partial.hbs',
     'systems/farhome/templates/partials/actor/inventory-partial.hbs',
+    'systems/farhome/templates/partials/item/prompt-partial.hbs',
     'systems/farhome/templates/partials/attribute-partial.hbs',
     'systems/farhome/templates/partials/max-resource-partial.hbs',
     'systems/farhome/templates/partials/resource-partial.hbs',

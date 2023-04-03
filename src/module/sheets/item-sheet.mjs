@@ -52,6 +52,16 @@ export class FarhomeItemSheet extends ItemSheet {
       note: await this._enrichTextHTML(context.system.note),
     };
 
+    // Run the TextEditor.enrichHTML on prompt description entries
+    // This prompt system treats an object like an array with numerical indexes as keys.
+    // This is due to the fact that handlebars does not support updating entries in array fields well, particularly for the description field.
+    const promptMaxIndex = context.system.prompts.maxIndex ?? 0;
+    for (let promptIndex = 0; promptIndex < promptMaxIndex; promptIndex++) {
+      let prompt = context.system.prompts[`${promptIndex}`];
+      prompt.description.enriched = await this._enrichTextHTML(prompt.description);
+      prompt.description.targetPath = `system.prompts.${promptIndex}.description.value`;
+    }
+
     return context;
   }
 
@@ -77,15 +87,6 @@ export class FarhomeItemSheet extends ItemSheet {
   }
 
   /** @override */
-  setPosition(options = {}) {
-    const position = super.setPosition(options);
-    const sheetBody = this.element.find('.sheet-body');
-    const bodyHeight = position.height - 192;
-    sheetBody.css('height', bodyHeight);
-    return position;
-  }
-
-  /** @override */
   activateListeners(html) {
     super.activateListeners(html);
 
@@ -94,6 +95,187 @@ export class FarhomeItemSheet extends ItemSheet {
 
     // Roll Handler
     html.find('.item-roll').click((ev) => this.item.roll());
+
+    // Prompts
+    html.find('.item-add-prompt').click(this._onItemAddPrompt.bind(this));
+    html.find('.item-remove-prompt').click(this._onItemRemovePrompt.bind(this));
+    html.find('.item-add-choice').click(this._onItemAddChoice.bind(this));
+    html.find('.item-remove-choice').click(this._onItemRemoveChoice.bind(this));
+    html.find('.item-prompt-title-input').change(this._onItemPromptTitleChange.bind(this));
+    html.find('.item-prompt-description-input').change(this._onItemPromptDescriptionChange.bind(this));
+    html.find('.item-prompt-variable-input').change(this._onItemPromptVariableChange.bind(this));
+    html.find('.item-prompt-choice-name-input').change(this._onItemPromptChoiceNameChange.bind(this));
+    html.find('.item-prompt-choice-value-input').change(this._onItemPromptChoiceValueChange.bind(this));
+  }
+
+  /**
+   * Handle adding a new prompt to an item.
+   * @param {Event} _event The originating click event
+   * @private
+   * @note Due to the nature of the templates with an embedded object. It was decided to update the entire object when changes are made.
+   * @note The use of "choice" instead of "label" was intentional since the localization automation uses "label" as a key.
+   */
+  async _onItemAddPrompt(event) {
+    event.preventDefault();
+
+    // #todo Fix localization for placeholder options
+    // #todo Should change this to a proper javascript Object and use that in documentation
+    const maxIndex = this.item.system.prompts.maxIndex ?? 0;
+
+    const newPrompt = {
+      isValid: true, // Used to indicate to handlebars that this is a valid prompt object since it is being similar to an array.
+      title: {
+        value: `Prompt Title ${maxIndex}`,
+      },
+      description: {
+        value: `Description for item ${maxIndex}`,
+      },
+      variable: {
+        value: `promptVariable${maxIndex}`,
+      },
+      choices: [],
+    };
+
+    this.item.system.prompts[`${maxIndex}`] = newPrompt;
+    this.item.system.prompts['maxIndex'] = maxIndex + 1;
+
+    await this._updatePrompts();
+  }
+
+  /**
+   * Handle removal of an item.
+   * @param {Event} event The originating click event
+   * @private
+   */
+  async _onItemRemovePrompt(event) {
+    // Since this is an object and not an array, it simply marks the entry as no longer being a prompt.
+    // This is also due to the fact that foundry does merges when it does an update as opposed to deleting fields.
+    // In this case, we always add new prompts to the end of the object and never remove existing entries, we just hide them instead.
+    const promptIndex = this._getPromptIndex(event);
+    await this.item.update({ [`system.prompts.${promptIndex}.isValid`]: false });
+  }
+
+  /**
+   * Handle addition of a choice.
+   * @param {Event} event The originating click event
+   * @private
+   */
+  async _onItemAddChoice(event) {
+    // #todo Fix localization for placeholder options
+    let prompt = this.item.system.prompts[this._getPromptIndex(event)];
+    const newChoice = {
+      name: {
+        value: `New Choice ${prompt.choices.length}`,
+      },
+      variableValue: {
+        value: `${prompt.choices.length}`,
+      },
+    };
+
+    prompt.choices.push(newChoice);
+
+    await this._updatePrompts();
+  }
+
+  /**
+   * Handle removal of a choice.
+   * @param {Event} event The originating click event
+   * @private
+   */
+  async _onItemRemoveChoice(event) {
+    this.item.system.prompts[this._getPromptIndex(event)].choices.splice(this._getChoiceIndex(event), 1);
+
+    await this._updatePrompts();
+  }
+
+  /**
+   * Handle the change of a prompts title.
+   * @param {Event} event The originating changed event
+   * @private
+   */
+  async _onItemPromptTitleChange(event) {
+    let prompt = this.item.system.prompts[this._getPromptIndex(event)];
+    prompt.title.value = event.currentTarget.value;
+
+    await this._updatePrompts();
+  }
+
+  /**
+   * Handle the change of a prompts description.
+   * @param {Event} event The originating changed event
+   * @private
+   */
+  async _onItemPromptDescriptionChange(event) {
+    let prompt = this.item.system.prompts[this._getPromptIndex(event)];
+    prompt.description.value = event.currentTarget.value;
+
+    await this._updatePrompts();
+  }
+
+  /**
+   * Handle the change of a prompts variable.
+   * @param {Event} event The originating changed event
+   * @private
+   */
+  async _onItemPromptVariableChange(event) {
+    let prompt = this.item.system.prompts[this._getPromptIndex(event)];
+    prompt.variable.value = event.currentTarget.value;
+
+    await this._updatePrompts();
+  }
+
+  /**
+   * Handle the change of a prompts choice name.
+   * @param {Event} event The originating changed event
+   * @private
+   */
+  async _onItemPromptChoiceNameChange(event) {
+    let prompt = this.item.system.prompts[this._getPromptIndex(event)];
+    prompt.choices[this._getChoiceIndex(event)].name.value = event.currentTarget.value;
+
+    await this._updatePrompts();
+  }
+
+  /**
+   * Handle the change of a prompts choice value.
+   * @param {Event} event The originating changed event
+   * @private
+   */
+  async _onItemPromptChoiceValueChange(event) {
+    let prompt = this.item.system.prompts[this._getPromptIndex(event)];
+    prompt.choices[this._getChoiceIndex(event)].variableValue.value = event.currentTarget.value;
+
+    await this._updatePrompts();
+  }
+
+  /**
+   * Updates the prompts field of an item.
+   * @private
+   */
+  async _updatePrompts() {
+    await this.item.update({ 'system.prompts': this.item.system.prompts });
+  }
+
+  /**
+   * Retrieves the promptIndex of a parent item-prommpt element.
+   * @param {Event} event The originating changed event
+   * @private
+   */
+  _getPromptIndex(event) {
+    const itemPrompt = $(event.currentTarget).parents('.item-prompt');
+    const promptIndex = itemPrompt.data('promptIndex');
+    return promptIndex;
+  }
+
+  /**
+   * Retrieves the choiceIndex of a parent item-prompt-choice element.
+   * @param {Event} event The originating changed event
+   * @private
+   */
+  _getChoiceIndex(event) {
+    const choicePrompt = $(event.currentTarget).parents('.item-prompt-choice');
+    const choiceIndex = choicePrompt.data('choiceIndex');
+    return choiceIndex;
   }
 }
 

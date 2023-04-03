@@ -13,6 +13,11 @@ export function localizeObject(objectKeyName, objectValue) {
     return;
   }
 
+  // Check if the object does not wish to localize.
+  if (objectValue instanceof Object && objectValue.ignoreLocalization) {
+    return;
+  }
+
   for (let [k, v] of Object.entries(objectValue)) {
     if (k === 'label') {
       console.warn(`Label field already found for key: ${objectKeyName}`);

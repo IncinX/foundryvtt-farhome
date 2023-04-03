@@ -1,0 +1,73 @@
+<div class="prompt-list">
+  {{#each system.prompts as |prompt promptIndex|}}
+    {{#if prompt.isValid}}
+      <div class="item-prompt" data-prompt-index="{{promptIndex}}">
+        <table>
+          <thead>
+            <tr>
+              <th>{{localize 'farhome.title'}}</th>
+              <th>{{localize 'farhome.variable'}}</th>
+              <th></th>
+            </tr>
+          </th>
+          <tbody>
+            <tr>
+              <td>
+                <input
+                  class="item-prompt-title-input"
+                  type="text"
+                  placeholder="{{localize 'farhome.title'}}"
+                  value="{{prompt.title.value}}"
+                />
+              </td>
+              <td>
+                <input
+                  class="item-prompt-variable-input"
+                  type="text"
+                  placeholder="{{localize 'farhome.variable'}}"
+                  value="{{prompt.variable.value}}"
+                />
+              </td>
+              <td>
+                <a class="item-remove-prompt" title="{{localize 'farhome.removePrompt'}}"><i class="fas fa-trash"></i></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>{{localize 'farhome.description'}}</h3>
+        {{editor prompt.description.enriched target=prompt.description.targetPath button=true owner=true editable=true}}
+
+        <h3>{{localize 'farhome.choices'}}</h3>
+        <ol class="choice-list">
+          <li class="flexrow item-divider">
+            <div class="header-prompt-choice-label flex5">{{localize 'farhome.label'}}</div>
+            <div class="header-prompt-choice-value flex5">{{localize 'farhome.value'}}</div>
+            <a class="item-add-choice" title="{{localize 'farhome.addChoice'}}"><i class="fas fa-plus"></i> {{localize 'farhome.addChoice'}}</a>
+          </li>
+          {{#each prompt.choices as |choice choiceIndex|}}
+          <li>
+            <div class="item-prompt-choice flexrow" data-choice-index="{{choiceIndex}}">
+              <input
+                class="item-prompt-choice-name-input"
+                type="text"
+                placeholder="{{localize 'farhome.label'}}"
+                value="{{choice.name.value}}"
+              />
+              <input
+                class="item-prompt-choice-value-input"
+                type="text"
+                placeholder="{{localize 'farhome.value'}}"
+                value="{{choice.variableValue.value}}"
+              />
+              <a class="item-remove-choice" title="{{localize 'farhome.removeChoice'}}"><i class="fas fa-trash"></i></a>
+            </div>
+          </li>
+          {{/each}}
+        </ol>
+      </div>
+      <hr>
+    {{/if}}
+  {{/each}}
+</div>
+<button class="item-add-prompt" title="{{localize 'farhome.addPrompt'}}"><i class="fas fa-plus" ></i> {{localize 'farhome.addPrompt'}}</button>
