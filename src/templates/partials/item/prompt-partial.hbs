@@ -1,9 +1,6 @@
-{{log .}}
 <ol class="prompt-list">
   {{#each system.prompts as |prompt promptIndex|}}
-  {{log prompt}}
-  {{log promptIndex}}
-    {{#if prompt.isPrompt}}
+    {{#if prompt.isValid}}
       <li>
         <div class="item-prompt" data-prompt-index="{{promptIndex}}">
           <table>
@@ -39,30 +36,10 @@
             </tbody>
           </table>
           <label>{{localize 'farhome.description'}}</label>
-          <!--
-          <input
-            class="item-prompt-description-input"
-            type="text"
-            placeholder="{{localize 'farhome.description'}}"
-            value="{{prompt.description}}"
-          />
-          -->
           <!-- TODO Also shrink the size of the description to be about half the current size. -->
-          <!-- TODO Fix prompt deletion which is no longer working -->
           {{editor prompt.description.enriched target=prompt.description.targetPath button=true owner=true editable=true}}
 
           <label>{{localize 'farhome.choices'}}</label>
-          <!--
-          <div class="flexrow">
-            <input
-              class="item-prompt-variable-input"
-              type="text"
-              placeholder="{{localize 'farhome.variable'}}"
-              value="{{prompt.variable}}"
-            />
-            <a class="item-remove-prompt" title="{{localize 'farhome.removePrompt'}}"><i class="fas fa-trash"></i></a>
-          </div>
-          -->
           <ol class="choice-list">
             <li class="flexrow item-divider">
               <div class="header-prompt-choice-label">{{localize 'farhome.label'}}</div>

@@ -53,6 +53,8 @@ export class FarhomeItemSheet extends ItemSheet {
     };
 
     // Run the TextEditor.enrichHTML on prompt description entries
+    // This prompt system treats an object like an array with numerical indexes as keys.
+    // This is due to the fact that handlebars does not support updating entries in array fields well, particularly for the description field.
     const promptMaxIndex = context.system.prompts.maxIndex ?? 0;
     for (let promptIndex = 0; promptIndex < promptMaxIndex; promptIndex++) {
       let prompt = context.system.prompts[`${promptIndex}`];
@@ -119,27 +121,28 @@ export class FarhomeItemSheet extends ItemSheet {
    * Handle adding a new prompt to an item.
    * @param {Event} _event The originating click event
    * @private
-   * @note Due to the nature of the templates with an embedded array. It was decided to update the entire array when changes are made.
+   * @note Due to the nature of the templates with an embedded object. It was decided to update the entire object when changes are made.
    * @note The use of "choice" instead of "label" was intentional since the localization automation uses "label" as a key.
    */
   async _onItemAddPrompt(_event) {
-    // #todo Fix localization errors from within prompts (likely requires change to the localizeObject) function.
+    // #todo Fix localization for placeholder options
     // #todo Should change this to a proper javascript Object and use that in documentation
+    const maxIndex = this.item.system.prompts.maxIndex ?? 0;
+
     const newPrompt = {
-      isPrompt: true, // Used to indicate to handlebars that this is a valid prompt object since it is being similar to an array.
+      isValid: true, // Used to indicate to handlebars that this is a valid prompt object since it is being similar to an array.
       title: {
-        value: '',
+        value: `Prompt Title ${maxIndex}`,
       },
       description: {
-        value: 'Insert Description Here',
+        value: `Description for item ${maxIndex}`,
       },
       variable: {
-        value: '',
+        value: `promptVariable${maxIndex}`,
       },
       choices: [],
     };
 
-    const maxIndex = this.item.system.prompts.maxIndex ?? 0;
     this.item.system.prompts[`${maxIndex}`] = newPrompt;
     this.item.system.prompts['maxIndex'] = maxIndex + 1;
 
@@ -152,11 +155,11 @@ export class FarhomeItemSheet extends ItemSheet {
    * @private
    */
   async _onItemRemovePrompt(event) {
+    // Since this is an object and not an array, it simply marks the entry as no longer being a prompt.
+    // This is also due to the fact that foundry does merges when it does an update as opposed to deleting fields.
+    // In this case, we always add new prompts to the end of the object and never remove existing entries, we just hide them instead.
     const promptIndex = this._getPromptIndex(event);
-    delete this.item.system.prompts[`${promptIndex}`];
-    this.item.system.prompts.maxIndex -= 1;
-
-    await this._updatePrompts();
+    await this.item.update({ [`system.prompts.${promptIndex}.isValid`]: false });
   }
 
   /**
@@ -165,16 +168,18 @@ export class FarhomeItemSheet extends ItemSheet {
    * @private
    */
   async _onItemAddChoice(event) {
+    // #todo Fix localization for placeholder options
+    let prompt = this.item.system.prompts[this._getPromptIndex(event)];
     const newChoice = {
       name: {
-        value: '',
+        value: `New Choice ${prompt.choices.length}`,
       },
       variableValue: {
-        value: '',
+        value: `${prompt.choices.length}`,
       },
     };
 
-    this.item.system.prompts[this._getPromptIndex(event)].choices.push(newChoice);
+    prompt.choices.push(newChoice);
 
     await this._updatePrompts();
   }

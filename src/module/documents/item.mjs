@@ -46,11 +46,15 @@ export class FarhomeItem extends Item {
     }
 
     // Process prompts and add them to the item context.
-    // #todo This should probably be within a prompt context object? Maybe??? Or just keep them with the item context perhaps...?
-    for (const prompt of this.system.prompts) {
-      const promptValue = await this._promptDialog(prompt);
+    // #todo This prompt stuff should be put into a Prompt class with helper methods that include iteration.
+    const promptMaxIndex = this.system.prompts.maxIndex ?? 0;
+    for (let promptIndex = 0; promptIndex < promptMaxIndex; promptIndex++) {
+      let prompt = this.system.prompts[`${promptIndex}`];
+      if (prompt.isValid) {
+        const promptResult = await this._promptDialog(prompt);
 
-      promptContext[prompt.variable] = promptValue;
+        promptContext[prompt.variable] = promptResult;
+      }
     }
 
     await this._executeRoll(extraItemContext, promptContext);
