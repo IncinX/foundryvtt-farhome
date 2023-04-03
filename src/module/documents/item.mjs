@@ -53,7 +53,7 @@ export class FarhomeItem extends Item {
       if (prompt.isValid) {
         const promptResult = await this._promptDialog(prompt);
 
-        promptContext[prompt.variable] = promptResult;
+        promptContext[prompt.variable.value] = promptResult;
       }
     }
 
