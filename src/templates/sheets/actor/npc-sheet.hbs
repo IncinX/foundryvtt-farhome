@@ -39,13 +39,13 @@
   {{!-- Sheet Tab Navigation --}}
   <nav class="sheet-tabs tabs" data-group="primary">
     <a class="item" data-tab="attributes">{{localize 'farhome.attributes'}}</a>
-    <a class="item" data-tab="effects">{{localize 'farhome.effects'}}</a>
-    <a class="item" data-tab="feats">{{localize 'farhome.feats'}}</a>
-    <a class="item" data-tab="maneuvers">{{localize 'farhome.maneuvers'}}</a>
-    <a class="item" data-tab="spells">{{localize 'farhome.spells'}}</a>
     <a class="item" data-tab="inventory">{{localize 'farhome.inventory'}}</a>
-    <a class="item" data-tab="biography">{{localize 'farhome.biography'}}</a>
+    <a class="item" data-tab="spells">{{localize 'farhome.spells'}}</a>
+    <a class="item" data-tab="maneuvers">{{localize 'farhome.maneuvers'}}</a>
+    <a class="item" data-tab="feats">{{localize 'farhome.feats'}}</a>
+    <a class="item" data-tab="effects">{{localize 'farhome.effects'}}</a>
     <a class="item" data-tab="notes">{{localize 'farhome.notes'}}</a>
+    <a class="item" data-tab="biography">{{localize 'farhome.biography'}}</a>
   </nav>
 
   {{!-- Sheet Body --}}
@@ -53,28 +53,27 @@
     {{!-- Attributes Tab --}}
     {{>"systems/farhome/templates/partials/actor/attributes-partial.hbs"}}
     
-    {{!-- Effects Tab --}}
-    {{>"systems/farhome/templates/partials/actor/effects-partial.hbs"}}
+    {{!-- Inventory Tab --}}
+    {{>"systems/farhome/templates/partials/actor/inventory-partial.hbs"}}
+    
+    {{!-- Spells Tab --}}
+    {{>"systems/farhome/templates/partials/actor/spells-partial.hbs"}}
+    
+    {{!-- Maneuvers Tab --}}
+    {{>"systems/farhome/templates/partials/actor/maneuvers-partial.hbs"}}
 
     {{!-- Feats Tab --}}
     {{>"systems/farhome/templates/partials/actor/feats-partial.hbs"}}
 
-    {{!-- Maneuvers Tab --}}
-    {{>"systems/farhome/templates/partials/actor/maneuvers-partial.hbs"}}
-
-    {{!-- Spells Tab --}}
-    {{>"systems/farhome/templates/partials/actor/spells-partial.hbs"}}
-
-    {{!-- Inventory Tab --}}
-    {{>"systems/farhome/templates/partials/actor/inventory-partial.hbs"}}
+    {{!-- Effects Tab --}}
+    {{>"systems/farhome/templates/partials/actor/effects-partial.hbs"}}
+    
+    {{!-- Notes Tab --}}
+    {{>"systems/farhome/templates/partials/actor/notes-partial.hbs"}}
 
     {{!-- Biography Tab --}}
     <div class="tab biography-tab" data-group="primary" data-tab="biography">
       {{editor enrichedText.biography target="system.biography.value" button=true owner=owner editable=editable}}
     </div>
-
-    {{!-- Notes Tab --}}
-    {{>"systems/farhome/templates/partials/actor/notes-partial.hbs"}}
   </section>
-
 </form>
