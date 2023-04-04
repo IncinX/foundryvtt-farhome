@@ -231,6 +231,7 @@
     "label": "Label",
     "value": "Value",
     "variable": "Variable",
-    "choices": "Choices"
+    "choices": "Choices",
+    "concentration": "Concentration"
   }
 }
