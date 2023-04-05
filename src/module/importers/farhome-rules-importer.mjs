@@ -76,18 +76,23 @@ export async function createCompendiumFromRules(
     for (const item of items) {
       const existingEntry = worldCompendiumNameMap.get(item.name);
       if (existingEntry) {
-        console.log(`Item ${item.name} already exists in compendium ${worldCompendiumName}`);
-
-        const itemDocument = await worldCompendium.getDocument(existingEntry._id);
-
-        console.log(itemDocument);
+        console.log(`Updating existing item ${item.name} in compendium ${worldCompendiumName}`);
+        
+        // This is how you can get the existing document from the compendium, but it isn't necessary right now and
+        // is just here for reference.
+        // const itemDocument = await worldCompendium.getDocument(existingEntry._id);
 
         if (!overwriteExistingTemplates) {
           // Remove the rollTemplate field from the update data so it doesn't overwrite in updateDocuments
           delete item.system.rollTemplate;
         }
+
+        // Add the id to the item data so that it knows what item update.
+        item._id = existingEntry._id;
+
         await game.farhome.FarhomeItem.updateDocuments([item], { pack: worldCompendiumName });
       } else {
+        console.log(`Adding new item ${item.name} to compendium ${worldCompendiumName}`);
         await game.farhome.FarhomeItem.createDocuments([item], { pack: worldCompendiumName });
       }
 
