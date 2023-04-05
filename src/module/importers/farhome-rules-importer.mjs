@@ -12,25 +12,33 @@ export async function createCompendiumFromRules(
   rulesUrl,
   compendiumLabels,
   progressCallback = undefined,
-  deleteExisting = false,
-  overwriteExistingTemplates = false
+  deleteExistingCompendium = false,
+  overwriteExistingTemplates = false,
 ) {
+  // Retrieve the rules from the provided URL
   const rulesFetch = await fetch(rulesUrl);
   const rulesBlob = await rulesFetch.blob();
   const rulesText = await rulesBlob.text();
 
+  // Parse the rules using the FarhomeRuleParser
   const ruleParser = new FarhomeRuleParser();
   const parsedRules = ruleParser.parse(rulesText);
 
   const parsedRulesEntries = Object.entries(parsedRules);
 
+  // Setup status bar variables
+  let currentStatus = 0;
+  const maxStatus = parsedRulesEntries.reduce((accumulator, arrayValue) => accumulator + arrayValue[1].length, 0);
+
+  // Enumerate through the parsed rule categories and create compendium entries
   for (let ruleEntryIndex = 0; ruleEntryIndex < parsedRulesEntries.length; ruleEntryIndex++) {
+    // Send the progress state to the callback
     if (typeof progressCallback === 'function') {
-      progressCallback(ruleEntryIndex, parsedRulesEntries.length);
+      progressCallback(currentStatus, maxStatus);
     }
 
     const key = parsedRulesEntries[ruleEntryIndex][0];
-    const value = parsedRulesEntries[ruleEntryIndex][1];
+    const items = parsedRulesEntries[ruleEntryIndex][1];
 
     const compendiumLabel = compendiumLabels.get(key);
     if (!compendiumLabel) {
@@ -40,26 +48,56 @@ export async function createCompendiumFromRules(
     const compendiumName = compendiumLabel.toLowerCase().replace(/ /g, '-');
     const worldCompendiumName = `world.${compendiumName}`;
 
-    if (deleteExisting) {
-      if (game.packs.has(worldCompendiumName)) {
-        await game.packs.get(worldCompendiumName).deleteCompendium();
-      }
+    // Delete existing compediums if requested
+    if (deleteExistingCompendium && game.packs.has(worldCompendiumName)) {
+      game.packs.get(worldCompendiumName).deleteCompendium();
     }
 
-    await CompendiumCollection.createCompendium({
-      name: compendiumName,
-      label: compendiumLabel,
-      type: 'Item',
-      system: 'farhome',
-      package: 'system',
-    });
+    // Create the compendium if it doesn't already exist
+    let worldCompendium = undefined;
+    if (game.packs.has(worldCompendiumName)) {
+      worldCompendium = game.packs.get(worldCompendiumName);
+    } else {
+      worldCompendium = await CompendiumCollection.createCompendium({
+        name: compendiumName,
+        label: compendiumLabel,
+        type: 'Item',
+        system: 'farhome',
+        package: 'system',
+      });
+    }
 
-    await game.farhome.FarhomeItem.createDocuments(value, { pack: worldCompendiumName });
+    // Optimize duplicate entry lookup by creating a new map with name->object mapping instead of id->object mapping
+    const worldCompendiumNameMap = new Map();
+    for (const [_key, item] of worldCompendium.index.entries()) {
+      worldCompendiumNameMap.set(item.name, item);
+    }
+
+    for (const item of items) {
+      const existingEntry = worldCompendiumNameMap.get(item.name);
+      if (existingEntry) {
+        console.log(`Item ${item.name} already exists in compendium ${worldCompendiumName}`);
+
+        const itemDocument = await worldCompendium.getDocument(existingEntry._id);
+
+        console.log(itemDocument);
+
+        if (!overwriteExistingTemplates) {
+          // Remove the rollTemplate field from the update data so it doesn't overwrite in updateDocuments
+          delete item.system.rollTemplate;
+        }
+        await game.farhome.FarhomeItem.updateDocuments([item], { pack: worldCompendiumName });
+      } else {
+        await game.farhome.FarhomeItem.createDocuments([item], { pack: worldCompendiumName });
+      }
+
+      currentStatus++;
+    }
   }
 
   // Send the progress state to the callback
   if (typeof progressCallback === 'function') {
-    progressCallback(parsedRulesEntries.length, parsedRulesEntries.length);
+    progressCallback(currentStatus, maxStatus);
   }
 }
 
