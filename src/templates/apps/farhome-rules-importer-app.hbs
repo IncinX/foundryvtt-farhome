@@ -38,11 +38,12 @@
         <tr>
           <td><label for='remove-existing-items'>Remove Existing Items</label></td>
           <td>
+            {{log removeExistingItems}}
             <input
               id='remove-existing-items'
               name='removeExistingItems'
               type='checkbox'
-              value='{{removeExistingItems}}'
+              {{#if removeExistingItems}}checked{{/if}}
             />
           </td>
         </tr>
@@ -53,7 +54,7 @@
               id='overwrite-existing-templates'
               name='overwriteExistingTemplates'
               type='checkbox'
-              value='{{overwriteExistingTemplates}}'
+              {{#if overwriteExistingTemplates}}checked{{/if}}
             />
           </td>
         </tr>
