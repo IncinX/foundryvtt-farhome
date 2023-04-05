@@ -12,7 +12,8 @@ export async function createCompendiumFromRules(
   rulesUrl,
   compendiumLabels,
   progressCallback = undefined,
-  deleteExisting = true,
+  deleteExisting = false,
+  overwriteExistingTemplates = false
 ) {
   const rulesFetch = await fetch(rulesUrl);
   const rulesBlob = await rulesFetch.blob();

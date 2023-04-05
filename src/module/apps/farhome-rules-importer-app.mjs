@@ -13,6 +13,8 @@ class FarhomeRulesImporterApplication extends FormApplication {
       featsCompendiumName: 'Farhome Feats',
       maneuversCompendiumName: 'Farhome Maneuvers',
       spellsCompendiumName: 'Farhome Spells',
+      removeExistingItems: false,
+      overwriteExistingTemplates: false,
     };
 
     super(data, {});
@@ -66,7 +68,13 @@ class FarhomeRulesImporterApplication extends FormApplication {
       ['spells', formData.spellsCompendiumName],
     ]);
 
-    await createCompendiumFromRules(formData.rulesUrl, compendiumLabels, this._progressCallback.bind(this));
+    await createCompendiumFromRules(
+      formData.rulesUrl,
+      compendiumLabels,
+      this._progressCallback.bind(this),
+      formData.removeExistingItems,
+      formData.overwriteExistingTemplates,
+    );
   }
 }
 
