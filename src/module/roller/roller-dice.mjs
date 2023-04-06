@@ -54,7 +54,7 @@ export const ENHANCED_ROLL_TABLE = [
   Faces.CRITICAL_SUCCESS,
 ];
 
-export const NORMAL_ROLL_TABLE = [Faces.BLANK, Faces.BLANK, Faces.BLANK, Faces.BLANK, Faces.SUCCESS, Faces.SUCCESS];
+export const NORMAL_ROLL_TABLE = [Faces.BLANK, Faces.BLANK, Faces.BLANK, Faces.SUCCESS, Faces.SUCCESS, Faces.SUCCESS];
 
 export const BAD_ROLL_TABLE = [
   Faces.CRITICAL_FAILURE,
