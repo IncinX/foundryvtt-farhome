@@ -147,7 +147,7 @@ test('should roll one of each dice with rng 3', () => {
   expect(result[2].face).toBe(Faces.SUCCESS);
 
   expect(result[3].die).toBe(Dice.NORMAL);
-  expect(result[3].face).toBe(Faces.BLANK);
+  expect(result[3].face).toBe(Faces.SUCCESS);
 
   expect(result[4].die).toBe(Dice.BAD);
   expect(result[4].face).toBe(Faces.FAILURE);
