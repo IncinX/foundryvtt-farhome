@@ -1,22 +1,64 @@
 <form class='{{cssClass}}' autocomplete='off'>
   <div>
     <label for='rules-url'>Farhome Rules URL (Raw Text)</label>
-    <input id='rules-url' name='rulesUrl' type='text' value='{{rulesUrl}}'/>
+    <input id='rules-url' name='rulesUrl' type='text' value='{{rulesUrl}}' />
 
     <label for='backgrounds-compendium-name'>Backgrounds Compendium Name</label>
-    <input id='backgrounds-compendium-name' name='backgroundsCompendiumName' type='text' value='{{backgroundsCompendiumName}}'/>
+    <input
+      id='backgrounds-compendium-name'
+      name='backgroundsCompendiumName'
+      type='text'
+      value='{{backgroundsCompendiumName}}'
+    />
 
     <label for='conditions-compendium-name'>Conditions Compendium Name</label>
-    <input id='conditions-compendium-name' name='conditionsCompendiumName' type='text' value='{{conditionsCompendiumName}}'/>
+    <input
+      id='conditions-compendium-name'
+      name='conditionsCompendiumName'
+      type='text'
+      value='{{conditionsCompendiumName}}'
+    />
 
     <label for='feats-compendium-name'>Feats Compendium Name</label>
-    <input id='feats-compendium-name' name='featsCompendiumName' type='text' value='{{featsCompendiumName}}'/>
+    <input id='feats-compendium-name' name='featsCompendiumName' type='text' value='{{featsCompendiumName}}' />
 
     <label for='maneuvers-compendium-name'>Maneuvers Compendium Name</label>
-    <input id='maneuvers-compendium-name' name='maneuversCompendiumName' type='text' value='{{maneuversCompendiumName}}'/>
+    <input
+      id='maneuvers-compendium-name'
+      name='maneuversCompendiumName'
+      type='text'
+      value='{{maneuversCompendiumName}}'
+    />
 
     <label for='spells-compendium-name'>Spells Compendium Name</label>
-    <input id='spells-compendium-name' name='spellsCompendiumName' type='text' value='{{spellsCompendiumName}}'/>
+    <input id='spells-compendium-name' name='spellsCompendiumName' type='text' value='{{spellsCompendiumName}}' />
+
+    <table class='rules-checkbox-table'>
+      <tbody>
+        <tr>
+          <td><label for='remove-existing-compendium'>Remove Existing Compendium</label></td>
+          <td>
+            <input
+              id='remove-existing-compendium'
+              name='removeExistingCompendium'
+              type='checkbox'
+              {{#if removeExistingCompendium}}checked{{/if}}
+            />
+          </td>
+        </tr>
+        <tr>
+          <td><label for='overwrite-existing-templates'>Overwrite Existing Templates</label></td>
+          <td>
+            <input
+              id='overwrite-existing-templates'
+              name='overwriteExistingTemplates'
+              type='checkbox'
+              {{#if overwriteExistingTemplates}}checked{{/if}}
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
     <button id='import' type='submit'>Import</button>
 

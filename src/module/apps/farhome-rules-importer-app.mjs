@@ -7,12 +7,14 @@ import { createCompendiumFromRules } from '../importers/farhome-rules-importer';
 class FarhomeRulesImporterApplication extends FormApplication {
   constructor() {
     let data = {
-      rulesUrl: '',
+      rulesUrl: 'https://raw.githubusercontent.com/IncinX/farhome-rules/master/rulesdoc.md',
       backgroundsCompendiumName: 'Farhome Backgrounds',
       conditionsCompendiumName: 'Farhome Conditions',
       featsCompendiumName: 'Farhome Feats',
       maneuversCompendiumName: 'Farhome Maneuvers',
       spellsCompendiumName: 'Farhome Spells',
+      removeExistingCompendium: false,
+      overwriteExistingTemplates: false,
     };
 
     super(data, {});
@@ -66,7 +68,13 @@ class FarhomeRulesImporterApplication extends FormApplication {
       ['spells', formData.spellsCompendiumName],
     ]);
 
-    await createCompendiumFromRules(formData.rulesUrl, compendiumLabels, this._progressCallback.bind(this));
+    await createCompendiumFromRules(
+      formData.rulesUrl,
+      compendiumLabels,
+      this._progressCallback.bind(this),
+      formData.removeExistingCompendium,
+      formData.overwriteExistingTemplates,
+    );
   }
 }
 
