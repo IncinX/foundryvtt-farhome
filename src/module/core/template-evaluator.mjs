@@ -87,25 +87,21 @@ export async function evaluateTemplateChunk(templateChunk, actorContext, itemCon
         intimidation: actorContext.system.proficiencies.attributes.str.intimidation.value,
 
         acrobatics: actorContext.system.proficiencies.attributes.dex.acrobatics.value,
-        lockpicking: actorContext.system.proficiencies.attributes.dex.lockpicking.value,
         stealth: actorContext.system.proficiencies.attributes.dex.stealth.value,
-        sleightOfHand: actorContext.system.proficiencies.attributes.dex.sleightOfHand.value,
+        thievery: actorContext.system.proficiencies.attributes.dex.thievery.value,
 
         exhaustion: actorContext.system.proficiencies.attributes.sta.exhaustion.value,
         survival: actorContext.system.proficiencies.attributes.sta.survival.value,
 
         arcana: actorContext.system.proficiencies.attributes.int.arcana.value,
-        investigation: actorContext.system.proficiencies.attributes.int.investigation.value,
+        insight: actorContext.system.proficiencies.attributes.int.insight.value,
         lore: actorContext.system.proficiencies.attributes.int.lore.value,
-        medicine: actorContext.system.proficiencies.attributes.int.medicine.value,
 
-        animalHandling: actorContext.system.proficiencies.attributes.will.animalHandling.value,
-        insight: actorContext.system.proficiencies.attributes.will.insight.value,
+        medicine: actorContext.system.proficiencies.attributes.will.medicine.value,
         nature: actorContext.system.proficiencies.attributes.will.nature.value,
         perception: actorContext.system.proficiencies.attributes.will.perception.value,
 
         conversation: actorContext.system.proficiencies.attributes.cha.conversation.value,
-        diplomacy: actorContext.system.proficiencies.attributes.cha.diplomacy.value,
         performance: actorContext.system.proficiencies.attributes.cha.performance.value,
         religion: actorContext.system.proficiencies.attributes.cha.religion.value,
 

@@ -52,14 +52,17 @@ export class FarhomeItemSheet extends ItemSheet {
       note: await this._enrichTextHTML(context.system.note),
     };
 
-    // Run the TextEditor.enrichHTML on prompt description entries
-    // This prompt system treats an object like an array with numerical indexes as keys.
-    // This is due to the fact that handlebars does not support updating entries in array fields well, particularly for the description field.
-    const promptMaxIndex = context.system.prompts.maxIndex ?? 0;
-    for (let promptIndex = 0; promptIndex < promptMaxIndex; promptIndex++) {
-      let prompt = context.system.prompts[`${promptIndex}`];
-      prompt.description.enriched = await this._enrichTextHTML(prompt.description);
-      prompt.description.targetPath = `system.prompts.${promptIndex}.description.value`;
+    // Prompts work on everything but notes for now
+    if (!['note'].includes(this.item.type)) {
+      // Run the TextEditor.enrichHTML on prompt description entries
+      // This prompt system treats an object like an array with numerical indexes as keys.
+      // This is due to the fact that handlebars does not support updating entries in array fields well, particularly for the description field.
+      const promptMaxIndex = context.system.prompts.maxIndex ?? 0;
+      for (let promptIndex = 0; promptIndex < promptMaxIndex; promptIndex++) {
+        let prompt = context.system.prompts[`${promptIndex}`];
+        prompt.description.enriched = await this._enrichTextHTML(prompt.description);
+        prompt.description.targetPath = `system.prompts.${promptIndex}.description.value`;
+      }
     }
 
     return context;
