@@ -69,26 +69,6 @@
           }
         },
         "proficiencies": {
-          "saves": {
-            "str": {
-              "value": 0
-            },
-            "dex": {
-              "value": 0
-            },
-            "sta": {
-              "value": 0
-            },
-            "int": {
-              "value": 0
-            },
-            "will": {
-              "value": 0
-            },
-            "cha": {
-              "value": 0
-            }
-          },
           "attributes": {
             "str": {
               "athletics": {
@@ -102,13 +82,10 @@
               "acrobatics": {
                 "value": 0
               },
-              "lockpicking": {
-                "value": 0
-              },
               "stealth": {
                 "value": 0
               },
-              "sleightOfHand": {
+              "thievery": {
                 "value": 0
               }
             },
@@ -124,21 +101,15 @@
               "arcana": {
                 "value": 0
               },
-              "investigation": {
+              "insight": {
                 "value": 0
               },
               "lore": {
                 "value": 0
-              },
-              "medicine": {
-                "value": 0
               }
             },
             "will": {
-              "animalHandling": {
-                "value": 0
-              },
-              "insight": {
+              "medicine": {
                 "value": 0
               },
               "nature": {
@@ -150,9 +121,6 @@
             },
             "cha": {
               "conversation": {
-                "value": 0
-              },
-              "diplomacy": {
                 "value": 0
               },
               "performance": {

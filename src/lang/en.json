@@ -232,6 +232,7 @@
     "value": "Value",
     "variable": "Variable",
     "choices": "Choices",
-    "concentration": "Concentration"
+    "concentration": "Concentration",
+    "thievery": "Thievery"
   }
 }
