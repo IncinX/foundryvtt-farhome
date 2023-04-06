@@ -716,6 +716,12 @@ class FarhomeRuleParser {
       <p>[[i.description]]</p>
       ${spellRoll}`;
 
+    // #todo Infer the AP from the casting time and add an [[ap()]] tag
+    // #todo Switch to using handlebars for the roll template construction
+    // #todo Infer the wounds of damage and add a roll for it (even if it is crit based)
+    // #todo Add extra dice (like bad or terrible) to the roll formula based on the description text
+    // #todo Review and validate good templates and merge them incrementally into the farhome packs... improve parser for bad templates
+
     // Add a new spell object to the list
     const spellObject = {
       name: name,
