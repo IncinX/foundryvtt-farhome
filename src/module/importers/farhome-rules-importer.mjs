@@ -50,7 +50,7 @@ export async function createCompendiumFromRules(
 
     // Delete existing compediums if requested
     if (deleteExistingCompendium && game.packs.has(worldCompendiumName)) {
-      game.packs.get(worldCompendiumName).deleteCompendium();
+      await game.packs.get(worldCompendiumName).deleteCompendium();
     }
 
     // Create the compendium if it doesn't already exist
