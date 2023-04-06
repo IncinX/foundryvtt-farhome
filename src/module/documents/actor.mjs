@@ -105,7 +105,6 @@ export class FarhomeActor extends Actor {
         roll: proficiencyRollFormula(saveValue, Math.max(this.system.attributes[attributeKey].value, 0)),
       };
     }
-    console.log(this.system.proficiencies.saves);
 
     // Setup rolls for weapons
     // It uses the maximum of strength of dexterity for everything but ranged.
