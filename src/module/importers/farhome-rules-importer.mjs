@@ -77,7 +77,7 @@ export async function createCompendiumFromRules(
       const existingEntry = worldCompendiumNameMap.get(item.name);
       if (existingEntry) {
         console.log(`Updating existing item ${item.name} in compendium ${worldCompendiumName}`);
-        
+
         // This is how you can get the existing document from the compendium, but it isn't necessary right now and
         // is just here for reference.
         // const itemDocument = await worldCompendium.getDocument(existingEntry._id);
