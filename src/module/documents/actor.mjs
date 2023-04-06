@@ -86,25 +86,26 @@ export class FarhomeActor extends Actor {
       attributeObject.roll = proficiencyRollFormula(0, attributeObject.value);
     }
 
-    // Loop through the saves, and add their roll string as derived this.system.
-    // Note that according to the rules that negative attribute scores do not replace normal dice with bad dice.  Thereforce, clamp the lower bound to 0.
-    for (let [attributeKey, proficiencyObject] of Object.entries(this.system.proficiencies.saves)) {
-      proficiencyObject.roll = proficiencyRollFormula(
-        proficiencyObject.value,
-        Math.max(this.system.attributes[attributeKey].value, 0),
-      );
-    }
-
     // Loop through the attribute proficiencies, and add their roll string as derived this.system.
     for (let [attributeKey, attributeObject] of Object.entries(this.system.proficiencies.attributes)) {
+      let proficiencySum = 0;
       for (let [_, proficiencyObject] of Object.entries(attributeObject)) {
         proficiencyObject.attribute = game.i18n.localize(`farhome.${attributeKey}Tag`);
         proficiencyObject.roll = proficiencyRollFormula(
           proficiencyObject.value,
           this.system.attributes[attributeKey].value,
         );
+
+        proficiencySum += proficiencyObject.value;
       }
+
+      const saveValue = Math.floor(proficiencySum / 2);
+      this.system.proficiencies.saves[attributeKey] = {
+        value: saveValue,
+        roll: proficiencyRollFormula(saveValue, Math.max(this.system.attributes[attributeKey].value, 0)),
+      };
     }
+    console.log(this.system.proficiencies.saves);
 
     // Setup rolls for weapons
     // It uses the maximum of strength of dexterity for everything but ranged.
