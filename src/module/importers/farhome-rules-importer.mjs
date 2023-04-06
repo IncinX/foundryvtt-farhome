@@ -97,6 +97,9 @@ export async function createCompendiumFromRules(
       }
 
       currentStatus++;
+      if (typeof progressCallback === 'function') {
+        progressCallback(currentStatus, maxStatus);
+      }
     }
   }
 
