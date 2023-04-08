@@ -480,7 +480,7 @@ function _convertAC(vetoolsMonsterImportConfig, monsterAC) {
   } else if (monsterAC instanceof Array) {
     if (monsterAC[0] instanceof Object) {
       armorValue = monsterAC[0].ac;
-      armorDescription = monsterAC[0].from.join(', ').replace('{@item ', '').replace('|phb}', '');
+      armorDescription = monsterAC[0].from.join(', ').replaceAll('{@item ', '').replaceAll('|phb}', '');
     } else {
       armorValue = monsterAC[0];
       armorDescription = 'natural evasion';
@@ -492,7 +492,7 @@ function _convertAC(vetoolsMonsterImportConfig, monsterAC) {
   if (armorDescription) {
     const armorList = armorDescription.split(',');
     for (const armorItem of armorList) {
-      const armorItemTrimmed = armorItem.trim();
+      const armorItemTrimmed = armorItem.trim().toLowerCase();
       switch (armorItemTrimmed) {
         case 'shield':
           roll = `D${roll}`;
@@ -523,6 +523,7 @@ function _convertAC(vetoolsMonsterImportConfig, monsterAC) {
           break;
         case 'splint':
         case 'half plate':
+        case 'half plate armor':
           roll = `${roll}2D3d`;
           break;
         case 'plate':
