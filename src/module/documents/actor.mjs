@@ -87,6 +87,9 @@ export class FarhomeActor extends Actor {
     }
 
     // Loop through the attribute proficiencies, and add their roll string as derived this.system.
+    // Also calculate and store the save proficiencies which are the sum of the proficiencies for that attribute,
+    // divided by 2, rounded down.
+    this.system.proficiencies.saves = {};
     for (let [attributeKey, attributeObject] of Object.entries(this.system.proficiencies.attributes)) {
       let proficiencySum = 0;
       for (let [_, proficiencyObject] of Object.entries(attributeObject)) {

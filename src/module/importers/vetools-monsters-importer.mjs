@@ -75,9 +75,15 @@ export async function createCompendiumFromVetoolsBeastiary(
 
     const monster = beastiaryJson.monster[monsterIndex];
 
-    console.log(`Farhome | Importing monster ${monster.name}`);
+    if (monster._copy) {
+      // #todo We don't support copying today since it requires multiple compendiums and correct compendium order import so skip.
+      console.log(`Farhome | Skipping monster ${monster.name} because it is a copy of another monster`);
+      continue;
+    }
 
-    const monsterImgUri = _getImageLink(monster.source, monster.name);
+    console.log(`Farhome | Importing monster ${monster.name} for compendium ${compendiumLabel}`);
+
+    const monsterImgUri = await _getImageLink(monster.source, monster.name);
     const monsterWounds = _convertHp(vetoolsMonsterImportConfig, monster.hp.average);
 
     // Construct the monster document
@@ -140,12 +146,13 @@ export async function createCompendiumFromVetoolsBeastiary(
         },
         dex: {
           acrobatics: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.acrobatics, monster.dex) },
-          sleightOfHand: {
-            value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill['sleight of hand'], monster.dex),
-          },
           stealth: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.stealth, monster.dex) },
-          lockpicking: {
-            value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill['sleight of hand'], monster.dex),
+          thievery: {
+            value: _convertProficiency(
+              vetoolsMonsterImportConfig,
+              Math.max(monster.skill['sleight of hand'], monster.skill.lockpicking),
+              monster.dex,
+            ),
           },
         },
         sta: {
@@ -154,25 +161,28 @@ export async function createCompendiumFromVetoolsBeastiary(
         },
         int: {
           arcana: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.arcana, monster.int) },
-          lore: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.history, monster.int) },
-          investigation: {
-            value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.investigation, monster.int),
+          insight: {
+            value: _convertProficiency(
+              vetoolsMonsterImportConfig,
+              Math.max(monster.skill.investigation, monster.skill.insight),
+              monster.int,
+            ),
           },
-          nature: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.nature, monster.int) },
+          lore: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.history, monster.int) },
         },
         will: {
-          animalHandling: {
-            value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill['animal handling'], monster.wis),
-          },
-          insight: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.insight, monster.wis) },
           medicine: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.medicine, monster.wis) },
+          nature: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.nature, monster.wis) },
           perception: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.perception, monster.wis) },
         },
         cha: {
           conversation: {
-            value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.persuasion, monster.cha),
+            value: _convertProficiency(
+              vetoolsMonsterImportConfig,
+              Math.max(monster.skill.persuasion, monster.skill.deception),
+              monster.cha,
+            ),
           },
-          diplomacy: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.deception, monster.cha) },
           performance: {
             value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.performance, monster.cha),
           },
@@ -346,10 +356,23 @@ function _toTitleCase(str) {
   return String(str).replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
 }
 
-function _getImageLink(veSource, veName) {
+async function _getImageLink(veSource, veName) {
   const veSourceUriComponent = encodeURIComponent(veSource.replace('3pp', '(3pp)'));
   const veNameUriComponent = encodeURIComponent(veName);
-  return `https://raw.githubusercontent.com/IncinX/5etools/master/img/${veSourceUriComponent}/${veNameUriComponent}.png`;
+
+  let baseUri = '';
+  const veToolsUri = `https://raw.githubusercontent.com/IncinX/5etools/master/img/${veSourceUriComponent}/${veNameUriComponent}.png`;
+  const veToolsMirrorUri = `https://raw.githubusercontent.com/IncinX/5etools-mirror-1.github.io/master/img/${veSourceUriComponent}/${veNameUriComponent}.png`;
+
+  if ((await fetch(veToolsUri)).ok) {
+    return veToolsUri;
+  }
+
+  if ((await fetch(veToolsMirrorUri)).ok) {
+    return veToolsMirrorUri;
+  }
+
+  return '';
 }
 
 function _calculateWoundTotal(guaranteedWoundCount, woundCount) {
@@ -381,7 +404,7 @@ function _calculateAverageDefenseSuccesses(superiorDefenseCount, defenseCount) {
 }
 
 function _convertTokenSize(veSize) {
-  switch (veSize.toUpperCase()) {
+  switch (veSize[0].toUpperCase()) {
     default:
     case 'S':
     case 'M':
@@ -446,17 +469,33 @@ function _convertCr(vetoolsMonsterImportConfig, veCr) {
 }
 
 function _convertAC(vetoolsMonsterImportConfig, monsterAC) {
-  // Parse the brackets in AC () for the armor type and use that if it is found.
-  const armorDescriptionMatch = monsterAC.match(/\(([^)]+)\)/);
-  const armorDescription = armorDescriptionMatch ? armorDescriptionMatch[1] : 'natural evasion';
-  const armorValue = parseInt(monsterAC.match(/\d+/)[0]);
+  let armorDescription = '';
+  let armorValue = 0;
+
+  if (typeof monsterAC === 'string') {
+    // Parse the brackets in AC () for the armor type and use that if it is found.
+    const armorDescriptionMatch = monsterAC.match(/\(([^)]+)\)/);
+    armorDescription = armorDescriptionMatch ? armorDescriptionMatch[1] : 'natural evasion';
+    armorValue = parseInt(monsterAC.match(/\d+/)[0]);
+  } else if (monsterAC instanceof Array) {
+    if (monsterAC[0] instanceof Object) {
+      armorValue = monsterAC[0].ac;
+      armorDescription = monsterAC[0].from.join(', ').replaceAll('{@item ', '').replaceAll('|phb}', '');
+    } else {
+      armorValue = monsterAC[0];
+      armorDescription = 'natural evasion';
+    }
+  } else {
+    armorValue = 10;
+    armorDescription = 'unknown armor';
+  }
 
   let roll = '';
 
   if (armorDescription) {
     const armorList = armorDescription.split(',');
     for (const armorItem of armorList) {
-      const armorItemTrimmed = armorItem.trim();
+      const armorItemTrimmed = armorItem.trim().toLowerCase();
       switch (armorItemTrimmed) {
         case 'shield':
           roll = `D${roll}`;
@@ -487,6 +526,7 @@ function _convertAC(vetoolsMonsterImportConfig, monsterAC) {
           break;
         case 'splint':
         case 'half plate':
+        case 'half plate armor':
           roll = `${roll}2D3d`;
           break;
         case 'plate':
@@ -499,6 +539,8 @@ function _convertAC(vetoolsMonsterImportConfig, monsterAC) {
         case 'natural evasion': // Custom defined type in case no armor type is specified
         case 'patchwork armor':
         case 'natural armor':
+        case 'bonecraft armor':
+        case 'unarmored defense':
           // For natural armor:
           // The way the formula works is by having a maximum number of regular defense dice and then upgrading
           // one of those to a superior before adding another regular defense die.
