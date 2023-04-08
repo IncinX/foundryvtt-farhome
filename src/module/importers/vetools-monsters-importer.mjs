@@ -353,7 +353,7 @@ function _toTitleCase(str) {
 async function _getImageLink(veSource, veName) {
   const veSourceUriComponent = encodeURIComponent(veSource.replace('3pp', '(3pp)'));
   const veNameUriComponent = encodeURIComponent(veName);
-  
+
   let baseUri = '';
   const veToolsUri = `https://raw.githubusercontent.com/IncinX/5etools/master/img/${veSourceUriComponent}/${veNameUriComponent}.png`;
   const veToolsMirrorUri = `https://raw.githubusercontent.com/IncinX/5etools-mirror-1.github.io/master/img/${veSourceUriComponent}/${veNameUriComponent}.png`;
