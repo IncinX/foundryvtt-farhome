@@ -75,6 +75,12 @@ export async function createCompendiumFromVetoolsBeastiary(
 
     const monster = beastiaryJson.monster[monsterIndex];
 
+    if (monster._copy) {
+      // #todo We don't support copying today since it requires multiple compendiums and correct compendium order import so skip.
+      console.log(`Farhome | Skipping monster ${monster.name} because it is a copy of another monster`);
+      continue;
+    }
+
     console.log(`Farhome | Importing monster ${monster.name}`);
 
     const monsterImgUri = await _getImageLink(monster.source, monster.name);
@@ -360,11 +366,13 @@ async function _getImageLink(veSource, veName) {
 
   if ((await fetch(veToolsUri)).ok) {
     return veToolsUri;
-  } else if ((await fetch(veToolsMirrorUri)).ok) {
-    return veToolsMirrorUri;
-  } else {
-    return '';
   }
+  
+  if ((await fetch(veToolsMirrorUri)).ok) {
+    return veToolsMirrorUri;
+  }
+  
+  return '';
 }
 
 function _calculateWoundTotal(guaranteedWoundCount, woundCount) {
@@ -470,8 +478,13 @@ function _convertAC(vetoolsMonsterImportConfig, monsterAC) {
     armorDescription = armorDescriptionMatch ? armorDescriptionMatch[1] : 'natural evasion';
     armorValue = parseInt(monsterAC.match(/\d+/)[0]);
   } else if (monsterAC instanceof Array) {
-    armorValue = monsterAC[0].ac;
-    armorDescription = monsterAC[0].from[0];
+    if (monsterAC[0] instanceof Object) {
+      armorValue = monsterAC[0].ac;
+      armorDescription = monsterAC[0].from.join(', ').replace('{@item ', '').replace('|phb}', '');
+    } else {
+      armorValue = monsterAC[0];
+      armorDescription = 'natural evasion';
+    }
   }
 
   let roll = '';
@@ -516,18 +529,19 @@ function _convertAC(vetoolsMonsterImportConfig, monsterAC) {
         case 'plate armor':
           roll = `${roll}3D2d`;
           break;
+        default:
+          console.warn(`Unknown armor type: ${armorItemTrimmed}`);
         case 'natural':
         case 'natural evasion': // Custom defined type in case no armor type is specified
         case 'patchwork armor':
         case 'natural armor':
         case 'bonecraft armor':
+        case 'unarmored defense':
           // For natural armor:
           // The way the formula works is by having a maximum number of regular defense dice and then upgrading
           // one of those to a superior before adding another regular defense die.
           roll = _convertACToDefenseRoll(vetoolsMonsterImportConfig, armorValue);
           break;
-        default:
-          console.warn(`Unknown armor type: ${armorItemTrimmed}`);
       }
     }
   }

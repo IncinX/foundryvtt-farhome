@@ -100,6 +100,7 @@ export class FarhomeActor extends Actor {
       }
 
       const saveValue = Math.floor(proficiencySum / 2);
+      this.system.proficiencies.saves = {};
       this.system.proficiencies.saves[attributeKey] = {
         value: saveValue,
         roll: proficiencyRollFormula(saveValue, Math.max(this.system.attributes[attributeKey].value, 0)),
