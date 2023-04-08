@@ -142,7 +142,11 @@ export async function createCompendiumFromVetoolsBeastiary(
           acrobatics: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.acrobatics, monster.dex) },
           stealth: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.stealth, monster.dex) },
           thievery: {
-            value: _convertProficiency(vetoolsMonsterImportConfig, Math.max(monster.skill['sleight of hand'], monster.skill.lockpicking), monster.dex),
+            value: _convertProficiency(
+              vetoolsMonsterImportConfig,
+              Math.max(monster.skill['sleight of hand'], monster.skill.lockpicking),
+              monster.dex,
+            ),
           },
         },
         sta: {
@@ -152,7 +156,11 @@ export async function createCompendiumFromVetoolsBeastiary(
         int: {
           arcana: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.arcana, monster.int) },
           insight: {
-            value: _convertProficiency(vetoolsMonsterImportConfig, Math.max(monster.skill.investigation, monster.skill.insight), monster.int),
+            value: _convertProficiency(
+              vetoolsMonsterImportConfig,
+              Math.max(monster.skill.investigation, monster.skill.insight),
+              monster.int,
+            ),
           },
           lore: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.history, monster.int) },
         },
@@ -163,7 +171,11 @@ export async function createCompendiumFromVetoolsBeastiary(
         },
         cha: {
           conversation: {
-            value: _convertProficiency(vetoolsMonsterImportConfig, Math.max(monster.skill.persuasion, monster.skill.deception), monster.cha),
+            value: _convertProficiency(
+              vetoolsMonsterImportConfig,
+              Math.max(monster.skill.persuasion, monster.skill.deception),
+              monster.cha,
+            ),
           },
           performance: {
             value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.performance, monster.cha),
@@ -440,7 +452,7 @@ function _convertCr(vetoolsMonsterImportConfig, veCr) {
 function _convertAC(vetoolsMonsterImportConfig, monsterAC) {
   let armorDescription = '';
   let armorValue = 0;
-  
+
   if (monsterAC instanceof String) {
     // Parse the brackets in AC () for the armor type and use that if it is found.
     const armorDescriptionMatch = monsterAC.match(/\(([^)]+)\)/);
