@@ -610,51 +610,57 @@ export class FarhomeActorSheet extends ActorSheet {
   async _onManaRefill(event) {
     event.preventDefault();
 
-    const actorContext = this.actor.system;
+    if (this.actor.type === 'npc') {
+      this.actor.update({ 'system.features.mana.value': this.actor.system.features.mana.max });
 
-    // RestType enumeration for dialog query and logic
-    const RestType = {
-      LongRest: 0,
-      ShortRest: 1,
-    };
+      await sendActorMessage(`<strong>${this.actor.name}</strong> restored max mana.`);
+    } else {
+      const actorContext = this.actor.system;
 
-    const dialogContent = await renderTemplate('systems/farhome/templates/dialogs/mana-dialog.hbs');
+      // RestType enumeration for dialog query and logic
+      const RestType = {
+        LongRest: 0,
+        ShortRest: 1,
+      };
 
-    const restType = await Dialog.wait({
-      title: 'Mana Recharge',
-      content: dialogContent,
-      buttons: {
-        shortRest: {
-          label: 'Short Rest',
-          callback: () => RestType.ShortRest,
+      const dialogContent = await renderTemplate('systems/farhome/templates/dialogs/mana-dialog.hbs');
+
+      const restType = await Dialog.wait({
+        title: 'Mana Recharge',
+        content: dialogContent,
+        buttons: {
+          shortRest: {
+            label: 'Short Rest',
+            callback: () => RestType.ShortRest,
+          },
+          longRest: {
+            label: 'Long Rest',
+            callback: () => RestType.LongRest,
+          },
         },
-        longRest: {
-          label: 'Long Rest',
-          callback: () => RestType.LongRest,
-        },
-      },
-      default: 'shortRest',
-    });
+        default: 'shortRest',
+      });
 
-    let manaRefillValue = 0;
-    switch (restType) {
-      case RestType.LongRest:
-        manaRefillValue = 3 + actorContext.level.value;
-        break;
-      case RestType.ShortRest:
-        manaRefillValue = Math.max(Math.ceil(actorContext.level.value / 2), 1);
-        break;
-      default:
-        console.error(`Unknown rest type: ${restType}`);
+      let manaRefillValue = 0;
+      switch (restType) {
+        case RestType.LongRest:
+          manaRefillValue = 3 + actorContext.level.value;
+          break;
+        case RestType.ShortRest:
+          manaRefillValue = Math.max(Math.ceil(actorContext.level.value / 2), 1);
+          break;
+        default:
+          console.error(`Unknown rest type: ${restType}`);
+      }
+
+      const newManaValue = Math.min(actorContext.features.mana.max, actorContext.features.mana.value + manaRefillValue);
+
+      this.actor.update({ 'system.features.mana.value': newManaValue });
+
+      await sendActorMessage(
+        `<strong>${this.actor.name}</strong> restored ${newManaValue - actorContext.features.mana.value} mana.`,
+      );
     }
-
-    const newManaValue = Math.min(actorContext.features.mana.max, actorContext.features.mana.value + manaRefillValue);
-
-    this.actor.update({ 'system.features.mana.value': newManaValue });
-
-    await sendActorMessage(
-      `<strong>${this.actor.name}</strong> restored ${newManaValue - actorContext.features.mana.value} mana.`,
-    );
   }
 
   /**
