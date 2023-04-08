@@ -77,7 +77,7 @@ export async function createCompendiumFromVetoolsBeastiary(
 
     console.log(`Farhome | Importing monster ${monster.name}`);
 
-    const monsterImgUri = _getImageLink(monster.source, monster.name);
+    const monsterImgUri = await _getImageLink(monster.source, monster.name);
     const monsterWounds = _convertHp(vetoolsMonsterImportConfig, monster.hp.average);
 
     // Construct the monster document
@@ -350,10 +350,21 @@ function _toTitleCase(str) {
   return String(str).replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
 }
 
-function _getImageLink(veSource, veName) {
+async function _getImageLink(veSource, veName) {
   const veSourceUriComponent = encodeURIComponent(veSource.replace('3pp', '(3pp)'));
   const veNameUriComponent = encodeURIComponent(veName);
-  return `https://raw.githubusercontent.com/IncinX/5etools/master/img/${veSourceUriComponent}/${veNameUriComponent}.png`;
+  
+  let baseUri = '';
+  const veToolsUri = `https://raw.githubusercontent.com/IncinX/5etools/master/img/${veSourceUriComponent}/${veNameUriComponent}.png`;
+  const veToolsMirrorUri = `https://raw.githubusercontent.com/IncinX/5etools-mirror-1.github.io/master/img/${veSourceUriComponent}/${veNameUriComponent}.png`;
+
+  if ((await fetch(veToolsUri)).ok) {
+    return veToolsUri;
+  } else if ((await fetch(veToolsMirrorUri)).ok) {
+    return veToolsMirrorUri;
+  } else {
+    return '';
+  }
 }
 
 function _calculateWoundTotal(guaranteedWoundCount, woundCount) {
@@ -385,7 +396,7 @@ function _calculateAverageDefenseSuccesses(superiorDefenseCount, defenseCount) {
 }
 
 function _convertTokenSize(veSize) {
-  switch (veSize.toUpperCase()) {
+  switch (veSize[0].toUpperCase()) {
     default:
     case 'S':
     case 'M':
