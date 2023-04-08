@@ -367,11 +367,11 @@ async function _getImageLink(veSource, veName) {
   if ((await fetch(veToolsUri)).ok) {
     return veToolsUri;
   }
-  
+
   if ((await fetch(veToolsMirrorUri)).ok) {
     return veToolsMirrorUri;
   }
-  
+
   return '';
 }
 
@@ -472,7 +472,7 @@ function _convertAC(vetoolsMonsterImportConfig, monsterAC) {
   let armorDescription = '';
   let armorValue = 0;
 
-  if (monsterAC instanceof String) {
+  if (typeof monsterAC === 'string') {
     // Parse the brackets in AC () for the armor type and use that if it is found.
     const armorDescriptionMatch = monsterAC.match(/\(([^)]+)\)/);
     armorDescription = armorDescriptionMatch ? armorDescriptionMatch[1] : 'natural evasion';
@@ -485,6 +485,9 @@ function _convertAC(vetoolsMonsterImportConfig, monsterAC) {
       armorValue = monsterAC[0];
       armorDescription = 'natural evasion';
     }
+  } else {
+    armorValue = 10;
+    armorDescription = 'unknown armor';
   }
 
   let roll = '';
