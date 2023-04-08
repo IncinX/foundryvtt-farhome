@@ -140,12 +140,9 @@ export async function createCompendiumFromVetoolsBeastiary(
         },
         dex: {
           acrobatics: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.acrobatics, monster.dex) },
-          sleightOfHand: {
-            value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill['sleight of hand'], monster.dex),
-          },
           stealth: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.stealth, monster.dex) },
-          lockpicking: {
-            value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill['sleight of hand'], monster.dex),
+          thievery: {
+            value: _convertProficiency(vetoolsMonsterImportConfig, Math.max(monster.skill['sleight of hand'], monster.skill.lockpicking), monster.dex),
           },
         },
         sta: {
@@ -154,25 +151,20 @@ export async function createCompendiumFromVetoolsBeastiary(
         },
         int: {
           arcana: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.arcana, monster.int) },
-          lore: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.history, monster.int) },
-          investigation: {
-            value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.investigation, monster.int),
+          insight: {
+            value: _convertProficiency(vetoolsMonsterImportConfig, Math.max(monster.skill.investigation, monster.skill.insight), monster.int),
           },
-          nature: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.nature, monster.int) },
+          lore: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.history, monster.int) },
         },
         will: {
-          animalHandling: {
-            value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill['animal handling'], monster.wis),
-          },
-          insight: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.insight, monster.wis) },
           medicine: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.medicine, monster.wis) },
+          nature: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.nature, monster.wis) },
           perception: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.perception, monster.wis) },
         },
         cha: {
           conversation: {
-            value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.persuasion, monster.cha),
+            value: _convertProficiency(vetoolsMonsterImportConfig, Math.max(monster.skill.persuasion, monster.skill.deception), monster.cha),
           },
-          diplomacy: { value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.deception, monster.cha) },
           performance: {
             value: _convertProficiency(vetoolsMonsterImportConfig, monster.skill.performance, monster.cha),
           },
@@ -446,10 +438,18 @@ function _convertCr(vetoolsMonsterImportConfig, veCr) {
 }
 
 function _convertAC(vetoolsMonsterImportConfig, monsterAC) {
-  // Parse the brackets in AC () for the armor type and use that if it is found.
-  const armorDescriptionMatch = monsterAC.match(/\(([^)]+)\)/);
-  const armorDescription = armorDescriptionMatch ? armorDescriptionMatch[1] : 'natural evasion';
-  const armorValue = parseInt(monsterAC.match(/\d+/)[0]);
+  let armorDescription = '';
+  let armorValue = 0;
+  
+  if (monsterAC instanceof String) {
+    // Parse the brackets in AC () for the armor type and use that if it is found.
+    const armorDescriptionMatch = monsterAC.match(/\(([^)]+)\)/);
+    armorDescription = armorDescriptionMatch ? armorDescriptionMatch[1] : 'natural evasion';
+    armorValue = parseInt(monsterAC.match(/\d+/)[0]);
+  } else if (monsterAC instanceof Array) {
+    armorValue = monsterAC[0].ac;
+    armorDescription = monsterAC[0].from[0];
+  }
 
   let roll = '';
 
@@ -493,17 +493,18 @@ function _convertAC(vetoolsMonsterImportConfig, monsterAC) {
         case 'plate armor':
           roll = `${roll}3D2d`;
           break;
-        default:
-          console.warn(`Unknown armor type: ${armorItemTrimmed}`);
         case 'natural':
         case 'natural evasion': // Custom defined type in case no armor type is specified
         case 'patchwork armor':
         case 'natural armor':
+        case 'bonecraft armor':
           // For natural armor:
           // The way the formula works is by having a maximum number of regular defense dice and then upgrading
           // one of those to a superior before adding another regular defense die.
           roll = _convertACToDefenseRoll(vetoolsMonsterImportConfig, armorValue);
           break;
+        default:
+          console.warn(`Unknown armor type: ${armorItemTrimmed}`);
       }
     }
   }
