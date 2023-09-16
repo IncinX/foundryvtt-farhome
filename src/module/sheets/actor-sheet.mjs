@@ -468,17 +468,37 @@ export class FarhomeActorSheet extends ActorSheet {
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
 
+    // Actor may be part of a scene and instanced (such as NPC's)
+    // In this case, the scene actor should be updated, not the global actor.
+    // Therefore pass the scene id and the token document id that it is a part of.
+    const tokenDocumentId =
+      this.actor.parent && this.actor.parent instanceof TokenDocument ? this.actor.parent.id : undefined;
+    const sceneId =
+      this.actor.parent && this.actor.parent.parent && this.actor.parent.parent instanceof Scene
+        ? this.actor.parent.parent.id
+        : undefined;
+
     // First get confirmation
     let confirmationDialog = new Dialog({
       title: `Delete ${item.name}?`,
-      content: `<div class='delete-data' data-actor-id='${this.actor.id}' data-item-id='${item.id}'>Are you sure you want to delete ${item.name}?</div>`,
+      content: `<div class='delete-data' data-actor-id='${this.actor.id}' data-item-id='${item.id}' data-token-document-id='${tokenDocumentId}' data-scene-id='${sceneId}'>Are you sure you want to delete ${item.name}?</div>`,
       buttons: {
         delete: {
           icon: '<i class="fas fa-check"></i>',
           label: 'Delete',
           callback: (html) => {
             const primaryDiv = html.find('.delete-data')[0];
-            const actor = game.actors.get(primaryDiv.dataset.actorId);
+
+            let actor = undefined;
+
+            if (primaryDiv.dataset.tokenDocumentId !== 'undefined' && primaryDiv.dataset.sceneId !== 'undefined') {
+              // Modify an actor in a scene
+              actor = game.scenes.get(primaryDiv.dataset.sceneId).tokens.get(primaryDiv.dataset.tokenDocumentId)._actor;
+            } else {
+              // Modify an actor globally
+              actor = game.actors.get(primaryDiv.dataset.actorId);
+            }
+
             let item = actor.items.get(primaryDiv.dataset.itemId);
             item.delete();
           },
@@ -486,9 +506,9 @@ export class FarhomeActorSheet extends ActorSheet {
         cancel: {
           icon: '<i class="fas fa-times"></i>',
           label: 'Cancel',
-          callback: (html) => {
-            console.log('Cancelled deletion');
-          }
+          callback: () => {
+            console.log('Cancelled deletion of item');
+          },
         },
       },
       default: 'cancel',
