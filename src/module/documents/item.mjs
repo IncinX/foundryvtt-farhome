@@ -42,7 +42,14 @@ export class FarhomeItem extends Item {
 
     if (this.type === 'spell') {
       // Add spell dialog context to the extra item context.
-      Object.assign(extraItemContext, await this._spellLevelDialog());
+      const spellDialogResult = await this._spellLevelDialog();
+
+      // Check if the user cancelled the prompt.
+      if (spellDialogResult === 'cancel') {
+        return;
+      }
+
+      Object.assign(extraItemContext, spellDialogResult);
     }
 
     // Process prompts and add them to the item context.
@@ -52,6 +59,11 @@ export class FarhomeItem extends Item {
       let prompt = this.system.prompts[`${promptIndex}`];
       if (prompt.isValid) {
         const promptResult = await this._promptDialog(prompt);
+
+        // Check if the user cancelled the prompt.
+        if (promptResult === 'cancel') {
+          return;
+        }
 
         promptContext[prompt.variable.value] = promptResult;
       }
