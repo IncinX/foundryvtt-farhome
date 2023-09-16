@@ -232,6 +232,9 @@ export class FarhomeActorSheet extends ActorSheet {
     // Add Inventory Item
     html.find('.item-create').click(this._onItemCreate.bind(this));
 
+    // Copy Inventory Item
+    html.find('.item-copy').click(this._onItemCopy.bind(this));
+
     // Render the item sheet for viewing/editing prior to the editable check.
     html.find('.item-edit').click(this._onItemEdit.bind(this));
 
@@ -419,11 +422,37 @@ export class FarhomeActorSheet extends ActorSheet {
   }
 
   /**
+   * Handle copying an Owned Item for the actor using initial data defined in the HTML dataset
+   * @param {Event} event   The originating click event
+   * @private
+   */
+  async _onItemCopy(event) {
+    event.preventDefault();
+    const li = $(event.currentTarget).parents('.item');
+    const item = this.actor.items.get(li.data('itemId'));
+
+    // Initialize a default name.
+    // #todo Add localization
+    const name = `${item.name} - Copy`;
+
+    // Prepare the item object.
+    const itemData = {
+      name: name,
+      type: item.type,
+      system: duplicate(item.system),
+    };
+
+    // Create the duplicate item!
+    return await Item.create(itemData, { parent: this.actor });
+  }
+
+  /**
    * Handle editing an Owned Item
    * @param {Event} event   The originating click event
    * @private
    */
   async _onItemEdit(event) {
+    event.preventDefault();
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
     item.sheet.render(true);
@@ -435,20 +464,41 @@ export class FarhomeActorSheet extends ActorSheet {
    * @private
    */
   async _onItemDelete(event) {
+    event.preventDefault();
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
+
+    // Actor may be part of a scene and instanced (such as NPC's)
+    // In this case, the scene actor should be updated, not the global actor.
+    // Therefore pass the scene id and the token document id that it is a part of.
+    const tokenDocumentId =
+      this.actor.parent && this.actor.parent instanceof TokenDocument ? this.actor.parent.id : undefined;
+    const sceneId =
+      this.actor.parent && this.actor.parent.parent && this.actor.parent.parent instanceof Scene
+        ? this.actor.parent.parent.id
+        : undefined;
 
     // First get confirmation
     let confirmationDialog = new Dialog({
       title: `Delete ${item.name}?`,
-      content: `<div class='delete-data' data-actor-id='${this.actor.id}' data-item-id='${item.id}'>Are you sure you want to delete ${item.name}?</div>`,
+      content: `<div class='delete-data' data-actor-id='${this.actor.id}' data-item-id='${item.id}' data-token-document-id='${tokenDocumentId}' data-scene-id='${sceneId}'>Are you sure you want to delete ${item.name}?</div>`,
       buttons: {
         delete: {
           icon: '<i class="fas fa-check"></i>',
           label: 'Delete',
           callback: (html) => {
             const primaryDiv = html.find('.delete-data')[0];
-            const actor = game.actors.get(primaryDiv.dataset.actorId);
+
+            let actor = undefined;
+
+            if (primaryDiv.dataset.tokenDocumentId !== 'undefined' && primaryDiv.dataset.sceneId !== 'undefined') {
+              // Modify an actor in a scene
+              actor = game.scenes.get(primaryDiv.dataset.sceneId).tokens.get(primaryDiv.dataset.tokenDocumentId)._actor;
+            } else {
+              // Modify an actor globally
+              actor = game.actors.get(primaryDiv.dataset.actorId);
+            }
+
             let item = actor.items.get(primaryDiv.dataset.itemId);
             item.delete();
           },
@@ -456,6 +506,9 @@ export class FarhomeActorSheet extends ActorSheet {
         cancel: {
           icon: '<i class="fas fa-times"></i>',
           label: 'Cancel',
+          callback: () => {
+            console.log('Cancelled deletion of item');
+          },
         },
       },
       default: 'cancel',
@@ -470,6 +523,7 @@ export class FarhomeActorSheet extends ActorSheet {
    * @private
    */
   async _onEffectDelete(event) {
+    event.preventDefault();
     const li = $(event.currentTarget).parents('.item');
     const effect = this.actor.effects.get(li.data('effectId'));
     effect.delete();
@@ -481,6 +535,7 @@ export class FarhomeActorSheet extends ActorSheet {
    * @private
    */
   async _onItemRoll(event) {
+    event.preventDefault();
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
     item.roll();
@@ -492,6 +547,7 @@ export class FarhomeActorSheet extends ActorSheet {
    * @private
    */
   async _onItemEquippedChanged(event) {
+    event.preventDefault();
     // #todo Code duplication between all this and attuned/prepared can probably be reduced by binding a string parameter for the data path.
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
@@ -504,6 +560,7 @@ export class FarhomeActorSheet extends ActorSheet {
    * @private
    */
   async _onItemAttunedChanged(event) {
+    event.preventDefault();
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
     await item.update({ 'system.attuned.value': event.target.checked });
@@ -515,6 +572,7 @@ export class FarhomeActorSheet extends ActorSheet {
    * @private
    */
   async _onItemPreparedChanged(event) {
+    event.preventDefault();
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
     await item.update({ 'system.prepared.value': event.target.checked });
@@ -526,6 +584,7 @@ export class FarhomeActorSheet extends ActorSheet {
    * @private
    */
   async _onItemChargesChanged(event) {
+    event.preventDefault();
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
     await item.update({ 'system.charges.value': parseInt(event.target.value) });
@@ -537,6 +596,7 @@ export class FarhomeActorSheet extends ActorSheet {
    * @private
    */
   async _onItemQuantityChanged(event) {
+    event.preventDefault();
     const li = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(li.data('itemId'));
     await item.update({ 'system.quantity.value': parseInt(event.target.value) });
