@@ -335,7 +335,7 @@ export class FarhomeActorSheet extends ActorSheet {
     }
 
     // Setup a custom template depending on the item type.
-    const actorData = this.actor.system;
+    const actorData = this.actor.type !== 'stash' ? this.actor.system : undefined;
 
     if (type === 'armor') {
       const rollTemplateHtml = await renderTemplate(
@@ -346,12 +346,14 @@ export class FarhomeActorSheet extends ActorSheet {
       };
     } else if (type === 'weapon' || type === 'maneuver') {
       const relevantWeaponAttributes = {
-        str: actorData.attributes.str,
-        dex: actorData.attributes.dex,
+        str: actorData ? actorData.attributes.str : 0,
+        dex: actorData ? actorData.attributes.dex : 0,
       };
 
-      const strongestWeaponProficiency = FarhomeActorSheet._getStrongestKey(actorData.proficiencies.weapons);
-      const strongestAttribute = FarhomeActorSheet._getStrongestKey(relevantWeaponAttributes);
+      const strongestWeaponProficiency = actorData
+        ? FarhomeActorSheet._getStrongestKey(actorData.proficiencies.weapons)
+        : 0;
+      const strongestAttribute = actorData ? FarhomeActorSheet._getStrongestKey(relevantWeaponAttributes) : 0;
 
       if (type === 'weapon') {
         const rollTemplateHtml = await renderTemplate(
@@ -378,13 +380,15 @@ export class FarhomeActorSheet extends ActorSheet {
       }
     } else if (type === 'spell') {
       const relevantSpellAttributes = {
-        sta: actorData.attributes.sta,
-        int: actorData.attributes.int,
-        will: actorData.attributes.will,
-        cha: actorData.attributes.cha,
+        sta: actorData ? actorData.attributes.sta : 0,
+        int: actorData ? actorData.attributes.int : 0,
+        will: actorData ? actorData.attributes.will : 0,
+        cha: actorData ? actorData.attributes.cha : 0,
       };
 
-      const strongestSpellProficiency = FarhomeActorSheet._getStrongestKey(actorData.proficiencies.spells);
+      const strongestSpellProficiency = actorData
+        ? FarhomeActorSheet._getStrongestKey(actorData.proficiencies.spells)
+        : 0;
       const strongestAttribute = FarhomeActorSheet._getStrongestKey(relevantSpellAttributes);
 
       const rollTemplateHtml = await renderTemplate(
