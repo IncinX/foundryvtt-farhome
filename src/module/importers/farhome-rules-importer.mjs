@@ -290,7 +290,7 @@ class FarhomeRuleParser {
       }
 
       //
-      // #todo Add maneuvers
+      // Add maneuvers
       //
       const maneuverHeadings = ['Maneuvers'];
 
@@ -349,7 +349,7 @@ class FarhomeRuleParser {
           nodeIndex++;
         }
 
-        // Add spell to the list
+        // Add maneuver to the list
         this._addManeuver(
           maneuverName,
           contentHtml,
@@ -378,21 +378,9 @@ class FarhomeRuleParser {
         spellSchool = this._recentHeading();
       }
 
-      const spellLevelHeadings = [
-        'Cantrips',
-        'First Level',
-        'Second Level',
-        'Third Level',
-        'Fourth Level',
-        'Fifth Level',
-        'Sixth Level',
-        'Seventh Level',
-        'Eighth Level',
-        'Ninth Level',
-      ];
-
       const spellHeadingToLevel = {
-        Cantrips: 0,
+        'Cantrip': 0,
+        'Cantrips': 0,
         'First Level': 1,
         'Second Level': 2,
         'Third Level': 3,
@@ -403,6 +391,8 @@ class FarhomeRuleParser {
         'Eighth Level': 8,
         'Ninth Level': 9,
       };
+
+      const spellLevelHeadings = Object.keys(spellHeadingToLevel);
 
       const spellHeadingIndex = this._getHeadingIndexInStack(spellLevelHeadings);
       if (
