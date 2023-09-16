@@ -379,8 +379,8 @@ class FarhomeRuleParser {
       }
 
       const spellHeadingToLevel = {
-        'Cantrip': 0,
-        'Cantrips': 0,
+        Cantrip: 0,
+        Cantrips: 0,
         'First Level': 1,
         'Second Level': 2,
         'Third Level': 3,
