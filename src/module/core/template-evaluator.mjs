@@ -185,6 +185,7 @@ export async function evaluateTemplateChunk(templateChunk, actorContext, itemCon
   help += '<li>success(successCount) -- Adds additional successes to the roll summary.</li><br/>';
   help += '<li>crit(critCount) -- Adds additional crits to the roll summary.</li><br/>';
   help += '<li>wound(woundCount) -- Adds additional wounds to the roll summary.</li><br/>';
+  help += '<li>roll(formula) -- Rolls a standard foundryvtt roll formula and returns the total roll result.</li><br/>';
   help += '<li>s -- System helper function context (see below).</li><br/>';
   help += '<li>a -- Actor data context (see below).</li><br/>';
   help += '<li>i -- Item data context (see below).</li><br/>';
@@ -230,6 +231,7 @@ export async function evaluateTemplateChunk(templateChunk, actorContext, itemCon
     crit: crit,
     wound: wound,
     ap: ap,
+    roll: roll,
     s: evaluatorSystemContext,
     a: evaluatorActorContext,
     i: evaluatorItemContext,
@@ -313,4 +315,15 @@ function crit(critCount) {
  */
 function wound(woundCount) {
   return `<div class='fh-wounds' data-wounds='${woundCount}'></div>`;
+}
+
+/**
+ * Executes a standard roll using foundryvtt roll syntax.
+ * @param {string} rollFormula The foundryvtt standard roll formula to execute.
+ * @returns The numerical outcome of the roll.
+ */
+async function roll(formula) {
+  let roll = new Roll(formula, {});
+  await roll.evaluate();
+  return roll.total;
 }
