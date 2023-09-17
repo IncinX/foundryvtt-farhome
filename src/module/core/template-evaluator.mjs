@@ -63,6 +63,19 @@ export async function evaluateTemplateChunk(templateChunk, actorContext, itemCon
     ? {
         name: actorContext.name,
 
+        wounds: actorContext.system.features.wounds.value,
+        maxWounds: actorContext.system.features.wounds.max,
+        tempWounds: actorContext.system.features.tempWounds.value,
+        ap: actorContext.system.features.ap.value,
+        maxAp: actorContext.system.features.ap.max,
+        hero: actorContext.system.features.hero.value,
+        maxHero: actorContext.system.features.hero.max,
+        move: actorContext.system.features.move.value,
+        sprint: actorContext.system.features.sprint.value,
+        spellPower: actorContext.system.features.spellPower.value,
+        healingSurges: actorContext.system.features.healingSurges.value,
+        maxHealingSurges: actorContext.system.features.healingSurges.max,
+
         str: actorContext.system.attributes.str.value,
         dex: actorContext.system.attributes.dex.value,
         sta: actorContext.system.attributes.sta.value,
