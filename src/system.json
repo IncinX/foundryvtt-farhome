@@ -13,7 +13,7 @@
   ],
   "compatibility": {
     "minimum": 10,
-    "verified": "10.291"
+    "verified": "10.303"
   },
   "scripts": [],
   "esmodules": ["module/farhome.js"],
