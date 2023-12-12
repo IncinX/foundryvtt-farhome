@@ -89,25 +89,6 @@ async function _handleReroll(event) {
   // Get the effect data from the original message.
   const effectSummaryData = _getEffectSummaryData($(messageQuery).find('.fh-active-effects').html());
 
-  // Count existing hexes in the original message
-  const appliedHexCount = $(messageQuery).find('.fh-hexed-roll').length;
-
-  // Apply additional hexes to the roll
-  const remainingHexes = effectSummaryData.hex - appliedHexCount;
-  if (remainingHexes > 0) {
-    // Use the first evaluated roll which is currently the actual roll template. This the only place that hex can currently
-    // be applied. THe extra rolls are system rolls like poison and blind that can't be hexed.
-    // #todo Perhaps later there may be radiance or inspiration that could be automatically rolled. This logic needs
-    //       to factor in the fh-hexable-roll class.
-    const evaluatedRoll = $(messageQuery).find('.fh-evaluated-roll')[0];
-
-    // Compute the new hexed roll html
-    const hexedRoll = await _applyHex(evaluatedRoll.innerHTML, remainingHexes);
-
-    // Replace the existing fh-evaluated-roll with hexRoll
-    evaluatedRoll.innerHTML = hexedRoll;
-  }
-
   // Need to re-compute the summary and re-post under the fh-roll-summary class
   const newRollSummaryData = _getRollSummaryData(messageQuery.html());
 
@@ -159,8 +140,8 @@ export function _getRollSummaryData(rollHtml) {
     fhRollDOM.querySelectorAll('input').forEach((element) => {
       containsRollData = true;
 
-      // The roll counts if it is enabled or if it is a hexed reroll die (which counts but is also disabled from being re-rolled).
-      if (!element.disabled || element.classList.contains('fh-hexed-reroll')) {
+      // The roll counts if it is enabled.
+      if (!element.disabled) {
         const rollData = _parseRoll(element);
         rolls.push(rollData);
       }
@@ -249,6 +230,8 @@ export function _getEffectSummaryData(effectHtml) {
  */
 function _applyRollSummaryEffects(rollSummaryData, effectModifierData) {
   rollSummaryData.successes -= effectModifierData.exhaustion;
+  // Hex reduces the number of crits rolled for each level of hex. This number can go below 0.
+  rollSummaryData.crits -= effectModifierData.hex;
 }
 
 /**
@@ -326,22 +309,16 @@ export async function sendChatRoll(
   const effectSummaryData = _getEffectSummaryData(activeEffectsHtml);
 
   //
-  // Compute and apply hex if it is present
-  // Hex downgrades a crit to a single success for each level of hex.
-  //
-  const hexedRollHtml = await _applyHex(evaluatedRollHtml, effectSummaryData.hex);
-
-  //
   // Evaluate the roll summary if it is present.
   //
-  let rollSummaryData = _getRollSummaryData(hexedRollHtml, effectSummaryData);
+  let rollSummaryData = _getRollSummaryData(evaluatedRollHtml, effectSummaryData);
 
   //
   // Only apply poison and blindness if it is not an armor roll.
   //
   let poisonRollHtml = '';
   let blindRollHtml = '';
-  if (!_isArmorRoll(hexedRollHtml)) {
+  if (!_isArmorRoll(evaluatedRollHtml)) {
     //
     // Compute and apply the poison if it is present
     // Poison adds terrible dice to the roll for each level of poison
@@ -379,13 +356,13 @@ export async function sendChatRoll(
       rollSummaryData.successes += blindRollSummaryData.successes;
       rollSummaryData.crits += blindRollSummaryData.crits;
     }
-
-    // Apply roll summary effects (like exhaustion)
-    _applyRollSummaryEffects(rollSummaryData, effectSummaryData);
   } else {
     // If it is an armor roll, then exhaustion doesn't apply so clear it so that it doesn't show up in the summary.
     effectSummaryData.exhaustion = 0;
   }
+
+  // Apply roll summary effects (like exhaustion and hex)
+  _applyRollSummaryEffects(rollSummaryData, effectSummaryData);
 
   //
   // Compute the final roll summary HTML
@@ -395,7 +372,7 @@ export async function sendChatRoll(
     : undefined;
 
   const messageHtmlString = await renderTemplate('systems/farhome/templates/chat/chat-roll.hbs', {
-    evaluatedRollHtml: hexedRollHtml,
+    evaluatedRollHtml: evaluatedRollHtml,
     activeEffectsHtml: activeEffectsHtml,
     poisonRollHtml: poisonRollHtml,
     blindRollHtml: blindRollHtml,
@@ -408,62 +385,6 @@ export async function sendChatRoll(
 
   // Send the evaluatedTemplate to chat.
   sendActorMessage(messageHtmlString);
-}
-
-/**
- * Apply hexes to a given roll.
- * Hex downgrades a crit to a single success for each level of hex.
- * @param {String} evaluatedRollHtml HTML string containing all the roll data
- * @param {Number} hexCount Number of hexes to apply to the roll.
- */
-async function _applyHex(evaluatedRollHtml, hexCount) {
-  // #todo Consider DOMParser vs jQuery for all of this stuff in all the functions
-
-  let rollDOM = new DOMParser().parseFromString(evaluatedRollHtml, 'text/html');
-  let enableInputElements = rollDOM.querySelectorAll('input:enabled');
-
-  for (
-    let enabledInputsIndex = 0;
-    enabledInputsIndex < enableInputElements.length && hexCount > 0;
-    enabledInputsIndex++
-  ) {
-    let enabledInputElement = enableInputElements[enabledInputsIndex];
-
-    // Parse the die and face
-    const rollData = _parseRoll(enabledInputElement);
-
-    // If it is a critical, downgrade it to a success
-    let hexApplied = false;
-    switch (rollData.face) {
-      case Faces.CRITICAL_SUCCESS:
-        rollData.face = Faces.SUCCESS;
-        hexApplied = true;
-        break;
-      case Faces.CRITICAL_DEFENSE:
-        rollData.face = Faces.DEFENSE;
-        hexApplied = true;
-        break;
-    }
-
-    if (hexApplied) {
-      // Replace with a formatted element (that also has a fh-hexed class)
-      const rollHtml = await game.farhome.roller.formatRolls([rollData], false);
-
-      // Add the new roll element
-      // It is disabled since a hexed roll cannot be re-rolled.
-      let newElement = enabledInputElement.insertAdjacentHTML('afterend', rollHtml);
-      enabledInputElement.nextElementSibling.classList.add('fh-hexed-reroll');
-      enabledInputElement.nextElementSibling.disabled = true;
-
-      // Disable and hex the current roll
-      enabledInputElement.disabled = true;
-      enabledInputElement.classList.add('fh-hexed-roll');
-
-      hexCount--;
-    }
-  }
-
-  return rollDOM.body.innerHTML;
 }
 
 /**
