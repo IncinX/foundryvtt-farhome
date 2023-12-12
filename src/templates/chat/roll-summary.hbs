@@ -1,6 +1,6 @@
 <ul>
   <li>Successes: {{rollSummaryData.successes}} {{#if effectModifierData.exhaustion}}(-{{effectModifierData.exhaustion}} from exhaustion){{/if}}</li>
-  <li>Criticals: {{rollSummaryData.crits}}</li>
+  <li>Criticals: {{rollSummaryData.crits}}{{#if effectModifierData.hex}}(-{{effectModifierData.hex}} from hex){{/if}}</li>
   {{#if rollSummaryData.wounds}}
   <li>Wounds: {{rollSummaryData.wounds}}</li>
   {{/if}}
